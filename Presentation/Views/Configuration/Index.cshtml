@@ -1,0 +1,44 @@
+﻿@model CreateWorkOrder
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="todolist">
+    <div class="custom_nav">
+        <ul class="nav_list">
+            <li id="overview1">
+                <input id="overview" name="menu" class="radios" type="radio" value="FeatureControl" />
+                <label for="overview">Feature</label>
+                <input id="record" name="menu" class="radios" type="radio" value="RoleControl" />
+                <label for="record">Role</label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="table_container">
+       
+    </div>
+    <div class="spinner">
+        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+            $('#overview').prop('checked', "checked");
+        });
+        $('.radios').click(function () {
+            var controller = $(this).val();
+            if (controller != "" && controller != undefined) {
+                var url = '@Url.Action("action")';
+                url = url.replace("action", controller);
+                $('.table_container').html("");
+                $('.fa-spin').show();
+                RESTCALL(url, {}, "GET", "", true, function (res) {
+                    $('.table_container').html(res);
+                    $('.fa-spin').hide();
+                });
+            }
+        });
+</script>

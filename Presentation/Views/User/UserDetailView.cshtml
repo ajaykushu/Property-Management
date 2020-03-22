@@ -1,0 +1,189 @@
+﻿@model Presentation.ViewModels.UserDetailModel
+
+@{
+    ViewData["Title"] = "UserDetailView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <hr />
+    <div class="workordertitle">
+        User Detail
+    </div>
+    @if (Model != null)
+    {
+    <table class="table">
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    Basic Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="FullName">Full Name</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.FullName)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="EmailAddress">Email Address</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.EmailAddress)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="PhoneNumber">Phone Number</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.PhoneNumber)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="UserId">User Id</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.UserId)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="OfficeExtension">Office Extension</label>
+                            </div>
+                            <div class="col">
+                                @if (Model.OfficeExtension != null)
+                                {
+                                    @Html.DisplayFor(x => x.OfficeExtension)
+                                }
+                                else
+                                {
+                                    <span>NA</span>
+                                }
+                            </div>
+                        </div>
+                        @if (Model.PhotoPath != null)
+                        {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="photo">Photo</label>
+                            </div>
+                            <div class="col">
+                               <img src='@Model.PhotoPath' class="imagethumbnail" width="100" height="100"> 
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Properties Assigned
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="d-md-inline-flex myview">
+                        @if (Model.ListProperties != null)
+                        {
+                            foreach (var item in Model.ListProperties)
+                            {
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.PropertyName</h5>
+                                    <p class="card-text">
+                                        <address>
+                                            <strong>@item.PropertyType</strong><br>
+                                            @item.HouseNumber @item.Street<br>
+                                            @item.Locality, @item.City<br>
+                                            @item.PinCode @item.Country<br>
+                                            @item.LandMark<br>
+                                        </address>
+                                    </p>
+                                </div>
+                            </div>
+
+                            }
+                        }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Access Information
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="Roles">Role Assigned</label>
+                            </div>
+                            <div class="col">
+                                @if (Model.Roles != null)
+                                {
+                                foreach (var item in Model.Roles)
+                                {
+
+                                    <div class="d-inline-flex">
+                                        <span class="btn bg-primary"> @item</span>
+                                    </div>
+                                }
+                                }
+                               </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="TimeZone">Time Zone</label>
+                                </div>
+                                <div class="col">
+                                    @Html.DisplayFor(x => x.TimeZone)
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="SMSAlert">SMS Alert</label>
+                                </div>
+                                <div class="col">
+                                    @Html.DisplayFor(x => x.SMSAlert)
+                                </div>
+                            </div>
+                        </div>
+                      
+                </td>
+            </tr>
+
+        </tbody>
+        </table>
+
+    }
+    </div>
+<div>
+    @Html.ActionLink("Edit", "EditUserView", new {  id = Model.Id }) |
+    <a asp-action="GetAllUsers">Back to List</a>
+</div>
+<style>
+   .myview .card{
+       width:200px;
+       margin:5px;
+   }
+   .imagethumbnail{
+       border:1px solid grey;
+       padding:4px;
+       border-radius:50%;
+   }
+
+</style>

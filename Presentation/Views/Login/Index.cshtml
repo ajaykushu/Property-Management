@@ -1,0 +1,48 @@
+﻿@model Presentation.ViewModels.LoginReq
+@{
+    ViewData["Title"] = "Login Page";
+}
+
+<div class="card login">
+    <div class="card-body">
+        <div class="card-title ">
+            <span class="title">LOG IN</span>
+            <a asp-controller="Login" asp-action="ForgotPassword" class="forgopassword">Forgot password?</a>
+        </div>
+       
+        <form asp-action="LoginExist" asp-controller="Login" method="post">
+            <div class="input-group mb-1">
+                <input type="email" id="inputEmail" asp-for="Email" class="form-control" placeholder="Email address" autofocus>
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                </div>
+
+            </div>
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+            <div class="input-group mb-1">
+                <input type="password" id="inputPassword" asp-for="Password" class="form-control" placeholder="Password">
+
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                </div>
+
+            </div>
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <button class="btn custom_btn" type="submit"><i class="fa fa-key" aria-hidden="true"></i>  Sign in</button>
+        </form>
+        @*<div class="registerdiv">
+            <a asp-controller="User" asp-action="Create" class="register">Click here to Create an account</a>
+        </div>*@
+    </div>
+</div>
+
+@if (TempData.ContainsKey("Error")||TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+     alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}
+

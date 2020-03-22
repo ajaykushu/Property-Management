@@ -1,0 +1,44 @@
+﻿@model List<SelectItem>
+<table class="table">
+    <tbody>
+        <tr>
+            <td>
+                <div class="col">
+                    <div class="row d-lg-table-row">
+                        <label>Select Role</label>
+                        <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                            <option value="">Please select one</option>
+                        </select>
+                    </div>
+                    <hr />
+                    <div class="row d-lg-table-row">
+                        <label>Adding New Role</label>
+                    </div>
+                    <div class="row d-lg-table-row">
+                        <label>Enter Role</label>
+                        <input class="form-control form-control-sm custom-input" />
+                    </div>
+                </div>
+            </td>
+            <td class="features">
+                <div class="spinner">
+                    <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+                </div>
+            </td>
+        </tr>
+       
+    </tbody>
+</table>
+<script>
+    $('.crole').change(function (e) {
+                var url = '@Url.Action("FeaturesSelector")';
+                $('.features').html("");
+               $('.fa-spin').show();
+               var id = $(this).val();
+                RESTCALL(url, {id:id}, "GET", "", true, function (res) {
+                    $('.features').html(res);
+                    $('.fa-spin').hide();
+                });
+            
+    })
+    </script>

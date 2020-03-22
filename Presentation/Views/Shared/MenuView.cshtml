@@ -1,0 +1,65 @@
+﻿@model Dictionary<string, List<MenuProperty>>
+    <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars fa-1x"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        @foreach (var menu in Model)
+        {
+        <li class="dropdown-submenu">
+            <a class="dropdown-toggle dropdown-item" href="#">@menu.Key</a>
+            <ul class="dropdown-menu">
+                @foreach (var submenu in menu.Value)
+                {
+                    <li><a class="dropdown-item" asp-action=@submenu.Action asp-controller=@submenu.Controller>&nbsp;<i class='@submenu.Class'></i>&nbsp;@submenu.SubMenuName</a></li>
+                }
+            </ul>
+            </li>
+       
+        }
+    </ul>
+
+<style>
+    ul.dropdown-menu{
+        color:black;
+        background-color:#343a40;
+         width:200px;
+         font-size:0.8em;
+    }
+   
+    .navbar-nav li:hover > ul.dropdown-menu {
+          display: block;
+           color:black;
+           width:200px;
+           background-color:#343a40;
+}
+    .dropdown-submenu {
+      position:relative;
+      color:white;
+       width:200px;
+     }
+.dropdown-submenu>.dropdown-menu {
+    top: 0px;
+    left:-200px;
+    margin-top:-9px;
+    width:150px;
+    background-color:#343a40;
+    color:white;
+}
+.dropdown-item{
+    color:white;
+}
+
+/* rotate caret on hover */
+.dropdown-menu > li > a:hover:after {
+    text-decoration: underline;
+    transform: rotate(90deg);
+} 
+@@media only screen and (max-width: 587px) {
+ 
+   .dropdown-submenu>.dropdown-menu {
+   
+    
+    margin-top:-1px;
+   
+}
+} 
+
+</style>

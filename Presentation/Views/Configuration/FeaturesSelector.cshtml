@@ -1,0 +1,66 @@
+﻿@model FeatureView
+<form asp-action="UpdateFeature" class="update" >
+    @foreach (var item in Model.Features)
+    {
+       <div class="row">
+       <div class="col">
+            @item.PropertyName
+       </div>
+        <div class="col" >
+            @{ var varclass = "toggle-label false" + item.Id;var varclass1 = "toggle-label true" + item.Id;}
+            <label class='@varclass1' style="color:red" value="@item.Id" name=@item.Id  @if (item.Selected == true) {<text>hidden</text>} for=@item.Id><i class="fas fa-toggle-off fa-1x"></i></label>
+            <label class='@varclass' style="color:blue" value="@item.Id" name=@item.Id @if (item.Selected == false) {<text>hidden</text>} for=@item.Id><i class="fas fa-toggle-on fa-1x"></i></label>
+            <input class="toggle" value=@item.Id   asp-for="@item.Selected" name="@Model.Roleid"/>
+           
+        </div>
+    </div>
+    }
+    <input class="btn btn-primary submit" type="submit">
+</form>
+ 
+
+<style>
+    .toggle{
+     position:relative;
+     opacity:0;
+     width:30px;
+     height:30px;
+      cursor:pointer;
+    }
+    .toggle-label{
+        position:absolute;
+         width:30px;
+        height:30px;
+        cursor:pointer;
+    }
+
+</style>
+<script>
+    $('.toggle').change(function () {
+        var falseval = ".false" + $(this).val();
+        var trueval = ".true" + $(this).val();
+        if ($(this)[0].checked) {
+             $(falseval).prop("hidden", false)
+             $(trueval).prop("hidden", true)
+          
+        }
+        else {
+             $(trueval).prop("hidden", false)
+             $(falseval).prop("hidden", true)
+        }
+    })
+   $('.update').submit(function (e) {
+            e.preventDefault();
+       var url = $(this).attr('action');
+       var form = $(this).serialize();
+      
+       $('.fa-spinner').prop("hidden", false);
+       RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', true, function (res) {
+                     alertify.alert('Info', '<p>' + res + '</p>', function () {
+                     });
+                }, function (res) {
+                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    });
+                }, "");
+        });
+    </script>

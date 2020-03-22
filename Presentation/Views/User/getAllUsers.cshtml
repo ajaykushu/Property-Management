@@ -1,0 +1,180 @@
+﻿@model Pagination<IList<UsersList>>
+
+@{
+    ViewData["Title"] = "GetAllUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .cont {
+        width: 100px;
+        height: 30px;
+        position: relative;
+        margin-right: 10px;
+    }
+
+    .selector1, .selector2 {
+        width: 100px;
+        height: 30px;
+        position: absolute;
+    }
+
+    .label1, .label2 {
+        background-color: white;
+        width: 100px;
+        height: 30px;
+        position: absolute;
+        padding: 4px;
+        border-radius: 4px;
+        color: black;
+        font-size: small;
+        border: outset 1px rgba(128, 128, 128,0.4);
+        box-shadow: 1px 1px 1px rgba(128, 128, 128,0.4)
+    }
+
+    .selector1:checked ~ .label1 {
+        background-color: rgb(65, 153, 66);
+        color: white;
+    }
+
+    .selector2:checked ~ .label2 {
+        background-color: rgb(65, 153, 66);
+        color: white;
+    }
+
+    .label1:hover, .label2:hover {
+        cursor: pointer;
+    }
+</style>
+@if (Model != null)
+{
+    <p>
+        <a class="btn btn-sm btn-success" asp-action="Create"><i class="fa fa-plus fa-1x"></i>&nbsp;Create New</a>
+    </p>
+
+    <form class="form">
+        <div class="input-group">
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnum.ByEmail) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.ByEmail' class="selector1" required>
+                <label class="label1" for="email">@FilterEnum.ByEmail</label>
+            </div>
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnum.ByFirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.ByFirstName class="selector2" required>
+                <label class="label2" for="firstname">@FilterEnum.ByFirstName</label>
+            </div>
+            <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info" type="submit" value="Filter">
+        </div>
+        <hr />
+        <div class="workordertitle">
+            Users List
+        </div>
+
+        <table class="table table-responsive-sm">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Roles
+                    </th>
+                    <th>
+                        User Id
+                    </th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (!Model.Payload.Any())
+                {
+                    <tr>
+                        <td>No Users Found</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Payload)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Roles)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-success" asp-action="EditUserView" asp-controller="User" asp-route-id="@item.Id"><i class="fa fa-pencil-alt"></i>&nbsp;Edit</button>
+                                <button class="btn btn-sm btn-outline-info" asp-action="UserDetailView" asp-controller="User" asp-route-id="@item.Id"><i class="fa fa-info"></i>&nbsp;Detail</button>
+                                @if (item.IsActive)
+                                {
+                                    @Html.ActionLink("Deactivate", "DeAct_ActUser", new { userId = item.Id, operation = 0, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-danger" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <hr />
+        <nav>
+            <ul class="pagination">
+                @{ int current = 0;}
+                <li class="page-item @if (Model.CurrentPage == 0)
+                {<text>disabled</text> }">
+                    @Html.ActionLink("Prev", "GetAllUsers", "User", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring }, new { @class = "page-link" })
+                </li>
+
+                @for (int i = 0; i < Model.PageCount; i++)
+                {
+
+                    if (Model.CurrentPage == i)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" asp-action="GetAllUsers">@(i + 1) <span class="sr-only">(current)</span></a>
+                        </li>
+                        current = i;
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            @Html.ActionLink(i + 1 + "", "GetAllUsers", "User", "", "", "", new { requestedPage = i, matchString = ViewBag.searchstring }, new { @class = "page-link" })
+                        </li>
+                    }
+                }
+                <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount)
+                {<text>disabled</text> }">
+                    @Html.ActionLink("Next", "GetAllUsers", "User", "", "", "", new { requestedPage = current + 1, matchString = ViewBag.searchstring }, new { @class = "page-link" })
+                </li>
+            </ul>
+        </nav>
+    </form>
+}
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+
+    </script>
+}

@@ -1,0 +1,91 @@
+2020-03-22 10:57:21.646 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 66.7528 ms
+2020-03-22 10:57:21.876 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 19.692 ms
+2020-03-22 11:08:11.673 +05:30 [INF] HTTP GET /api/values responded 404 in 67.4202 ms
+2020-03-22 11:12:15.621 +05:30 [INF] HTTP GET /api/values responded 404 in 79.6144 ms
+2020-03-22 11:16:49.080 +05:30 [INF] HTTP GET /api/values responded 404 in 65.0967 ms
+2020-03-22 11:19:35.749 +05:30 [WRN] Invalid password for user 1.
+2020-03-22 11:19:35.925 +05:30 [ERR] HTTP POST /api/login/userlogin responded 500 in 3043.971 ms
+Utilities.CustomException.UnAuthorizedException: Invalid Password
+   at API.Authentication.User.DoLogin(LoginReq loginDTO) in E:\myproj\mrproj\API\Authentication\User.cs:line 109
+   at API.Controllers.LoginController.UserLogin(LoginReq login) in E:\myproj\mrproj\API\Controllers\LoginController.cs:line 37
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-03-22 11:19:35.991 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Utilities.CustomException.UnAuthorizedException: Invalid Password
+   at API.Authentication.User.DoLogin(LoginReq loginDTO) in E:\myproj\mrproj\API\Authentication\User.cs:line 109
+   at API.Controllers.LoginController.UserLogin(LoginReq login) in E:\myproj\mrproj\API\Controllers\LoginController.cs:line 37
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-22 11:19:36.015 +05:30 [INF] Invalid Password
+Stack Trace:    at API.Authentication.User.DoLogin(LoginReq loginDTO) in E:\myproj\mrproj\API\Authentication\User.cs:line 109
+   at API.Controllers.LoginController.UserLogin(LoginReq login) in E:\myproj\mrproj\API\Controllers\LoginController.cs:line 37
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-22 12:38:19.797 +05:30 [INF] HTTP GET /api/values responded 404 in 83.3177 ms
+2020-03-22 12:39:00.301 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3923.2002 ms
+2020-03-22 12:39:00.895 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 143.1675 ms
+2020-03-22 12:39:16.465 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 92.7056 ms
+2020-03-22 12:40:41.893 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 51.7423 ms
+2020-03-22 12:40:58.210 +05:30 [INF] HTTP GET /api/configuration/getrole responded 200 in 2322.5059 ms
+2020-03-22 12:41:07.398 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=1 responded 200 in 6007.8471 ms
+2020-03-22 12:41:29.124 +05:30 [INF] HTTP POST /api/configuration/updatefeature responded 200 in 798.1137 ms
+2020-03-22 12:41:34.750 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 37.2378 ms
+2020-03-22 12:41:37.271 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 200 in 175.9505 ms
+2020-03-22 12:41:45.508 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 74.0147 ms
+2020-03-22 12:41:45.612 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 17.6873 ms
+2020-03-22 12:41:49.001 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 403 in 9.3706 ms
+2020-03-22 12:41:54.391 +05:30 [INF] HTTP GET /api/user/userdetail?Id=2 responded 403 in 1.5009 ms
+2020-03-22 12:41:59.834 +05:30 [INF] HTTP GET /api/user/getregisterrequestmodel responded 200 in 370.6944 ms
+2020-03-22 12:42:06.985 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 18.872 ms
+2020-03-22 12:42:08.785 +05:30 [INF] HTTP GET /api/user/getPropertyTypes responded 403 in 6.0729 ms
