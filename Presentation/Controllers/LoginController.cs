@@ -56,12 +56,11 @@ namespace Presentation.Controllers
         /// <param name="login">Login</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginExist(LoginReq login)
         {
 
             var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
-           // HttpContext.Session.TryGetValue("cookie", out byte[] cookie);
             if (!consentFeature.HasConsent)
             {
                 TempData["Info"] = "accept cookie";
