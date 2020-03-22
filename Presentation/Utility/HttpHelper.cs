@@ -28,10 +28,10 @@ namespace Presentation.Utility
             }
             var res = await _httpClient.GetAsync(url).ConfigureAwait(false);
             await SetTempData(res, controller);
-            
+
             return res;
         }
-        public  void RemoveHeader()
+        public void RemoveHeader()
         {
             if (_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 _httpClient.DefaultRequestHeaders.Remove("Authorization");
@@ -91,7 +91,7 @@ namespace Presentation.Utility
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
                 controller.TempData["Error"] = "Some Error Occured Contact Administrator";
             }
-           
+
 
         }
 

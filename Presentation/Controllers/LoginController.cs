@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.ConstModal;
@@ -60,7 +59,7 @@ namespace Presentation.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginExist(LoginReq login)
         {
-           
+
             var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
             if (!consentFeature.HasConsent)
             {

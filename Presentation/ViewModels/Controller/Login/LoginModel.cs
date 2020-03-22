@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models.RequestModels
+
+namespace Presentation.ViewModels
 {
     public class LoginReq
     {
@@ -11,6 +12,6 @@ namespace Models.RequestModels
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public bool Rememberme { get; set; }
+        public bool Rememberme { set; get; }
     }
 }

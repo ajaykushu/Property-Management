@@ -29,7 +29,7 @@ namespace DataEntity
         [Column(TypeName = "varchar(50)")]
         public string Street { set; get; }
         [Column(TypeName = "varchar(100)")]
-        public string LandMark { set; get; }
+        public string StreetLine2 { set; get; }
         [Required]
         [Column(TypeName = "varchar(8)")]
         public string PinCode { set; get; }

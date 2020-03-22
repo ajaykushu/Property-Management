@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Presentation.ViewModels.Controller.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Utilities;
 
@@ -12,7 +10,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ConfigurationController:ControllerBase
+    public class ConfigurationController : ControllerBase
     {
         IConfigService _configService;
         public ConfigurationController(IConfigService configService)

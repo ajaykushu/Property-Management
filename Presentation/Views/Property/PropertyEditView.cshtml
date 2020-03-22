@@ -1,4 +1,4 @@
-﻿@model Presentation.ViewModels.AddProperty
+﻿@model Presentation.ViewModels.PropertyOperation
     <partial name="_ValidationScriptsPartial">
         <div class="table_container">
             <div class="workordertitle">
@@ -65,8 +65,8 @@
                                             <label for="LandMark">Street Line 2</label>
                                         </div>
                                         <div class="col">
-                                            <input asp-for="LandMark" class="form-control-sm custom-input">
-                                            <span asp-validation-for="LandMark" class="text-danger"></span>
+                                            <input asp-for="StreetLine2" class="form-control-sm custom-input">
+                                            <span asp-validation-for="StreetLine2" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row top-buffer">
@@ -124,7 +124,7 @@
             </form>
             }
             <div>
-                <a asp-action="ListProperties" asp-controller="User">Back</a>
+                <a asp-action="ListProperties" asp-controller="Property">Back</a>
             </div>
         </div>
 

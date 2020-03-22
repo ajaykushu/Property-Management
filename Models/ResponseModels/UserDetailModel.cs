@@ -7,7 +7,7 @@ namespace Models.ResponseModels
         public long Id { get; set; }
         public string FullName { get; set; }
         public IList<string> Roles { get; set; }
-        public List<Properties> ListProperties { set; get; }
+        public List<PropertiesModel> ListProperties { set; get; }
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
         public string UserId { get; set; }

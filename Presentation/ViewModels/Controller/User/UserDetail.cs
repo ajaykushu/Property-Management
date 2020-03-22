@@ -2,7 +2,7 @@
 
 namespace Presentation.ViewModels
 {
-    public class UserDetailModel
+    public class UserDetail
     {
         public long Id { get; set; }
         public string FullName { get; set; }

@@ -40,7 +40,7 @@ namespace Presentation.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterRequest register)
+        public async Task<ActionResult> Register(RegisterUser register)
         {
 
             if (ModelState.IsValid)
@@ -83,13 +83,13 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> UserDetailView(long id)
         {
-            UserDetailModel userDetail = new UserDetailModel();
+            UserDetail userDetail = new UserDetail();
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("userdetail", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?Id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
-                    userDetail = JsonConvert.DeserializeObject<UserDetailModel>(await response.Content.ReadAsStringAsync());
+                    userDetail = JsonConvert.DeserializeObject<UserDetail>(await response.Content.ReadAsStringAsync());
 
             }
             catch (Exception)
@@ -102,112 +102,24 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            RegisterRequest registerrequest = null;
+            RegisterUser registerrequest = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("getregistermodel", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
-                    registerrequest = JsonConvert.DeserializeObject<RegisterRequest>(await response.Content.ReadAsStringAsync());
+                    registerrequest = JsonConvert.DeserializeObject<RegisterUser>(await response.Content.ReadAsStringAsync());
 
             }
             catch (Exception)
             {
-                registerrequest = new RegisterRequest();
+                registerrequest = new RegisterUser();
                 TempData["Error"] = StringConstants.Error;
                 return View(registerrequest);
             }
             return View(registerrequest);
         }
-        [HttpGet]
-        public async Task<ActionResult> AddPropertyView()
-        {
-            AddProperty addProperty = new AddProperty();
-            try
-            {
-                HttpContext.Session.TryGetValue("token", out var token);
-                _apiRoute.Value.Routes.TryGetValue("getPropertyTypes", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                    addProperty = JsonConvert.DeserializeObject<AddProperty>(await response.Content.ReadAsStringAsync());
-
-
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = StringConstants.Error;
-            }
-            return PartialView("_AddPropertyView", addProperty);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddProperty(AddProperty model)
-        {
-            if (ModelState.IsValid)
-            {
-                _apiRoute.Value.Routes.TryGetValue("addproperty", out string path);
-                try
-                {
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, model, this, _token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync() == "true")
-                        return Ok(StringConstants.SuccessSaved);
-                    else if (response.StatusCode == HttpStatusCode.BadRequest)
-                        return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-                    else
-                        return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
-                }
-                catch (Exception)
-                {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
-                }
-            }
-            else
-            {
-                var msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
-                return StatusCode(500, msg);
-            }
-        }
-        [HttpGet]
-        public async Task<ActionResult> ListProperties()
-        {
-            _apiRoute.Value.Routes.TryGetValue("listproperties", out string path);
-            List<Properties> properties = new List<Properties>();
-            try
-            {
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                    properties = JsonConvert.DeserializeObject<List<Properties>>(await response.Content.ReadAsStringAsync());
-
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = StringConstants.Error;
-            }
-
-            return View(properties);
-        }
-        [HttpGet]
-        public async Task<ActionResult> DeleteProperty(int id)
-        {
-            if (id == 0)
-            {
-                return BadRequest("invalid property");
-            }
-            try
-            {
-                _apiRoute.Value.Routes.TryGetValue("deleteproperty", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                    TempData["Success"] = StringConstants.DeleteSuccess;
-
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = StringConstants.Error;
-            }
-            return RedirectToAction("ListProperties");
-        }
-
+        
         [HttpGet]
         public async Task<ActionResult> EditUserView(long Id)
         {
@@ -299,53 +211,7 @@ namespace Presentation.Controllers
             }
             return View(usersLists);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProperty(AddProperty prop)
-        {
-            _apiRoute.Value.Routes.TryGetValue("updateproperty", out string path);
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, prop, this, _token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode)
-                        TempData["Success"] = StringConstants.SuccessUpdate;
-
-                }
-                catch (Exception)
-                {
-                    TempData["Error"] = StringConstants.Error;
-                }
-            }
-            else
-            {
-                TempData["Error"] = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
-            }
-
-            return RedirectToAction("PropertyEditView", new { id = prop.Id });
-
-        }
-        [HttpGet]
-        public async Task<IActionResult> PropertyEditView(long id)
-        {
-            _apiRoute.Value.Routes.TryGetValue("getproperty", out string path);
-            AddProperty prop = new AddProperty();
-            try
-            {
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                    prop = JsonConvert.DeserializeObject<AddProperty>(await response.Content.ReadAsStringAsync());
-
-
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = StringConstants.Error;
-            }
-            return View(prop);
-        }
-
+       
         [HttpGet]
         public async Task<IActionResult> DeAct_ActUser(long userId, int operation, int page)
         {
@@ -371,6 +237,63 @@ namespace Presentation.Controllers
             return RedirectToAction("GetAllUsers", page);
         }
 
+        [HttpGet]
+        public async Task<JsonResult> CheckEmail(string email)
+        {
+            String result = String.Empty;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("checkemail", out var path);
+                var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?email=" + email, this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    result = await res.Content.ReadAsStringAsync();
+                    if(result.Equals("false"))
+                        return Json("Email Already Present");
+                } 
+
+            }
+            catch (Exception) { }
+            return Json(true);
+        }
+        [HttpGet]
+        public async Task<JsonResult> CheckPhoneNumber(string phoneNumber)
+        {
+            String result = String.Empty;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("checkphonenumber", out var path);
+                var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?phone=" + phoneNumber, this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    result = await res.Content.ReadAsStringAsync();
+                    if (result.Equals("false"))
+                        return Json("Phone Number Already Present");
+                }
+
+            }
+            catch (Exception) { }
+            return Json(true);
+        }
+        [HttpGet]
+        public async Task<JsonResult> CheckUserName(string userName)
+        {
+            String result = String.Empty;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("checkusername", out var path);
+                var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?userName=" + userName, this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    result = await res.Content.ReadAsStringAsync();
+                    if (result.Equals("false"))
+                        return Json("User Name Already Present");
+                }
+
+            }
+            catch (Exception) { }
+            return Json(true);
+        }
 
     }
 }

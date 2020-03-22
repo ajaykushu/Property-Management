@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Models
+namespace Models.RequestModels
 {
-    public class EditUser
-    {  /**/
-        [Required(ErrorMessage = "Choose Title")]
-        public string Title { set; get; }
+    public class EditUserModel
+    { 
         [Required(ErrorMessage = "Please Enter First Name")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Please Enter Last Name")]
@@ -49,7 +46,7 @@ namespace Models
         public bool SMSAlert { set; get; }
         public string OfficeExt { get; set; }
         public string ClockType { get; set; }
-        public IFormFile Files { get; set; }
+        //public IFormFile Files { get; set; }
 
 
     }

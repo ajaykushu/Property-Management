@@ -16,9 +16,6 @@ namespace DataEntity
         }
 
         [Required]
-        [Column(TypeName = "varchar(4)")]
-        public string Title { set; get; }
-        [Required]
         [Column(TypeName = "varchar(50)")]
         public string FirstName { set; get; }
 

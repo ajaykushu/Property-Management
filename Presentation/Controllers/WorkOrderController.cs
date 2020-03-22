@@ -20,12 +20,12 @@ namespace Presentation.Controllers
 
 
         [HttpGet]
-       
+
         public IActionResult Index()
         {
             return View();
         }
-      
+
         public IActionResult WorkOrderOverview()
         {
             return PartialView("_WorkOrderOverview");

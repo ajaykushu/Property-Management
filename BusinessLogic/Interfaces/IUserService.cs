@@ -8,21 +8,16 @@ namespace BusinessLogic.Interfaces
 {
     public interface IUserService
     {
-        Task<bool> RegisterUser(RegisterRequest model);
-        RegisterRequest GetRegisterModel();
-        Task<EditUser> GetEditUserModelAsync(long Id);
-        Task<bool> UpdateUser(EditUser editUser);
+        Task<bool> RegisterUser(RegisterUser model);
+        RegisterUser GetRegisterModel();
+        Task<EditUserModel> GetEditUserModelAsync(long Id);
+        Task<bool> UpdateUser(EditUserModel editUser);
         Task<bool> UploadAvtar(string path, string email);
-        AddProperty GetPropertyType();
-        Task<bool> AddProperty(AddProperty modal);
-        Task<List<Properties>> GetProperties();
-        Task<bool> DeleteProperty(int id);
-        //Task<bool> MarkasPrimaryProperty(int id, string email);
-        Task<bool> CheckUser(RegisterRequest model);
-        Task<Pagination<IList<UsersList>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchString);
+        Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchString);
         Task<bool> Deact_Actuser(long userId, int operation);
         Task<UserDetailModel> GetUserDetail(long id);
-        Task<AddProperty> GetProperty(long id);
-        Task<bool> UpdateProperty(AddProperty prop);
+        Task<bool> CheckEmail(string email);
+        Task<bool> CheckPhoneNumber(string phoneNumber);
+        Task<bool> CheckUserName(string userName);
     }
 }

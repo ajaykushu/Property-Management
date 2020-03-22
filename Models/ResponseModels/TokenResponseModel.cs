@@ -2,7 +2,7 @@
 
 namespace Models.ResponseModels
 {
-    public class TokenResponse
+    public class TokenResponseModel
     {
         public string Token { set; get; }
         public IList<string> Roles { set; get; }

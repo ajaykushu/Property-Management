@@ -122,24 +122,24 @@ namespace DataAccessLayer.Repository
                  Id = 9,
                  MainMenuId = 1,
                  MenuName = "Delete Property"
-             },new Menu()
+             }, new Menu()
              {
                  Id = 10,
                  MainMenuId = 1,
                  MenuName = "Edit Feature"
              });
             builder.Entity<RoleMenuMap>().HasData(
-                new RoleMenuMap {Id=1, MenuId=1,RoleId=1 },
-                 new RoleMenuMap {Id=2, MenuId = 2, RoleId = 1 },
-                  new RoleMenuMap {Id=3, MenuId = 3, RoleId = 1 },
-                   new RoleMenuMap {Id=4, MenuId = 4, RoleId = 1 },
-                    new RoleMenuMap {Id=5, MenuId = 5, RoleId = 1 },
-                     new RoleMenuMap {Id=6, MenuId = 6, RoleId = 1 },
-                      new RoleMenuMap {Id=7, MenuId = 7, RoleId = 1 },
-                       new RoleMenuMap {Id=8, MenuId = 8, RoleId = 1 },
-                        new RoleMenuMap {Id=9, MenuId = 9, RoleId = 1 },
-                         new RoleMenuMap {Id=10, MenuId = 10, RoleId = 1 }
-                         
+                new RoleMenuMap { Id = 1, MenuId = 1, RoleId = 1 },
+                 new RoleMenuMap { Id = 2, MenuId = 2, RoleId = 1 },
+                  new RoleMenuMap { Id = 3, MenuId = 3, RoleId = 1 },
+                   new RoleMenuMap { Id = 4, MenuId = 4, RoleId = 1 },
+                    new RoleMenuMap { Id = 5, MenuId = 5, RoleId = 1 },
+                     new RoleMenuMap { Id = 6, MenuId = 6, RoleId = 1 },
+                      new RoleMenuMap { Id = 7, MenuId = 7, RoleId = 1 },
+                       new RoleMenuMap { Id = 8, MenuId = 8, RoleId = 1 },
+                        new RoleMenuMap { Id = 9, MenuId = 9, RoleId = 1 },
+                         new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 }
+
                 );
             builder.Entity<MainMenu>().HasData(new MainMenu
             {
@@ -148,7 +148,7 @@ namespace DataAccessLayer.Repository
             });
 
 
-            
+
             builder.Entity<Country>().HasData(new Country()
             {
                 Id = 1,

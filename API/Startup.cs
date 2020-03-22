@@ -94,6 +94,7 @@ namespace API
             services.AddScoped<IConfigService, ConfigService>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IImageUploadInFile, ImageUploadInFile>();
+            services.AddScoped<IPropertyService, PropertyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

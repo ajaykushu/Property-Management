@@ -80,11 +80,11 @@ namespace API.Authentication
                 throw new BadRequestException("User Not Found");
             }
         }
-        public async Task<TokenResponse> DoLogin(LoginReq loginDTO)
+        public async Task<TokenResponseModel> DoLogin(LoginUserModel loginDTO)
         {
             if (_userManager.Users.Count() == 0)
             {
-                await _user.RegisterUser(new RegisterRequest
+                await _user.RegisterUser(new RegisterUser
                 {
                     UserName = "TestUser",
                     Email = "test@test.com",
@@ -94,13 +94,12 @@ namespace API.Authentication
                     Language = 1,
                     CountryCode = 1,
                     Role = "Admin",
-                    Title = "Mr.",
                     Password = "Testuser123@",
                     TimeZone = "India +5:30"
                 });
             }
             ApplicationUser identityUser;
-            TokenResponse returnToken;
+            TokenResponseModel returnToken;
 
             identityUser = await _userManager.FindByEmailAsync(loginDTO.Email);
             if (identityUser != null)
@@ -116,10 +115,10 @@ namespace API.Authentication
                     var roles = await _userManager.GetRolesAsync(identityUser) ?? new List<string>();
 
                     var tempquer = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.Id).ToHashSet();
-                    var menu = await _MainMenu.GetAll().Include(x=>x.Menus).Select(x => new
+                    var menu = await _MainMenu.GetAll().Include(x => x.Menus).Select(x => new
                     {
                         MainMenu = x.MainMenuName,
-                        SubMenu = x.Menus.Where(x=>tempquer.Contains(x.Id)).Select(x => x.MenuName).ToList()
+                        SubMenu = x.Menus.Where(x => tempquer.Contains(x.Id)).Select(x => x.MenuName).ToList()
                     }).ToArrayAsync();
                     List<string> submenu = new List<string>();
                     var MenuItems = new Dictionary<string, HashSet<string>>();
@@ -130,7 +129,7 @@ namespace API.Authentication
                     }
                     var claims = _tokenGenerator.GetClaims(identityUser, roles, submenu);
 
-                    returnToken = new TokenResponse()
+                    returnToken = new TokenResponseModel()
                     {
                         FullName = identityUser.FirstName + " " + identityUser.LastName + " " + identityUser.Suffix,
                         Roles = roles,

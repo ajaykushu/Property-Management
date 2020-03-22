@@ -31,7 +31,7 @@ namespace API.Controllers
         [HttpPost]
 
         [Route("userlogin")]
-        public async Task<ActionResult<TokenResponse>> UserLogin([FromBody] LoginReq login)
+        public async Task<ActionResult<TokenResponseModel>> UserLogin([FromBody] LoginUserModel login)
         {
 
             var tokenResponse = await _user.DoLogin(login);
@@ -69,7 +69,7 @@ namespace API.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("changepassword")]
-        public async Task<ActionResult<bool>> ChangePassword([FromBody] PasswordChange user)
+        public async Task<ActionResult<bool>> ChangePassword([FromBody] PasswordChangeModel user)
         {
             var status = await _user.ChangePassowrd(user.Email, user.Token, user.NewPassword);
             return Ok(status);

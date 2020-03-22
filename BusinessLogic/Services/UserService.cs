@@ -43,7 +43,7 @@ namespace BusinessLogic.Services
 
         }
 
-        public async Task<bool> RegisterUser(RegisterRequest model)
+        public async Task<bool> RegisterUser(RegisterUser model)
         {
 
             var language = _langrepo.Get(x => x.Id == model.Language).FirstOrDefault();
@@ -60,7 +60,6 @@ namespace BusinessLogic.Services
                 Suffix = model.Suffix,
                 TimeZone = model.TimeZone,
                 CountryId = model.CountryCode,
-                Title = model.Title,
                 OfficeExt = model.OfficeExt ?? null
             };
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
@@ -85,20 +84,10 @@ namespace BusinessLogic.Services
             }
 
         }
-        public async Task<bool> CheckUser(RegisterRequest model)
+       
+        public RegisterUser GetRegisterModel()
         {
-            ApplicationUser identityUser;
-
-            identityUser = await _userManager.FindByIdAsync(model.Email);
-            if (identityUser != null)
-            {
-                return true;
-            }
-            return false;
-        }
-        public RegisterRequest GetRegisterModel()
-        {
-            RegisterRequest registerRequest = new RegisterRequest
+            RegisterUser registerRequest = new RegisterUser
             {
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
@@ -112,14 +101,14 @@ namespace BusinessLogic.Services
             registerRequest.Role = roleid != null ? roleid.PropertyName : null;
             return registerRequest;
         }
-        public async Task<EditUser> GetEditUserModelAsync(long Id)
+        public async Task<EditUserModel> GetEditUserModelAsync(long Id)
         {
 
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == Id).Include(x => x.UserProperties).ThenInclude(x => x.Property).Include(x => x.Country).AsNoTracking().FirstOrDefaultAsync();
             if (applicationUser == null)
                 throw new BadRequestException("User not Found");
             var roles = await _userManager.GetRolesAsync(applicationUser);
-            EditUser editusermodel = new EditUser
+            EditUserModel editusermodel = new EditUserModel
             {
                 Properties = _property.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList(),
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
@@ -136,18 +125,17 @@ namespace BusinessLogic.Services
                 Language = applicationUser.LanguageId,
                 Role = roles.Count > 0 ? roles[0] : "",
                 ClockType = applicationUser.ClockType,
-                OfficeExt=applicationUser.OfficeExt,
+                OfficeExt = applicationUser.OfficeExt,
                 PhoneNumber = applicationUser.PhoneNumber,
                 CountryCode = applicationUser.Country.Id,
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
-                Id = applicationUser.Id,
-                Title = applicationUser.Title
+                Id = applicationUser.Id
             };
 
 
             return editusermodel;
         }
-        public async Task<bool> UpdateUser(EditUser editUser)
+        public async Task<bool> UpdateUser(EditUserModel editUser)
         {
 
 
@@ -165,7 +153,6 @@ namespace BusinessLogic.Services
             applicationUser.SMSAltert = editUser.SMSAlert;
             applicationUser.TimeZone = editUser.TimeZone;
             applicationUser.OfficeExt = editUser.OfficeExt;
-            applicationUser.Title = editUser.Title;
             applicationUser.CountryId = editUser.CountryCode;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
@@ -208,100 +195,7 @@ namespace BusinessLogic.Services
 
 
         }
-        public AddProperty GetPropertyType()
-        {
-            var res = _proprepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyTypeName }).AsNoTracking().ToList();
-            if (res == null)
-                throw new BadRequestException("Property type is not available");
-            AddProperty prop = new AddProperty
-            {
-                PropertyTypes = res
-            };
-            return prop;
-        }
-        public async Task<bool> AddProperty(AddProperty modal)
-        {
-
-            var property = _property.Get(x => x.PropertyName.ToLower().Equals(modal.PropertyName.ToLower())).FirstOrDefault();
-            if (property != null)
-            {
-                throw new BadRequestException("Property Name already available");
-            }
-            Property prop = new Property()
-            {
-                City = modal.City,
-                Country = modal.Country,
-                HouseNumber = modal.HouseNumber,
-                LandMark = modal.LandMark,
-                Locality = modal.Locality,
-                PropertyName = modal.PropertyName,
-                PropertyTypes = _proprepo.Get(x => x.Id == modal.PropertyTypeId).FirstOrDefault(),
-                Street = modal.Street,
-                PinCode = modal.PinCode
-
-            };
-            var res = await _property.Add(prop);
-            if (res > 0)
-            {
-                return true;
-            }
-            else
-            {
-                throw new BadRequestException("Add user failed");
-            }
-        }
-
-
-
-        public async Task<List<Properties>> GetProperties()
-        {
-            var prop = await _property.GetAll().Select(
-                x => new Properties
-                {
-                    City = x.City,
-                    Country = x.Country,
-                    HouseNumber = x.HouseNumber,
-                    Id = x.Id,
-                    LandMark = x.LandMark,
-                    Locality = x.Locality,
-                    PinCode = x.PinCode,
-                    PropertyName = x.PropertyName,
-                    PropertyType = x.PropertyTypes.PropertyTypeName,
-                    Street = x.Street
-
-                }
-                ).AsNoTracking().ToListAsync();
-
-            return prop;
-
-
-        }
-        public async Task<bool> DeleteProperty(int id)
-        {
-            var prop = _property.Get(x => x.Id == id).Include(x => x.UserProperties).ThenInclude(x => x.ApplicationUser).FirstOrDefault();
-
-            if (prop != null)
-            {
-                if (prop.UserProperties != null && prop.UserProperties.Count != 0)
-                {
-                    throw new BadRequestException("Unable to delete as this is propery is allocated to [ " + string.Join(",", prop.UserProperties.Select(x => x.ApplicationUser.UserName).ToList()) + " ]");
-                }
-                int status = await _property.Delete(prop);
-                if (status > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                throw new BadRequestException("Property not found");
-            }
-        }
-
+       
         public async Task<bool> UploadAvtar(string path, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -320,9 +214,9 @@ namespace BusinessLogic.Services
 
         }
 
-        public async Task<Pagination<IList<UsersList>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
+        public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
-           // long Id = Convert.ToInt64(managerId);
+            // long Id = Convert.ToInt64(managerId);
             var count = _userManager.Users.Count();
             List<ApplicationUser> user;
             if (matchStr != null && filter == FilterEnum.ByEmail)
@@ -331,22 +225,22 @@ namespace BusinessLogic.Services
                 user = await _userManager.Users.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower())).Skip(pageNumber * 10).Take(10).AsNoTracking().ToListAsync();
             else
                 user = await _userManager.Users.Skip(pageNumber * 10).Take(10).AsNoTracking().ToListAsync();
-            List<UsersList> users = new List<UsersList>();
+            List<UsersListModel> users = new List<UsersListModel>();
             foreach (var item in user)
             {
                 var roles = await _userManager.GetRolesAsync(item);
                 if (roles != null)
-                    users.Add(new UsersList
+                    users.Add(new UsersListModel
                     {
                         Email = item.Email,
-                        FullName = item.Title + " " + item.FirstName + " " + item.LastName,
+                        FullName =item.FirstName + " " + item.LastName,
                         Id = item.Id,
                         UserName = item.UserName,
                         IsActive = item.IsActive,
                         Roles = string.Join(", ", roles)
                     });
             }
-            var pagination = new Pagination<IList<UsersList>>
+            var pagination = new Pagination<IList<UsersListModel>>
             {
                 ItemsPerPage = user.Count < 10 ? user.Count : 10,
                 PageCount = count < 10 ? 1 : (count / 10) + 1,
@@ -382,16 +276,16 @@ namespace BusinessLogic.Services
                 {
                     CountryCode = x.Country.Name + " (" + x.Country.PhoneCode + ")",
                     EmailAddress = x.Email,
-                    FullName = string.Concat(x.Title ?? "", " ", x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
+                    FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
                     PhotoPath = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + x.PhotoPath,
-                    ListProperties = x.UserProperties.Select(x => new Properties
+                    ListProperties = x.UserProperties.Select(x => new PropertiesModel
                     {
                         Id = x.Property.Id,
                         City = x.Property.City,
                         Country = x.Property.Country,
                         HouseNumber = x.Property.HouseNumber,
-                        LandMark = x.Property.LandMark,
+                        StreetLine2 = x.Property.StreetLine2,
                         Locality = x.Property.Locality,
                         PinCode = x.Property.PinCode,
                         PropertyName = x.Property.PropertyName,
@@ -413,53 +307,29 @@ namespace BusinessLogic.Services
             return user.UserModel;
         }
 
-        public async Task<AddProperty> GetProperty(long id)
+       
+        public async Task<bool> CheckEmail(string email)
         {
-            var prop = await _property.Get(x => x.Id == id).Select(x => new AddProperty
-            {
-                City = x.City,
-                Country = x.Country,
-                HouseNumber = x.HouseNumber,
-                LandMark = x.LandMark,
-                Locality = x.Locality,
-                PinCode = x.PinCode,
-                PropertyName = x.PropertyName,
-                PropertyTypeId = x.PropertyTypeId,
-                Street = x.Street,
-                Id = x.Id
-            }).AsNoTracking().FirstOrDefaultAsync();
-            if (prop != null)
-                prop.PropertyTypes = await _proprepo.GetAll().Select(x => new SelectItem
-                {
-                    Id = x.Id,
-                    PropertyName = x.PropertyTypeName
-                }).ToListAsync();
-            else
-                throw new BadRequestException("Property Not Found");
-            return prop;
+            bool status = false;
+            var res = await _userManager.FindByEmailAsync(email);
+            status = res == null ? true : false;
+            return status;
         }
 
-        public async Task<bool> UpdateProperty(AddProperty prop)
+        public async Task<bool> CheckPhoneNumber(string phoneNumber)
         {
-            var property = _property.Get(x => x.Id == prop.Id).FirstOrDefault();
-            var status = false;
-            if (property != null)
-            {
-                property.HouseNumber = prop.HouseNumber;
-                property.Country = prop.Country;
-                property.City = prop.City;
-                property.LandMark = prop.LandMark;
-                property.Locality = prop.Locality;
-                property.PropertyName = prop.PropertyName;
-                property.PropertyTypeId = prop.PropertyTypeId;
-                property.Street = prop.Street;
-                property.PinCode = prop.PinCode;
-                status = Convert.ToBoolean(await _property.Update(property));
-            }
-            else
-                throw new BadRequestException("Property Not Found");
+            bool status = false;
+            var res = await _userManager.Users.Where(x => x.PhoneNumber.Equals(phoneNumber)).FirstOrDefaultAsync();
+            status = res == null ? true : false;
             return status;
+        }
 
+        public async Task<bool> CheckUserName(string userName)
+        {
+            bool status = false;
+            var res = await _userManager.Users.Where(x => x.UserName.ToLower().Equals(userName.Trim().ToLower())).FirstOrDefaultAsync();
+            status = res == null ? true : false;
+            return status;
         }
     }
 }

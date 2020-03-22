@@ -1,7 +1,7 @@
 ﻿
 namespace Models.ResponseModels
 {
-    public class UsersList
+    public class UsersListModel
     {
         public long Id { get; set; }
         public string FullName { get; set; }

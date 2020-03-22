@@ -17,7 +17,7 @@
     </div>
 </p>
 <div class="new_address_css">
-     @if (!Model.Any())
+     @if (Model==null || !Model.Any())
      {
             <div>No properties Found</div>
      }
@@ -28,8 +28,8 @@
                 <div class="card propetry">
                     <div class="card-header propery_head">
                         <ul class="opertion_menu">
-                            <li class="opertion_menu_item"><a  asp-action="DeleteProperty" asp-route-id="@item.Id" asp-controller="User"><i class="fa fa-trash-alt fa-1x" aria-hidden="true"></i></a></li>
-                            &nbsp;<li class="opertion_menu_item"><a  asp-action="PropertyEditView" asp-route-id="@item.Id" asp-controller="User"><i class="fa fa-pencil-alt fa-1x" aria-hidden="true"></i></a></li>
+                            <li class="opertion_menu_item"><a  asp-action="DeleteProperty" asp-route-id="@item.Id" asp-controller="Property"><i class="fa fa-trash-alt fa-1x" aria-hidden="true"></i></a></li>
+                            &nbsp;<li class="opertion_menu_item"><a  asp-action="PropertyEditView" asp-route-id="@item.Id" asp-controller="Property"><i class="fa fa-pencil-alt fa-1x" aria-hidden="true"></i></a></li>
                         </ul>
                     </div>
                     <div class="card-body">
@@ -40,7 +40,7 @@
                                 @item.HouseNumber @item.Street<br>
                                 @item.Locality, @item.City<br>
                                 @item.PinCode @item.Country<br>
-                                @item.LandMark<br>
+                                @item.StreetLine2<br>
                             </address>
 
                         </p>
