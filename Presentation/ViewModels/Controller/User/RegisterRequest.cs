@@ -20,7 +20,7 @@ namespace Presentation.ViewModels
         public List<string> SelectedProperty { get; set; }
         public List<SelectItem> Roles { get; set; }
         [Required(ErrorMessage = "Please Choose Language")]
-        public int Language { get; set; }
+        public long Language { get; set; }
         public List<SelectItem> Languages { get; set; }
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
@@ -30,6 +30,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> CountryCodes { set; get; }
         [Required(ErrorMessage = "Please Select Time Zone")]
         public string TimeZone { set; get; }
+        public string OfficeExt { get; set; }
         public List<SelectItem> TimeZones { set; get; }
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]

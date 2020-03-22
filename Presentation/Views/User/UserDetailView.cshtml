@@ -75,14 +75,14 @@
                         </div>
                         @if (Model.PhotoPath != null)
                         {
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label for="photo">Photo</label>
-                            </div>
-                            <div class="col">
-                               <img src='@Model.PhotoPath' class="imagethumbnail" width="100" height="100"> 
-                            </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label for="photo">Photo</label>
                         </div>
+                        <div class=" photo_disp" style="display:block">
+                            <img src='@Model.PhotoPath' area-hidden="true" width="200" height="150" />
+                        </div>
+                    </div>
                         }
                     </div>
                 </td>

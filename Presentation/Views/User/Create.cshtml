@@ -137,6 +137,15 @@
                                     </div>
                                     <div class="row top-buffer">
                                         <div class="col-md-3">
+                                            <label asp-for="OfficeExt">Office Extension</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="OfficeExt" class="form-control-sm custom-input">
+                                            <span asp-validation-for="OfficeExt" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
                                             <label asp-for="Language"> </label>
                                         </div>
                                         <div class="col">
@@ -177,10 +186,12 @@
                                         </div>
                                         <div class="col">
                                             <div class="cont">
-                                                <label class="browsebutton">Browse</label>
-                                                <input accept="image/*" data-toggle="tooltip" data-html="true"  asp-for="Photo" class="form-control-sm custom-input Photo">
+                                                <label class="browsebutton">Browse Photo</label>
+                                                <input accept="image/*" data-toggle="tooltip" data-html="true" asp-for="Photo" class="form-control-sm custom-input Photo">
                                             </div>
-                                            <span class="text-danger"></span>
+                                            <div class="top-buffer photo_disp">
+                                                <img src="" area-hidden="true" width="200" height="150" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row top-buffer">

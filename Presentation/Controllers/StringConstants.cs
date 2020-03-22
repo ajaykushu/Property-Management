@@ -2,7 +2,7 @@
 {
     internal static class StringConstants
     {
-        public static string PwdChanged = "Password Successfully changed.";
+        public static string PwdChanged = "Password successfully changed.";
         public static string EmailNotFound = "Email not found.";
         public static string Error = "Some Error Occured";
         public static string EmailSent = "Email sent.";
@@ -11,8 +11,8 @@
         public static string InvalidModel = "Some Values Are Missing {0}";
         public static string RegisterSuccess = "Registration Successfull";
         public static string ImageFailed = "Successfully Registered & Image Upload Failed";
-        public static string ImageUpload = "successfull updated & image uploaded";
-        public static string SuccessUpdate = "successfull updated";
+        public static string ImageUpload = "Successfull updated & image uploaded";
+        public static string SuccessUpdate = "Successfull updated";
         public static string SuccessSaved = "Successfully Saved";
         public static string DeleteFailed = "Unable To Delete Reach Site Owner";
         public static string DeleteSuccess = "Delete Successfull";

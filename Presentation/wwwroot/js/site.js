@@ -41,14 +41,11 @@ $('.Photo').change(function (e) {
         var src = "";
         reader.onload = e => {
             src = e.target.result;
-            $('[data-toggle="tooltip"]').tooltip({
-                html: true,
-                sanitize: true,
-                placement: "bottom",
-                title:"<img class='myavtar' src='"+src+"' width='80' height='80' />"
-            });
+            console.log(src);
+            $(".photo_disp img").prop("src", src);
         };
         reader.readAsDataURL(file);
         $('.browsebutton')[0].innerText = "Selected";
+        $('.photo_disp').show();
     }
 })

@@ -61,6 +61,7 @@ namespace BusinessLogic.Services
                 TimeZone = model.TimeZone,
                 CountryId = model.CountryCode,
                 Title = model.Title,
+                OfficeExt = model.OfficeExt ?? null
             };
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
             foreach (var item in prop)
@@ -105,6 +106,10 @@ namespace BusinessLogic.Services
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Properties = _property.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
             };
+            var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower() == "english").FirstOrDefault();
+            var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").FirstOrDefault();
+            registerRequest.Language = langId != null ? langId.Id : 0;
+            registerRequest.Role = roleid != null ? roleid.PropertyName : null;
             return registerRequest;
         }
         public async Task<EditUser> GetEditUserModelAsync(long Id)
@@ -131,6 +136,7 @@ namespace BusinessLogic.Services
                 Language = applicationUser.LanguageId,
                 Role = roles.Count > 0 ? roles[0] : "",
                 ClockType = applicationUser.ClockType,
+                OfficeExt=applicationUser.OfficeExt,
                 PhoneNumber = applicationUser.PhoneNumber,
                 CountryCode = applicationUser.Country.Id,
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),

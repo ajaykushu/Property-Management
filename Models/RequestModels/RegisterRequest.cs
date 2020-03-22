@@ -19,7 +19,7 @@ namespace Models.RequestModels
         public List<string> SelectedProperty { get; set; }
         public List<SelectItem> Roles { get; set; }
         [Required]
-        public int Language { get; set; }
+        public long Language { get; set; }
         public List<SelectItem> Languages { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -30,6 +30,7 @@ namespace Models.RequestModels
         [Required]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { set; get; }
+        public string OfficeExt { get; set; }
         [Required]
         public string TimeZone { set; get; }
         public List<SelectItem> TimeZones { set; get; }
