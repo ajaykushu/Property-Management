@@ -287,3 +287,100 @@ Stack Trace:    at BusinessLogic.Services.UserService.RegisterUser(RegisterReque
 2020-03-22 16:34:02.194 +05:30 [INF] HTTP GET /api/configuration/getrole responded 200 in 24.0128 ms
 2020-03-22 16:34:04.239 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=1 responded 200 in 21.9047 ms
 2020-03-22 16:34:07.578 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=2 responded 200 in 28.6591 ms
+2020-03-22 16:37:06.041 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 45.854 ms
+2020-03-22 16:37:06.207 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 33.0127 ms
+2020-03-22 16:42:00.241 +05:30 [INF] HTTP GET /api/values responded 404 in 47.8478 ms
+2020-03-22 16:42:12.629 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4536.1836 ms
+2020-03-22 16:42:13.488 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 199.0065 ms
+2020-03-22 16:42:32.771 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=vijay&filter=ByFirstName&requestedPage=0 responded 200 in 194.636 ms
+2020-03-22 16:42:35.824 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=vijay&filter=ByFirstName&requestedPage=0 responded 200 in 31.76 ms
+2020-03-22 16:42:39.230 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=vijay&filter=ByFirstName&requestedPage=0 responded 200 in 32.8305 ms
+2020-03-22 16:43:20.573 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=vijay&filter=ByFirstName&requestedPage=0 responded 200 in 35.6713 ms
+2020-03-22 16:43:23.576 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByFirstName&requestedPage=0 responded 200 in 26.4115 ms
+2020-03-22 16:43:30.818 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=vijay&filter=ByFirstName&requestedPage=0 responded 200 in 54.7041 ms
+2020-03-22 16:43:32.266 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByFirstName&requestedPage=0 responded 200 in 37.2919 ms
+2020-03-22 16:51:59.552 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 78.0519 ms
+2020-03-22 16:52:02.869 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 137.9156 ms
+2020-03-22 16:52:04.955 +05:30 [INF] HTTP GET /api/user/getPropertyTypes responded 200 in 47.0216 ms
+2020-03-22 16:52:21.917 +05:30 [INF] HTTP GET /api/user/getPropertyTypes responded 200 in 14.6338 ms
+2020-03-22 16:53:08.571 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 42.192 ms
+2020-03-22 16:53:10.448 +05:30 [INF] HTTP GET /api/user/getPropertyTypes responded 200 in 8.6327 ms
+2020-03-22 16:53:33.074 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 24.4889 ms
+2020-03-22 16:53:34.897 +05:30 [INF] HTTP GET /api/user/getPropertyTypes responded 200 in 10.523 ms
+2020-03-22 16:55:34.510 +05:30 [INF] HTTP GET /api/values responded 404 in 53.975 ms
+2020-03-22 16:55:46.977 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4613.8895 ms
+2020-03-22 16:55:47.788 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 203.257 ms
+2020-03-22 16:56:05.811 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 121.8214 ms
+2020-03-22 16:56:07.670 +05:30 [INF] HTTP GET /api/user/getPropertyTypes responded 200 in 75.0973 ms
+2020-03-22 16:57:17.493 +05:30 [ERR] HTTP POST /api/user/addproperty responded 500 in 352.931 ms
+Utilities.CustomException.BadRequestException: Property Name already available
+   at BusinessLogic.Services.UserService.AddProperty(AddProperty modal) in E:\Newmyproj\mrproj - Copy\BusinessLogic\Services\UserService.cs:line 230
+   at API.Controllers.UserController.AddProperty(AddProperty modal) in E:\Newmyproj\mrproj - Copy\API\Controllers\UserController.cs:line 120
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-03-22 16:57:17.586 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Utilities.CustomException.BadRequestException: Property Name already available
+   at BusinessLogic.Services.UserService.AddProperty(AddProperty modal) in E:\Newmyproj\mrproj - Copy\BusinessLogic\Services\UserService.cs:line 230
+   at API.Controllers.UserController.AddProperty(AddProperty modal) in E:\Newmyproj\mrproj - Copy\API\Controllers\UserController.cs:line 120
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-22 16:57:17.609 +05:30 [INF] Property Name already available
+Stack Trace:    at BusinessLogic.Services.UserService.AddProperty(AddProperty modal) in E:\Newmyproj\mrproj - Copy\BusinessLogic\Services\UserService.cs:line 230
+   at API.Controllers.UserController.AddProperty(AddProperty modal) in E:\Newmyproj\mrproj - Copy\API\Controllers\UserController.cs:line 120
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-22 16:57:24.383 +05:30 [INF] HTTP POST /api/user/addproperty responded 200 in 498.9951 ms
+2020-03-22 16:57:31.375 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 43.4702 ms
+2020-03-22 16:57:39.698 +05:30 [INF] HTTP GET /api/user/deleteproperty?id=3 responded 200 in 178.773 ms
+2020-03-22 16:57:39.815 +05:30 [INF] HTTP GET /api/user/listproperties responded 200 in 13.07 ms
