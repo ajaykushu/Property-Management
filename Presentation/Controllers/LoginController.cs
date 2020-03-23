@@ -89,8 +89,9 @@ namespace Presentation.Controllers
                     HttpContext.Session.SetString("UId",
                                                   tokenResponse.UId+"");
 
-                    Dictionary<string, HashSet<MenuProperty>> menuView = new Dictionary<string, HashSet<MenuProperty>>();
-                    _sessionStorage.AddItem(tokenResponse.UId, MakeDictionaryFormenuView(tokenResponse, menuView));
+                    Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
+                    MakeDictionaryFormenuView(tokenResponse, menuView);
+                    _sessionStorage.AddItem(tokenResponse.UId, tokenResponse.MenuItems);
                     HttpContext.Session.SetString(
                     "menu",
                     JsonConvert.SerializeObject(menuView)
@@ -120,35 +121,28 @@ namespace Presentation.Controllers
             }
         }
 
-        private HashSet<string> MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, HashSet<MenuProperty>> menuView)
+        private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, List<MenuProperty>> menuView)
         {
-            var CompleteHashSet = new HashSet<string>();
-            foreach (var items in tokenResponse.MenuItems)
+            foreach(var menu in _menuDetails.Value.Menus)
             {
-                CompleteHashSet = CompleteHashSet.Concat(items.Value).ToHashSet();
-                foreach (var submenu in items.Value)
+                if (tokenResponse.MenuItems.Contains(menu.Key))
                 {
-
-                    if (_menuDetails.Value.Menus.ContainsKey(submenu) && _menuDetails.Value.Menus[submenu].Enabled == false)
-                        if (!menuView.ContainsKey(items.Key))
-                        {
-                            var list = new HashSet<MenuProperty>
-                            {
-                                _menuDetails.Value.Menus[submenu]
-                            };
-                            _menuDetails.Value.Menus[submenu].Enabled = true;
-                            menuView.Add(items.Key, list);
-                        }
-                        else
-                        {
-                            menuView[items.Key].Add(_menuDetails.Value.Menus[submenu]);
-                            _menuDetails.Value.Menus[submenu].Enabled = true;
-                        }
+                    menu.Value.Enabled = true;
+                    if (!menuView.ContainsKey(menu.Value.MainMenuName))
+                    {
+                        var templist = new List<MenuProperty>();
+                        templist.Add(menu.Value);
+                        menuView.Add(menu.Value.MainMenuName, templist);
+                    }
+                    else
+                        menuView[menu.Value.MainMenuName].Add(menu.Value);
                 }
             }
-            foreach (var item in _menuDetails.Value.Menus)
+
+            
+             foreach (var item in _menuDetails.Value.Menus)
                 item.Value.Enabled = false;
-            return CompleteHashSet;
+           
         }
 
         /// <summary>

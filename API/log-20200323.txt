@@ -327,3 +327,12 @@ Stack Trace:    at BusinessLogic.Services.UserService.GetUserDetail(Int64 id) in
 2020-03-23 11:10:15.480 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 104.3943 ms
 2020-03-23 11:13:06.317 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 67742.456 ms
 2020-03-23 11:13:08.137 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 782.945 ms
+2020-03-23 12:50:27.755 +05:30 [INF] HTTP GET /api/values responded 404 in 47.6879 ms
+2020-03-23 13:10:42.837 +05:30 [INF] HTTP GET /api/values responded 404 in 47.3245 ms
+2020-03-23 13:10:58.483 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 11905.5845 ms
+2020-03-23 13:11:01.011 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 2138.6706 ms
+2020-03-23 13:11:09.482 +05:30 [INF] HTTP GET /api/property/listproperties responded 200 in 1631.5405 ms
+2020-03-23 13:11:21.321 +05:30 [INF] HTTP GET /api/user/getregisterrequestmodel responded 200 in 2233.7262 ms
+2020-03-23 13:11:28.190 +05:30 [INF] HTTP GET /api/user/checkusername?userName=test@test.com responded 200 in 1126.9309 ms
+2020-03-23 13:11:36.507 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 1475.9944 ms
+2020-03-23 13:11:41.303 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 403 in 1938.2777 ms

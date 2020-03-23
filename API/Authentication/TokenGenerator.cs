@@ -17,7 +17,7 @@ namespace API.Authentication
         {
             _configuration = configuration;
         }
-        public Claim[] GetClaims(ApplicationUser applicationuser, IList<string> roles, List<string> features)
+        public Claim[] GetClaims(ApplicationUser applicationuser, IList<string> roles, HashSet<string> features)
         {
 
             List<Claim> authClaims = new List<Claim>

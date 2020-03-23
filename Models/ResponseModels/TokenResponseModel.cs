@@ -8,7 +8,7 @@ namespace Models.ResponseModels
         public long UId { set; get; }
         public HashSet<string> Roles { set; get; }
         public string FullName { get; set; }
-        public Dictionary<string, HashSet<string>> MenuItems { set; get; }
+        public HashSet<string> MenuItems { set; get; }
         public string PhotoPath { set; get; }
     }
 }
