@@ -8,7 +8,7 @@
 @if (Model != null)
 {
 <p>
-    <button class="btn btn-sm btn-success addmodal" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus-circle fa-1x" alt="Add"></i>&nbsp;Create New</button>
+    <auth-link bclass="btn btn-sm btn-success addmodal" feature="Add Property" data-toggle="modal" data-target=".bd-example-modal-lg"  content='<i class="fa fa-plus-circle fa-1x" alt="Add"></i>&nbsp;Create New'></auth-link>
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -28,8 +28,13 @@
                 <div class="card propetry">
                     <div class="card-header propery_head">
                         <ul class="opertion_menu">
-                            <li class="opertion_menu_item"><a  asp-action="DeleteProperty" asp-route-id="@item.Id" asp-controller="Property"><i class="fa fa-trash-alt fa-1x" aria-hidden="true"></i></a></li>
-                            &nbsp;<li class="opertion_menu_item"><a  asp-action="PropertyEditView" asp-route-id="@item.Id" asp-controller="Property"><i class="fa fa-pencil-alt fa-1x" aria-hidden="true"></i></a></li>
+                            @{
+                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                keyValuePairs.Add("id", item.Id + "");
+                            }
+                            <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature="Delete Property" routedata=@keyValuePairs action="DeleteProperty" controller="Property" content='<i class="fa fa-trash-alt fa-1x" aria-hidden="true"></i>'></auth-link></li>
+                            &nbsp;
+                            <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature="Edit Property" routedata=@keyValuePairs action="PropertyEditView" controller="Property" content='<i class="fa fa-pencil-alt fa-1x" aria-hidden="true"></i>'></auth-link></li>
                         </ul>
                     </div>
                     <div class="card-body">

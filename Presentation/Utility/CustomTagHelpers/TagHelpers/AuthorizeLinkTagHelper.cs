@@ -40,8 +40,12 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
                 
             }
             var sb = new StringBuilder();
-            if(CheckAuthorizarion())
-            sb.AppendFormat(@"<a class='{0}' href='/{1}/{2}{4}'>{3}</a>",bclass,controller,action,content,route);
+            if (CheckAuthorizarion()) {
+                if(!string.IsNullOrWhiteSpace(action) || !string.IsNullOrWhiteSpace(controller))
+                    sb.AppendFormat(@"<a class='{0}' href='/{1}/{2}{4}'>{3}</a>", bclass, controller, action, content, route);
+                else
+                    sb.AppendFormat(@"<a class='{0}'>{1}</a>", bclass, content);
+            }
 
             output.PreContent.SetHtmlContent(sb.ToString());
            
