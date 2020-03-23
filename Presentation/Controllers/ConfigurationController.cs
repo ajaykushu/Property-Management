@@ -67,7 +67,7 @@ namespace Presentation.Controllers
             _apiRoute.Value.Routes.TryGetValue("updatefeature", out var path);
             var res = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, keyValuePair, this, _token);
             if (res.IsSuccessStatusCode)
-                return Ok("successfully updated");
+                return RedirectToAction("FeaturesSelector", keyValuePair.Key);
             else
                 return BadRequest("Some Eror Occured");
         }

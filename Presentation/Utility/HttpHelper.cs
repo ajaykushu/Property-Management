@@ -75,7 +75,6 @@ namespace Presentation.Utility
             else if (message.StatusCode == HttpStatusCode.Unauthorized)
             {
                 controller.TempData["Error"] = "Please Login";
-                _httpContextAccessor.HttpContext.Session.Clear();
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
                 _httpContextAccessor.HttpContext.Response.Redirect("https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/Login/LogOut");
             }
@@ -91,8 +90,7 @@ namespace Presentation.Utility
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
                 controller.TempData["Error"] = "Some Error Occured Contact Administrator";
             }
-
-
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
         }
 
         public string SerializeToString(object toBeSerializedObj)

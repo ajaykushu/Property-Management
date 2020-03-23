@@ -16,11 +16,10 @@ namespace Presentation.Utility
 
         public void AddItem(long key, object value )
         {
-            lock(_dict){ 
-                if (!_dict.ContainsKey(key))
-                    _dict[key] = value;
-                else
-                    _dict.Add(key, value);
+            lock(_dict){
+                if (_dict.ContainsKey(key))
+                    _dict.Remove(key);
+                _dict.Add(key, value);
 
                }
         }
