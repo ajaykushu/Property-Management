@@ -213,13 +213,13 @@ namespace Presentation.Controllers
         }
        
         [HttpGet]
-        public async Task<IActionResult> DeAct_ActUser(long userId, int operation, int page)
+        public async Task<IActionResult> DeAct_ActUser(long id, int operation, int page)
         {
 
             _apiRoute.Value.Routes.TryGetValue("deAct_actUser", out string path);
             try
             {
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?userId=" + userId + "&operation=" + operation, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?userId=" + id + "&operation=" + operation, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     if (operation == 0)

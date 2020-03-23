@@ -862,3 +862,9 @@ Stack Trace:    at BusinessLogic.Services.PropertyService.DeleteProperty(Int32 i
 2020-03-22 22:58:58.603 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 169.0763 ms
 2020-03-22 22:59:07.504 +05:30 [INF] HTTP GET /api/property/listproperties responded 200 in 84.9236 ms
 2020-03-22 22:59:09.572 +05:30 [INF] HTTP GET /api/property/getPropertyTypes responded 200 in 43.9351 ms
+2020-03-22 23:22:15.205 +05:30 [INF] HTTP GET /api/values responded 404 in 145.1421 ms
+2020-03-22 23:22:22.016 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 2981.6229 ms
+2020-03-22 23:22:22.591 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 155.3235 ms
+2020-03-22 23:24:45.710 +05:30 [INF] HTTP GET /api/configuration/getrole responded 200 in 66.3899 ms
+2020-03-22 23:24:48.394 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=1 responded 200 in 66.847 ms
+2020-03-22 23:24:52.184 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=2 responded 200 in 22.345 ms

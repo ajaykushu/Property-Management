@@ -27,8 +27,6 @@ namespace API.Controllers
             _imageUploadInFile = imageUploadInFile;
         }
 
-       
-
         /// <summary>
         /// This Controller Action fot Register User
         /// </summary>

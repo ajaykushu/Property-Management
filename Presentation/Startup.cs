@@ -56,6 +56,7 @@ namespace Presentation
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IHttpClientHelper, HttpHelper>();
             services.AddHttpClient<HttpHelper>();
+            services.AddSingleton<ISessionStorage, SessionStorage>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

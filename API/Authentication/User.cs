@@ -132,7 +132,8 @@ namespace API.Authentication
                     returnToken = new TokenResponseModel()
                     {
                         FullName = identityUser.FirstName + " " + identityUser.LastName + " " + identityUser.Suffix,
-                        Roles = roles,
+                        UId = identityUser.Id,
+                        Roles = roles.ToHashSet(),
                         Token = _tokenGenerator.GetToken(claims),
                         MenuItems = MenuItems,
                         PhotoPath = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath

@@ -23,13 +23,15 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly IOptions<MenuMapperModel> _menuDetails;
+        private readonly ISessionStorage _sessionStorage;
 
 
-        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails)
+        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails,ISessionStorage sessionStorage)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             _menuDetails = menuDetails;
+            _sessionStorage = sessionStorage;
 
         }
         /// <summary>
@@ -84,9 +86,11 @@ namespace Presentation.Controllers
                                                   tokenResponse.FullName);
                     HttpContext.Session.SetString("imagePath",
                                                   tokenResponse.PhotoPath);
+                    HttpContext.Session.SetString("UId",
+                                                  tokenResponse.UId+"");
 
                     Dictionary<string, HashSet<MenuProperty>> menuView = new Dictionary<string, HashSet<MenuProperty>>();
-                    MakeDictionaryFormenuView(tokenResponse, menuView);
+                    _sessionStorage.AddItem(tokenResponse.UId, MakeDictionaryFormenuView(tokenResponse, menuView));
                     HttpContext.Session.SetString(
                     "menu",
                     JsonConvert.SerializeObject(menuView)
@@ -116,10 +120,15 @@ namespace Presentation.Controllers
             }
         }
 
-        private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, HashSet<MenuProperty>> menuView)
+        private HashSet<string> MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, HashSet<MenuProperty>> menuView)
         {
+            var CompleteHashSet = new HashSet<string>();
             foreach (var items in tokenResponse.MenuItems)
+            {
+                CompleteHashSet = CompleteHashSet.Concat(items.Value).ToHashSet();
                 foreach (var submenu in items.Value)
+                {
+
                     if (_menuDetails.Value.Menus.ContainsKey(submenu) && _menuDetails.Value.Menus[submenu].Enabled == false)
                         if (!menuView.ContainsKey(items.Key))
                         {
@@ -135,8 +144,11 @@ namespace Presentation.Controllers
                             menuView[items.Key].Add(_menuDetails.Value.Menus[submenu]);
                             _menuDetails.Value.Menus[submenu].Enabled = true;
                         }
+                }
+            }
             foreach (var item in _menuDetails.Value.Menus)
                 item.Value.Enabled = false;
+            return CompleteHashSet;
         }
 
         /// <summary>
@@ -147,6 +159,8 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult LogOut()
         {
+            var Id = Convert.ToInt64(HttpContext.Session.GetString("UId"));
+            _sessionStorage.RemoveItem(Id);
             HttpContext.Session.Clear();
             _httpClientHelper.RemoveHeader();
             return RedirectToAction("Index", "Login", null);
