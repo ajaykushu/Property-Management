@@ -1,0 +1,282 @@
+2020-03-24 00:00:07.780 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Threading.Tasks.Task`1[System.String]' to type 'System.String'.
+   at API.BlackListCheck.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-24 00:09:39.627 +05:30 [INF] HTTP GET /api/values responded 404 in 40.2585 ms
+2020-03-24 00:09:48.908 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3558.0372 ms
+2020-03-24 00:09:56.458 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 177.296 ms
+2020-03-24 00:10:01.456 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 525.4259 ms
+2020-03-24 00:10:20.526 +05:30 [INF] HTTP POST /api/user/updateuser responded 200 in 2694.9707 ms
+2020-03-24 00:21:38.126 +05:30 [INF] HTTP GET /api/values responded 404 in 40.0597 ms
+2020-03-24 00:21:44.271 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3059.7876 ms
+2020-03-24 00:21:44.857 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 145.3077 ms
+2020-03-24 00:21:55.514 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 819.0846 ms
+2020-03-24 00:22:25.398 +05:30 [INF] HTTP POST /api/user/updateuser responded 200 in 3725.3681 ms
+2020-03-24 00:22:28.653 +05:30 [ERR] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 500 in 45.4769 ms
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-03-24 00:22:28.956 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheck.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheck.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-24 00:22:28.969 +05:30 [WRN] The response has already started, the error handler will not be executed.
+2020-03-24 00:22:28.973 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheck.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheck.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-03-24 00:22:28.978 +05:30 [WRN] The response has already started, the error page middleware will not be executed.
+2020-03-24 00:22:28.989 +05:30 [ERR] Connection ID "18014398515387564551", Request ID "8000020c-0001-fa00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheck.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheck.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+2020-03-24 00:25:03.207 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 68.8834 ms
+2020-03-24 00:25:03.347 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 39.3935 ms
+2020-03-24 00:36:24.550 +05:30 [INF] HTTP GET /api/values responded 404 in 57.8998 ms
+2020-03-24 00:36:34.175 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5769.6015 ms
+2020-03-24 00:40:58.526 +05:30 [INF] HTTP GET /api/values responded 404 in 187.2709 ms
+2020-03-24 00:41:27.793 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4293.835 ms
+2020-03-24 00:41:31.673 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 178.3509 ms
+2020-03-24 00:41:41.097 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 494.4563 ms
+2020-03-24 00:48:30.154 +05:30 [INF] HTTP POST /api/user/updateuser responded 200 in 394415.2511 ms
+2020-03-24 00:48:38.777 +05:30 [ERR] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 500 in 52.1206 ms
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-03-24 00:48:39.084 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheck.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheck.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-03-24 00:48:39.102 +05:30 [WRN] The response has already started, the error handler will not be executed.
+2020-03-24 00:48:39.107 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheck.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheck.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-03-24 00:48:39.113 +05:30 [WRN] The response has already started, the error page middleware will not be executed.
+2020-03-24 00:48:39.127 +05:30 [ERR] Connection ID "17509995357122068688", Request ID "800000d1-0001-f300-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+System.InvalidOperationException: The response headers cannot be modified because the response has already started.
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.ThrowIfReadOnly()
+   at Microsoft.AspNetCore.HttpSys.Internal.HeaderCollection.set_Item(String key, StringValues value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at Microsoft.AspNetCore.Mvc.Formatters.OutputFormatter.WriteResponseHeaders(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Formatters.TextOutputFormatter.WriteAsync(OutputFormatterWriteContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsyncCore(ActionContext context, ObjectResult result, Type objectType, Object value)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.ExecuteAsync(ActionContext context, ObjectResult result)
+   at Microsoft.AspNetCore.Mvc.ObjectResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultAsync(IActionResult result)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResultFilterAsync[TFilter,TFilterAsync]()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheck.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheck.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+2020-03-24 00:49:18.631 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 58.6746 ms
+2020-03-24 00:49:21.615 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 36.0061 ms
+2020-03-24 13:06:40.834 +05:30 [INF] HTTP GET /api/values responded 404 in 54.1777 ms
+2020-03-24 13:07:01.966 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 13339.0349 ms
+2020-03-24 13:07:02.732 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 204.6299 ms
+2020-03-24 13:07:08.999 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 787.5893 ms
+2020-03-24 13:08:22.601 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 28.0628 ms
+2020-03-24 13:09:04.948 +05:30 [INF] HTTP GET /api/user/getregisterrequestmodel responded 200 in 42.0487 ms
+2020-03-24 13:09:18.765 +05:30 [INF] HTTP GET /api/user/checkusername?userName=test@test.com responded 200 in 105.4001 ms
+2020-03-24 13:09:34.107 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 79.7301 ms
+2020-03-24 13:09:39.575 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 29.4675 ms
+2020-03-24 13:09:52.059 +05:30 [INF] HTTP POST /api/user/updateuser responded 200 in 1129.7528 ms
+2020-03-24 13:09:53.776 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 28.4833 ms
+2020-03-24 13:09:56.620 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 44.7405 ms

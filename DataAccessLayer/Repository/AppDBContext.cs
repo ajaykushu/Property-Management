@@ -10,7 +10,6 @@ namespace DataAccessLayer.Repository
     {
         public DbSet<Property> Properties { set; get; }
         public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
-        public DbSet<Country> Countries { set; get; }
         public DbSet<Menu> Menu { set; get; }
         public DbSet<MainMenu> MainMenus { set; get; }
 
@@ -145,19 +144,6 @@ namespace DataAccessLayer.Repository
             {
                 Id = 1,
                 MainMenuName = "User Manager"
-            });
-
-
-
-            builder.Entity<Country>().HasData(new Country()
-            {
-                Id = 1,
-                ISO2 = "IN",
-                ISO3 = "IND",
-                Name = "INDIA",
-                Nicename = "India",
-                Numcode = 91,
-                PhoneCode = 0
             });
 
 

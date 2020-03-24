@@ -109,16 +109,7 @@
                                             <label for="PhoneNumber">Phone Number</label>
                                         </div>
                                         <div class="col">
-                                            @if (Model.CountryCodes.Any())
-                                            {
-                                                <select class="form-control form-control-sm custom-input" asp-for="CountryCode" asp-items="@(new SelectList(Model.CountryCodes, "Id", "PropertyName"))">
-                                                    <option value="">Country Code</option>
-                                                </select>
-                                                <span asp-validation-for="CountryCode" class="text-danger"></span>
-                                            }
-                                        </div>
-                                        <div class="col">
-                                            <input asp-for="PhoneNumber" autocomplete="off" class="form-control-sm custom-input" placeholder="Phone Number">
+                                            <input asp-for="PhoneNumber" autocomplete="off" class="form-control-sm custom-input" placeholder="+91-1234567890">
                                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                         </div>
                                     </div>

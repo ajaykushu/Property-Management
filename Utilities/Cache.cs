@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Threading.Tasks;
 using Utilities.Interface;
 
 namespace Utilities
@@ -11,25 +12,29 @@ namespace Utilities
         {
             _memoryCache = memoryCache;
         }
-        public void AddItem(string key, object value)
+        public void AddItem(string key, object value,long ticks)
         {
             DateTime cacheEntry;
             if (!_memoryCache.TryGetValue(key, out var val))
             {
+                
                 cacheEntry = DateTime.UtcNow;
-                var cacheentryop = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(15));
+                var cacheentryop = new MemoryCacheEntryOptions();
+                cacheentryop.SetAbsoluteExpiration(new TimeSpan(ticks));
                 //key not in cache
                 _memoryCache.Set(key, value, cacheentryop);
             }
 
         }
-        public object GetItem(string key)
+        public string GetItem(string key)
         {
-            if (!_memoryCache.TryGetValue(key, out var val))
+            var res = _memoryCache.Get(key);
+            if (res==null)
             {
-                return null;
+                return "";
             }
-            else { return val; }
+            else { return res as string; }
         }
+       
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface ICache
     {
-        public void AddItem(string key, object value);
-        public object GetItem(string key);
+        public void AddItem(string key, object value, long ticks);
+        public string GetItem(string key);
     }
 }

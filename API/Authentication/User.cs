@@ -92,7 +92,6 @@ namespace API.Authentication
                     FirstName = "Test",
                     LastName = "Last",
                     Language = 1,
-                    CountryCode = 1,
                     Role = "Admin",
                     Password = "Testuser123@",
                     TimeZone = "India +5:30"

@@ -38,18 +38,11 @@ namespace API
                         break;
                     default:
                         httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        httpContext.Response.WriteAsync(contextFeature.Error.Message);
+                        httpContext.Response.WriteAsync("Some Error Occured");
                         break;
-
                 }
-
-
             }
             return Task.CompletedTask;
-
         }
-
-
-
     }
 }

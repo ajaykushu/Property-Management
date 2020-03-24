@@ -24,16 +24,13 @@ namespace Presentation.ViewModels
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
         [Remote("CheckEmail","User")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Please Choose ContryCode")]
-        public int CountryCode { set; get; }
-        public List<SelectItem> CountryCodes { set; get; }
         [Required(ErrorMessage = "Please Select Time Zone")]
         public string TimeZone { set; get; }
         public string OfficeExt { get; set; }
         public List<SelectItem> TimeZones { set; get; }
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
+        [RegularExpression(@"([+][0-9]{2,3}[-]{1})?[1-9]{1}[0-9]{9}", ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
         [Remote("CheckUserName", "User")]
         [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length less than 256 charcters")]

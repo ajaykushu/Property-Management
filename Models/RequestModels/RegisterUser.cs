@@ -21,9 +21,6 @@ namespace Models.RequestModels
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Please Choose ContryCode")]
-        public int CountryCode { set; get; }
-        public List<SelectItem> CountryCodes { set; get; }
         [Required(ErrorMessage = "Please Select Time Zone")]
         public string TimeZone { set; get; }
         public string OfficeExt { get; set; }

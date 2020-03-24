@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using DataAccessLayer.Interfaces;
 using DataEntity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.CustomException;
 using Utilities.Interface;
@@ -21,24 +23,22 @@ namespace BusinessLogic.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IRepo<Languages> _langrepo;
-        private readonly IRepo<PropertyType> _proprepo;
         private readonly IRepo<Property> _property;
         private readonly IRepo<UserProperty> _userproperty;
-        private readonly IRepo<Country> _country;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
+        private readonly ICache _cache;
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<PropertyType> proprepo, IRepo<Property> property, IRepo<Country> country, IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property,  IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _langrepo = langrepo;
-            _proprepo = proprepo;
             _property = property;
             _userproperty = userproperty;
-            _country = country;
             _httpContextAccessor = httpContextAccessor;
             _imageUploadInFile = imageUploadInFile;
+            _cache = cache;
 
 
         }
@@ -59,7 +59,6 @@ namespace BusinessLogic.Services
                 Language = language,
                 Suffix = model.Suffix,
                 TimeZone = model.TimeZone,
-                CountryId = model.CountryCode,
                 OfficeExt = model.OfficeExt ?? null
             };
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
@@ -91,7 +90,6 @@ namespace BusinessLogic.Services
             {
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
-                CountryCodes = _country.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name + " (" + x.PhoneCode + ")" }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Properties = _property.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
             };
@@ -104,7 +102,7 @@ namespace BusinessLogic.Services
         public async Task<EditUserModel> GetEditUserModelAsync(long Id)
         {
 
-            ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == Id).Include(x => x.UserProperties).ThenInclude(x => x.Property).Include(x => x.Country).AsNoTracking().FirstOrDefaultAsync();
+            ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == Id).Include(x => x.UserProperties).ThenInclude(x => x.Property).AsNoTracking().FirstOrDefaultAsync();
             if (applicationUser == null)
                 throw new BadRequestException("User not Found");
             var roles = await _userManager.GetRolesAsync(applicationUser);
@@ -113,7 +111,6 @@ namespace BusinessLogic.Services
                 Properties = _property.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList(),
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
-                CountryCodes = _country.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name + " (" + x.PhoneCode + ")" }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Email = applicationUser.Email,
                 UserName = applicationUser.UserName,
@@ -127,7 +124,6 @@ namespace BusinessLogic.Services
                 ClockType = applicationUser.ClockType,
                 OfficeExt = applicationUser.OfficeExt,
                 PhoneNumber = applicationUser.PhoneNumber,
-                CountryCode = applicationUser.Country.Id,
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
                 Id = applicationUser.Id
             };
@@ -153,7 +149,6 @@ namespace BusinessLogic.Services
             applicationUser.SMSAltert = editUser.SMSAlert;
             applicationUser.TimeZone = editUser.TimeZone;
             applicationUser.OfficeExt = editUser.OfficeExt;
-            applicationUser.CountryId = editUser.CountryCode;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
             applicationUser.UserProperties.Clear();
@@ -168,14 +163,14 @@ namespace BusinessLogic.Services
                     });
 
             }
-
             if (!String.IsNullOrEmpty(editUser.Password))
                 applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, editUser.Password);
 
             identityResult = await _userManager.UpdateAsync(applicationUser);
             if (identityResult.Succeeded)
             {
-
+                var ticks =  Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x=>x.Type.Equals("exp")).Value);
+                if (editUser.Password != null) _cache.AddItem(applicationUser.Id+"",await _httpContextAccessor.HttpContext.GetTokenAsync("access_token"),ticks);
                 var roles = await _userManager.GetRolesAsync(applicationUser);
                 var roleDeleted = await _userManager.RemoveFromRolesAsync(applicationUser, roles);
                 var roleAdded = await _userManager.AddToRoleAsync(applicationUser, editUser.Role);
@@ -269,12 +264,11 @@ namespace BusinessLogic.Services
 
         public async Task<UserDetailModel> GetUserDetail(long id)
         {
-            var user = _userManager.Users.Where(x => x.Id == id).Include(x => x.UserProperties).Include(x => x.Country).Select(x => new
+            var user = _userManager.Users.Where(x => x.Id == id).Include(x => x.UserProperties).Select(x => new
             {
                 applicationUser = x,
                 UserModel = new UserDetailModel
                 {
-                    CountryCode = x.Country.Name + " (" + x.Country.PhoneCode + ")",
                     EmailAddress = x.Email,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,

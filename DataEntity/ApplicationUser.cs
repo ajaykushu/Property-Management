@@ -32,10 +32,7 @@ namespace DataEntity
 
         [Required]
         public int LanguageId { get; set; }
-        [Required]
-        public int CountryId { get; set; }
-        public Country Country { get; set; }
-
+        
         [Column(TypeName = "varchar(100)")]
         public string TimeZone { get; set; }
 
