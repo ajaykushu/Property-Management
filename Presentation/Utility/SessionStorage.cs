@@ -8,7 +8,7 @@ namespace Presentation.Utility
 {
     public class SessionStorage:ISessionStorage
     {
-        private Dictionary<long, object> _dict;
+        private readonly Dictionary<long, object> _dict;
         public SessionStorage()
         {
             _dict = new Dictionary<long, object>();

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
@@ -20,24 +20,6 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Countries",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ISO2 = table.Column<string>(type: "varchar(2)", nullable: true),
-                    Name = table.Column<string>(type: "varchar(80)", nullable: true),
-                    Nicename = table.Column<string>(type: "varchar(80)", nullable: true),
-                    ISO3 = table.Column<string>(type: "varchar(3)", nullable: true),
-                    Numcode = table.Column<int>(nullable: true),
-                    PhoneCode = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Countries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,16 +49,16 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MainMenus",
+                name: "Menu",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MainMenuName = table.Column<string>(type: "varchar(30)", nullable: false)
+                    MenuName = table.Column<string>(type: "varchar(30)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MainMenus", x => x.Id);
+                    table.PrimaryKey("PK_Menu", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -127,13 +109,11 @@ namespace DataAccessLayer.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(type: "varchar(4)", nullable: false),
                     FirstName = table.Column<string>(type: "varchar(50)", nullable: false),
                     LastName = table.Column<string>(type: "varchar(50)", nullable: false),
                     Suffix = table.Column<string>(type: "varchar(10)", nullable: true),
                     SMSAltert = table.Column<bool>(nullable: false, defaultValue: false),
                     LanguageId = table.Column<int>(nullable: false, defaultValue: 1),
-                    CountryId = table.Column<int>(nullable: false),
                     TimeZone = table.Column<string>(type: "varchar(100)", nullable: true),
                     ClockType = table.Column<string>(type: "varchar(2)", nullable: true, defaultValue: "12"),
                     OfficeExt = table.Column<string>(type: "varchar(10)", nullable: true),
@@ -144,12 +124,6 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Languages_LanguageId",
                         column: x => x.LanguageId,
@@ -165,21 +139,27 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Menu",
+                name: "RoleMenuMaps",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MenuName = table.Column<string>(type: "varchar(30)", nullable: false),
-                    MainMenuId = table.Column<long>(nullable: false)
+                    RoleId = table.Column<long>(nullable: false),
+                    MenuId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Menu", x => x.Id);
+                    table.PrimaryKey("PK_RoleMenuMaps", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Menu_MainMenus_MainMenuId",
-                        column: x => x.MainMenuId,
-                        principalTable: "MainMenus",
+                        name: "FK_RoleMenuMaps_Menu_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menu",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleMenuMaps_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -222,7 +202,7 @@ namespace DataAccessLayer.Migrations
                     HouseNumber = table.Column<string>(type: "varchar(10)", nullable: false),
                     Locality = table.Column<string>(type: "varchar(50)", nullable: true),
                     Street = table.Column<string>(type: "varchar(50)", nullable: false),
-                    LandMark = table.Column<string>(type: "varchar(100)", nullable: true),
+                    StreetLine2 = table.Column<string>(type: "varchar(100)", nullable: true),
                     PinCode = table.Column<string>(type: "varchar(8)", nullable: false),
                     City = table.Column<string>(type: "varchar(50)", nullable: false),
                     Country = table.Column<string>(type: "varchar(50)", nullable: false)
@@ -263,32 +243,6 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleMenuMaps",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<long>(nullable: false),
-                    MenuId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleMenuMaps", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RoleMenuMaps_Menu_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menu",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RoleMenuMaps_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "WorkerTyperUserMap",
                 columns: table => new
                 {
@@ -315,7 +269,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "userProperties",
+                name: "UserProperties",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -325,15 +279,15 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_userProperties", x => x.Id);
+                    table.PrimaryKey("PK_UserProperties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_userProperties_AspNetUsers_ApplicationUserId",
+                        name: "FK_UserProperties_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_userProperties_Properties_PropertyId",
+                        name: "FK_UserProperties_Properties_PropertyId",
                         column: x => x.PropertyId,
                         principalTable: "Properties",
                         principalColumn: "Id",
@@ -345,14 +299,9 @@ namespace DataAccessLayer.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "d5f84fd4-fdea-469e-9ac9-7f9e7da06b9f", "Admin", "ADMIN" },
-                    { 2L, "ceb31bb6-c9d0-43d7-96f4-e501b8ab9eb4", "User", "USER" }
+                    { 1L, "0461163f-dc9b-431d-91c9-ba60e57340e2", "Admin", "ADMIN" },
+                    { 2L, "27458f36-30f5-4746-baa3-8e2414dc124f", "User", "USER" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "Id", "ISO2", "ISO3", "Name", "Nicename", "Numcode", "PhoneCode" },
-                values: new object[] { 1, "IN", "IND", "INDIA", "India", 91, 0 });
 
             migrationBuilder.InsertData(
                 table: "Languages",
@@ -360,31 +309,27 @@ namespace DataAccessLayer.Migrations
                 values: new object[] { 1, "English" });
 
             migrationBuilder.InsertData(
-                table: "MainMenus",
-                columns: new[] { "Id", "MainMenuName" },
-                values: new object[] { 1L, "User Manager" });
+                table: "Menu",
+                columns: new[] { "Id", "MenuName" },
+                values: new object[,]
+                {
+                    { 1L, "Add User" },
+                    { 2L, "View Users" },
+                    { 3L, "View Property" },
+                    { 4L, "Edit User" },
+                    { 5L, "Add Property" },
+                    { 6L, "Edit Property" },
+                    { 7L, "ActDct User" },
+                    { 8L, "View User Detail" },
+                    { 9L, "Delete Property" },
+                    { 10L, "Edit Feature" },
+                    { 11L, "Access Setting" }
+                });
 
             migrationBuilder.InsertData(
                 table: "PropertyType",
                 columns: new[] { "Id", "PropertyTypeName" },
                 values: new object[] { 1, "Hotel" });
-
-            migrationBuilder.InsertData(
-                table: "Menu",
-                columns: new[] { "Id", "MainMenuId", "MenuName" },
-                values: new object[,]
-                {
-                    { 1L, 1L, "Add User" },
-                    { 2L, 1L, "View Users" },
-                    { 3L, 1L, "View Property" },
-                    { 4L, 1L, "Edit User" },
-                    { 5L, 1L, "Add Property" },
-                    { 6L, 1L, "Edit Property" },
-                    { 7L, 1L, "ActDct User" },
-                    { 8L, 1L, "View User Detail" },
-                    { 9L, 1L, "Delete Property" },
-                    { 10L, 1L, "Edit Feature" }
-                });
 
             migrationBuilder.InsertData(
                 table: "RoleMenuMaps",
@@ -414,11 +359,6 @@ namespace DataAccessLayer.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CountryId",
-                table: "AspNetUsers",
-                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_Email",
@@ -457,11 +397,6 @@ namespace DataAccessLayer.Migrations
                 filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Menu_MainMenuId",
-                table: "Menu",
-                column: "MainMenuId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Properties_PropertyName",
                 table: "Properties",
                 column: "PropertyName",
@@ -490,13 +425,13 @@ namespace DataAccessLayer.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_userProperties_ApplicationUserId",
-                table: "userProperties",
+                name: "IX_UserProperties_ApplicationUserId",
+                table: "UserProperties",
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_userProperties_PropertyId",
-                table: "userProperties",
+                name: "IX_UserProperties_PropertyId",
+                table: "UserProperties",
                 column: "PropertyId");
 
             migrationBuilder.CreateIndex(
@@ -529,7 +464,7 @@ namespace DataAccessLayer.Migrations
                 name: "RoleMenuMaps");
 
             migrationBuilder.DropTable(
-                name: "userProperties");
+                name: "UserProperties");
 
             migrationBuilder.DropTable(
                 name: "WorkerTyperUserMap");
@@ -550,13 +485,7 @@ namespace DataAccessLayer.Migrations
                 name: "WorkerType");
 
             migrationBuilder.DropTable(
-                name: "MainMenus");
-
-            migrationBuilder.DropTable(
                 name: "PropertyType");
-
-            migrationBuilder.DropTable(
-                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "Languages");

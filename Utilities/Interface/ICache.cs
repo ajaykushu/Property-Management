@@ -3,6 +3,7 @@
     public interface ICache
     {
         public void AddItem(string key, object value, long ticks);
-        public string GetItem(string key);
+        public object GetItem(string key);
+        void RemoveItem(string v);
     }
 }

@@ -21,12 +21,11 @@ namespace API.Authentication
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
-        private readonly IRepo<MainMenu> _MainMenu;
         private readonly IUserService _user;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public User(UserManager<ApplicationUser> userManager, ITokenGenerator tokenGenerator, IEmailSender emailSender,
-               IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor, IRepo<MainMenu> MainMenu)
+               IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
@@ -34,7 +33,6 @@ namespace API.Authentication
             _roleMenuMap = roleMenuMap;
             _user = user;
             _httpContextAccessor = httpContextAccessor;
-            _MainMenu = MainMenu;
 
 
 
@@ -116,7 +114,7 @@ namespace API.Authentication
                     var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
                     
                    
-                    var claims = _tokenGenerator.GetClaims(identityUser, roles, submenu);
+                    var claims = _tokenGenerator.GetClaims(identityUser, submenu);
 
                     returnToken = new TokenResponseModel()
                     {

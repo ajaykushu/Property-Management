@@ -96,7 +96,7 @@ namespace BusinessLogic.Services
             var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower() == "english").FirstOrDefault();
             var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").FirstOrDefault();
             registerRequest.Language = langId != null ? langId.Id : 0;
-            registerRequest.Role = roleid != null ? roleid.PropertyName : null;
+            registerRequest.Role = roleid?.PropertyName;
             return registerRequest;
         }
         public async Task<EditUserModel> GetEditUserModelAsync(long Id)
@@ -127,18 +127,13 @@ namespace BusinessLogic.Services
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
                 Id = applicationUser.Id
             };
-
-
             return editusermodel;
         }
         public async Task<bool> UpdateUser(EditUserModel editUser)
         {
-
-
             IdentityResult identityResult;
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == editUser.Id).Include(x => x.Language).Include(x => x.UserProperties).FirstOrDefaultAsync();
             var prop = _property.GetAll().Include(x => x.UserProperties).ThenInclude(x => x.Property).ToList();
-            //making prop primary
             applicationUser.Email = editUser.Email;
             applicationUser.UserName = editUser.UserName;
             applicationUser.TimeZone = editUser.TimeZone;
@@ -155,13 +150,11 @@ namespace BusinessLogic.Services
             foreach (var item in prop)
             {
                 if (editUser.SelectedProperty != null && editUser.SelectedProperty.Contains(item.PropertyName))
-
                     applicationUser.UserProperties.Add(new UserProperty()
                     {
                         ApplicationUser = applicationUser,
                         Property = item
                     });
-
             }
             if (!String.IsNullOrEmpty(editUser.Password))
                 applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, editUser.Password);
@@ -169,8 +162,7 @@ namespace BusinessLogic.Services
             identityResult = await _userManager.UpdateAsync(applicationUser);
             if (identityResult.Succeeded)
             {
-                var ticks =  Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x=>x.Type.Equals("exp")).Value);
-                if (editUser.Password != null) _cache.AddItem(applicationUser.Id+"",await _httpContextAccessor.HttpContext.GetTokenAsync("access_token"),ticks);
+                if (editUser.Password != null) _cache.RemoveItem(applicationUser.Id + "");
                 var roles = await _userManager.GetRolesAsync(applicationUser);
                 var roleDeleted = await _userManager.RemoveFromRolesAsync(applicationUser, roles);
                 var roleAdded = await _userManager.AddToRoleAsync(applicationUser, editUser.Role);
@@ -187,8 +179,6 @@ namespace BusinessLogic.Services
             {
                 throw new BadRequestException(identityResult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
-
-
         }
        
         public async Task<bool> UploadAvtar(string path, string email)
@@ -206,12 +196,10 @@ namespace BusinessLogic.Services
             {
                 throw new BadRequestException(result.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
-
         }
 
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
-            // long Id = Convert.ToInt64(managerId);
             var count = _userManager.Users.Count();
             List<ApplicationUser> user;
             if (matchStr != null && filter == FilterEnum.ByEmail)
@@ -254,6 +242,8 @@ namespace BusinessLogic.Services
             var identityresult = await _userManager.UpdateAsync(iduser);
             if (identityresult.Succeeded)
             {
+                if(operation==0)
+                    _cache.RemoveItem(userId + "");
                 return true;
             }
             else
@@ -304,7 +294,7 @@ namespace BusinessLogic.Services
        
         public async Task<bool> CheckEmail(string email)
         {
-            bool status = false;
+            bool status;
             var res = await _userManager.FindByEmailAsync(email);
             status = res == null ? true : false;
             return status;

@@ -18,6 +18,8 @@
     <Compile Remove="Migrations\20200305103156_nwmigwithwoer.Designer.cs" />
     <Compile Remove="Migrations\20200305104721_nemig2.cs" />
     <Compile Remove="Migrations\20200305104721_nemig2.Designer.cs" />
+    <Compile Remove="Migrations\20200324145754_init6.cs" />
+    <Compile Remove="Migrations\20200324145754_init6.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace API.Controllers
         public IConfiguration Configuration;
         private readonly IUserService _userService;
         private readonly IImageUploadInFile _imageUploadInFile;
-        public UserController(ILogger<LoginController> logger, IUserManager user, IUserService userService, IImageUploadInFile imageUploadInFile)
+        public UserController(IUserService userService, IImageUploadInFile imageUploadInFile)
         {
             _userService = userService;
             _imageUploadInFile = imageUploadInFile;

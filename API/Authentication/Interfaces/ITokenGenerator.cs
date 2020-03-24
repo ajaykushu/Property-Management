@@ -6,7 +6,7 @@ namespace API.Authentication.Interfaces
 {
     public interface ITokenGenerator
     {
-        Claim[] GetClaims(ApplicationUser applicationuser, IList<string> roles, HashSet<string> features);
+        Claim[] GetClaims(ApplicationUser applicationuser, HashSet<string> features);
         string GetToken(Claim[] claims);
     }
 }

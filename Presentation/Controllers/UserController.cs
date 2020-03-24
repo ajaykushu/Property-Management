@@ -240,7 +240,7 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<JsonResult> CheckEmail(string email)
         {
-            String result = String.Empty;
+            String result;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("checkemail", out var path);
@@ -259,7 +259,7 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<JsonResult> CheckPhoneNumber(string phoneNumber)
         {
-            String result = String.Empty;
+            String result;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("checkphonenumber", out var path);
@@ -278,7 +278,7 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<JsonResult> CheckUserName(string userName)
         {
-            String result = String.Empty;
+            String result;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("checkusername", out var path);

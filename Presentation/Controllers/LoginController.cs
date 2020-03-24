@@ -130,8 +130,10 @@ namespace Presentation.Controllers
                     menu.Value.Enabled = true;
                     if (!menuView.ContainsKey(menu.Value.MainMenuName))
                     {
-                        var templist = new List<MenuProperty>();
-                        templist.Add(menu.Value);
+                        var templist = new List<MenuProperty>
+                        {
+                            menu.Value
+                        };
                         menuView.Add(menu.Value.MainMenuName, templist);
                     }
                     else

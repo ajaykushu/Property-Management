@@ -15,12 +15,12 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISessionStorage _sessionStorage;
-        public string feature { get; set; }
-        public string action { get; set; }
-        public string controller { get; set; }
-        public string bclass { get; set; }
-        public string content { get; set; }
-        public Dictionary<string,string> routedata { get; set; }
+        public string Feature { get; set; }
+        public string Action { get; set; }
+        public string Controller { get; set; }
+        public string Bclass { get; set; }
+        public string Content { get; set; }
+        public Dictionary<string,string> Routedata { get; set; }
        
         public AuthorizeLinkTagHelper(IHttpContextAccessor httpContextAccessor, ISessionStorage sessionStorage)
         {
@@ -34,17 +34,17 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
             output.TagName = "CustumTagHelper";
             output.TagMode = TagMode.StartTagAndEndTag;
             var route = String.Empty;
-            if (routedata != null)
+            if (Routedata != null)
             {
-                route = QueryString.Create(routedata).Value;
+                route = QueryString.Create(Routedata).Value;
                 
             }
             var sb = new StringBuilder();
             if (CheckAuthorizarion()) {
-                if(!string.IsNullOrWhiteSpace(action) || !string.IsNullOrWhiteSpace(controller))
-                    sb.AppendFormat(@"<a class='{0}' href='/{1}/{2}{4}'>{3}</a>", bclass, controller, action, content, route);
+                if(!string.IsNullOrWhiteSpace(Action) || !string.IsNullOrWhiteSpace(Controller))
+                    sb.AppendFormat(@"<a class='{0}' href='/{1}/{2}{4}'>{3}</a>", Bclass, Controller, Action, Content, route);
                 else
-                    sb.AppendFormat(@"<a class='{0}'>{1}</a>", bclass, content);
+                    sb.AppendFormat(@"<a class='{0}'>{1}</a>", Bclass, Content);
             }
 
             output.PreContent.SetHtmlContent(sb.ToString());
@@ -53,10 +53,10 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
         //check authorization
         public bool CheckAuthorizarion()
         {
-            HashSet<string> menus=null;
+            HashSet<string> menus;
             long Id = Convert.ToInt64(_httpContextAccessor.HttpContext.Session.GetString("UId"));
             menus = (HashSet<string>)_sessionStorage.GetItem(Id);
-            if (menus!=null && menus.Contains(feature))
+            if (menus!=null && menus.Contains(Feature))
                 return true;
             return false;
         }

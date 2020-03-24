@@ -18,7 +18,7 @@ namespace API.Controllers
         public IConfiguration Configuration;
         private readonly IUserManager _user;
 
-        public LoginController(ILogger<LoginController> logger, IUserManager user)
+        public LoginController(IUserManager user)
         {
             _user = user;
         }

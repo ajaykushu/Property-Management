@@ -51,14 +51,14 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "47b77d4e-e36a-4d23-8cee-018f8d8da2f8",
+                            ConcurrencyStamp = "0461163f-dc9b-431d-91c9-ba60e57340e2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "0f2408e5-df76-47d8-9c16-9e52e469bee8",
+                            ConcurrencyStamp = "27458f36-30f5-4746-baa3-8e2414dc124f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -225,29 +225,6 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataEntity.MainMenu", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MainMenuName")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MainMenus");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            MainMenuName = "User Manager"
-                        });
-                });
-
             modelBuilder.Entity("DataEntity.Menu", b =>
                 {
                     b.Property<long>("Id")
@@ -255,16 +232,11 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("MainMenuId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("MenuName")
                         .IsRequired()
                         .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MainMenuId");
 
                     b.ToTable("Menu");
 
@@ -272,62 +244,57 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            MainMenuId = 1L,
                             MenuName = "Add User"
                         },
                         new
                         {
                             Id = 2L,
-                            MainMenuId = 1L,
                             MenuName = "View Users"
                         },
                         new
                         {
                             Id = 3L,
-                            MainMenuId = 1L,
                             MenuName = "View Property"
                         },
                         new
                         {
                             Id = 4L,
-                            MainMenuId = 1L,
                             MenuName = "Edit User"
                         },
                         new
                         {
                             Id = 5L,
-                            MainMenuId = 1L,
                             MenuName = "Add Property"
                         },
                         new
                         {
                             Id = 6L,
-                            MainMenuId = 1L,
                             MenuName = "Edit Property"
                         },
                         new
                         {
                             Id = 7L,
-                            MainMenuId = 1L,
                             MenuName = "ActDct User"
                         },
                         new
                         {
                             Id = 8L,
-                            MainMenuId = 1L,
                             MenuName = "View User Detail"
                         },
                         new
                         {
                             Id = 9L,
-                            MainMenuId = 1L,
                             MenuName = "Delete Property"
                         },
                         new
                         {
                             Id = 10L,
-                            MainMenuId = 1L,
                             MenuName = "Edit Feature"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            MenuName = "Access Setting"
                         });
                 });
 
@@ -531,7 +498,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("userProperties");
+                    b.ToTable("UserProperties");
                 });
 
             modelBuilder.Entity("DataEntity.WorkerType", b =>
@@ -608,15 +575,6 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataEntity.ApplicationUser", "Manager")
                         .WithMany()
                         .HasForeignKey("ManagerId");
-                });
-
-            modelBuilder.Entity("DataEntity.Menu", b =>
-                {
-                    b.HasOne("DataEntity.MainMenu", "MainMenu")
-                        .WithMany("Menus")
-                        .HasForeignKey("MainMenuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DataEntity.Property", b =>
