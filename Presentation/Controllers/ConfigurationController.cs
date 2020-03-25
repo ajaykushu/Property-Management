@@ -28,9 +28,18 @@ namespace Presentation.Controllers
 
         }
         /// <s
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<SelectItem> roles = null;
+            _apiRoute.Value.Routes.TryGetValue("getrole", out var path);
+            var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token);
+            if (res.IsSuccessStatusCode)
+                roles = JsonConvert.DeserializeObject<List<SelectItem>>(await res.Content.ReadAsStringAsync());
+            else
+            {
+                roles = new List<SelectItem>();
+            }
+            return View(roles);
         }
         public async Task<IActionResult> FeaturesSelector(long id)
         {
@@ -42,17 +51,7 @@ namespace Presentation.Controllers
             features.Roleid = id;
             return PartialView(features);
         }
-        public async Task<IActionResult> FeatureControl()
-        {
-            //getting Role and Features
-            List<SelectItem> roles = null;
-            _apiRoute.Value.Routes.TryGetValue("getrole", out var path);
-            var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token);
-            if (res.IsSuccessStatusCode)
-                roles = JsonConvert.DeserializeObject<List<SelectItem>>(await res.Content.ReadAsStringAsync());
-
-            return PartialView(roles);
-        }
+      
         public IActionResult RoleControl()
         {
             return View();

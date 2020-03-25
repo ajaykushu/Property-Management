@@ -49,19 +49,4 @@
              $(falseval).prop("hidden", true)
         }
     })
-   $('.update').submit(function (e) {
-            e.preventDefault();
-       var url = $(this).attr('action');
-       var form = $(this).serialize();
-      
-       $('.fa-spinner').prop("hidden", false);
-       RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', true, function (res) {
-           $().html(res);
-                     alertify.alert('Info', '<p> + Successfully Updated </p>', function () {
-                     });
-                }, function (res) {
-                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                    });
-                }, "");
-        });
     </script>

@@ -1,44 +1,73 @@
-﻿@model CreateWorkOrder
+﻿
+@model List<SelectItem>
+
 @{
     ViewData["Title"] = "Home Page";
 }
-
-
-<div class="todolist">
-    <div class="custom_nav">
-        <ul class="nav_list">
-            <li id="overview1">
-                <input id="FeatureControl" name="menu" class="radios" type="radio" value="FeatureControl" />
-                <label for="FeatureControl">Feature</label>
-                <input id="RoleControl" name="menu" class="radios" type="radio" value="RoleControl" />
-                <label for="RoleControl">Role</label>
-            </li>
-        </ul>
+<div class="table_container">
+    <div class="workordertitle">
+        Access Control
     </div>
+    <table class="table table-responsive-lg">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row d-lg-table-row">
+                            <label>Select Role</label>
+                            <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                                <option value="">Please select one</option>
+                            </select>
+                        </div>
+                        <hr />
+                        <div class="row d-lg-table-row">
+                            <label>Adding New Role</label>
+                        </div>
+                        <div class="row d-lg-table-row">
+                            <label>Enter Role</label>
+                            <input class="form-control form-control-sm custom-input" />
+                        </div>
+                    </div>
+                </td>
+                <td class="features">
+                    <div class="spinner">
+                        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+                    </div>
+                </td>
+            </tr>
 
-    <div class="table_container">
-       
-    </div>
-    <div class="spinner">
-        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
-    </div>
+        </tbody>
+    </table>
+</div>
+<div class="spinner">
+    <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
 </div>
 
 <script>
-        $(document).ready(function () {
-            $('#FeatureControl').prop('checked', "checked");
-        });
-        $('.radios').click(function () {
-            var controller = $(this).val();
-            if (controller != "" && controller != undefined) {
-                var url = '@Url.Action("action")';
-                url = url.replace("action", controller);
-                $('.table_container').html("");
-                $('.fa-spin').show();
-                RESTCALL(url, {}, "GET", "", true, function (res) {
-                    $('.table_container').html(res);
+    $('.crole').change(function (e) {
+                var url = '@Url.Action("FeaturesSelector")';
+                $('.features').html("");
+               $('.fa-spin').show();
+               var id = $(this).val();
+                RESTCALL(url, {id:id}, "GET", "", true, function (res) {
+                    $('.features').html(res);
                     $('.fa-spin').hide();
                 });
-            }
+
+    })
+     $('.update').submit(function (e) {
+            e.preventDefault();
+       var url = $(this).attr('action');
+       var form = $(this).serialize();
+      
+       $('.fa-spinner').prop("hidden", false);
+       RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', true, function (res) {
+           $().html(res);
+                     alertify.alert('Info', '<p> + Successfully Updated </p>', function () {
+                     });
+                }, function (res) {
+                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    });
+                }, "");
         });
 </script>
