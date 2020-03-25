@@ -6,6 +6,7 @@ using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,10 +36,7 @@ namespace Presentation.Controllers
             var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token);
             if (res.IsSuccessStatusCode)
                 roles = JsonConvert.DeserializeObject<List<SelectItem>>(await res.Content.ReadAsStringAsync());
-            else
-            {
-                roles = new List<SelectItem>();
-            }
+           
             return View(roles);
         }
         public async Task<IActionResult> FeaturesSelector(long id)
@@ -67,8 +65,16 @@ namespace Presentation.Controllers
             var res = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, keyValuePair, this, _token);
             if (res.IsSuccessStatusCode)
                 return Ok("Successfully Updated");
-            else
-                return RedirectToAction("FeaturesSelector", keyValuePair.Key);
+            else {
+                var result = await FeaturesSelector(keyValuePair.Key) as PartialViewResult;
+                HttpContext.Response.StatusCode = (int)res.StatusCode;
+                if (res.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
+                }
+                
+                return PartialView("FeaturesSelector", result.Model);
+            }
         }
 
     }
