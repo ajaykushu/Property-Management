@@ -27,14 +27,22 @@ namespace API
                 var id = httpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
                 var jti = httpContext.User.FindFirst(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
                 var retval = _cache.GetItem(id);
-                if (retval==null)
+                if (retval != null)
                 {
-                    //authenticated but blacklisted
+                    await _requestDelegate(httpContext);
+                }
+                else
+                {
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     await httpContext.Response.WriteAsync("Request Failed");
+
                 }
             }
-            await _requestDelegate(httpContext);
+            else
+            {
+                await _requestDelegate(httpContext);
+            }
+
         }
     }
 }

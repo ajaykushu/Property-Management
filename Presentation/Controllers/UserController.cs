@@ -66,6 +66,8 @@ namespace Presentation.Controllers
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return BadRequest(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
                     else
                         return StatusCode((int)response.StatusCode, StringConstants.Error);
                 }
@@ -173,6 +175,8 @@ namespace Presentation.Controllers
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return BadRequest(await response.Content.ReadAsStringAsync());
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
                     else
                         return StatusCode(500, StringConstants.Error);
                 }
