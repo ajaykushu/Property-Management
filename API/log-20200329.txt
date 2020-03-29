@@ -1,1 +1,14 @@
 2020-03-29 19:25:21.518 +05:30 [INF] HTTP GET /api/values responded 404 in 29.2445 ms
+2020-03-29 19:28:09.969 +05:30 [INF] HTTP GET /api/values responded 404 in 57.8304 ms
+2020-03-29 19:29:35.509 +05:30 [INF] HTTP GET /api/values responded 404 in 90.8984 ms
+2020-03-29 19:29:47.087 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5614.3198 ms
+2020-03-29 19:29:47.919 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 190.2687 ms
+2020-03-29 19:29:55.045 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 200 in 347.5418 ms
+2020-03-29 19:30:28.694 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 52.2175 ms
+2020-03-29 19:30:51.920 +05:30 [INF] HTTP GET /api/values responded 404 in 71.0837 ms
+2020-03-29 19:31:02.527 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5827.8916 ms
+2020-03-29 19:31:03.428 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 179.498 ms
+2020-03-29 19:31:09.891 +05:30 [INF] HTTP GET /api/configuration/getrole responded 200 in 75.6146 ms
+2020-03-29 19:31:13.046 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=1 responded 200 in 93.3614 ms
+2020-03-29 19:31:16.354 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=2 responded 200 in 30.2339 ms
+2020-03-29 19:31:31.167 +05:30 [INF] HTTP GET /api/property/listproperties responded 200 in 139.2203 ms
