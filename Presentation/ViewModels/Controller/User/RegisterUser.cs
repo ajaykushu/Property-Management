@@ -22,7 +22,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> Languages { get; set; }
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
-        [Remote("CheckEmail","User")]
+        [Remote("CheckEmail", "User")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Please Select Time Zone")]
         public string TimeZone { set; get; }

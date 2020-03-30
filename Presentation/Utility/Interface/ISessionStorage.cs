@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Presentation.Utility.Interface
+﻿namespace Presentation.Utility.Interface
 {
     public interface ISessionStorage
     {

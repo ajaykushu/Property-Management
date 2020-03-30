@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
@@ -163,12 +163,12 @@ namespace Presentation.Controllers
             return View(prop);
         }
         [HttpGet]
-        public async Task<IActionResult> MarkPrimary(long id,long userId)
+        public async Task<IActionResult> MarkPrimary(long id, long userId)
         {
             _apiRoute.Value.Routes.TryGetValue("markprimary", out string path);
             try
             {
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id+"&userId="+userId, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&userId=" + userId, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     TempData["Success"] = "Marked as Primary Propery";
 
@@ -178,7 +178,7 @@ namespace Presentation.Controllers
                 TempData["Error"] = StringConstants.Error;
             }
 
-            return RedirectToAction("UserDetailView", "User", new { id=userId });
+            return RedirectToAction("UserDetailView", "User", new { id = userId });
         }
 
 

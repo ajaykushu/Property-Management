@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Threading.Tasks;
 using Utilities.Interface;
 
 namespace Utilities
@@ -12,7 +11,7 @@ namespace Utilities
         {
             _memoryCache = memoryCache;
         }
-        public void AddItem(string key, object value,long ticks)
+        public void AddItem(string key, object value, long ticks)
         {
             if (!_memoryCache.TryGetValue(key, out _))
             {
@@ -23,14 +22,14 @@ namespace Utilities
 
         }
         public object GetItem(string key)
-        {   
+        {
             var res = _memoryCache.Get(key);
             return res;
         }
 
         public void RemoveItem(string v)
         {
-            if(_memoryCache.TryGetValue(v,out _))
+            if (_memoryCache.TryGetValue(v, out _))
                 _memoryCache.Remove(v);
         }
     }

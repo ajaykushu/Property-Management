@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Models.RequestModels
 {
     public class EditUserModel
-    { 
+    {
         [Required(ErrorMessage = "Please Enter First Name")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Please Enter Last Name")]

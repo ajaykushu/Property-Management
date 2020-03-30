@@ -15,7 +15,7 @@ namespace API.Authentication
     {
         private readonly IConfiguration _configuration;
         private readonly ICache _cache;
-        public TokenGenerator(IConfiguration configuration,ICache cache)
+        public TokenGenerator(IConfiguration configuration, ICache cache)
         {
             _configuration = configuration;
             _cache = cache;
@@ -33,7 +33,7 @@ namespace API.Authentication
             };
             foreach (var feature in features)
                 authClaims.Add(new Claim("Feature", feature));
-            _cache.AddItem(applicationuser.Id+"", jti,TimeSpan.FromMinutes(10).Ticks);
+            _cache.AddItem(applicationuser.Id + "", jti, TimeSpan.FromMinutes(10).Ticks);
             return authClaims.ToArray();
         }
 

@@ -8,13 +8,12 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Utilities.CustomException;
 
 namespace BusinessLogic.Services
 {
-   public  class PropertyService:IPropertyService
+    public class PropertyService : IPropertyService
     {
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
@@ -172,7 +171,7 @@ namespace BusinessLogic.Services
 
 
             var user = await _user.Get(x => x.Id == userId).Include(x => x.UserProperties).FirstOrDefaultAsync();
-            if (user != null && user.UserProperties!=null)
+            if (user != null && user.UserProperties != null)
             {
                 foreach (var property in user.UserProperties)
                 {
@@ -182,7 +181,7 @@ namespace BusinessLogic.Services
                         property.isPrimary = false;
                 }
             }
-           var updatestatus=await _user.Update(user);
+            var updatestatus = await _user.Update(user);
             if (updatestatus > 0)
                 return true;
             else

@@ -1,13 +1,11 @@
 ﻿using Models.RequestModels;
 using Models.ResponseModels;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Interfaces
 {
-   public interface IPropertyService
+    public interface IPropertyService
     {
         Task<PropertyOperationModel> GetProperty(long id);
         Task<bool> UpdateProperty(PropertyOperationModel prop);

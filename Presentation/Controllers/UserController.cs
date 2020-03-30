@@ -121,7 +121,7 @@ namespace Presentation.Controllers
             }
             return View(registerrequest);
         }
-        
+
         [HttpGet]
         public async Task<ActionResult> EditUserView(long Id)
         {
@@ -215,7 +215,7 @@ namespace Presentation.Controllers
             }
             return View(usersLists);
         }
-       
+
         [HttpGet]
         public async Task<IActionResult> DeAct_ActUser(long id, int operation, int page)
         {
@@ -252,9 +252,9 @@ namespace Presentation.Controllers
                 if (res.IsSuccessStatusCode)
                 {
                     result = await res.Content.ReadAsStringAsync();
-                    if(result.Equals("false"))
+                    if (result.Equals("false"))
                         return Json("Email Already Present");
-                } 
+                }
 
             }
             catch (Exception) { }

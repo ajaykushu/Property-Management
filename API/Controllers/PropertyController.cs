@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessLogic.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.RequestModels;
 using Models.ResponseModels;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Utilities;
 
 namespace API.Controllers

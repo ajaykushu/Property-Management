@@ -1,12 +1,9 @@
 ﻿using Presentation.Utility.Interface;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Presentation.Utility
 {
-    public class SessionStorage:ISessionStorage
+    public class SessionStorage : ISessionStorage
     {
         private readonly Dictionary<long, object> _dict;
         public SessionStorage()
@@ -14,14 +11,15 @@ namespace Presentation.Utility
             _dict = new Dictionary<long, object>();
         }
 
-        public void AddItem(long key, object value )
+        public void AddItem(long key, object value)
         {
-            lock(_dict){
+            lock (_dict)
+            {
                 if (_dict.ContainsKey(key))
                     _dict.Remove(key);
                 _dict.Add(key, value);
 
-               }
+            }
         }
         public object GetItem(long key)
         {

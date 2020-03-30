@@ -36,7 +36,7 @@ namespace Presentation.Controllers
             var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token);
             if (res.IsSuccessStatusCode)
                 roles = JsonConvert.DeserializeObject<List<SelectItem>>(await res.Content.ReadAsStringAsync());
-           
+
             return View(roles);
         }
         public async Task<IActionResult> FeaturesSelector(long id)
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
             features.Roleid = id;
             return PartialView(features);
         }
-      
+
         public IActionResult RoleControl()
         {
             return View();
@@ -65,14 +65,15 @@ namespace Presentation.Controllers
             var res = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, keyValuePair, this, _token);
             if (res.IsSuccessStatusCode)
                 return Ok("Successfully Updated");
-            else {
+            else
+            {
                 var result = await FeaturesSelector(keyValuePair.Key) as PartialViewResult;
                 HttpContext.Response.StatusCode = (int)res.StatusCode;
                 if (res.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
                 }
-                
+
                 return PartialView("FeaturesSelector", result.Model);
             }
         }

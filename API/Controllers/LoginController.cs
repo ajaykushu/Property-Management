@@ -1,7 +1,6 @@
 ﻿using API.Authentication.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System;

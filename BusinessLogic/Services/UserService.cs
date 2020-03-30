@@ -1,7 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using DataAccessLayer.Interfaces;
 using DataEntity;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.CustomException;
 using Utilities.Interface;
@@ -29,7 +27,7 @@ namespace BusinessLogic.Services
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property,  IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -84,7 +82,7 @@ namespace BusinessLogic.Services
             }
 
         }
-       
+
         public RegisterUser GetRegisterModel()
         {
             RegisterUser registerRequest = new RegisterUser
@@ -148,7 +146,8 @@ namespace BusinessLogic.Services
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
             applicationUser.UserProperties.Clear();
-            if (editUser.SelectedProperty != null && editUser.Role=="User") {
+            if (editUser.SelectedProperty != null && editUser.Role == "User")
+            {
                 foreach (var item in prop)
                 {
                     if (editUser.SelectedProperty.Contains(item.PropertyName))
@@ -183,7 +182,7 @@ namespace BusinessLogic.Services
                 throw new BadRequestException(identityResult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
         }
-       
+
         public async Task<bool> UploadAvtar(string path, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -219,7 +218,7 @@ namespace BusinessLogic.Services
                     users.Add(new UsersListModel
                     {
                         Email = item.Email,
-                        FullName =item.FirstName + " " + item.LastName,
+                        FullName = item.FirstName + " " + item.LastName,
                         Id = item.Id,
                         UserName = item.UserName,
                         IsActive = item.IsActive,
@@ -245,7 +244,7 @@ namespace BusinessLogic.Services
             var identityresult = await _userManager.UpdateAsync(iduser);
             if (identityresult.Succeeded)
             {
-                if(operation==0)
+                if (operation == 0)
                     _cache.RemoveItem(userId + "");
                 return true;
             }
@@ -278,7 +277,7 @@ namespace BusinessLogic.Services
                         PropertyName = x.Property.PropertyName,
                         PropertyType = x.Property.PropertyTypes.PropertyTypeName,
                         Street = x.Property.Street,
-                        IsPrimary=x.isPrimary
+                        IsPrimary = x.isPrimary
                     }).ToList(),
                     PhoneNumber = x.PhoneNumber,
                     UserId = x.UserName,
@@ -295,7 +294,7 @@ namespace BusinessLogic.Services
             return user.UserModel;
         }
 
-       
+
         public async Task<bool> CheckEmail(string email)
         {
             bool status;

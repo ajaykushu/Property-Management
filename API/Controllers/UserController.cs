@@ -1,9 +1,7 @@
-﻿using API.Authentication.Interfaces;
-using BusinessLogic.Interfaces;
+﻿using BusinessLogic.Interfaces;
 using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
@@ -85,7 +83,7 @@ namespace API.Controllers
             return StatusCode(500, "Upload Failed");
 
         }
-        
+
         [Route("getallusers")]
         [FeatureBasedAuthorization("View Users")]
         [HttpGet]
@@ -113,7 +111,7 @@ namespace API.Controllers
             UserDetailModel userDetailModel = await _userService.GetUserDetail(Id);
             return Ok(userDetailModel);
         }
-       
+
         [HttpGet]
         [Route("checkemail")]
         public async Task<ActionResult<bool>> CheckEmail(string email)

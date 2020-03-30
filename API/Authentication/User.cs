@@ -112,8 +112,8 @@ namespace API.Authentication
                     var roles = await _userManager.GetRolesAsync(identityUser) ?? new List<string>();
 
                     var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
-                    
-                   
+
+
                     var claims = _tokenGenerator.GetClaims(identityUser, submenu);
 
                     returnToken = new TokenResponseModel()

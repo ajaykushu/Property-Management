@@ -26,7 +26,7 @@ namespace Presentation.Controllers
         private readonly ISessionStorage _sessionStorage;
 
 
-        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails,ISessionStorage sessionStorage)
+        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, ISessionStorage sessionStorage)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -87,7 +87,7 @@ namespace Presentation.Controllers
                     HttpContext.Session.SetString("imagePath",
                                                   tokenResponse.PhotoPath);
                     HttpContext.Session.SetString("UId",
-                                                  tokenResponse.UId+"");
+                                                  tokenResponse.UId + "");
 
                     Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
                     MakeDictionaryFormenuView(tokenResponse, menuView);
@@ -123,7 +123,7 @@ namespace Presentation.Controllers
 
         private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, List<MenuProperty>> menuView)
         {
-            foreach(var menu in _menuDetails.Value.Menus)
+            foreach (var menu in _menuDetails.Value.Menus)
             {
                 if (tokenResponse.MenuItems.Contains(menu.Key))
                 {
@@ -141,10 +141,10 @@ namespace Presentation.Controllers
                 }
             }
 
-            
-             foreach (var item in _menuDetails.Value.Menus)
+
+            foreach (var item in _menuDetails.Value.Menus)
                 item.Value.Enabled = false;
-           
+
         }
 
         /// <summary>
