@@ -145,9 +145,11 @@ namespace BusinessLogic.Services
             applicationUser.OfficeExt = editUser.OfficeExt;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
-            applicationUser.UserProperties.Clear();
-            if (editUser.SelectedProperty != null && editUser.Role == "User")
+            if (editUser.Role == "Admin")
+                applicationUser.UserProperties.Clear();
+            else if (editUser.SelectedProperty != null && editUser.Role == "User")
             {
+                applicationUser.UserProperties.Clear();
                 foreach (var item in prop)
                 {
                     if (editUser.SelectedProperty.Contains(item.PropertyName))
