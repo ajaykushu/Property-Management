@@ -12,12 +12,21 @@
                         <div class="col">
                             <div class="row">
                                 <div class="col-md-3">
+                                    <label asp-for="Property"> </label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="Property" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="Property" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
                                     <label asp-for="Location"> </label>
                                 </div>
                                 <div class="col">
-                                    <select required class="form-control form-control-sm custom-input" asp-for="Location" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
+                                    <input asp-for="Location" class="form-control-sm custom-input" disabled>
                                     <span asp-validation-for="Location" class="text-danger"></span>
                                 </div>
                             </div>
@@ -26,9 +35,7 @@
                                     <label asp-for="Area"> </label>
                                 </div>
                                 <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="Area" asp-items="@(new SelectList(Model.Areas, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
+                                    <input asp-for="Area" class="form-control-sm custom-input" disabled>
                                     <span asp-validation-for="Area" class="text-danger"></span>
                                 </div>
                             </div>
@@ -38,36 +45,42 @@
                 <tr>
                     <td>
                         <div class="col">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label asp-for="Item"> </label>
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label asp-for="Item"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="Item" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                            <option value="">Please select one</option>
+                                        </select>
+                                        <span asp-validation-for="Item" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="Item" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="Item" class="text-danger"></span>
-                                </div>
+                            }
+                                @if (Model.Issues != null && Model.Issues.Any())
+                                {
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Issue"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                                <option>Please select one</option>
+                                            </select>
+                                            <span asp-validation-for="Issue" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                }
                             </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Issue"> </label>
-                                </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                        <option>Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="Issue" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="col">
                             <div class="row">
-                                <div class="col-md-3">
+                                @*<div class="col-md-3">
                                     <label asp-for="RequestedBy"> </label>
                                 </div>
                                 <div class="col">
@@ -75,15 +88,15 @@
                                         <option value="">Please select one</option>
                                     </select>
                                     <span asp-validation-for="RequestedById" class="text-danger"></span>
-                                </div>
+                                </div>*@
                             </div>
                             <div class="row top-buffer">
                                 <div class="col-md-3">
-                                    <label asp-for="Details"> </label>
+                                    <label asp-for="Description"> </label>
                                 </div>
                                 <div class="col">
-                                    <textarea class="form-control custom-input" asp-for="Details" placeholder="additional Items"></textarea>
-                                    <span asp-validation-for="Details" class="text-danger"></span>
+                                    <textarea class="form-control custom-input" asp-for="Description" placeholder="additional Details"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -112,18 +125,18 @@
                                 <div class="col-md-3">
                                     <label>Assign To </label>
                                 </div>
-                                <div class="col">
+                                @*<div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="Enginnering" asp-items="@(new SelectList(Model.Enginnerings, "Id", "PropertyName"))">
                                         <option value="">Engineering</option>
                                     </select>
                                     <span asp-validation-for="Enginnering" class="text-danger"></span>
-                                </div>
-                                <div class="col">
+                                </div>*@
+                                @*<div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="Department" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
                                         <option value="">Department</option>
                                     </select>
                                     <span asp-validation-for="Department" class="text-danger"></span>
-                                </div>
+                                </div>*@
                             </div>
 
                             <div class="row top-buffer">
@@ -131,8 +144,10 @@
                                     <label asp-for="Photos"> </label>
                                 </div>
                                 <div class="col">
-                                    <input type="file" asp-for="Photos" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Photos" class="text-danger"></span>
+                                    <div class="cont">
+                                        <label class="browsebutton">Browse Photo</label>
+                                        <input accept="image/*" data-toggle="tooltip" data-html="true" asp-for="Photos" class="form-control-sm custom-input Photo">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,6 +174,17 @@
                     form.trigger("reset");;
                 })
             }
+        });
+        $('#Property').change(function () {
+            console.log($(this).val());
+            $.get('@Url.Action("GetAreaLocation","WorkOrder")' + "?id=" + $(this).val(),
+                function (data) {
+                    console.log(data);
+                    if (data != null || data != undefined) {
+                        $('#Area').val(data.area);
+                        $('#Location').val(data.location);
+                    }
+                });
         });
     </script>
 

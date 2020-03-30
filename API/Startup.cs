@@ -95,6 +95,7 @@ namespace API
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IImageUploadInFile, ImageUploadInFile>();
             services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<IWorkOrderService, WorkOrderService>();
             services.AddSingleton<ICache, Cache>();
         }
 

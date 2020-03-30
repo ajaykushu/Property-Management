@@ -42,6 +42,7 @@ namespace DataEntity
         public long? ManagerId { set; get; }
         public virtual ApplicationUser Manager { get; set; }
         public bool IsActive { get; set; }
+        public virtual ICollection<Comments> Comments { get; set; }
     }
 
     public class ApplicationUserPhoneValidator : IUserValidator<ApplicationUser>

@@ -11,7 +11,11 @@ namespace DataAccessLayer.Repository
         public DbSet<Property> Properties { set; get; }
         public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
         public DbSet<Menu> Menu { set; get; }
-
+        public DbSet<Issue> Issues { set; get; }
+        public DbSet<Item> Items { set; get; }
+        public DbSet<Stage> Stages { set; get; }
+        public DbSet<WorkOrder> WorkOrders { set; get; }
+        public DbSet<Comments> Comments { set; get; }
         public DbSet<Languages> Languages { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
         public static readonly ILoggerFactory MyLoggerFactory
