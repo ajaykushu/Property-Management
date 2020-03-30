@@ -70,12 +70,11 @@
                                         }
                                         </div>
                                 </div>
-                                <div class="row top-buffer mainprop">
+                                <div class="row top-buffer mainprop" style="@if (Model.Role == "Admin") {<text>display:none;</text> }">
                                     <div class="col-md-3">
-                                        <label for="SelectedProperty">Main Property</label>
+                                        <label for="SelectedProperty">Assigned Property</label>
                                     </div>
                                     <div class="col">
-
                                         @if (Model.Properties!=null && Model.Properties.Any())
                                         {
                                             <input type="text" value="@if (Model.SelectedProperty.Any())
@@ -272,7 +271,5 @@
         }
     });
    
-   
-    
 </script>
 

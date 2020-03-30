@@ -12,7 +12,6 @@
         public string PinCode { set; get; }
         public string City { set; get; }
         public string Country { set; get; }
-
-
+        public bool IsPrimary { set; get; }
     }
 }

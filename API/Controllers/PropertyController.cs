@@ -66,6 +66,12 @@ namespace API.Controllers
             var status = await _propertyService.DeleteProperty(id);
             return Ok(status);
         }
-
+        [HttpGet]
+        [Route("markprimary")]
+        public async Task<ActionResult<bool>> MarkPrimary(long id, long userId)
+        {
+            bool status = await _propertyService.MarkPrimary(id, userId);
+            return Ok(status);
+        }
     }
 }

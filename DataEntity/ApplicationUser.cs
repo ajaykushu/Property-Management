@@ -18,24 +18,18 @@ namespace DataEntity
         [Required]
         [Column(TypeName = "varchar(50)")]
         public string FirstName { set; get; }
-
         [Column(TypeName = "varchar(50)")]
         [Required]
         public string LastName { set; get; }
-
         [Column(TypeName = "varchar(10)")]
         public string Suffix { set; get; }
-
         [Required]
         public bool SMSAltert { get; set; }
         public Languages Language { get; set; }
-
         [Required]
         public int LanguageId { get; set; }
-        
         [Column(TypeName = "varchar(100)")]
         public string TimeZone { get; set; }
-
         [Column(TypeName = "varchar(2)")]
         public string ClockType { set; get; }
         [Column(TypeName = "varchar(10)")]

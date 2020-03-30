@@ -15,5 +15,6 @@ namespace BusinessLogic.Interfaces
         Task<List<PropertiesModel>> GetProperties();
         Task<bool> DeleteProperty(int id);
         PropertyOperationModel GetPropertyType();
+        Task<bool> MarkPrimary(long id, long userId);
     }
 }

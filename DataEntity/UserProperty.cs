@@ -10,5 +10,6 @@ namespace DataEntity
         public ApplicationUser ApplicationUser { get; set; }
         public long PropertyId { get; set; }
         public Property Property { get; set; }
+        public bool isPrimary { get; set; }
     }
 }

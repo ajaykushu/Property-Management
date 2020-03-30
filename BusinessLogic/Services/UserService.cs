@@ -62,11 +62,12 @@ namespace BusinessLogic.Services
                 OfficeExt = model.OfficeExt ?? null
             };
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
-            foreach (var item in prop)
-                if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
-                    applicationUser.UserProperties.Add(item);
-
-
+            if (model.SelectedProperty != null && model.Role == "User")
+            {
+                foreach (var item in prop)
+                    if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
+                        applicationUser.UserProperties.Add(item);
+            }
             if (!identityResult.Succeeded)
             {
                 throw new BadRequestException(identityResult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
@@ -147,14 +148,16 @@ namespace BusinessLogic.Services
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
             applicationUser.UserProperties.Clear();
-            foreach (var item in prop)
-            {
-                if (editUser.SelectedProperty != null && editUser.SelectedProperty.Contains(item.PropertyName))
-                    applicationUser.UserProperties.Add(new UserProperty()
-                    {
-                        ApplicationUser = applicationUser,
-                        Property = item
-                    });
+            if (editUser.SelectedProperty != null && editUser.Role=="User") {
+                foreach (var item in prop)
+                {
+                    if (editUser.SelectedProperty.Contains(item.PropertyName))
+                        applicationUser.UserProperties.Add(new UserProperty()
+                        {
+                            ApplicationUser = applicationUser,
+                            Property = item
+                        });
+                }
             }
             if (!String.IsNullOrEmpty(editUser.Password))
                 applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, editUser.Password);
@@ -274,7 +277,8 @@ namespace BusinessLogic.Services
                         PinCode = x.Property.PinCode,
                         PropertyName = x.Property.PropertyName,
                         PropertyType = x.Property.PropertyTypes.PropertyTypeName,
-                        Street = x.Property.Street
+                        Street = x.Property.Street,
+                        IsPrimary=x.isPrimary
                     }).ToList(),
                     PhoneNumber = x.PhoneNumber,
                     UserId = x.UserName,

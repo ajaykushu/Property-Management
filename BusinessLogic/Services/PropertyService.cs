@@ -18,10 +18,12 @@ namespace BusinessLogic.Services
     {
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype)
+        private readonly IRepo<UserProperty> _userProperty;
+        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<UserProperty> userProperty)
         {
             _property = property;
             _proptype = proptype;
+            _userProperty = userProperty;
         }
         public PropertyOperationModel GetPropertyType()
         {
@@ -165,6 +167,18 @@ namespace BusinessLogic.Services
 
         }
 
-
+        public async Task<bool> MarkPrimary(long Id, long userId)
+        {
+            var prop =await  _userProperty.Get(x => x.ApplicationUserId == userId && x.PropertyId == Id).SingleOrDefaultAsync();
+            if(prop!=null)
+            {
+                prop.isPrimary = true;
+            }
+           var updatestatus=await _userProperty.Update(prop);
+            if (updatestatus > 0)
+                return true;
+            else
+                return false;
+        }
     }
 }
