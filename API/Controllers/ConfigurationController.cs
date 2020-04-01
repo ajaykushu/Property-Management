@@ -12,11 +12,13 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        IConfigService _configService;
+        private readonly IConfigService _configService;
+
         public ConfigurationController(IConfigService configService)
         {
             _configService = configService;
         }
+
         [HttpGet]
         [Route("getfeatues")]
         [FeatureBasedAuthorization("Edit Feature")]
@@ -25,6 +27,7 @@ namespace API.Controllers
             var data = await _configService.GetFeatureRoles(id);
             return Ok(data);
         }
+
         [HttpGet]
         [Route("getrole")]
         [FeatureBasedAuthorization("Edit Feature")]
@@ -33,6 +36,7 @@ namespace API.Controllers
             var data = await _configService.GetRoles();
             return Ok(data);
         }
+
         [HttpPost]
         [Route("updatefeature")]
         [FeatureBasedAuthorization("Edit Feature")]

@@ -1,5 +1,4 @@
-﻿
-namespace Models.ResponseModels
+﻿namespace Models.ResponseModels
 {
     public class UsersListModel
     {
@@ -9,6 +8,5 @@ namespace Models.ResponseModels
         public string UserName { get; set; }
         public string Roles { get; set; }
         public bool IsActive { get; set; }
-
     }
 }

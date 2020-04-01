@@ -4,13 +4,13 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading.Tasks;
 
-
 namespace API
 {
     public class ExceptionHandlerMiddlerwarecs
     {
         private readonly RequestDelegate _requestDelegate;
         private readonly ILogger<ExceptionHandlerMiddlerwarecs> _logger;
+
         public ExceptionHandlerMiddlerwarecs(RequestDelegate requestDelegate, ILogger<ExceptionHandlerMiddlerwarecs> logger)
         {
             _requestDelegate = requestDelegate;
@@ -32,10 +32,12 @@ namespace API
                         httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         httpContext.Response.WriteAsync(contextFeature.Error.Message);
                         break;
+
                     case "UnAuthorizedException":
                         httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         httpContext.Response.WriteAsync(contextFeature.Error.Message);
                         break;
+
                     default:
                         httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         httpContext.Response.WriteAsync("Some Error Occured");

@@ -5,7 +5,6 @@ using Serilog;
 using System;
 using System.IO;
 
-
 namespace API
 {
     public class Program
@@ -16,6 +15,7 @@ namespace API
                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                .AddEnvironmentVariables()
                .Build();
+
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -26,7 +26,6 @@ namespace API
              .CreateLogger();
 
             CreateWebHostBuilder(args).Build().Run();
-
         }
 
         public static IHostBuilder CreateWebHostBuilder(string[] args) =>

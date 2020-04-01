@@ -10,11 +10,14 @@ namespace DataEntity
         {
             workOrders = new HashSet<WorkOrder>();
         }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Column(TypeName ="varchar(30)")]
+
+        [Column(TypeName = "varchar(30)")]
         public string ItemName { get; set; }
+
         public virtual ICollection<WorkOrder> workOrders { get; set; }
     }
 }

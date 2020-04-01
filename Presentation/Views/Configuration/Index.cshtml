@@ -1,5 +1,4 @@
-﻿
-@model List<SelectItem>
+﻿@model List<SelectItem>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -11,34 +10,33 @@
     <table class="table table-responsive-lg">
         @if (Model != null)
         {
-        <tbody>
-            <tr>
-                <td>
-                    <div class="col">
-                        <div class="row d-lg-table-row">
-                            <label>Select Role</label>
-                            <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
-                                <option value="">Please select one</option>
-                            </select>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row d-lg-table-row">
+                                <label>Select Role</label>
+                                <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                                    <option value="">Please select one</option>
+                                </select>
+                            </div>
+                            <hr />
+                            <div class="row d-lg-table-row">
+                                <label>Adding New Role</label>
+                            </div>
+                            <div class="row d-lg-table-row">
+                                <label>Enter Role</label>
+                                <input class="form-control form-control-sm custom-input" />
+                            </div>
                         </div>
-                        <hr />
-                        <div class="row d-lg-table-row">
-                            <label>Adding New Role</label>
+                    </td>
+                    <td class="features">
+                        <div class="spinner">
+                            <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
                         </div>
-                        <div class="row d-lg-table-row">
-                            <label>Enter Role</label>
-                            <input class="form-control form-control-sm custom-input" />
-                        </div>
-                    </div>
-                </td>
-                <td class="features">
-                    <div class="spinner">
-                        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
-                    </div>
-                </td>
-            </tr>
-
-        </tbody>
+                    </td>
+                </tr>
+            </tbody>
         }
     </table>
 </div>
@@ -58,5 +56,4 @@
         });
 
     });
-    
 </script>

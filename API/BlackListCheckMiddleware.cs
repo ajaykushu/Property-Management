@@ -11,6 +11,7 @@ namespace API
     {
         private readonly RequestDelegate _requestDelegate;
         private readonly ICache _cache;
+
         public BlackListCheckMiddleware(RequestDelegate requestDelegate, ICache cache)
         {
             _requestDelegate = requestDelegate;
@@ -32,14 +33,12 @@ namespace API
                 {
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     await httpContext.Response.WriteAsync("Request Failed");
-
                 }
             }
             else
             {
                 await _requestDelegate(httpContext);
             }
-
         }
     }
 }

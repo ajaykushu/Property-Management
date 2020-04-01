@@ -72,7 +72,6 @@ namespace Presentation
                     name: "default",
                     pattern: "{controller=Login}/{action=Index}/{id?}");
             });
-
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Presentation.ViewModels
+﻿namespace Presentation.ViewModels
 {
     public class ErrorModel
     {

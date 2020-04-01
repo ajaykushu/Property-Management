@@ -9,8 +9,11 @@ namespace Presentation.Utility.Interface
     public interface IHttpClientHelper
     {
         Task<HttpResponseMessage> GetDataAsync(String urlstring, Controller controller, string token = null);
+
         Task<HttpResponseMessage> PostDataAsync(string urlstring, object data, Controller controller, string token = null);
+
         Task<HttpResponseMessage> PostFileDataAsync(string urlstring, string email, IFormFile data, Controller controller, string token = null);
+
         void RemoveHeader();
     }
 }

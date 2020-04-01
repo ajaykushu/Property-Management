@@ -6,8 +6,6 @@ namespace Utilities.CustomException
     {
         public BadRequestException(string message) : base(message)
         {
-
         }
     }
 }
-

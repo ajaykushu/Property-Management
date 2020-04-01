@@ -11,10 +11,12 @@ namespace Utilities
     public class EmailSender : IEmailSender
     {
         private readonly IOptions<EmailConfigurationModel> _smtpconfig;
+
         public EmailSender(IOptions<EmailConfigurationModel> smtpconfig)
         {
             _smtpconfig = smtpconfig;
         }
+
         public async Task SendAsync(string recieveremail, string subject, string body, bool isbodyHTML)
         {
             try
@@ -56,6 +58,7 @@ namespace Utilities
                 throw;
             }
         }
+
         public SmtpClient BuildClient()
         {
             SmtpClient client = new SmtpClient(_smtpconfig.Value.SMTPServerAddress, _smtpconfig.Value.Port)
@@ -66,6 +69,7 @@ namespace Utilities
             };
             return client;
         }
+
         public MailMessage BuildMailMessage(string body, List<string> receiverEmail, string subject, bool isHTML)
         {
             MailMessage mailMessage = new MailMessage

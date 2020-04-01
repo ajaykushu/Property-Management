@@ -1078,3 +1078,13 @@ Stack Trace:    at Microsoft.EntityFrameworkCore.Update.ReaderModificationComman
    at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 29
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-01 15:16:21.393 +05:30 [INF] HTTP GET /api/values responded 404 in 57.9622 ms
+2020-04-01 15:16:29.485 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 2669.5378 ms
+2020-04-01 15:16:29.872 +05:30 [INF] HTTP GET /ImageFileStore/90107f51df454eb9bbf0e0b635b9962euploadwithimg.jpg responded 404 in 0.1815 ms
+2020-04-01 15:16:32.077 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 167.5381 ms
+2020-04-01 15:16:41.652 +05:30 [INF] HTTP GET /api/workorder/getsection?id=1 responded 200 in 33.824 ms
+2020-04-01 15:17:07.112 +05:30 [INF] HTTP POST /api/workorder/createwo responded 200 in 22504.3447 ms
+2020-04-01 15:17:11.635 +05:30 [INF] HTTP GET /ImageFileStore/90107f51df454eb9bbf0e0b635b9962euploadwithimg.jpg responded 404 in 32.626 ms
+2020-04-01 21:10:27.553 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 126.1637 ms
+2020-04-01 21:10:27.916 +05:30 [INF] HTTP GET / responded 404 in 0.2106 ms
+2020-04-01 21:10:54.905 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 47.1572 ms

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace Presentation.ViewModels
 {
     public class RouteConstModel

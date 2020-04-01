@@ -19,6 +19,7 @@ namespace API.Controllers
         public IConfiguration Configuration;
         private readonly IUserService _userService;
         private readonly IImageUploadInFile _imageUploadInFile;
+
         public UserController(IUserService userService, IImageUploadInFile imageUploadInFile)
         {
             _userService = userService;
@@ -30,7 +31,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="register">Object</param>
         /// <returns>IActionResult</returns>
-        /// 
+        ///
 
         [HttpPost]
         [Route("register")]
@@ -41,6 +42,7 @@ namespace API.Controllers
             var status = await _userService.RegisterUser(register);
             return Ok(status);
         }
+
         [HttpGet]
         [Route("getregisterrequestmodel")]
         [FeatureBasedAuthorization("Add User")]
@@ -48,6 +50,7 @@ namespace API.Controllers
         {
             return _userService.GetRegisterModel();
         }
+
         [HttpGet]
         [Route("getedituserrequestmodel")]
         [FeatureBasedAuthorization("Edit User")]
@@ -55,6 +58,7 @@ namespace API.Controllers
         {
             return await _userService.GetEditUserModelAsync(Id);
         }
+
         [HttpPost]
         [Route("updateuser")]
         [FeatureBasedAuthorization("Edit User")]
@@ -63,13 +67,13 @@ namespace API.Controllers
             var status = await _userService.UpdateUser(edit);
             return Ok(status);
         }
+
         [HttpPost]
         [Route("uploadAvtar")]
         [FeatureBasedAuthorization("Add User,Edit User")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<bool>> UploadAvtar(IFormFile files, string email)
         {
-
             if (files == null)
             {
                 return BadRequest();
@@ -81,7 +85,6 @@ namespace API.Controllers
                 return Ok(status);
             }
             return StatusCode(500, "Upload Failed");
-
         }
 
         [Route("getallusers")]
@@ -93,6 +96,7 @@ namespace API.Controllers
             var usersList = await _userService.GetAllUsers(requestedPage, filter, matchString);
             return Ok(usersList);
         }
+
         [HttpGet]
         [FeatureBasedAuthorization("ActDct User")]
         [Route("deact_actuser")]
@@ -103,6 +107,7 @@ namespace API.Controllers
             bool status = await _userService.Deact_Actuser(userId, operation);
             return Ok(status);
         }
+
         [HttpGet]
         [FeatureBasedAuthorization("View User Detail")]
         [Route("userdetail")]
@@ -119,6 +124,7 @@ namespace API.Controllers
             var res = await _userService.CheckEmail(email);
             return res;
         }
+
         [HttpGet]
         [Route("checkphonenumber")]
         public async Task<ActionResult<bool>> CheckPhoneNumber(string phone)
@@ -126,15 +132,13 @@ namespace API.Controllers
             var res = await _userService.CheckPhoneNumber(phone);
             return res;
         }
+
         [HttpGet]
         [Route("checkusername")]
         public async Task<ActionResult<bool>> CheckUserName(string userName)
         {
             var res = await _userService.CheckUserName(userName);
             return res;
-
         }
-
-
     }
 }

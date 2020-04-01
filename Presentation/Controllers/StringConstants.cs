@@ -19,7 +19,5 @@
         public static string DeactivateSuccessfull = "Account Deactivated";
         public static string ActivateSuccessfull = "Account Activated";
         public static string OperationFailed = "Operation on Account Failed Reach Site Owner";
-
-
     }
 }

@@ -14,12 +14,14 @@ namespace BusinessLogic.Services
         private readonly IRepo<ApplicationRole> _applicationRole;
         private readonly IRepo<Menu> _menu;
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
+
         public ConfigService(IRepo<ApplicationRole> applicationRole, IRepo<Menu> menu, IRepo<RoleMenuMap> roleMenuMap)
         {
             _applicationRole = applicationRole;
             _menu = menu;
             _roleMenuMap = roleMenuMap;
         }
+
         public async Task<List<SelectItem>> GetRoles()
         {
             var roles = await _applicationRole.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToListAsync();
@@ -38,12 +40,10 @@ namespace BusinessLogic.Services
                 Selected = rolemenumap.Contains(x.Id) ? true : false
             }).ToList();
             return ret;
-
         }
 
         public async Task<bool> UpdateFeature(KeyValuePair<int, List<string>> valuePairs)
         {
-
             var role = await _applicationRole.GetAll().Include(x => x.RoleMenuMaps).Where(x => x.Id == valuePairs.Key).FirstOrDefaultAsync();
             if (role != null)
             {
@@ -64,10 +64,8 @@ namespace BusinessLogic.Services
                 var row = await _applicationRole.Update(role);
                 if (row > 0)
                     return true;
-
             }
             return false;
         }
-
     }
 }

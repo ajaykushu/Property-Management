@@ -26,8 +26,8 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
-
         }
+
         /// <s
         public async Task<IActionResult> Index()
         {
@@ -39,6 +39,7 @@ namespace Presentation.Controllers
 
             return View(roles);
         }
+
         public async Task<IActionResult> FeaturesSelector(long id)
         {
             FeatureView features = new FeatureView();
@@ -54,6 +55,7 @@ namespace Presentation.Controllers
         {
             return View();
         }
+
         [HttpPost]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateFeature()
@@ -77,7 +79,5 @@ namespace Presentation.Controllers
                 return PartialView("FeaturesSelector", result.Model);
             }
         }
-
     }
-
 }

@@ -9,5 +9,4 @@ namespace DataEntity
         public int? DepartmentId { set; get; }
         public Department Department { set; get; }
     }
-
 }

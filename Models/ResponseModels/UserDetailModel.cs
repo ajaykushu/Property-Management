@@ -16,8 +16,5 @@ namespace Models.ResponseModels
         public bool IsActive { get; set; }
         public string TimeZone { get; set; }
         public string PhotoPath { get; set; }
-
-
-
     }
 }

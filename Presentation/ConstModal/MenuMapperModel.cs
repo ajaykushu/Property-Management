@@ -7,6 +7,7 @@ namespace Presentation.ConstModal
     {
         public Dictionary<string, MenuProperty> Menus { get; set; }
     }
+
     [Serializable]
     public class MenuProperty
     {
@@ -16,7 +17,5 @@ namespace Presentation.ConstModal
         public string Class { get; set; }
         public bool Enabled { get; set; }
         public string MainMenuName { get; set; }
-
-
     }
 }

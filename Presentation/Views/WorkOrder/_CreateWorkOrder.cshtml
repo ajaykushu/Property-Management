@@ -59,21 +59,21 @@
                                     </div>
                                 </div>
                             }
-                                @if (Model.Issues != null && Model.Issues.Any())
-                                {
-                                    <div class="row top-buffer">
-                                        <div class="col-md-3">
-                                            <label asp-for="Issue"> </label>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                                <option>Please select one</option>
-                                            </select>
-                                            <span asp-validation-for="Issue" class="text-danger"></span>
-                                        </div>
+                            @if (Model.Issues != null && Model.Issues.Any())
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="Issue"> </label>
                                     </div>
-                                }
-                            </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                            <option>Please select one</option>
+                                        </select>
+                                        <span asp-validation-for="Issue" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -81,14 +81,14 @@
                         <div class="col">
                             <div class="row">
                                 @*<div class="col-md-3">
-                                    <label asp-for="RequestedBy"> </label>
-                                </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="RequestedById" asp-items="@(new SelectList(Model.RequestedBy, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="RequestedById" class="text-danger"></span>
-                                </div>*@
+                                        <label asp-for="RequestedBy"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="RequestedById" asp-items="@(new SelectList(Model.RequestedBy, "Id", "PropertyName"))">
+                                            <option value="">Please select one</option>
+                                        </select>
+                                        <span asp-validation-for="RequestedById" class="text-danger"></span>
+                                    </div>*@
                             </div>
                             <div class="row top-buffer">
                                 <div class="col-md-3">
@@ -100,7 +100,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </td>
                 </tr>
                 <tr>
@@ -157,13 +156,11 @@
                         </div>
                     </td>
                 </tr>
-
             </tbody>
         </table>
         <hr />
         <button type="submit" class="btn btn-sm btn-outline-primary submit">Create To Do</button>
         @*passing data to controller*@
-
     </form>
 
     <script>
@@ -218,7 +215,7 @@
                         $("input[type=email]").val("");
                         $('select').prop('selectedIndex',0);
                     });
-                  
+
                 }, function (res) {
                         $('.fa-spinner').prop("hidden",true);
                         alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
@@ -229,4 +226,3 @@
             }
         });
     </script>
-

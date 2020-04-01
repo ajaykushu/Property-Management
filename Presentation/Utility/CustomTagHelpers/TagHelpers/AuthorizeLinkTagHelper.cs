@@ -27,14 +27,12 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-
             output.TagName = "CustumTagHelper";
             output.TagMode = TagMode.StartTagAndEndTag;
             var route = String.Empty;
             if (Routedata != null)
             {
                 route = QueryString.Create(Routedata).Value;
-
             }
             var sb = new StringBuilder();
             if (CheckAuthorizarion())
@@ -46,8 +44,8 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
             }
 
             output.PreContent.SetHtmlContent(sb.ToString());
-
         }
+
         //check authorization
         public bool CheckAuthorizarion()
         {

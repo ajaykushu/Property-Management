@@ -18,6 +18,7 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
+
         public PropertyController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
         {
             _httpClientHelper = httpClientHelper;
@@ -26,8 +27,8 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
-
         }
+
         [HttpGet]
         public async Task<ActionResult> AddPropertyView()
         {
@@ -39,8 +40,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     addProperty = JsonConvert.DeserializeObject<PropertyOperation>(await response.Content.ReadAsStringAsync());
-
-
             }
             catch (Exception)
             {
@@ -48,6 +47,7 @@ namespace Presentation.Controllers
             }
             return PartialView("_AddPropertyView", addProperty);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddProperty(PropertyOperation model)
@@ -76,6 +76,7 @@ namespace Presentation.Controllers
                 return StatusCode(500, msg);
             }
         }
+
         [HttpGet]
         public async Task<ActionResult> ListProperties()
         {
@@ -86,7 +87,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     properties = JsonConvert.DeserializeObject<List<Properties>>(await response.Content.ReadAsStringAsync());
-
             }
             catch (Exception)
             {
@@ -95,6 +95,7 @@ namespace Presentation.Controllers
 
             return View(properties);
         }
+
         [HttpGet]
         public async Task<ActionResult> DeleteProperty(int id)
         {
@@ -108,7 +109,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     TempData["Success"] = StringConstants.DeleteSuccess;
-
             }
             catch (Exception)
             {
@@ -116,6 +116,7 @@ namespace Presentation.Controllers
             }
             return RedirectToAction("ListProperties");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateProperty(PropertyOperation prop)
@@ -128,7 +129,6 @@ namespace Presentation.Controllers
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, prop, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                         TempData["Success"] = StringConstants.SuccessUpdate;
-
                 }
                 catch (Exception)
                 {
@@ -141,8 +141,8 @@ namespace Presentation.Controllers
             }
 
             return RedirectToAction("PropertyEditView", new { id = prop.Id });
-
         }
+
         [HttpGet]
         public async Task<IActionResult> PropertyEditView(long id)
         {
@@ -153,8 +153,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     prop = JsonConvert.DeserializeObject<PropertyOperation>(await response.Content.ReadAsStringAsync());
-
-
             }
             catch (Exception)
             {
@@ -162,6 +160,7 @@ namespace Presentation.Controllers
             }
             return View(prop);
         }
+
         [HttpGet]
         public async Task<IActionResult> MarkPrimary(long id, long userId)
         {
@@ -172,12 +171,11 @@ namespace Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var res = Convert.ToBoolean(await response.Content.ReadAsStringAsync());
-                    if(res)
-                    TempData["Success"] = "Marked as Primary Propery";
+                    if (res)
+                        TempData["Success"] = "Marked as Primary Propery";
                     else
                         TempData["Error"] = "Primary Marking Failed";
                 }
-
             }
             catch (Exception)
             {
@@ -186,7 +184,5 @@ namespace Presentation.Controllers
 
             return RedirectToAction("UserDetailView", "User", new { id = userId });
         }
-
-
     }
 }

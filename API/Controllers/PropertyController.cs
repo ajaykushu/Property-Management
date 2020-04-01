@@ -13,10 +13,12 @@ namespace API.Controllers
     public class PropertyController : ControllerBase
     {
         private readonly IPropertyService _propertyService;
+
         public PropertyController(IPropertyService propertyService)
         {
             _propertyService = propertyService;
         }
+
         [HttpGet]
         [FeatureBasedAuthorization("Add Property")]
         [Route("getproperty")]
@@ -30,6 +32,7 @@ namespace API.Controllers
             var status = await _propertyService.UpdateProperty(prop);
             return Ok(status);
         }
+
         [HttpGet]
         [Route("listproperties")]
         [FeatureBasedAuthorization("View Property")]
@@ -37,8 +40,8 @@ namespace API.Controllers
         {
             List<PropertiesModel> properties = await _propertyService.GetProperties();
             return properties;
-
         }
+
         [FeatureBasedAuthorization("Add Property")]
         [HttpPost]
         [Route("addproperty")]
@@ -46,8 +49,8 @@ namespace API.Controllers
         {
             var status = await _propertyService.AddProperty(modal);
             return Ok(status);
-
         }
+
         [HttpGet]
         [Route("getPropertyTypes")]
         [FeatureBasedAuthorization("Add Property")]
@@ -55,6 +58,7 @@ namespace API.Controllers
         {
             return _propertyService.GetPropertyType();
         }
+
         [HttpGet]
         [Route("deleteproperty")]
         [FeatureBasedAuthorization("Delete Property")]
@@ -63,6 +67,7 @@ namespace API.Controllers
             var status = await _propertyService.DeleteProperty(id);
             return Ok(status);
         }
+
         [HttpGet]
         [Route("markprimary")]
         public async Task<ActionResult<bool>> MarkPrimary(long id, long userId)

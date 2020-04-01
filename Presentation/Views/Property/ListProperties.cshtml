@@ -7,24 +7,24 @@
 <h1>Properties</h1>
 @if (Model != null)
 {
-<p>
-    <auth-link bclass="btn btn-sm btn-success addmodal" feature="Add Property" data-toggle="modal" data-target=".bd-example-modal-lg"  content='<i class="fa fa-plus-circle fa-1x" alt="Add"></i>&nbsp;Create New'></auth-link>
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+    <p>
+        <auth-link bclass="btn btn-sm btn-success addmodal" feature="Add Property" data-toggle="modal" data-target=".bd-example-modal-lg" content='<i class="fa fa-plus-circle fa-1x" alt="Add"></i>&nbsp;Create New'></auth-link>
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                </div>
             </div>
         </div>
-    </div>
-</p>
-<div class="new_address_css">
-     @if (Model==null || !Model.Any())
-     {
+    </p>
+    <div class="new_address_css">
+        @if (Model == null || !Model.Any())
+        {
             <div>No properties Found</div>
-     }
-     else
-     {
-         foreach (var item in Model)
-         {
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
                 <div class="card propetry">
                     <div class="card-header propery_head">
                         <ul class="opertion_menu">
@@ -47,16 +47,12 @@
                                 @item.PinCode @item.Country<br>
                                 @item.StreetLine2<br>
                             </address>
-
                         </p>
-
                     </div>
-
                 </div>
-         }
-     }
-  
-</div>
+            }
+        }
+    </div>
 }
 <div class="spinner">
     <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
@@ -73,7 +69,6 @@
                     $('.fa-spin').hide();
                 })
     })
-
 </script>
 <style>
     .new_address_css {
@@ -82,15 +77,14 @@
         flex-wrap: wrap;
         margin-right: 10px;
         padding-left: 0px;
-        padding-right:5px;
+        padding-right: 5px;
     }
 
         .new_address_css .propetry {
             flex: 1 1 auto;
             border: 1px blue solid;
             text-align: center;
-             margin-right: 10px;
-           
+            margin-right: 10px;
         }
 </style>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))

@@ -9,22 +9,26 @@
     vertical-align: middle;
     background-color: rgba(0,0,0,0.7);
 }
+
 @media screen and (max-width: 400px) {
     .login {
         width: 250px;
     }
 }
+
 .custom_btn {
     width: 100%;
     background-color: rgb(230, 69, 69);
     color: white;
 }
+
     .custom_btn:hover {
         background-color: rgba(238, 70, 70, 0.90);
         animation: ease-in-out;
         transition-delay: 0.1s;
         color: white;
     }
+
 .registerdiv {
     text-align: center;
 }
@@ -33,35 +37,41 @@
     font-size: small;
     padding-top: 0px;
     padding-bottom: 0px;
-    margin-top:0px;
+    margin-top: 0px;
 }
+
 .title {
     font-size: larger;
     font-weight: bold;
     color: white;
 }
+
 .input-group-text {
     color: rgb(230, 69, 69);
 }
+
 .register {
     font-size: small;
     color: rgb(230, 69, 69)
 }
+
 .forgopassword {
-    font-style:italic;
+    font-style: italic;
     font-size: small;
     color: rgb(230, 69, 69);
-    float:right;
+    float: right;
 }
 
-.register:hover, .forgopassword:hover {
-    color: rgb(230, 69, 69)
-}
+    .register:hover, .forgopassword:hover {
+        color: rgb(230, 69, 69)
+    }
+
 .custom_btn .fa-key {
-     transform: rotate(-135deg);
+    transform: rotate(-135deg);
 }
-.input-group-text{
-    background-color:white;
+
+.input-group-text {
+    background-color: white;
 }
 /*endlogin*/
 /*start todo*/
@@ -85,7 +95,6 @@
     padding-left: 5px;
     font-weight: 500;
 }
-
 
 .addnewbutton {
     border: none;
@@ -220,7 +229,6 @@ th {
     .wordorderdetail td:nth-of-type(4):before {
         content: "Date";
     }
-    
 }
 /*end todo*/
 /* work order add*/
@@ -228,6 +236,7 @@ th {
 .top-buffer {
     margin-top: 15px;
 }
+
 .workordertitle {
     display: block;
     background-color: rgb(65, 153, 66);
@@ -242,7 +251,7 @@ th {
     border-radius: 0.4em;
     border: 1.5px solid grey;
     width: 200px;
-    margin-top:0px;
+    margin-top: 0px;
 }
 
 label {
@@ -326,7 +335,6 @@ label {
     transition: height 0.5s ease-in-out;
 }
 
-
 .select-input:hover + .select-mul {
     display: block;
     height: 25px;
@@ -351,13 +359,14 @@ label {
     background-color: green;
     color: white;
     text-align: center;
-    
 }
+
 .photo_disp {
     display: none;
     width: 200px;
     height: 150px;
 }
+
     .photo_disp:hover {
         box-shadow: 0 10px 20px 0 rgba(0,0,0,0.15);
         transition-property: box-shadow, -webkit-box-shadow;
@@ -366,11 +375,12 @@ label {
         transition-delay: 0s, 0s;
     }
 
-    .cont .browsebutton:hover {
-        cursor: pointer;
-    }
-.fa-spin{
-    display:none;
+.cont .browsebutton:hover {
+    cursor: pointer;
+}
+
+.fa-spin {
+    display: none;
 }
 /**/
 /*propery view*/
@@ -389,4 +399,4 @@ label {
         text-align: center;
         margin-right: 10px;
     }
-    /**/
+/**/

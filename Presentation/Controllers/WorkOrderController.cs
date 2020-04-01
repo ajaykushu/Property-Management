@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-
     public class WorkOrderController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;
@@ -28,7 +27,6 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
-
         }
 
         [HttpGet]
@@ -41,6 +39,7 @@ namespace Presentation.Controllers
         {
             return PartialView("_WorkOrderOverview");
         }
+
         [HttpGet]
         // [Authorize]
         public async Task<IActionResult> CreateWorkOrderAsync()
@@ -58,23 +57,24 @@ namespace Presentation.Controllers
             }
             return PartialView("_CreateWorkOrder", createWorkOrder);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAreaLocation(long id)
         {
-            PropDetail result=null;
+            PropDetail result = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("getarealocation", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?id="+id, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     result = JsonConvert.DeserializeObject<PropDetail>(await response.Content.ReadAsStringAsync());
             }
             catch (Exception)
             {
-               
             }
             return Ok(result);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetSection(long id)
         {
@@ -88,7 +88,6 @@ namespace Presentation.Controllers
             }
             catch (Exception)
             {
-
             }
             return Ok(result);
         }
@@ -96,14 +95,13 @@ namespace Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder)
         {
-
             if (ModelState.IsValid)
             {
                 WorkOrderDetail result = null;
                 try
                 {
                     _apiRoute.Value.Routes.TryGetValue("createwo", out string path);
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,workOrder,this, _token).ConfigureAwait(false);
+                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, workOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
                         result = JsonConvert.DeserializeObject<WorkOrderDetail>(await response.Content.ReadAsStringAsync());
@@ -112,16 +110,14 @@ namespace Presentation.Controllers
                 }
                 catch (Exception)
                 {
-
                 }
                 return Ok(result);
             }
             else
             {
-              var  msg = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
+                var msg = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
                 return BadRequest(msg);
             }
-            
         }
     }
 }

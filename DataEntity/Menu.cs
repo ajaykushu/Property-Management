@@ -8,15 +8,17 @@ namespace DataEntity
     {
         public Menu()
         {
-
             this.RoleMenuMaps = new HashSet<RoleMenuMap>();
         }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { set; get; }
+
         [Required]
         [Column(TypeName = "varchar(30)")]
         public string MenuName { set; get; }
+
         public ICollection<RoleMenuMap> RoleMenuMaps { set; get; }
     }
 }

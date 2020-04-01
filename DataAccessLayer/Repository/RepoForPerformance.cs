@@ -13,10 +13,6 @@ namespace DataAccessLayer.Repository
 
         public void GetMenu()
         {
-
         }
-
-
-
     }
 }

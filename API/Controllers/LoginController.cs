@@ -21,6 +21,7 @@ namespace API.Controllers
         {
             _user = user;
         }
+
         /// <summary>
         /// This Controller Action is Post method for Login.
         /// </summary>
@@ -28,18 +29,15 @@ namespace API.Controllers
         /// <returns>IActionResult</returns>
         // POST: api/Logins
         [HttpPost]
-
         [Route("userlogin")]
         public async Task<ActionResult<TokenResponseModel>> UserLogin([FromBody] LoginUserModel login)
         {
-
             var tokenResponse = await _user.DoLogin(login);
             if (tokenResponse == null)
             {
                 throw new Exception("Internal Server Error");
             }
             return tokenResponse;
-
         }
 
         /// <summary>
@@ -61,6 +59,7 @@ namespace API.Controllers
                 throw new ArgumentNullException("Some values are missing");
             }
         }
+
         /// <summary>
         /// This Controller Action updates the new Password of User.
         /// </summary>
@@ -73,6 +72,5 @@ namespace API.Controllers
             var status = await _user.ChangePassowrd(user.Email, user.Token, user.NewPassword);
             return Ok(status);
         }
-
     }
 }

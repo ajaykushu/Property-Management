@@ -6,6 +6,5 @@ namespace Presentation.ViewModels
     {
         public List<SelectItem> Features { get; set; }
         public long Roleid { get; set; }
-
     }
 }

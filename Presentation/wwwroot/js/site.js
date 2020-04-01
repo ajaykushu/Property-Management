@@ -20,8 +20,6 @@ function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_
         success: succ_callback,
         error: fail_callback
     });
-
-
 }
 
 $('.select-mul').change(function (e) {

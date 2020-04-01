@@ -2,7 +2,6 @@
 {
     public class PropertiesModel
     {
-
         public long Id { set; get; }
         public string PropertyName { get; set; }
         public string PropertyType { get; set; }
@@ -14,6 +13,5 @@
         public string City { set; get; }
         public string Country { set; get; }
         public bool IsPrimary { set; get; }
-
     }
 }

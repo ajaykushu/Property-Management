@@ -15,11 +15,13 @@ namespace Presentation.Utility
     {
         private readonly HttpClient _httpClient;
         public readonly IHttpContextAccessor _httpContextAccessor;
+
         public HttpHelper(IHttpClientFactory httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient.CreateClient();
             _httpContextAccessor = httpContextAccessor;
         }
+
         public async Task<HttpResponseMessage> GetDataAsync(string url, Controller controller, string token = null)
         {
             if (!string.IsNullOrWhiteSpace(token))
@@ -31,6 +33,7 @@ namespace Presentation.Utility
 
             return res;
         }
+
         public void RemoveHeader()
         {
             if (_httpClient.DefaultRequestHeaders.Contains("Authorization"))
@@ -67,9 +70,9 @@ namespace Presentation.Utility
             await SetTempData(res, controller);
             return res;
         }
+
         public async Task SetTempData(HttpResponseMessage message, Controller controller)
         {
-
             if (message.StatusCode == HttpStatusCode.BadRequest)
                 controller.TempData["Error"] = await message.Content.ReadAsStringAsync();
             else if (message.StatusCode == HttpStatusCode.Unauthorized)
@@ -83,7 +86,6 @@ namespace Presentation.Utility
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
                 _httpContextAccessor.HttpContext.Response.Redirect(
                     "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/Home/Forbidden");
-
             }
             else if (message.StatusCode == HttpStatusCode.InternalServerError)
             {
@@ -97,6 +99,5 @@ namespace Presentation.Utility
         {
             return JsonConvert.SerializeObject(toBeSerializedObj);
         }
-
     }
 }

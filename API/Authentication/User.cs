@@ -33,11 +33,8 @@ namespace API.Authentication
             _roleMenuMap = roleMenuMap;
             _user = user;
             _httpContextAccessor = httpContextAccessor;
-
-
-
-
         }
+
         public async Task<bool> GetPasswordChangeTokenAsync(string email, string verificationPath)
         {
             ApplicationUser user;
@@ -78,6 +75,7 @@ namespace API.Authentication
                 throw new BadRequestException("User Not Found");
             }
         }
+
         public async Task<TokenResponseModel> DoLogin(LoginUserModel loginDTO)
         {
             if (_userManager.Users.Count() == 0)
@@ -113,7 +111,6 @@ namespace API.Authentication
 
                     var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
 
-
                     var claims = _tokenGenerator.GetClaims(identityUser, submenu);
 
                     returnToken = new TokenResponseModel()
@@ -125,16 +122,12 @@ namespace API.Authentication
                         MenuItems = submenu,
                         PhotoPath = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath
                     };
-
                 }
-
             }
             else
                 throw new UnAuthorizedException("Email Id not Registered. Please Contact Admin");
 
             return returnToken;
         }
-
-
     }
 }

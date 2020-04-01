@@ -1,11 +1,11 @@
 ﻿@model Presentation.ViewModels.PropertyOperation
-    <partial name="_ValidationScriptsPartial">
-        <div class="table_container">
-            <div class="workordertitle">
-                Add Property
-            </div>
-            @if (Model != null)
-            {
+<partial name="_ValidationScriptsPartial">
+    <div class="table_container">
+        <div class="workordertitle">
+            Add Property
+        </div>
+        @if (Model != null)
+        {
             <form asp-action="AddProperty" class="addprop">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <table class="table">
@@ -20,9 +20,9 @@
                                         <div class="col">
                                             @if (Model.PropertyTypes != null)
                                             {
-                                            <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
-                                                <option value="">Please select one</option>
-                                            </select>
+                                                <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
                                             }
                                             <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
                                         </div>
@@ -113,21 +113,19 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <hr />
                 <button type="submit" class="btn btn-sm btn-outline-primary submit"><span>Add Property</span>&nbsp;<i class="fa fa-spinner fa-1x fa-spin" hidden></i></button>
-
             </form>
-            }
-            <div>
-                <a asp-action="ListProperties" asp-controller="Property">Back</a>
-            </div>
+        }
+        <div>
+            <a asp-action="ListProperties" asp-controller="Property">Back</a>
         </div>
-   <script>
+    </div>
+    <script>
             $('.addprop').submit(function (e) {
                 e.preventDefault();
                 var url = $(this).attr('action');
@@ -140,7 +138,7 @@
                         $("input[type=text]").val("");
                         $('select').prop('selectedIndex',0);
                         });
-                       
+
                     }, function (res) {
                         $('.fa-spinner').prop("hidden",true);
                         alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
@@ -148,5 +146,4 @@
                     },"");
                 }
             });
-            </script>
-
+    </script>

@@ -18,14 +18,16 @@ namespace DataAccessLayer.Repository
         public DbSet<Comments> Comments { set; get; }
         public DbSet<Languages> Languages { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
+
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         public AppDBContext(DbContextOptions options) : base(options)
         {
-
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -139,9 +141,6 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 9, MenuId = 9, RoleId = 1 },
                 new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 }
                 );
-
-
         }
     }
-
 }

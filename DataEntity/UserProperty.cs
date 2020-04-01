@@ -6,6 +6,7 @@ namespace DataEntity
     {
         [Key]
         public long Id { get; set; }
+
         public long ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public long PropertyId { get; set; }

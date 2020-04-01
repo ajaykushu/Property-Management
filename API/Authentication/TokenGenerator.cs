@@ -15,11 +15,13 @@ namespace API.Authentication
     {
         private readonly IConfiguration _configuration;
         private readonly ICache _cache;
+
         public TokenGenerator(IConfiguration configuration, ICache cache)
         {
             _configuration = configuration;
             _cache = cache;
         }
+
         public Claim[] GetClaims(ApplicationUser applicationuser, HashSet<string> features)
         {
             var jti = Guid.NewGuid().ToString().Replace("-", "");

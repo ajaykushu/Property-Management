@@ -10,13 +10,15 @@ namespace DataEntity
         {
             this.UserType = new HashSet<ApplicationRole>();
         }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         [Required]
         [Column(TypeName = "varchar(30)")]
         public string DepartmentName { get; set; }
-        public virtual ICollection<ApplicationRole> UserType { get; set; }
 
+        public virtual ICollection<ApplicationRole> UserType { get; set; }
     }
 }

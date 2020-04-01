@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-
     public class LoginController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;
@@ -25,15 +24,14 @@ namespace Presentation.Controllers
         private readonly IOptions<MenuMapperModel> _menuDetails;
         private readonly ISessionStorage _sessionStorage;
 
-
         public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, ISessionStorage sessionStorage)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             _menuDetails = menuDetails;
             _sessionStorage = sessionStorage;
-
         }
+
         /// <summary>
         /// This Controller Action returns View to LogIn.
         /// </summary>
@@ -52,6 +50,7 @@ namespace Presentation.Controllers
             HttpContext.Session.SetString("cookie", "t@st");
             return View();
         }
+
         /// <summary>
         /// This Controller Action is Post method for Login.
         /// </summary>
@@ -61,7 +60,6 @@ namespace Presentation.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginExist(LoginReq login)
         {
-
             var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
             if (!consentFeature.HasConsent)
             {
@@ -77,7 +75,6 @@ namespace Presentation.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-
                     var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(
                         await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     HttpContext.Session.SetString("token",
@@ -111,9 +108,7 @@ namespace Presentation.Controllers
                     TempData["Error"] = StringConstants.Error;
                     return RedirectToAction("Index");
                 }
-
             }
-
             else
             {
                 TempData["Error"] = ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage);
@@ -141,10 +136,8 @@ namespace Presentation.Controllers
                 }
             }
 
-
             foreach (var item in _menuDetails.Value.Menus)
                 item.Value.Enabled = false;
-
         }
 
         /// <summary>
@@ -161,6 +154,7 @@ namespace Presentation.Controllers
             _httpClientHelper.RemoveHeader();
             return RedirectToAction("Index", "Login", null);
         }
+
         /// <summary>
         /// This Controller Action returns View to Forget Password Screen.
         /// </summary>
@@ -172,6 +166,7 @@ namespace Presentation.Controllers
             HttpContext.Session.Clear();
             return View();
         }
+
         /// <summary>
         /// This Controller Action Post Method for Email based token generation for Password Change.
         /// </summary>
@@ -179,12 +174,10 @@ namespace Presentation.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> SendEmailForPasswordReset(LoginReq login)
         {
             if (!String.IsNullOrWhiteSpace(login.Email))
             {
-
                 string verPath = "https://" + HttpContext.Request.Host.Value + "/Login/PasswordResetView";
                 _apiRoute.Value.Routes.TryGetValue("sendforgotpwdemail", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?email=" + login.Email + "&verificationPath=" + verPath, this).ConfigureAwait(false);
@@ -203,8 +196,8 @@ namespace Presentation.Controllers
                 TempData["error"] = ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage);
                 return View();
             }
-
         }
+
         /// <summary>
         /// This Controller Action returns Post method for token recognition and return View to ForgetPassword.
         /// </summary>
@@ -215,6 +208,7 @@ namespace Presentation.Controllers
         {
             return View(new PasswordChange() { Email = email, Token = token });
         }
+
         /// <summary>
         /// This Controller Action updates the new Password of User.
         /// </summary>
@@ -224,7 +218,6 @@ namespace Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(PasswordChange resetPassword)
         {
-
             if (ModelState.IsValid)
             {
                 if (resetPassword.Token.Contains(" ")) resetPassword.Token = resetPassword.Token.Replace(" ", "+");
@@ -246,9 +239,6 @@ namespace Presentation.Controllers
                 TempData["Error"] = ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage);
                 return RedirectToAction("PasswordResetView", "Login");
             }
-
         }
-
-
     }
 }

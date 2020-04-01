@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace Presentation.ViewModels
 {
     public class TokenResponse
@@ -11,7 +10,5 @@ namespace Presentation.ViewModels
         public string FullName { get; set; }
         public HashSet<string> MenuItems { set; get; }
         public string PhotoPath { set; get; }
-
-
     }
 }

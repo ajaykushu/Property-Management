@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-
     public class UserController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;
@@ -31,10 +30,10 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
-
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="register"></param>
         /// <returns></returns>
@@ -42,7 +41,6 @@ namespace Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterUser register)
         {
-
             if (ModelState.IsValid)
             {
                 try
@@ -62,7 +60,6 @@ namespace Presentation.Controllers
                         }
                         else
                             return Ok(StringConstants.RegisterSuccess);
-
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return BadRequest(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
@@ -82,6 +79,7 @@ namespace Presentation.Controllers
                 return BadRequest(msg);
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> UserDetailView(long id)
         {
@@ -92,7 +90,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?Id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     userDetail = JsonConvert.DeserializeObject<UserDetail>(await response.Content.ReadAsStringAsync());
-
             }
             catch (Exception)
             {
@@ -111,7 +108,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     registerrequest = JsonConvert.DeserializeObject<RegisterUser>(await response.Content.ReadAsStringAsync());
-
             }
             catch (Exception)
             {
@@ -133,7 +129,6 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?Id=" + Id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     editrequestmodal = JsonConvert.DeserializeObject<EditUser>(await response.Content.ReadAsStringAsync());
-
             }
             catch (Exception)
             {
@@ -143,8 +138,6 @@ namespace Presentation.Controllers
             }
 
             return View(editrequestmodal);
-
-
         }
 
         [HttpPost]
@@ -219,7 +212,6 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> DeAct_ActUser(long id, int operation, int page)
         {
-
             _apiRoute.Value.Routes.TryGetValue("deAct_actUser", out string path);
             try
             {
@@ -231,7 +223,6 @@ namespace Presentation.Controllers
                     else
                         TempData["Success"] = StringConstants.ActivateSuccessfull;
                 }
-
             }
             catch (Exception)
             {
@@ -255,11 +246,11 @@ namespace Presentation.Controllers
                     if (result)
                         return Json("Email Already Present");
                 }
-
             }
             catch (Exception) { }
             return Json(true);
         }
+
         [HttpGet]
         public async Task<JsonResult> CheckPhoneNumber(string phoneNumber)
         {
@@ -274,11 +265,11 @@ namespace Presentation.Controllers
                     if (result)
                         return Json("Phone Number Already Present");
                 }
-
             }
             catch (Exception) { }
             return Json(true);
         }
+
         [HttpGet]
         public async Task<JsonResult> CheckUserName(string userName)
         {
@@ -293,11 +284,9 @@ namespace Presentation.Controllers
                     if (result)
                         return Json("User Name Already Present");
                 }
-
             }
             catch (Exception) { }
             return Json(true);
         }
-
     }
 }

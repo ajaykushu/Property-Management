@@ -1,11 +1,11 @@
 ﻿@model Presentation.ViewModels.PropertyOperation
-    <partial name="_ValidationScriptsPartial">
-        <div class="table_container">
-            <div class="workordertitle">
-                Edit Property
-            </div>
-            @if (Model != null)
-            {
+<partial name="_ValidationScriptsPartial">
+    <div class="table_container">
+        <div class="workordertitle">
+            Edit Property
+        </div>
+        @if (Model != null)
+        {
             <form asp-action="UpdateProperty" class="addprop">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <table class="table">
@@ -113,7 +113,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </td>
                         </tr>
                     </tbody>
@@ -122,17 +121,17 @@
                 <button type="submit" class="btn btn-sm btn-outline-primary submit"><span>Update Property</span>&nbsp;<i class="fa fa-spinner fa-1x fa-spin" hidden></i></button>
                 <input asp-for="Id" hidden>
             </form>
-            }
-            <div>
-                <a asp-action="ListProperties" asp-controller="Property">Back</a>
-            </div>
-        </div>
-
-        @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-        {
-            var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "info";
-
-            <script>
-        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-            </script>
         }
+        <div>
+            <a asp-action="ListProperties" asp-controller="Property">Back</a>
+        </div>
+    </div>
+
+    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+    {
+        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "info";
+
+        <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+        </script>
+    }

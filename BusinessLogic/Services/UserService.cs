@@ -26,6 +26,7 @@ namespace BusinessLogic.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
+
         public UserService(UserManager<ApplicationUser> userManager,
               RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache)
         {
@@ -37,13 +38,10 @@ namespace BusinessLogic.Services
             _httpContextAccessor = httpContextAccessor;
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
-
-
         }
 
         public async Task<bool> RegisterUser(RegisterUser model)
         {
-
             var language = _langrepo.Get(x => x.Id == model.Language).FirstOrDefault();
             var prop = _userproperty.GetAll().Include(x => x.Property).ToList();
             IdentityResult identityResult;
@@ -78,7 +76,6 @@ namespace BusinessLogic.Services
                 else
                     throw new BadRequestException(roleresult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
-
         }
 
         public RegisterUser GetRegisterModel()
@@ -96,9 +93,9 @@ namespace BusinessLogic.Services
             registerRequest.Role = roleid?.PropertyName;
             return registerRequest;
         }
+
         public async Task<EditUserModel> GetEditUserModelAsync(long Id)
         {
-
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == Id).Include(x => x.UserProperties).ThenInclude(x => x.Property).AsNoTracking().FirstOrDefaultAsync();
             if (applicationUser == null)
                 throw new BadRequestException("User not Found");
@@ -126,6 +123,7 @@ namespace BusinessLogic.Services
             };
             return editusermodel;
         }
+
         public async Task<bool> UpdateUser(EditUserModel editUser)
         {
             IdentityResult identityResult;
@@ -143,7 +141,7 @@ namespace BusinessLogic.Services
             applicationUser.OfficeExt = editUser.OfficeExt;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
-            if(editUser.Role=="Admin")
+            if (editUser.Role == "Admin")
                 applicationUser.UserProperties.Clear();
             else if (editUser.SelectedProperty != null && editUser.Role == "User")
             {
@@ -238,7 +236,6 @@ namespace BusinessLogic.Services
 
         public async Task<bool> Deact_Actuser(long userId, int operation)
         {
-
             var iduser = await _userManager.FindByIdAsync(userId + "");
             iduser.IsActive = Convert.ToBoolean(operation);
             var identityresult = await _userManager.UpdateAsync(iduser);
@@ -293,7 +290,6 @@ namespace BusinessLogic.Services
                 throw new BadRequestException("User Not Found");
             return user.UserModel;
         }
-
 
         public async Task<bool> CheckEmail(string email)
         {

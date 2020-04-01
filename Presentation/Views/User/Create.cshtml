@@ -8,13 +8,13 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-    <div>
-        <div class="table_container">
-            <div class="workordertitle">
-                Register User
-            </div>
-            @if (Model != null)
-            {
+<div>
+    <div class="table_container">
+        <div class="workordertitle">
+            Register User
+        </div>
+        @if (Model != null)
+        {
             <form asp-action="Register" asp-controller="User" class="adduser">
 
                 <table class="table">
@@ -62,10 +62,10 @@
                                         <div class="col">
                                             @if (Model.Roles.Any())
                                             {
-                                            <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
-                                                <option value="">Please select one</option>
-                                            </select>
-                                            <span asp-validation-for="Role" class="text-danger"></span>
+                                                <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="Role" class="text-danger"></span>
                                             }
                                         </div>
                                     </div>
@@ -82,10 +82,10 @@
                                         <div class="col">
                                             @if (Model.TimeZones.Any())
                                             {
-                                            <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
-                                                <option value="">Please select one</option>
-                                            </select>
-                                            <span asp-validation-for="TimeZone" class="text-danger"></span>
+                                                <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="TimeZone" class="text-danger"></span>
                                             }
                                         </div>
                                     </div>
@@ -152,7 +152,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </td>
                         </tr>
                         <tr>
@@ -177,7 +176,7 @@
                                             <label for="UserName">User Name</label>
                                         </div>
                                         <div class="col">
-                                            <input asp-for='UserName' autocomplete="off"  class="form-control-sm custom-input">
+                                            <input asp-for='UserName' autocomplete="off" class="form-control-sm custom-input">
                                             <span asp-validation-for="UserName" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -206,19 +205,16 @@
                 </table>
                 <hr />
                 <button type="submit" class="btn btn-sm btn-outline-primary submit">Add User&nbsp;<i class="fa fa-spinner fa-1x fa-spin"></i></button>
-               
             </form>
-            }
-        </div>
-
+        }
     </div>
+</div>
 
+<div>
+    <a asp-action="GetAllUsers">Back</a>
+</div>
 
-    <div>
-        <a asp-action="GetAllUsers">Back</a>
-    </div>
-  
-    <script>
+<script>
         $('.adduser').submit(function (e) {
             e.preventDefault();
             var url = $(this).attr('action');
@@ -234,7 +230,7 @@
                         $("input[type=email]").val("");
                         $('select').prop('selectedIndex',0);
                     });
-                  
+
                 }, function (res) {
                         $('.fa-spinner').prop("hidden",true);
                         alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
@@ -248,9 +244,9 @@
         $('.select-input').val($(this).val());
           })
         $('#Role').on("change",function (e) {
-        if ($(this).val() == "Admin") 
+        if ($(this).val() == "Admin")
             $('.mainprop').hide();
         else
             $('.mainprop').show();
     })
-    </script>
+</script>

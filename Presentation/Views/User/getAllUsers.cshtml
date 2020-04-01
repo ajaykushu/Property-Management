@@ -47,9 +47,9 @@
 </style>
 @if (Model != null)
 {
-<p>
-    <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'  bclass="btn btn-sm btn-success" feature="Add User"></auth-link>
-</p>
+    <p>
+        <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New' bclass="btn btn-sm btn-success" feature="Add User"></auth-link>
+    </p>
 
     <form class="form">
         <div class="input-group">
@@ -183,6 +183,5 @@
 
     <script>
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-
     </script>
 }

@@ -8,6 +8,7 @@ namespace DataEntity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         [Required]
         [Column(TypeName = "varchar(40)")]
         public string Language { get; set; }

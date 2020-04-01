@@ -18,12 +18,14 @@ namespace BusinessLogic.Services
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
         private readonly IRepo<ApplicationUser> _user;
+
         public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user)
         {
             _property = property;
             _proptype = proptype;
             _user = user;
         }
+
         public PropertyOperationModel GetPropertyType()
         {
             var res = _proptype.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyTypeName }).AsNoTracking().ToList();
@@ -35,9 +37,9 @@ namespace BusinessLogic.Services
             };
             return prop;
         }
+
         public async Task<bool> AddProperty(PropertyOperationModel modal)
         {
-
             var property = _property.Get(x => x.PropertyName.ToLower().Equals(modal.PropertyName.ToLower())).FirstOrDefault();
             if (property != null)
             {
@@ -54,7 +56,6 @@ namespace BusinessLogic.Services
                 PropertyTypes = _proptype.Get(x => x.Id == modal.PropertyTypeId).FirstOrDefault(),
                 Street = modal.Street,
                 PinCode = modal.PinCode
-
             };
             var res = await _property.Add(prop);
             if (res > 0)
@@ -66,8 +67,6 @@ namespace BusinessLogic.Services
                 throw new BadRequestException("Add user failed");
             }
         }
-
-
 
         public async Task<List<PropertiesModel>> GetProperties()
         {
@@ -84,14 +83,12 @@ namespace BusinessLogic.Services
                     PropertyName = x.PropertyName,
                     PropertyType = x.PropertyTypes.PropertyTypeName,
                     Street = x.Street
-
                 }
                 ).AsNoTracking().ToListAsync();
 
             return prop;
-
-
         }
+
         public async Task<bool> DeleteProperty(int id)
         {
             var prop = _property.Get(x => x.Id == id).Include(x => x.UserProperties).ThenInclude(x => x.ApplicationUser).FirstOrDefault();
@@ -117,6 +114,7 @@ namespace BusinessLogic.Services
                 throw new BadRequestException("Property not found");
             }
         }
+
         public async Task<PropertyOperationModel> GetProperty(long id)
         {
             var prop = await _property.Get(x => x.Id == id).Select(x => new PropertyOperationModel
@@ -163,13 +161,10 @@ namespace BusinessLogic.Services
             else
                 throw new BadRequestException("Property Not Found");
             return status;
-
         }
 
         public async Task<bool> MarkPrimary(long Id, long userId)
         {
-
-
             var user = await _user.Get(x => x.Id == userId).Include(x => x.UserProperties).FirstOrDefaultAsync();
             if (user != null && user.UserProperties != null)
             {
@@ -183,11 +178,9 @@ namespace BusinessLogic.Services
                 var updatestatus = await _user.Update(user);
                 if (updatestatus > 0)
                     return true;
-                
             }
-            
-            return false;
 
+            return false;
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Utilities.CustomException
     {
         public UnAuthorizedException(string message) : base(message)
         {
-
         }
     }
 }
