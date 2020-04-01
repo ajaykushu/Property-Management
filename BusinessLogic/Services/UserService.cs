@@ -59,22 +59,20 @@ namespace BusinessLogic.Services
                 TimeZone = model.TimeZone,
                 OfficeExt = model.OfficeExt ?? null
             };
-            identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
             if (model.SelectedProperty != null && model.Role == "User")
             {
                 foreach (var item in prop)
                     if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
                         applicationUser.UserProperties.Add(item);
             }
+            identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
             if (!identityResult.Succeeded)
             {
                 throw new BadRequestException(identityResult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
             else
             {
-                var user = await _userManager.FindByEmailAsync(applicationUser.Email);
-
-                var roleresult = await _userManager.AddToRoleAsync(user, model.Role);
+                var roleresult = await _userManager.AddToRoleAsync(applicationUser, model.Role);
                 if (roleresult.Succeeded)
                     return true;
                 else
@@ -145,7 +143,7 @@ namespace BusinessLogic.Services
             applicationUser.OfficeExt = editUser.OfficeExt;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
-            if (editUser.Role == "Admin")
+            if(editUser.Role=="Admin")
                 applicationUser.UserProperties.Clear();
             else if (editUser.SelectedProperty != null && editUser.Role == "User")
             {
@@ -301,7 +299,7 @@ namespace BusinessLogic.Services
         {
             bool status;
             var res = await _userManager.FindByEmailAsync(email);
-            status = res == null ? true : false;
+            status = res == null ? false : true;
             return status;
         }
 
@@ -309,7 +307,7 @@ namespace BusinessLogic.Services
         {
             bool status = false;
             var res = await _userManager.Users.Where(x => x.PhoneNumber.Equals(phoneNumber)).FirstOrDefaultAsync();
-            status = res == null ? true : false;
+            status = res == null ? false : true;
             return status;
         }
 
@@ -317,7 +315,7 @@ namespace BusinessLogic.Services
         {
             bool status = false;
             var res = await _userManager.Users.Where(x => x.UserName.ToLower().Equals(userName.Trim().ToLower())).FirstOrDefaultAsync();
-            status = res == null ? true : false;
+            status = res == null ? false : true;
             return status;
         }
     }

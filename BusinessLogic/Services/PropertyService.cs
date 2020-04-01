@@ -175,17 +175,19 @@ namespace BusinessLogic.Services
             {
                 foreach (var property in user.UserProperties)
                 {
-                    if (property.Id == Id)
+                    if (property.PropertyId == Id)
                         property.isPrimary = true;
                     else
                         property.isPrimary = false;
                 }
+                var updatestatus = await _user.Update(user);
+                if (updatestatus > 0)
+                    return true;
+                
             }
-            var updatestatus = await _user.Update(user);
-            if (updatestatus > 0)
-                return true;
-            else
-                return false;
+            
+            return false;
+
         }
     }
 }

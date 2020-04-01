@@ -169,7 +169,7 @@ namespace Presentation.Controllers
             try
             {
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&userId=" + userId, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync()=="true")
                     TempData["Success"] = "Marked as Primary Propery";
 
             }

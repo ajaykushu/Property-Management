@@ -1,4 +1,4 @@
-﻿namespace Presentation.ViewModels
+﻿namespace Models.ResponseModels
 {
     public class WorkOrderDetail
     {
