@@ -87,7 +87,7 @@ namespace BusinessLogic.Services
         public async Task<CreateWO> GetCreateWOModel(long userId)
         {
             var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).AsNoTracking().ToListAsync();
-            var primaryprop = property.Where(x => x.isPrimary == true).FirstOrDefault();
+            var primaryprop = property.Where(x => x.IsPrimary == true).FirstOrDefault();
             StringBuilder sb = new StringBuilder();
             if (primaryprop != null)
             {
