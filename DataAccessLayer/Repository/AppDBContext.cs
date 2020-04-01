@@ -50,7 +50,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
-
+            builder.Entity<Comments>().HasOne(s => s.Parent).WithMany().HasForeignKey(x => x.ParentId);
 
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()

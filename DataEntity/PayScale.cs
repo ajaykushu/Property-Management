@@ -8,7 +8,7 @@ namespace DataEntity
     {
         public PayScale()
         {
-            this.WorkerTypes = new HashSet<WorkerType>();
+            this.WorkerTypes = new HashSet<ApplicationUser>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,7 +19,7 @@ namespace DataEntity
         public string Billingtype { get; set; }
         [Column(TypeName = "money")]
         public decimal HourlyCost { get; set; }
-        public ICollection<WorkerType> WorkerTypes { get; set; }
+        public ICollection<ApplicationUser> WorkerTypes { get; set; }
 
     }
 }

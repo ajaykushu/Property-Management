@@ -17,6 +17,9 @@ namespace DataEntity
         public WorkOrder WorkOrder { get; set; }
         [Column(TypeName ="nvarchar(max)")]
         public string Comment { get; set; }
+        public Comments Parent { get; set; }
+        public long? ParentId { get; set; }
+
 
     }
 }

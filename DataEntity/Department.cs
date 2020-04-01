@@ -8,7 +8,7 @@ namespace DataEntity
     {
         public Department()
         {
-            this.WorkerTypes = new HashSet<WorkerType>();
+            this.UserType = new HashSet<ApplicationRole>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,7 +16,7 @@ namespace DataEntity
         [Required]
         [Column(TypeName = "varchar(30)")]
         public string DepartmentName { get; set; }
-        public virtual ICollection<WorkerType> WorkerTypes { get; set; }
+        public virtual ICollection<ApplicationRole> UserType { get; set; }
 
     }
 }

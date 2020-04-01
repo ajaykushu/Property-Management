@@ -12,7 +12,6 @@ namespace DataEntity
         public ApplicationUser()
         {
             this.UserProperties = new HashSet<UserProperty>();
-            this.WorkerTyperUserMaps = new HashSet<WorkerTyperUserMap>();
         }
 
         [Required]
@@ -36,9 +35,6 @@ namespace DataEntity
         public string OfficeExt { set; get; }
         public string PhotoPath { set; get; }
         public virtual ICollection<UserProperty> UserProperties { set; get; }
-        //for worker types
-        public virtual ICollection<WorkerTyperUserMap> WorkerTyperUserMaps { set; get; }
-        //for manager
         public long? ManagerId { set; get; }
         public virtual ApplicationUser Manager { get; set; }
         public bool IsActive { get; set; }

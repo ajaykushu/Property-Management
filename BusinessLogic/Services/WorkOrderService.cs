@@ -19,18 +19,18 @@ namespace BusinessLogic.Services
         private readonly IRepo<Item> _itemRepo;
         private readonly IRepo<UserProperty> _userProperty;
         private readonly IRepo<Department> _department;
-        private readonly IRepo<WorkerType> _workertype;
+        private readonly IRepo<ApplicationRole> _role;
         private readonly IRepo<Stage> _stage;
         private readonly IRepo<WorkOrder> _workOrder;
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkerType> workertype, IRepo<Stage> stage, IRepo<WorkOrder> workOrder)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<Stage> stage, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
             _userProperty = userProperty;
             _department = department;
-            _workertype = workertype;
             _stage = stage;
             _workOrder = workOrder;
+            _role = role;
         }
 
         public async Task<WorkOrderDetail> CreateWO(CreateWO createWO)
@@ -128,9 +128,9 @@ namespace BusinessLogic.Services
 
         public Task<List<SelectItem>> GetSection(long id)
         {
-            var res = _workertype.GetAll().Where(x => x.DepartmentId == id).Select(x => new SelectItem {
+            var res = _role.GetAll().Where(x => x.DepartmentId == id).Select(x => new SelectItem {
                 Id=x.Id,
-                PropertyName=x.TypeName
+                PropertyName=x.Name
             }).AsNoTracking().ToListAsync();
             return res;
                 
