@@ -176,9 +176,9 @@ namespace BusinessLogic.Services
                 foreach (var property in user.UserProperties)
                 {
                     if (property.PropertyId == Id)
-                        property.isPrimary = true;
+                        property.IsPrimary = true;
                     else
-                        property.isPrimary = false;
+                        property.IsPrimary = false;
                 }
                 var updatestatus = await _user.Update(user);
                 if (updatestatus > 0)

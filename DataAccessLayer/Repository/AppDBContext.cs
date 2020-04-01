@@ -47,7 +47,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.ClockType).HasDefaultValue(12);
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
-            builder.Entity<UserProperty>().Property(x => x.isPrimary).HasDefaultValue(false);
+            builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
 

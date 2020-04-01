@@ -267,3 +267,17 @@ Stack Trace:    at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtract
 2020-04-01 11:58:21.797 +05:30 [INF] HTTP GET /api/property/markprimary?id=1&userId=3 responded 200 in 118593.8942 ms
 2020-04-01 11:58:28.577 +05:30 [INF] HTTP GET /api/property/markprimary?id=1&userId=3 responded 200 in 954.743 ms
 2020-04-01 11:58:28.720 +05:30 [INF] HTTP GET /api/user/userdetail?Id=3 responded 200 in 19.6257 ms
+2020-04-01 12:14:13.225 +05:30 [INF] HTTP GET /api/values responded 404 in 49.7592 ms
+2020-04-01 12:14:24.321 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5038.4483 ms
+2020-04-01 12:14:25.134 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 207.7793 ms
+2020-04-01 12:14:43.369 +05:30 [INF] HTTP GET /api/user/userdetail?Id=3 responded 200 in 396.5849 ms
+2020-04-01 12:14:49.036 +05:30 [INF] HTTP GET /api/user/userdetail?Id=2 responded 200 in 50.1787 ms
+2020-04-01 12:14:54.829 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=3 responded 200 in 439.596 ms
+2020-04-01 12:15:09.770 +05:30 [INF] HTTP POST /api/user/updateuser responded 200 in 1018.1809 ms
+2020-04-01 12:15:09.973 +05:30 [INF] HTTP POST /api/user/uploadAvtar?email=shukla.ajay1995@gmail.com responded 200 in 151.9449 ms
+2020-04-01 12:15:11.798 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=3 responded 200 in 70.9612 ms
+2020-04-01 12:15:15.042 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 54.6695 ms
+2020-04-01 12:15:16.886 +05:30 [INF] HTTP GET /api/user/userdetail?Id=2 responded 200 in 45.0951 ms
+2020-04-01 12:15:21.647 +05:30 [INF] HTTP GET /api/user/userdetail?Id=3 responded 200 in 22.1788 ms
+2020-04-01 12:15:30.674 +05:30 [INF] HTTP GET /api/property/markprimary?id=1&userId=3 responded 200 in 1429.462 ms
+2020-04-01 12:15:30.865 +05:30 [INF] HTTP GET /api/user/userdetail?Id=3 responded 200 in 26.0336 ms

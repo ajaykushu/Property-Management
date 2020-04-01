@@ -169,8 +169,14 @@ namespace Presentation.Controllers
             try
             {
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&userId=" + userId, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync()=="true")
+                if (response.IsSuccessStatusCode)
+                {
+                    var res = Convert.ToBoolean(await response.Content.ReadAsStringAsync());
+                    if(res)
                     TempData["Success"] = "Marked as Primary Propery";
+                    else
+                        TempData["Error"] = "Primary Marking Failed";
+                }
 
             }
             catch (Exception)

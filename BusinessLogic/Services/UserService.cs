@@ -277,7 +277,7 @@ namespace BusinessLogic.Services
                         PropertyName = x.Property.PropertyName,
                         PropertyType = x.Property.PropertyTypes.PropertyTypeName,
                         Street = x.Property.Street,
-                        IsPrimary = x.isPrimary
+                        IsPrimary = x.IsPrimary
                     }).ToList(),
                     PhoneNumber = x.PhoneNumber,
                     UserId = x.UserName,
