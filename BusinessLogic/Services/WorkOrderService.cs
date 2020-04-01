@@ -18,11 +18,48 @@ namespace BusinessLogic.Services
         private readonly IRepo<Issue> _issueRepo;
         private readonly IRepo<Item> _itemRepo;
         private readonly IRepo<UserProperty> _userProperty;
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty)
+        private readonly IRepo<Department> _department;
+        private readonly IRepo<WorkerType> _workertype;
+        private readonly IRepo<Stage> _stage;
+        private readonly IRepo<WorkOrder> _workOrder;
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkerType> workertype, IRepo<Stage> stage, IRepo<WorkOrder> workOrder)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
             _userProperty = userProperty;
+            _department = department;
+            _workertype = workertype;
+            _stage = stage;
+            _workOrder = workOrder;
+        }
+
+        public async Task<WorkOrderDetail> CreateWO(CreateWO createWO)
+        {
+            WorkOrder workOrder = new WorkOrder
+            {
+                CreationTime=DateTime.UtcNow,
+                UpdateTime=DateTime.UtcNow,
+                ApplicationUserId=createWO.RequestedById,
+                PropertyId=createWO.Property,
+                IssueId=createWO.Issue,
+                ItemId=createWO.Item,
+                Description=createWO.Description
+            };
+            workOrder.Stage.StageCode = "1000";
+            await _workOrder.Add(workOrder);
+            var prop = await GetAreaLocation(createWO.Property);
+            var workorder =await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Select(x => new WorkOrderDetail
+            {
+                Area=prop.Area,
+                Location=prop.Location,
+                PropertyName=x.Property.PropertyName,
+                Issue=x.Issue.IssueName,
+                StageCode=x.Stage.StageCode,
+                StageDescription=x.Stage.StageDescription,
+                Item=x.Item.ItemName,
+                Requestedby=x.ApplicationUser.FirstName+" "+ x.ApplicationUser.LastName
+            }).FirstOrDefaultAsync();
+            return workorder;
         }
 
         public async Task<PropDetail> GetAreaLocation(long id)
@@ -82,10 +119,21 @@ namespace BusinessLogic.Services
                 }).ToListAsync(),
 
                 Area = primaryprop != null ? primaryprop.Property.Street : "",
-                Location = sb.ToString()
+                Location = sb.ToString(),
+                Departments=await _department.GetAll().Select(x=> new SelectItem {Id=x.Id,PropertyName=x.DepartmentName }).ToListAsync()
             };
             
             return wo;
+        }
+
+        public Task<List<SelectItem>> GetSection(long id)
+        {
+            var res = _workertype.GetAll().Where(x => x.DepartmentId == id).Select(x => new SelectItem {
+                Id=x.Id,
+                PropertyName=x.TypeName
+            }).AsNoTracking().ToListAsync();
+            return res;
+                
         }
     }
 }

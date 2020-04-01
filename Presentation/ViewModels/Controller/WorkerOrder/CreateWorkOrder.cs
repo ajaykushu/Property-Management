@@ -14,7 +14,7 @@ namespace Presentation.ViewModels
         [Required(ErrorMessage = "Please Select Item")]
         public int Item { get; set; }
         public List<SelectItem> Properties { get; set; }
-        [Required(ErrorMessage = "Please Select Item")]
+        [Required(ErrorMessage = "Please Select Property")]
         public long Property { get; set; }
         public List<SelectItem> Issues { get; set; }
         [Required(ErrorMessage = "Please Select Issue")]
@@ -29,10 +29,9 @@ namespace Presentation.ViewModels
         public List<SelectItem> Departments { get; set; }
         [Required(ErrorMessage = "Please Select Department")]
         public int Department { get; set; }
-        public List<SelectItem> Sections { get; set; }
         [Required(ErrorMessage = "Please Select Section")]
         public int Section { get; set; }
-        public IFormFile Photos { set; get; }
+        public IFormFile Photo { set; get; }
 
     }
 }

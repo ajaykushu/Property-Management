@@ -244,15 +244,15 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<JsonResult> CheckEmail(string email)
         {
-            String result;
+            Boolean result;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("checkemail", out var path);
                 var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?email=" + email, this, _token);
                 if (res.IsSuccessStatusCode)
                 {
-                    result = await res.Content.ReadAsStringAsync();
-                    if (result.Equals("false"))
+                    result = Convert.ToBoolean(await res.Content.ReadAsStringAsync());
+                    if (result)
                         return Json("Email Already Present");
                 }
 
@@ -263,15 +263,15 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<JsonResult> CheckPhoneNumber(string phoneNumber)
         {
-            String result;
+            Boolean result;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("checkphonenumber", out var path);
                 var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?phone=" + phoneNumber, this, _token);
                 if (res.IsSuccessStatusCode)
                 {
-                    result = await res.Content.ReadAsStringAsync();
-                    if (result.Equals("false"))
+                    result = Convert.ToBoolean(await res.Content.ReadAsStringAsync());
+                    if (result)
                         return Json("Phone Number Already Present");
                 }
 
@@ -282,15 +282,15 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<JsonResult> CheckUserName(string userName)
         {
-            String result;
+            Boolean result;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("checkusername", out var path);
                 var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?userName=" + userName, this, _token);
                 if (res.IsSuccessStatusCode)
                 {
-                    result = await res.Content.ReadAsStringAsync();
-                    if (result.Equals("false"))
+                    result = Convert.ToBoolean(await res.Content.ReadAsStringAsync());
+                    if (result)
                         return Json("User Name Already Present");
                 }
 

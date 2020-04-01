@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
 using Utilities;
@@ -38,6 +39,20 @@ namespace API.Controllers
         {
             PropDetail prop= await _workOrderService.GetAreaLocation(id);
             return Ok(prop);
+        }
+        [HttpGet]
+        [Route("getsection")]
+        public async Task<ActionResult<List<SelectItem>>> GetSection(long id)
+        {
+            List<SelectItem> prop = await _workOrderService.GetSection(id);
+            return Ok(prop);
+        }
+        [HttpPost]
+        [Route("createwo")]
+        public async Task<ActionResult> CreateWO(CreateWO createWO)
+        {
+            WorkOrderDetail workOrderDetail = await _workOrderService.CreateWO(createWO);
+            return Ok(workOrderDetail);
         }
 
     }
