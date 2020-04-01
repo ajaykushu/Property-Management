@@ -13,6 +13,6 @@ namespace BusinessLogic.Interfaces
         Task<CreateWO> GetCreateWOModel(long userId);
         Task<PropDetail> GetAreaLocation(long id);
         Task<List<SelectItem>> GetSection(long id);
-        Task<WorkOrderDetail> CreateWO(CreateWO createWO);
+        Task<WorkOrderDetail> CreateWO(CreateWO createWO,long userId);
     }
 }

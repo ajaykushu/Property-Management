@@ -20,32 +20,32 @@ namespace BusinessLogic.Services
         private readonly IRepo<UserProperty> _userProperty;
         private readonly IRepo<Department> _department;
         private readonly IRepo<ApplicationRole> _role;
-        private readonly IRepo<Stage> _stage;
         private readonly IRepo<WorkOrder> _workOrder;
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<Stage> stage, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role)
+        private readonly IRepo<Stage> _stage;
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
             _userProperty = userProperty;
             _department = department;
-            _stage = stage;
             _workOrder = workOrder;
             _role = role;
+            _stage = stage;
         }
 
-        public async Task<WorkOrderDetail> CreateWO(CreateWO createWO)
+        public async Task<WorkOrderDetail> CreateWO(CreateWO createWO, long userId)
         {
             WorkOrder workOrder = new WorkOrder
             {
                 CreationTime=DateTime.UtcNow,
                 UpdateTime=DateTime.UtcNow,
-                ApplicationUserId=createWO.RequestedById,
+                ApplicationUserId=userId,
                 PropertyId=createWO.Property,
                 IssueId=createWO.Issue,
                 ItemId=createWO.Item,
                 Description=createWO.Description
             };
-            workOrder.Stage.StageCode = "1000";
+            workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
             await _workOrder.Add(workOrder);
             var prop = await GetAreaLocation(createWO.Property);
             var workorder =await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Select(x => new WorkOrderDetail

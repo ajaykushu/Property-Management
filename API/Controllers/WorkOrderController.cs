@@ -51,7 +51,10 @@ namespace API.Controllers
         [Route("createwo")]
         public async Task<ActionResult> CreateWO(CreateWO createWO)
         {
-            WorkOrderDetail workOrderDetail = await _workOrderService.CreateWO(createWO);
+            WorkOrderDetail workOrderDetail = null;
+            var userId = HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
+            if(userId!=null)
+                workOrderDetail = await _workOrderService.CreateWO(createWO,Convert.ToInt64(userId));
             return Ok(workOrderDetail);
         }
 

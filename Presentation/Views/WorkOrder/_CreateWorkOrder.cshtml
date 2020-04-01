@@ -196,8 +196,10 @@
                 function (data) {
                     console.log(data);
                     if (data != null || data != undefined) {
-                        for (var i = 0; i < data.length; i++)
-                        $("#Section").append('<option value='+data[i].id+'>'+data[i].propertyName+'</option>')
+                        for (var i = 0; i < data.length; i++) {
+                            $("#Section").html("<option value=''>Section</option>")
+                            $("#Section").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                        }
                     }
                 });
          });

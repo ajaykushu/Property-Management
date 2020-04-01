@@ -18,9 +18,6 @@ namespace Models.RequestModels
         public List<SelectItem> Issues { get; set; }
         [Required(ErrorMessage = "Please Select Issue Id")]
         public int Issue { get; set; }
-        public List<SelectItem> RequestedBy { get; set; }
-        [Required(ErrorMessage = "Please give Requested By")]
-        public int RequestedById { get; set; }
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
         [Required(ErrorMessage = "Please give Date")]
