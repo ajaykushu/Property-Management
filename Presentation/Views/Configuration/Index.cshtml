@@ -1,44 +1,62 @@
-﻿@model CreateWorkOrder
+﻿
+@model List<SelectItem>
+
 @{
     ViewData["Title"] = "Home Page";
 }
-
-
-<div class="todolist">
-    <div class="custom_nav">
-        <ul class="nav_list">
-            <li id="overview1">
-                <input id="overview" name="menu" class="radios" type="radio" value="FeatureControl" />
-                <label for="overview">Feature</label>
-                <input id="record" name="menu" class="radios" type="radio" value="RoleControl" />
-                <label for="record">Role</label>
-            </li>
-        </ul>
+<div class="table_container">
+    <div class="workordertitle">
+        Access Control
     </div>
+    <table class="table table-responsive-lg">
+        @if (Model != null)
+        {
+        <tbody>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row d-lg-table-row">
+                            <label>Select Role</label>
+                            <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                                <option value="">Please select one</option>
+                            </select>
+                        </div>
+                        <hr />
+                        <div class="row d-lg-table-row">
+                            <label>Adding New Role</label>
+                        </div>
+                        <div class="row d-lg-table-row">
+                            <label>Enter Role</label>
+                            <input class="form-control form-control-sm custom-input" />
+                        </div>
+                    </div>
+                </td>
+                <td class="features">
+                    <div class="spinner">
+                        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+                    </div>
+                </td>
+            </tr>
 
-    <div class="table_container">
-       
-    </div>
-    <div class="spinner">
-        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
-    </div>
+        </tbody>
+        }
+    </table>
+</div>
+<div class="spinner">
+    <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
 </div>
 
 <script>
-        $(document).ready(function () {
-            $('#overview').prop('checked', "checked");
+    $('.crole').change(function (e) {
+        var url = '@Url.Action("FeaturesSelector")';
+        $('.features').html("");
+        $('.fa-spin').show();
+        var id = $(this).val();
+        RESTCALL(url, { id: id }, "GET", "", true, function (res) {
+            $('.features').html(res);
+            $('.fa-spin').hide();
         });
-        $('.radios').click(function () {
-            var controller = $(this).val();
-            if (controller != "" && controller != undefined) {
-                var url = '@Url.Action("action")';
-                url = url.replace("action", controller);
-                $('.table_container').html("");
-                $('.fa-spin').show();
-                RESTCALL(url, {}, "GET", "", true, function (res) {
-                    $('.table_container').html(res);
-                    $('.fa-spin').hide();
-                });
-            }
-        });
+
+    });
+    
 </script>

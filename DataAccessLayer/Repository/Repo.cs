@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository
@@ -23,7 +24,7 @@ namespace DataAccessLayer.Repository
             this.context.Remove<TEntity>(entity);
             return this.context.SaveChangesAsync();
         }
-        public virtual IQueryable<TEntity> Get(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate)
+        public virtual IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
         {
 
             IQueryable<TEntity> query = context.Set<TEntity>().Where(predicate);

@@ -15,6 +15,7 @@ namespace Presentation.ConstModal
         public string Controller { set; get; }
         public string Class { get; set; }
         public bool Enabled { get; set; }
+        public string MainMenuName { get; set; }
 
 
     }

@@ -23,20 +23,7 @@
                     <tr>
                         <td>
                             <div class="col">
-                                <div class="row ">
-                                    <div class="col-md-3">
-                                        <label asp-for="Title"></label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="Title">
-                                            <option value="">Please select one</option>
-                                            <option value="Mr.">Mr.</option>
-                                            <option value="Mrs.">Mrs.</option>
-                                        </select>
-                                        <span asp-validation-for="Title" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="row top-buffer">
+                                <div class="row">
                                     <div class="col-md-3">
                                         <label for="FirstName">First Name</label>
                                     </div>
@@ -83,12 +70,11 @@
                                         }
                                         </div>
                                 </div>
-                                <div class="row top-buffer mainprop">
+                                <div class="row top-buffer mainprop" style="@if (Model.Role == "Admin") {<text>display:none;</text> }">
                                     <div class="col-md-3">
-                                        <label for="SelectedProperty">Main Property</label>
+                                        <label for="SelectedProperty">Assigned Property</label>
                                     </div>
                                     <div class="col">
-
                                         @if (Model.Properties!=null && Model.Properties.Any())
                                         {
                                             <input type="text" value="@if (Model.SelectedProperty.Any())
@@ -153,16 +139,7 @@
                                         <label for="PhoneNumber">Phone Number</label>
                                     </div>
                                     <div class="col">
-                                        @if (Model.CountryCodes!=null && Model.CountryCodes.Any())
-                                        {
-                                        <select class="form-control-sm custom-input" asp-for="CountryCode" asp-items="@(new SelectList(Model.CountryCodes, "Id", "PropertyName"))">
-                                            <option value="">Country Code</option>
-                                        </select>
-                                        <span asp-validation-for="CountryCode" class="text-danger"></span>
-                                        }
-                                    </div>
-                                    <div class="col">
-                                        <input asp-for="PhoneNumber" class="form-control-sm custom-input" placeholder="Phone Number">
+                                        <input asp-for="PhoneNumber" class="form-control-sm custom-input" placeholder="+91-1234567890">
                                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -294,7 +271,5 @@
         }
     });
    
-   
-    
 </script>
 

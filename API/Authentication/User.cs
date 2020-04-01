@@ -21,12 +21,11 @@ namespace API.Authentication
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
-        private readonly IRepo<MainMenu> _MainMenu;
         private readonly IUserService _user;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public User(UserManager<ApplicationUser> userManager, ITokenGenerator tokenGenerator, IEmailSender emailSender,
-               IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor, IRepo<MainMenu> MainMenu)
+               IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
@@ -34,7 +33,6 @@ namespace API.Authentication
             _roleMenuMap = roleMenuMap;
             _user = user;
             _httpContextAccessor = httpContextAccessor;
-            _MainMenu = MainMenu;
 
 
 
@@ -80,11 +78,11 @@ namespace API.Authentication
                 throw new BadRequestException("User Not Found");
             }
         }
-        public async Task<TokenResponse> DoLogin(LoginReq loginDTO)
+        public async Task<TokenResponseModel> DoLogin(LoginUserModel loginDTO)
         {
             if (_userManager.Users.Count() == 0)
             {
-                await _user.RegisterUser(new RegisterRequest
+                await _user.RegisterUser(new RegisterUser
                 {
                     UserName = "TestUser",
                     Email = "test@test.com",
@@ -92,15 +90,13 @@ namespace API.Authentication
                     FirstName = "Test",
                     LastName = "Last",
                     Language = 1,
-                    CountryCode = 1,
                     Role = "Admin",
-                    Title = "Mr.",
                     Password = "Testuser123@",
                     TimeZone = "India +5:30"
                 });
             }
             ApplicationUser identityUser;
-            TokenResponse returnToken;
+            TokenResponseModel returnToken;
 
             identityUser = await _userManager.FindByEmailAsync(loginDTO.Email);
             if (identityUser != null)
@@ -115,27 +111,18 @@ namespace API.Authentication
                     }
                     var roles = await _userManager.GetRolesAsync(identityUser) ?? new List<string>();
 
-                    var tempquer = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.Id).ToHashSet();
-                    var menu = await _MainMenu.GetAll().Include(x=>x.Menus).Select(x => new
-                    {
-                        MainMenu = x.MainMenuName,
-                        SubMenu = x.Menus.Where(x=>tempquer.Contains(x.Id)).Select(x => x.MenuName).ToList()
-                    }).ToArrayAsync();
-                    List<string> submenu = new List<string>();
-                    var MenuItems = new Dictionary<string, HashSet<string>>();
-                    foreach (var menus in menu)
-                    {
-                        submenu = submenu.Concat(menus.SubMenu).Distinct().ToList();
-                        MenuItems.Add(menus.MainMenu, menus.SubMenu.ToHashSet());
-                    }
-                    var claims = _tokenGenerator.GetClaims(identityUser, roles, submenu);
+                    var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
 
-                    returnToken = new TokenResponse()
+
+                    var claims = _tokenGenerator.GetClaims(identityUser, submenu);
+
+                    returnToken = new TokenResponseModel()
                     {
                         FullName = identityUser.FirstName + " " + identityUser.LastName + " " + identityUser.Suffix,
-                        Roles = roles,
+                        UId = identityUser.Id,
+                        Roles = roles.ToHashSet(),
                         Token = _tokenGenerator.GetToken(claims),
-                        MenuItems = MenuItems,
+                        MenuItems = submenu,
                         PhotoPath = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath
                     };
 

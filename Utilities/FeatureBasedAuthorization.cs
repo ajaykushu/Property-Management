@@ -18,7 +18,7 @@ namespace Utilities
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            
+
             var user = context.HttpContext.User;
             var featurecheck = new HashSet<string>();
             if (!user.Identity.IsAuthenticated)
@@ -30,7 +30,7 @@ namespace Utilities
                 };
                 return;
             }
-            
+
             else if (Feature != null && Feature != "" && Feature.Contains(","))
             {
                 var temp = Feature.Split(",");

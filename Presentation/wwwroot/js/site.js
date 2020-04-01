@@ -49,3 +49,6 @@ $('.Photo').change(function (e) {
         $('.photo_disp').show();
     }
 })
+$('.clear').click(function () {
+    $("input[type=text]").val("");
+})

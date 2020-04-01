@@ -1,7 +1,6 @@
 ﻿using API.Authentication.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System;
@@ -18,7 +17,7 @@ namespace API.Controllers
         public IConfiguration Configuration;
         private readonly IUserManager _user;
 
-        public LoginController(ILogger<LoginController> logger, IUserManager user)
+        public LoginController(IUserManager user)
         {
             _user = user;
         }
@@ -31,7 +30,7 @@ namespace API.Controllers
         [HttpPost]
 
         [Route("userlogin")]
-        public async Task<ActionResult<TokenResponse>> UserLogin([FromBody] LoginReq login)
+        public async Task<ActionResult<TokenResponseModel>> UserLogin([FromBody] LoginUserModel login)
         {
 
             var tokenResponse = await _user.DoLogin(login);
@@ -69,7 +68,7 @@ namespace API.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("changepassword")]
-        public async Task<ActionResult<bool>> ChangePassword([FromBody] PasswordChange user)
+        public async Task<ActionResult<bool>> ChangePassword([FromBody] PasswordChangeModel user)
         {
             var status = await _user.ChangePassowrd(user.Email, user.Token, user.NewPassword);
             return Ok(status);

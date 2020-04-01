@@ -16,32 +16,20 @@ namespace DataEntity
         }
 
         [Required]
-        [Column(TypeName = "varchar(4)")]
-        public string Title { set; get; }
-        [Required]
         [Column(TypeName = "varchar(50)")]
         public string FirstName { set; get; }
-
         [Column(TypeName = "varchar(50)")]
         [Required]
         public string LastName { set; get; }
-
         [Column(TypeName = "varchar(10)")]
         public string Suffix { set; get; }
-
         [Required]
         public bool SMSAltert { get; set; }
         public Languages Language { get; set; }
-
         [Required]
         public int LanguageId { get; set; }
-        [Required]
-        public int CountryId { get; set; }
-        public Country Country { get; set; }
-
         [Column(TypeName = "varchar(100)")]
         public string TimeZone { get; set; }
-
         [Column(TypeName = "varchar(2)")]
         public string ClockType { set; get; }
         [Column(TypeName = "varchar(10)")]
@@ -54,6 +42,7 @@ namespace DataEntity
         public long? ManagerId { set; get; }
         public virtual ApplicationUser Manager { get; set; }
         public bool IsActive { get; set; }
+        public virtual ICollection<Comments> Comments { get; set; }
     }
 
     public class ApplicationUserPhoneValidator : IUserValidator<ApplicationUser>

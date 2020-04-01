@@ -1,14 +1,11 @@
-﻿using API.Authentication.Interfaces;
-using BusinessLogic.Interfaces;
+﻿using BusinessLogic.Interfaces;
 using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Interface;
@@ -22,19 +19,10 @@ namespace API.Controllers
         public IConfiguration Configuration;
         private readonly IUserService _userService;
         private readonly IImageUploadInFile _imageUploadInFile;
-        public UserController(ILogger<LoginController> logger, IUserManager user, IUserService userService, IImageUploadInFile imageUploadInFile)
+        public UserController(IUserService userService, IImageUploadInFile imageUploadInFile)
         {
             _userService = userService;
             _imageUploadInFile = imageUploadInFile;
-        }
-
-        [HttpGet]
-        [Route("deleteproperty")]
-        [FeatureBasedAuthorization("Delete Property")]
-        public async Task<ActionResult<bool>> DeleteProperty(int id)
-        {
-            var status = await _userService.DeleteProperty(id);
-            return Ok(status);
         }
 
         /// <summary>
@@ -47,7 +35,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("register")]
         [FeatureBasedAuthorization("Add User")]
-        public async Task<ActionResult> Register([FromBody] RegisterRequest register)
+        public async Task<ActionResult> Register([FromBody] RegisterUser register)
         {
             //var managerId = HttpContext.User.FindFirstValue(ClaimTypes.Sid);
             var status = await _userService.RegisterUser(register);
@@ -56,21 +44,21 @@ namespace API.Controllers
         [HttpGet]
         [Route("getregisterrequestmodel")]
         [FeatureBasedAuthorization("Add User")]
-        public ActionResult<RegisterRequest> GetRegisterRequestModel()
+        public ActionResult<RegisterUser> GetRegisterRequestModel()
         {
             return _userService.GetRegisterModel();
         }
         [HttpGet]
         [Route("getedituserrequestmodel")]
         [FeatureBasedAuthorization("Edit User")]
-        public async Task<ActionResult<EditUser>> GeUserEditRequestModel(long Id)
+        public async Task<ActionResult<EditUserModel>> GeUserEditRequestModel(long Id)
         {
             return await _userService.GetEditUserModelAsync(Id);
         }
         [HttpPost]
         [Route("updateuser")]
         [FeatureBasedAuthorization("Edit User")]
-        public async Task<ActionResult<EditUser>> UpdateUser([FromBody] EditUser edit)
+        public async Task<ActionResult<EditUserModel>> UpdateUser([FromBody] EditUserModel edit)
         {
             var status = await _userService.UpdateUser(edit);
             return Ok(status);
@@ -95,36 +83,11 @@ namespace API.Controllers
             return StatusCode(500, "Upload Failed");
 
         }
-        [HttpGet]
-        [Route("getPropertyTypes")]
-        [FeatureBasedAuthorization("Add Property")]
-        public ActionResult<AddProperty> GetPropertyTypes()
-        {
-            return _userService.GetPropertyType();
-        }
-        [HttpGet]
-        [Route("listproperties")]
-        [FeatureBasedAuthorization("View Property")]
-        public async Task<ActionResult<List<Properties>>> GetProperties()
-        {
-            List<Properties> properties = await _userService.GetProperties();
-            return properties;
 
-        }
-
-        [FeatureBasedAuthorization("Add Property")]
-        [HttpPost]
-        [Route("addproperty")]
-        public async Task<ActionResult<bool>> AddProperty([FromBody] AddProperty modal)
-        {
-            var status = await _userService.AddProperty(modal);
-            return Ok(status);
-
-        }
         [Route("getallusers")]
         [FeatureBasedAuthorization("View Users")]
         [HttpGet]
-        public async Task<ActionResult<Pagination<IList<UsersList>>>> GetAllUsers(string matchString, FilterEnum filter, int requestedPage)
+        public async Task<ActionResult<Pagination<IList<UsersListModel>>>> GetAllUsers(string matchString, FilterEnum filter, int requestedPage)
         {
             //var managerId = HttpContext.User.FindFirstValue(ClaimTypes.Sid);
             var usersList = await _userService.GetAllUsers(requestedPage, filter, matchString);
@@ -148,21 +111,30 @@ namespace API.Controllers
             UserDetailModel userDetailModel = await _userService.GetUserDetail(Id);
             return Ok(userDetailModel);
         }
+
         [HttpGet]
-        [FeatureBasedAuthorization("Add Property")]
-        [Route("getproperty")]
-        public async Task<AddProperty> GetPropertyType(long id) => await _userService.GetProperty(id);
-
-        [HttpPost]
-        [FeatureBasedAuthorization("Edit Property")]
-        [Route("updateproperty")]
-        public async Task<IActionResult> UpdateProperty(AddProperty prop)
+        [Route("checkemail")]
+        public async Task<ActionResult<bool>> CheckEmail(string email)
         {
-
-            var status = await _userService.UpdateProperty(prop);
-            return Ok(status);
+            var res = await _userService.CheckEmail(email);
+            return res;
+        }
+        [HttpGet]
+        [Route("checkphonenumber")]
+        public async Task<ActionResult<bool>> CheckPhoneNumber(string phone)
+        {
+            var res = await _userService.CheckPhoneNumber(phone);
+            return res;
+        }
+        [HttpGet]
+        [Route("checkusername")]
+        public async Task<ActionResult<bool>> CheckUserName(string userName)
+        {
+            var res = await _userService.CheckUserName(userName);
+            return res;
 
         }
+
 
     }
 }

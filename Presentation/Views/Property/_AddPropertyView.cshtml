@@ -1,0 +1,152 @@
+﻿@model Presentation.ViewModels.PropertyOperation
+    <partial name="_ValidationScriptsPartial">
+        <div class="table_container">
+            <div class="workordertitle">
+                Add Property
+            </div>
+            @if (Model != null)
+            {
+            <form asp-action="AddProperty" class="addprop">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <label for="PropertyTypeId">Property Type</label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.PropertyTypes != null)
+                                            {
+                                            <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
+                                                <option value="">Please select one</option>
+                                            </select>
+                                            }
+                                            <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer ">
+                                        <div class="col-md-3">
+                                            <label for="PropertyName">Property Name </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="PropertyName" class="form-control-sm custom-input">
+                                            <span asp-validation-for="PropertyName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="HouseNumber">House Number</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="HouseNumber" class="form-control-sm custom-input">
+                                            <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="Street">Street</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="Street" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Street" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="Landmark">Street Line 2</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="StreetLine2" class="form-control-sm custom-input">
+                                            <span asp-validation-for="StreetLine2" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Locality"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="Locality" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Locality" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="City"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="City" class="form-control-sm custom-input">
+                                            <span asp-validation-for="City" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="PinCode">Zip Code</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="PinCode" class="form-control-sm custom-input">
+                                            <span asp-validation-for="PinCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Country"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="Country" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Country" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <button type="submit" class="btn btn-sm btn-outline-primary submit"><span>Add Property</span>&nbsp;<i class="fa fa-spinner fa-1x fa-spin" hidden></i></button>
+
+            </form>
+            }
+            <div>
+                <a asp-action="ListProperties" asp-controller="Property">Back</a>
+            </div>
+        </div>
+   <script>
+            $('.addprop').submit(function (e) {
+                e.preventDefault();
+                var url = $(this).attr('action');
+                var form = $(this).serialize();
+                if ($(this).valid()) {
+                    $('.fa-spinner').prop("hidden",false);
+                    RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', false, function (res) {
+                        $('.fa-spinner').prop("hidden",true);
+                        alertify.alert('Info', '<p>' + res + '</p>', function () {
+                        $("input[type=text]").val("");
+                        $('select').prop('selectedIndex',0);
+                        });
+                       
+                    }, function (res) {
+                        $('.fa-spinner').prop("hidden",true);
+                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                        });
+                    },"");
+                }
+            });
+            </script>
+

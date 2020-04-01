@@ -47,9 +47,9 @@
 </style>
 @if (Model != null)
 {
-    <p>
-        <a class="btn btn-sm btn-success" asp-action="Create"><i class="fa fa-plus fa-1x"></i>&nbsp;Create New</a>
-    </p>
+<p>
+    <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'  bclass="btn btn-sm btn-success" feature="Add User"></auth-link>
+</p>
 
     <form class="form">
         <div class="input-group">
@@ -63,6 +63,7 @@
             </div>
             <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
             &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info" type="submit" value="Filter">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info clear" type="submit" value="Clear Filter">
         </div>
         <hr />
         <div class="workordertitle">
@@ -119,15 +120,22 @@
                                 @Html.DisplayFor(modelItem => item.UserName)
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-success" asp-action="EditUserView" asp-controller="User" asp-route-id="@item.Id"><i class="fa fa-pencil-alt"></i>&nbsp;Edit</button>
-                                <button class="btn btn-sm btn-outline-info" asp-action="UserDetailView" asp-controller="User" asp-route-id="@item.Id"><i class="fa fa-info"></i>&nbsp;Detail</button>
+                                @{
+                                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                    keyValuePairs.Add("id", item.Id + "");
+                                }
+                                <auth-link bclass="btn btn-sm btn-outline-success" feature="Edit User" routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-outline-info" feature="View User Detail" routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                @{keyValuePairs.Add("page", Model.CurrentPage + "");}
                                 @if (item.IsActive)
                                 {
-                                    @Html.ActionLink("Deactivate", "DeAct_ActUser", new { userId = item.Id, operation = 0, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-danger" })
+                                    keyValuePairs.Add("operation", "0");
+                                    <auth-link bclass="btn btn-sm btn-outline-danger" feature="ActDct User" routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
                                 }
                                 else
                                 {
-                                    @Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })
+                                    keyValuePairs.Add("operation", "1");
+                                    <auth-link bclass="btn btn-sm btn-outline-info" feature="ActDct User" routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link> @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
                                 }
                             </td>
                         </tr>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.ConstModal;
@@ -24,13 +23,15 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly IOptions<MenuMapperModel> _menuDetails;
+        private readonly ISessionStorage _sessionStorage;
 
 
-        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails)
+        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, ISessionStorage sessionStorage)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             _menuDetails = menuDetails;
+            _sessionStorage = sessionStorage;
 
         }
         /// <summary>
@@ -60,7 +61,7 @@ namespace Presentation.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginExist(LoginReq login)
         {
-           
+
             var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
             if (!consentFeature.HasConsent)
             {
@@ -85,9 +86,12 @@ namespace Presentation.Controllers
                                                   tokenResponse.FullName);
                     HttpContext.Session.SetString("imagePath",
                                                   tokenResponse.PhotoPath);
+                    HttpContext.Session.SetString("UId",
+                                                  tokenResponse.UId + "");
 
-                    Dictionary<string, HashSet<MenuProperty>> menuView = new Dictionary<string, HashSet<MenuProperty>>();
+                    Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
                     MakeDictionaryFormenuView(tokenResponse, menuView);
+                    _sessionStorage.AddItem(tokenResponse.UId, tokenResponse.MenuItems);
                     HttpContext.Session.SetString(
                     "menu",
                     JsonConvert.SerializeObject(menuView)
@@ -117,27 +121,30 @@ namespace Presentation.Controllers
             }
         }
 
-        private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, HashSet<MenuProperty>> menuView)
+        private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, List<MenuProperty>> menuView)
         {
-            foreach (var items in tokenResponse.MenuItems)
-                foreach (var submenu in items.Value)
-                    if (_menuDetails.Value.Menus.ContainsKey(submenu) && _menuDetails.Value.Menus[submenu].Enabled == false)
-                        if (!menuView.ContainsKey(items.Key))
+            foreach (var menu in _menuDetails.Value.Menus)
+            {
+                if (tokenResponse.MenuItems.Contains(menu.Key))
+                {
+                    menu.Value.Enabled = true;
+                    if (!menuView.ContainsKey(menu.Value.MainMenuName))
+                    {
+                        var templist = new List<MenuProperty>
                         {
-                            var list = new HashSet<MenuProperty>
-                            {
-                                _menuDetails.Value.Menus[submenu]
-                            };
-                            _menuDetails.Value.Menus[submenu].Enabled = true;
-                            menuView.Add(items.Key, list);
-                        }
-                        else
-                        {
-                            menuView[items.Key].Add(_menuDetails.Value.Menus[submenu]);
-                            _menuDetails.Value.Menus[submenu].Enabled = true;
-                        }
+                            menu.Value
+                        };
+                        menuView.Add(menu.Value.MainMenuName, templist);
+                    }
+                    else
+                        menuView[menu.Value.MainMenuName].Add(menu.Value);
+                }
+            }
+
+
             foreach (var item in _menuDetails.Value.Menus)
                 item.Value.Enabled = false;
+
         }
 
         /// <summary>
@@ -148,6 +155,8 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult LogOut()
         {
+            var Id = Convert.ToInt64(HttpContext.Session.GetString("UId"));
+            _sessionStorage.RemoveItem(Id);
             HttpContext.Session.Clear();
             _httpClientHelper.RemoveHeader();
             return RedirectToAction("Index", "Login", null);

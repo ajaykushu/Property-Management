@@ -17,9 +17,6 @@ namespace DataEntity
         [Required]
         [Column(TypeName = "varchar(30)")]
         public string MenuName { set; get; }
-        [Required]
-        public long MainMenuId { set; get; }
-        public MainMenu MainMenu { set; get; }
         public ICollection<RoleMenuMap> RoleMenuMaps { set; get; }
     }
 }

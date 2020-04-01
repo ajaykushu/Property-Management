@@ -31,31 +31,17 @@ namespace Presentation
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            //  services.AddAuthentication(options =>
-            //  {
-            //      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //      options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //  }).AddJwtBearer(options =>
-            //{
-            //    options.SaveToken = true;
-            //    options.RequireHttpsMetadata = false;
-            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-            //    {
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false,
-            //        ValidateLifetime = true,
-            //        ValidIssuer = Configuration.GetSection("token").GetSection("issuer").Value,
-            //        ValidAudience = Configuration.GetSection("token").GetSection("audience").Value,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("token").GetSection("key").Value))
-            //    };
-            //});
+            services.AddSession(opts =>
+            {
+                opts.IdleTimeout = TimeSpan.FromMinutes(5);
+            });
             services.Configure<RouteConstModel>(Configuration.GetSection("ApiRoutes"));
             services.Configure<MenuMapperModel>(Configuration.GetSection("SubMenuMapper"));
             services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IHttpClientHelper, HttpHelper>();
             services.AddHttpClient<HttpHelper>();
+            services.AddSingleton<ISessionStorage, SessionStorage>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

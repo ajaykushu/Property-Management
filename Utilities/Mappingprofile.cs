@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DataEntity;
-using Models.ResponseModels;
+using Models.RequestModels;
 
 namespace Utilities
 {
@@ -8,7 +8,7 @@ namespace Utilities
     {
         public Mappingprofile()
         {
-            CreateMap<AddProperty, Property>();
+            CreateMap<PropertyOperationModel, Property>();
         }
     }
 }

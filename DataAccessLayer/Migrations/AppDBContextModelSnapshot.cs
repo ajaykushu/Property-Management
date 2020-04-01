@@ -51,14 +51,14 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "d5f84fd4-fdea-469e-9ac9-7f9e7da06b9f",
+                            ConcurrencyStamp = "0c23d9fe-34d2-440e-a1cc-ea4d0e98a7c1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "ceb31bb6-c9d0-43d7-96f4-e501b8ab9eb4",
+                            ConcurrencyStamp = "5463ca92-4a29-4ed6-a473-e19780dc80b4",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -82,9 +82,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -157,10 +154,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("TimeZone")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("varchar(4)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -169,8 +162,6 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -195,46 +186,29 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("DataEntity.Country", b =>
+            modelBuilder.Entity("DataEntity.Comments", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ISO2")
-                        .HasColumnType("varchar(2)");
+                    b.Property<long>("ApplicationUserId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("ISO3")
-                        .HasColumnType("varchar(3)");
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(80)");
-
-                    b.Property<string>("Nicename")
-                        .HasColumnType("varchar(80)");
-
-                    b.Property<int?>("Numcode")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PhoneCode")
-                        .HasColumnType("int");
+                    b.Property<long>("WorkOrderId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ISO2 = "IN",
-                            ISO3 = "IND",
-                            Name = "INDIA",
-                            Nicename = "India",
-                            Numcode = 91,
-                            PhoneCode = 0
-                        });
+                    b.HasIndex("WorkOrderId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("DataEntity.Department", b =>
@@ -251,6 +225,36 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("DataEntity.Issue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IssueName")
+                        .HasColumnType("varchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Issues");
+                });
+
+            modelBuilder.Entity("DataEntity.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ItemName")
+                        .HasColumnType("varchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("DataEntity.Languages", b =>
@@ -276,29 +280,6 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataEntity.MainMenu", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MainMenuName")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MainMenus");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            MainMenuName = "User Manager"
-                        });
-                });
-
             modelBuilder.Entity("DataEntity.Menu", b =>
                 {
                     b.Property<long>("Id")
@@ -306,16 +287,11 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("MainMenuId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("MenuName")
                         .IsRequired()
                         .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MainMenuId");
 
                     b.ToTable("Menu");
 
@@ -323,62 +299,57 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            MainMenuId = 1L,
                             MenuName = "Add User"
                         },
                         new
                         {
                             Id = 2L,
-                            MainMenuId = 1L,
                             MenuName = "View Users"
                         },
                         new
                         {
                             Id = 3L,
-                            MainMenuId = 1L,
                             MenuName = "View Property"
                         },
                         new
                         {
                             Id = 4L,
-                            MainMenuId = 1L,
                             MenuName = "Edit User"
                         },
                         new
                         {
                             Id = 5L,
-                            MainMenuId = 1L,
                             MenuName = "Add Property"
                         },
                         new
                         {
                             Id = 6L,
-                            MainMenuId = 1L,
                             MenuName = "Edit Property"
                         },
                         new
                         {
                             Id = 7L,
-                            MainMenuId = 1L,
                             MenuName = "ActDct User"
                         },
                         new
                         {
                             Id = 8L,
-                            MainMenuId = 1L,
                             MenuName = "View User Detail"
                         },
                         new
                         {
                             Id = 9L,
-                            MainMenuId = 1L,
                             MenuName = "Delete Property"
                         },
                         new
                         {
                             Id = 10L,
-                            MainMenuId = 1L,
                             MenuName = "Edit Feature"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            MenuName = "Access Setting"
                         });
                 });
 
@@ -422,9 +393,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(10)");
 
-                    b.Property<string>("LandMark")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("Locality")
                         .HasColumnType("varchar(50)");
 
@@ -442,6 +410,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("StreetLine2")
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
@@ -563,6 +534,27 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DataEntity.Stage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("StageCode")
+                        .HasColumnType("varchar(5)");
+
+                    b.Property<string>("StageDescription")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("StageShortHand")
+                        .HasColumnType("varchar(7)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stages");
+                });
+
             modelBuilder.Entity("DataEntity.UserProperty", b =>
                 {
                     b.Property<long>("Id")
@@ -576,13 +568,64 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("isPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("userProperties");
+                    b.ToTable("UserProperties");
+                });
+
+            modelBuilder.Entity("DataEntity.WorkOrder", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ApplicationUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int>("IssueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("StageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("IssueId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("StageId");
+
+                    b.ToTable("WorkOrders");
                 });
 
             modelBuilder.Entity("DataEntity.WorkerType", b =>
@@ -650,12 +693,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.ApplicationUser", b =>
                 {
-                    b.HasOne("DataEntity.Country", "Country")
-                        .WithMany("ApplicationUsers")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DataEntity.Languages", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
@@ -667,11 +704,17 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("ManagerId");
                 });
 
-            modelBuilder.Entity("DataEntity.Menu", b =>
+            modelBuilder.Entity("DataEntity.Comments", b =>
                 {
-                    b.HasOne("DataEntity.MainMenu", "MainMenu")
-                        .WithMany("Menus")
-                        .HasForeignKey("MainMenuId")
+                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
+                        .WithMany("Comments")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataEntity.WorkOrder", "WorkOrder")
+                        .WithMany("Comments")
+                        .HasForeignKey("WorkOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -711,6 +754,39 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataEntity.Property", "Property")
                         .WithMany("UserProperties")
                         .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataEntity.WorkOrder", b =>
+                {
+                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataEntity.Issue", "Issue")
+                        .WithMany("workOrders")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataEntity.Item", "Item")
+                        .WithMany("workOrders")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataEntity.Property", "Property")
+                        .WithMany()
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataEntity.Stage", "Stage")
+                        .WithMany("workOrders")
+                        .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

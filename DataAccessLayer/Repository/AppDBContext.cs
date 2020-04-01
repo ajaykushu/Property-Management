@@ -10,12 +10,14 @@ namespace DataAccessLayer.Repository
     {
         public DbSet<Property> Properties { set; get; }
         public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
-        public DbSet<Country> Countries { set; get; }
         public DbSet<Menu> Menu { set; get; }
-        public DbSet<MainMenu> MainMenus { set; get; }
-
+        public DbSet<Issue> Issues { set; get; }
+        public DbSet<Item> Items { set; get; }
+        public DbSet<Stage> Stages { set; get; }
+        public DbSet<WorkOrder> WorkOrders { set; get; }
+        public DbSet<Comments> Comments { set; get; }
         public DbSet<Languages> Languages { set; get; }
-        public DbSet<UserProperty> userProperties { set; get; }
+        public DbSet<UserProperty> UserProperties { set; get; }
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
@@ -45,6 +47,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.ClockType).HasDefaultValue(12);
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
+            builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
 
@@ -69,96 +72,73 @@ namespace DataAccessLayer.Repository
                     Language = "English"
                 });
 
-            builder.Entity<PropertyType>().HasData(new PropertyType() { Id = 1, PropertyTypeName = "Hotel" });
+            builder.Entity<PropertyType>()
+                   .HasData(new PropertyType() { Id = 1, PropertyTypeName = "Hotel" });
             builder.Entity<Menu>().HasData(
                 new Menu()
                 {
                     Id = 1,
-                    MainMenuId = 1,
                     MenuName = "Add User"
                 },
                 new Menu()
                 {
                     Id = 2,
-                    MainMenuId = 1,
                     MenuName = "View Users"
                 }, new Menu()
                 {
                     Id = 3,
-                    MainMenuId = 1,
                     MenuName = "View Property"
                 }
             , new Menu()
             {
                 Id = 4,
-                MainMenuId = 1,
                 MenuName = "Edit User"
             }
             , new Menu()
             {
                 Id = 5,
-                MainMenuId = 1,
                 MenuName = "Add Property"
             }
             , new Menu()
             {
                 Id = 6,
-                MainMenuId = 1,
                 MenuName = "Edit Property"
             }
             , new Menu()
             {
                 Id = 7,
-                MainMenuId = 1,
                 MenuName = "ActDct User"
             }, new Menu()
             {
                 Id = 8,
-                MainMenuId = 1,
                 MenuName = "View User Detail"
             },
              new Menu()
              {
                  Id = 9,
-                 MainMenuId = 1,
                  MenuName = "Delete Property"
-             },new Menu()
+             }, new Menu()
              {
                  Id = 10,
-                 MainMenuId = 1,
                  MenuName = "Edit Feature"
+             }, new Menu()
+             {
+                 Id = 11,
+                 MenuName = "Access Setting"
              });
+
             builder.Entity<RoleMenuMap>().HasData(
-                new RoleMenuMap {Id=1, MenuId=1,RoleId=1 },
-                 new RoleMenuMap {Id=2, MenuId = 2, RoleId = 1 },
-                  new RoleMenuMap {Id=3, MenuId = 3, RoleId = 1 },
-                   new RoleMenuMap {Id=4, MenuId = 4, RoleId = 1 },
-                    new RoleMenuMap {Id=5, MenuId = 5, RoleId = 1 },
-                     new RoleMenuMap {Id=6, MenuId = 6, RoleId = 1 },
-                      new RoleMenuMap {Id=7, MenuId = 7, RoleId = 1 },
-                       new RoleMenuMap {Id=8, MenuId = 8, RoleId = 1 },
-                        new RoleMenuMap {Id=9, MenuId = 9, RoleId = 1 },
-                         new RoleMenuMap {Id=10, MenuId = 10, RoleId = 1 }
-                         
+                new RoleMenuMap { Id = 1, MenuId = 1, RoleId = 1 },
+                new RoleMenuMap { Id = 2, MenuId = 2, RoleId = 1 },
+                new RoleMenuMap { Id = 3, MenuId = 3, RoleId = 1 },
+                new RoleMenuMap { Id = 4, MenuId = 4, RoleId = 1 },
+                new RoleMenuMap { Id = 5, MenuId = 5, RoleId = 1 },
+                new RoleMenuMap { Id = 6, MenuId = 6, RoleId = 1 },
+                new RoleMenuMap { Id = 7, MenuId = 7, RoleId = 1 },
+                new RoleMenuMap { Id = 8, MenuId = 8, RoleId = 1 },
+                new RoleMenuMap { Id = 9, MenuId = 9, RoleId = 1 },
+                new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 }
                 );
-            builder.Entity<MainMenu>().HasData(new MainMenu
-            {
-                Id = 1,
-                MainMenuName = "User Manager"
-            });
-
-
-            
-            builder.Entity<Country>().HasData(new Country()
-            {
-                Id = 1,
-                ISO2 = "IN",
-                ISO3 = "IND",
-                Name = "INDIA",
-                Nicename = "India",
-                Numcode = 91,
-                PhoneCode = 0
-            });
 
 
         }
