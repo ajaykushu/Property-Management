@@ -1,4 +1,6 @@
-﻿namespace Presentation.ViewModels
+﻿using System;
+
+namespace Presentation.ViewModels
 {
     public class WorkOrderDetail
     {
@@ -13,5 +15,8 @@
         public string StageCode { get; set; }
         public string Issue { get; set; }
         public string Item { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime UpdatedTime { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

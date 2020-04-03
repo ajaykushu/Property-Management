@@ -1088,3 +1088,7 @@ Stack Trace:    at Microsoft.EntityFrameworkCore.Update.ReaderModificationComman
 2020-04-01 21:10:27.553 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 126.1637 ms
 2020-04-01 21:10:27.916 +05:30 [INF] HTTP GET / responded 404 in 0.2106 ms
 2020-04-01 21:10:54.905 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 47.1572 ms
+2020-04-01 21:43:22.740 +05:30 [INF] HTTP GET /api/values responded 404 in 64.1169 ms
+2020-04-01 22:15:00.717 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 7364.9521 ms
+2020-04-01 22:15:01.607 +05:30 [INF] HTTP GET / responded 404 in 0.2173 ms
+2020-04-01 22:15:03.725 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 272.5055 ms

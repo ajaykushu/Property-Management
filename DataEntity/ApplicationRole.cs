@@ -8,5 +8,6 @@ namespace DataEntity
         public virtual ICollection<RoleMenuMap> RoleMenuMaps { set; get; }
         public int? DepartmentId { set; get; }
         public Department Department { set; get; }
+        public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
     }
 }

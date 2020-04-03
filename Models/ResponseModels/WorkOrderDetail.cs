@@ -1,4 +1,6 @@
-﻿namespace Models.ResponseModels
+﻿using System;
+
+namespace Models.ResponseModels
 {
     public class WorkOrderDetail
     {
@@ -13,5 +15,9 @@
         public string StageCode { get; set; }
         public string Issue { get; set; }
         public string Item { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
+        public string UpdatedBy { get; set; }
+        public string AssignedToUser { get; set; }
     }
 }

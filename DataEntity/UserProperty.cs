@@ -2,7 +2,7 @@
 
 namespace DataEntity
 {
-    public class UserProperty
+    public class UserProperty:Log
     {
         [Key]
         public long Id { get; set; }

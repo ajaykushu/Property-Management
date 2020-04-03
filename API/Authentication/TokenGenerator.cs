@@ -22,7 +22,7 @@ namespace API.Authentication
             _cache = cache;
         }
 
-        public Claim[] GetClaims(ApplicationUser applicationuser, HashSet<string> features)
+        public Claim[] GetClaims(ApplicationUser applicationuser, HashSet<string> features,IList<string> roles)
         {
             var jti = Guid.NewGuid().ToString().Replace("-", "");
             List<Claim> authClaims = new List<Claim>
@@ -36,6 +36,8 @@ namespace API.Authentication
             foreach (var feature in features)
                 authClaims.Add(new Claim("Feature", feature));
             _cache.AddItem(applicationuser.Id + "", jti, TimeSpan.FromMinutes(10).Ticks);
+            foreach (var role in roles)
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
             return authClaims.ToArray();
         }
 

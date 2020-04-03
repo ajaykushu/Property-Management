@@ -1,8 +1,14 @@
 ﻿using DataEntity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository
 {
@@ -21,11 +27,11 @@ namespace DataAccessLayer.Repository
 
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
-
-        public AppDBContext(DbContextOptions options) : base(options)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AppDBContext(DbContextOptions options,IHttpContextAccessor httpContextAccessor) : base(options)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -53,6 +59,10 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
             builder.Entity<Comments>().HasOne(s => s.Parent).WithMany().HasForeignKey(x => x.ParentId);
+            builder.Entity<ApplicationUser>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToId).IsRequired(false);
+            builder.Entity<ApplicationRole>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToRoleId);
+
+
 
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()
@@ -141,6 +151,33 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 9, MenuId = 9, RoleId = 1 },
                 new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 }
                 );
+        }
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var entries = ChangeTracker
+            .Entries()
+           .Where(e => e.Entity is Log && (
+                e.State == EntityState.Added
+                || e.State == EntityState.Modified));
+            var user = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            foreach (var entityEntry in entries)
+            {
+                if (entityEntry.State == EntityState.Added)
+                {
+                    
+                    ((Log)entityEntry.Entity).CreatedTime = DateTime.UtcNow;
+                    ((Log)entityEntry.Entity).CreatedByUserName = user;
+                }
+                if (entityEntry.State == EntityState.Modified)
+                {
+                    ((Log)entityEntry.Entity).UpdatedTime = DateTime.UtcNow;
+                    if (user != null)
+                        ((Log)entityEntry.Entity).UpdatedByUserName = user;
+                            }
+            }
+
+            return (await base.SaveChangesAsync(true, cancellationToken));
+
         }
     }
 }

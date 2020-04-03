@@ -3,16 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class RoleMenuMap
+    public class RoleMenuMap:Log
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [Required]
         public long RoleId { get; set; }
-
-        [Required]
         public long MenuId { get; set; }
 
         public virtual Menu Menu { get; set; }

@@ -130,7 +130,6 @@ namespace BusinessLogic.Services
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == editUser.Id).Include(x => x.Language).Include(x => x.UserProperties).FirstOrDefaultAsync();
             var prop = _property.GetAll().Include(x => x.UserProperties).ThenInclude(x => x.Property).ToList();
             applicationUser.Email = editUser.Email;
-            applicationUser.UserName = editUser.UserName;
             applicationUser.TimeZone = editUser.TimeZone;
             applicationUser.Suffix = editUser.Suffix;
             applicationUser.FirstName = editUser.FirstName;
@@ -200,7 +199,6 @@ namespace BusinessLogic.Services
 
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
-            var count = _userManager.Users.Count();
             List<ApplicationUser> user;
             if (matchStr != null && filter == FilterEnum.ByEmail)
                 user = await _userManager.Users.Where(x => x.Email.ToLower().StartsWith(matchStr.ToLower())).Skip(pageNumber * 10).Take(10).AsNoTracking().ToListAsync();
@@ -209,6 +207,7 @@ namespace BusinessLogic.Services
             else
                 user = await _userManager.Users.Skip(pageNumber * 10).Take(10).AsNoTracking().ToListAsync();
             List<UsersListModel> users = new List<UsersListModel>();
+            var count = user.Count();
             foreach (var item in user)
             {
                 var roles = await _userManager.GetRolesAsync(item);

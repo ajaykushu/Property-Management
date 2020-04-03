@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Comments
+    public class Comments:Log
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,7 +17,6 @@ namespace DataEntity
 
         [Column(TypeName = "nvarchar(max)")]
         public string Comment { get; set; }
-
         public Comments Parent { get; set; }
         public long? ParentId { get; set; }
     }

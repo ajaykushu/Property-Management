@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Item
+    public class Item:Log
     {
         public Item()
         {
-            workOrders = new HashSet<WorkOrder>();
+            WorkOrders = new HashSet<WorkOrder>();
         }
 
         [Key]
@@ -17,7 +18,6 @@ namespace DataEntity
 
         [Column(TypeName = "varchar(30)")]
         public string ItemName { get; set; }
-
-        public virtual ICollection<WorkOrder> workOrders { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

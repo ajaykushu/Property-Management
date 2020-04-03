@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Menu
+    public class Menu:Log
     {
         public Menu()
         {
@@ -15,7 +15,6 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { set; get; }
 
-        [Required]
         [Column(TypeName = "varchar(30)")]
         public string MenuName { set; get; }
 

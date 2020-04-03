@@ -26,10 +26,21 @@
     <Compile Remove="Migrations\20200401080323_modify.Designer.cs" />
     <Compile Remove="Migrations\20200401081000_new-init.cs" />
     <Compile Remove="Migrations\20200401081000_new-init.Designer.cs" />
+    <Compile Remove="Migrations\20200402065139_withlog.cs" />
+    <Compile Remove="Migrations\20200402065139_withlog.Designer.cs" />
+    <Compile Remove="Migrations\20200402072730_init8.cs" />
+    <Compile Remove="Migrations\20200402072730_init8.Designer.cs" />
+    <Compile Remove="Migrations\20200402073311_nwmig4.cs" />
+    <Compile Remove="Migrations\20200402073311_nwmig4.Designer.cs" />
+    <Compile Remove="Migrations\20200402152435_newmh6.cs" />
+    <Compile Remove="Migrations\20200402152435_newmh6.Designer.cs" />
+    <Compile Remove="Migrations\20200402154822_nemg46.cs" />
+    <Compile Remove="Migrations\20200402154822_nemg46.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.6" />

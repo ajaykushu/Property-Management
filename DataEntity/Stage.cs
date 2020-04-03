@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Stage
+    public class Stage:Log
     {
         public Stage()
         {
-            workOrders = new HashSet<WorkOrder>();
+            WorkOrders = new HashSet<WorkOrder>();
         }
 
         [Key]
@@ -21,6 +21,6 @@ namespace DataEntity
         [Column(TypeName = "varchar(7)")]
         public string StageCode { get; set; }
 
-        public virtual ICollection<WorkOrder> workOrders { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

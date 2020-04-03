@@ -1,45 +1,113 @@
-﻿@model CreateWorkOrder
-@{
-    ViewData["Title"] = "Home Page";
+﻿@model Pagination<List<WorkOrderAssigned>>
+    <form class="form">
+        <div class="input-group">
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByAssigned) { <text> checked</text>} id="assigned" name="Filter" value='@FilterEnumWO.ByAssigned' class="selector1" required>
+                <label class="label1" for="assigned">@FilterEnumWO.ByAssigned</label>
+            </div>
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByDate) { <text> checked</text>} id="date" name="Filter" value=@FilterEnumWO.ByDate class="selector2" required>
+                <label class="label2" for="date">@FilterEnumWO.ByDate</label>
+            </div>
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByStatus) { <text> checked</text>} id="status" name="Filter" value=@FilterEnumWO.ByStatus class="selector2" required>
+                <label class="label2" for="status">@FilterEnumWO.ByStatus</label>
+            </div>
+            <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
+            &nbsp;<input class="form-control form-control-sm" value='@ViewBag.searchString' name="endDate" autocomplete="off" id="endDate" type="date">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info" type="submit" value="Filter">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info clear" type="submit" value="Clear Filter">
+        </div>
+        <hr />
+        <div class="workordertitle">
+            Work Orders
+        </div>
+        <table class="table table-striped wordorderdetail">
+            <thead>
+                <tr>
+                    <th scope="col" colspan="3" class="mytitle">
+                        To Do List
+                    </th>
+                    <th scope="col" colspan="2" class="button">
+                        <button class="addnewbutton" value="CreateWorkOrder" onclick="location.href='@Url.Action("CreateWorkOrder")'"><i class="fa fa-plus"></i>&nbsp;New</button>
+                    </th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Payload)
+                {
+                    <tr>
+                        <td>
+                            <input type="button" class="workorderbutton" value="work order">
+                        </td>
+                        <td>@item.Description</td>
+                        <td>Assigned to @item.AssignedTo</td>
+                        <td>@item.CreatedDate</td>
+                        <td>
+                            <a class="btn-outline-primary btn btn-sm">Edit</a>
+                            <a class="btn-outline-primary btn btn-sm">Detail</a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <hr />
+        <nav>
+            <ul class="pagination">
+                @{ int current = 0;}
+                <li class="page-item @if (Model.CurrentPage == 0)
+                {<text>disabled</text> }">
+                    @Html.ActionLink("Prev", "Index","WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring }, new { @class = "page-link" })
+                </li>
+
+                @for (int i = 0; i < Model.PageCount; i++)
+                {
+
+                    if (Model.CurrentPage == i)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                        </li>
+                        current = i;
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", new { requestedPage = i, matchString = ViewBag.searchstring }, new { @class = "page-link" })
+                        </li>
+                    }
+                }
+                <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount)
+                {<text>disabled</text> }">
+                    @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", new { requestedPage = current + 1, matchString = ViewBag.searchstring }, new { @class = "page-link" })
+                </li>
+            </ul>
+        </nav>
+    </form>
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
 }
-
-<div class="todolist">
-    <div class="custom_nav">
-        <ul class="nav_list">
-            <li id="overview1">
-                <input id="overview" name="menu" class="radios" type="radio" value="WorkOrderOverview" />
-                <label for="overview">Overview</label>
-                <input id="record" name="menu" class="radios" type="radio" value="WorkOrderOverview" />
-                <label for="record">Records</label>
-                <input id="new" name="menu" class="radios" type="radio" value="CreateWorkOrder" />
-                <label for="new"><i class="fa fa-plus"> </i> &nbsp;New</label>
-            </li>
-        </ul>
-    </div>
-
-    <div class="table_container">
-        <partial name="_WorkOrderOverview">
-    </div>
-    <div class="spinner">
-        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
-    </div>
-</div>
-
 <script>
-        $(document).ready(function () {
-            $('#overview').prop('checked', "checked");
-        });
-        $('.radios').click(function () {
-            var controller = $(this).val();
-            if (controller != "" && controller != undefined) {
-                var url = '@Url.Action("action")';
-                url = url.replace("action", controller);
-                $('.table_container').html("");
-                $('.fa-spin').show();
-                RESTCALL(url, {}, "GET", "", true, function (res) {
-                    $('.table_container').html(res);
-                    $('.fa-spin').hide();
-                });
-            }
-        });
-</script>
+    $("[name='Filter']").change(function () {
+        console.log($(this).val());
+        if ($(this).val() == 'ByDate') {
+            $('#search').prop("type", 'date');
+            $('#endDate').show();
+        }
+        if ($(this).val() == 'ByStatus') {
+            $('#search').prop("type", 'checkbox');
+         $('#endDate').hide();
+        }
+        if ($(this).val() == 'ByAssigned') {
+            $('#search').prop("type", 'text');
+         $('#endDate').hide();
+        }
+    })
+    </script>

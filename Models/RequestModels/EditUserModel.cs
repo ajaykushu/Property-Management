@@ -36,8 +36,6 @@ namespace Models.RequestModels
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
 
-        [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length less than 256 charcters")]
-        [Required(ErrorMessage = "Please Enter UserName")]
         public string UserName { set; get; }
 
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Password")]

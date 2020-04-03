@@ -36,9 +36,6 @@ namespace Presentation.ViewModels
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [RegularExpression(@"([+][0-9]{2,3}[-]{1})?[1-9]{1}[0-9]{9}", ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
-
-        [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length less than 256 charcters")]
-        [Required(ErrorMessage = "Please Enter UserName")]
         public string UserName { set; get; }
 
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Password")]

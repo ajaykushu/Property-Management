@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200402073512_newmih45")]
+    partial class newmih45
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,14 +58,14 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "dee3bb28-c417-4e4d-9bcd-c41540582ddc",
+                            ConcurrencyStamp = "58e7cdc1-43d1-49eb-b45a-d71df2747400",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "bf525e46-af21-44cc-92b6-0c356fa0de31",
+                            ConcurrencyStamp = "177de418-d1c1-451b-a5da-82f7801be21a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -753,18 +755,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("AssignedToId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("AssignedToId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("AssignedToRoleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("AssignedToRoleId1")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("nvarchar(max)");
 
@@ -783,8 +773,11 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("RequestedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("RequestedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("RequestedById1")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("StageId")
                         .HasColumnType("int");
@@ -797,19 +790,15 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignedToId");
-
-                    b.HasIndex("AssignedToId1");
-
-                    b.HasIndex("AssignedToRoleId");
-
-                    b.HasIndex("AssignedToRoleId1");
-
                     b.HasIndex("IssueId");
 
                     b.HasIndex("ItemId");
 
                     b.HasIndex("PropertyId");
+
+                    b.HasIndex("RequestedById");
+
+                    b.HasIndex("RequestedById1");
 
                     b.HasIndex("StageId");
 
@@ -911,22 +900,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.WorkOrder", b =>
                 {
-                    b.HasOne("DataEntity.ApplicationUser", null)
-                        .WithMany("WorkOrdersAssigned")
-                        .HasForeignKey("AssignedToId");
-
-                    b.HasOne("DataEntity.ApplicationUser", "AssignedTo")
-                        .WithMany()
-                        .HasForeignKey("AssignedToId1");
-
-                    b.HasOne("DataEntity.ApplicationRole", null)
-                        .WithMany("WorkOrdersAssigned")
-                        .HasForeignKey("AssignedToRoleId");
-
-                    b.HasOne("DataEntity.ApplicationRole", "AssignedToRole")
-                        .WithMany()
-                        .HasForeignKey("AssignedToRoleId1");
-
                     b.HasOne("DataEntity.Issue", "Issue")
                         .WithMany("WorkOrders")
                         .HasForeignKey("IssueId")
@@ -934,7 +907,7 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("DataEntity.Item", "Item")
-                        .WithMany("WorkOrders")
+                        .WithMany("workOrders")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -944,6 +917,14 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DataEntity.ApplicationUser", null)
+                        .WithMany("WorkOrders")
+                        .HasForeignKey("RequestedById");
+
+                    b.HasOne("DataEntity.ApplicationUser", "RequestedBy")
+                        .WithMany()
+                        .HasForeignKey("RequestedById1");
 
                     b.HasOne("DataEntity.Stage", "Stage")
                         .WithMany("WorkOrders")

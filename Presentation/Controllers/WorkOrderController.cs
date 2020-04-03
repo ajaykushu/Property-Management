@@ -30,19 +30,28 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string matchString, int requestedPage, FilterEnumWO filter = FilterEnumWO.ByAssigned)
         {
-            return View();
+            ViewBag.searchString = matchString ?? "";
+            ViewBag.filter = filter;
+            Pagination<List<WorkOrderAssigned>> WorkOrderAssigned = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
+                string parameters = "?matchString=" + matchString + "&filter=" + filter + "&requestedPage=" + requestedPage;
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + parameters, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return View(WorkOrderAssigned);
         }
-
-        public IActionResult WorkOrderOverview()
-        {
-            return PartialView("_WorkOrderOverview");
-        }
-
         [HttpGet]
-        // [Authorize]
-        public async Task<IActionResult> CreateWorkOrderAsync()
+        public async Task<IActionResult> CreateWorkOrder()
         {
             CreateWorkOrder createWorkOrder = new CreateWorkOrder();
             try
@@ -55,7 +64,7 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
-            return PartialView("_CreateWorkOrder", createWorkOrder);
+            return View("CreateWorkOrder", createWorkOrder);
         }
 
         [HttpGet]
@@ -105,7 +114,7 @@ namespace Presentation.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         result = JsonConvert.DeserializeObject<WorkOrderDetail>(await response.Content.ReadAsStringAsync());
-                        return View("WorkOrderDetail", result);
+                        return PartialView("_WorkOrderDetail", result);
                     }
                 }
                 catch (Exception)
@@ -119,5 +128,6 @@ namespace Presentation.Controllers
                 return BadRequest(msg);
             }
         }
+       
     }
 }

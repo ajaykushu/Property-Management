@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Issue
+    public class Issue:Log
     {
         public Issue()
         {

@@ -400,3 +400,44 @@ label {
         margin-right: 10px;
     }
 /**/
+/*getall users*/
+.cont {
+    width: 100px;
+    height: 30px;
+    position: relative;
+    margin-right: 10px;
+}
+
+.selector1, .selector2 {
+    width: 100px;
+    height: 30px;
+    position: absolute;
+}
+
+.label1, .label2 {
+    background-color: white;
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    padding: 4px;
+    border-radius: 4px;
+    color: black;
+    font-size: small;
+    border: outset 1px rgba(128, 128, 128,0.4);
+    box-shadow: 1px 1px 1px rgba(128, 128, 128,0.4)
+}
+
+.selector1:checked ~ .label1 {
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+
+.selector2:checked ~ .label2 {
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+
+.label1:hover, .label2:hover {
+    cursor: pointer;
+}
+/**/

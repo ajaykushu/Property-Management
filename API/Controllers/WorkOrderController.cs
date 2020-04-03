@@ -7,6 +7,7 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -55,10 +56,16 @@ namespace API.Controllers
         public async Task<ActionResult> CreateWO(CreateWO createWO)
         {
             WorkOrderDetail workOrderDetail = null;
-            var userId = HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            if (userId != null)
-                workOrderDetail = await _workOrderService.CreateWO(createWO, Convert.ToInt64(userId));
+            workOrderDetail = await _workOrderService.CreateWO(createWO);
             return Ok(workOrderDetail);
+        }
+        [HttpGet]
+        [Route("getallworkorder")]
+        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, FilterEnumWO filter, int requestedPage)
+        {
+            Pagination<List<WorkOrderAssigned>> workorderassigned = null;
+            workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString);
+            return Ok(workorderassigned);
         }
     }
 }

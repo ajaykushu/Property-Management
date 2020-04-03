@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using DataAccessLayer.Interfaces;
 using DataEntity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.RequestModels;
@@ -8,7 +9,9 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
@@ -22,8 +25,9 @@ namespace BusinessLogic.Services
         private readonly IRepo<ApplicationRole> _role;
         private readonly IRepo<WorkOrder> _workOrder;
         private readonly IRepo<Stage> _stage;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage,IHttpContextAccessor httpContextAccessor)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -32,24 +36,24 @@ namespace BusinessLogic.Services
             _workOrder = workOrder;
             _role = role;
             _stage = stage;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<WorkOrderDetail> CreateWO(CreateWO createWO, long userId)
+        public async Task<WorkOrderDetail> CreateWO(CreateWO createWO)
         {
             WorkOrder workOrder = new WorkOrder
             {
-                CreationTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow,
-                ApplicationUserId = userId,
+                RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x=>x.Type==ClaimTypes.NameIdentifier).Value,
                 PropertyId = createWO.Property,
                 IssueId = createWO.Issue,
                 ItemId = createWO.Item,
-                Description = createWO.Description
+                Description = createWO.Description,
+                AssignedToRoleId=createWO.Section
             };
             workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
             await _workOrder.Add(workOrder);
             var prop = await GetAreaLocation(createWO.Property);
-            var workorder = await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Select(x => new WorkOrderDetail
+            var workorder = await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x=>x.AssignedTo).Include(x=>x.AssignedToRole).ThenInclude(x=>x.Department).Select(x => new WorkOrderDetail
             {
                 Area = prop.Area,
                 Location = prop.Location,
@@ -58,7 +62,11 @@ namespace BusinessLogic.Services
                 StageCode = x.Stage.StageCode,
                 StageDescription = x.Stage.StageDescription,
                 Item = x.Item.ItemName,
-                Requestedby = x.ApplicationUser.FirstName + " " + x.ApplicationUser.LastName
+                CreatedTime=x.CreatedTime,
+                UpdatedTime=x.UpdatedTime,
+                Department=x.AssignedToRole.Department.DepartmentName,
+                Section=x.AssignedToRole.Name,
+                AssignedToUser=x.AssignedTo.UserName
             }).FirstOrDefaultAsync();
             return workorder;
         }
@@ -134,6 +142,45 @@ namespace BusinessLogic.Services
                 PropertyName = x.Name
             }).AsNoTracking().ToListAsync();
             return res;
+        }
+
+        public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr)
+        {
+            List<WorkOrderAssigned> workOrderAssigned = null;
+            int count = 0;
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                workOrderAssigned=await _workOrder.GetAll().Select(x=> new WorkOrderAssigned{ 
+                CreatedDate=x.CreatedTime.ToString("dd/MMM/YYYY"),
+                Description=x.Description,
+                Id=x.Id,
+                AssignedTo=x.AssignedTo.UserName,
+                AssignedToSection=x.AssignedToRole.Name
+                }).AsNoTracking().ToListAsync();
+            }
+            else
+            {
+                workOrderAssigned =await _workOrder.GetAll().Select(x => new WorkOrderAssigned
+                {
+                    CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
+                    Description = x.Description,
+                    Id = x.Id,
+                    AssignedTo=x.AssignedTo.UserName,
+                    AssignedToSection=x.AssignedToRole.Name
+                }).AsNoTracking().ToListAsync();
+
+            }
+            if (workOrderAssigned != null)
+                count = workOrderAssigned.Count();
+            Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
+            {
+                Payload = workOrderAssigned,
+                CurrentPage = pageNumber,
+                ItemsPerPage = count > 10 ? 10 : count,
+                PageCount = count % 10 == 0 ? count / 10 : count / 10 + 1
+            };
+
+            return pagination;
         }
     }
 }
