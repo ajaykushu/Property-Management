@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace API.Controllers
 {
@@ -24,7 +25,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getworkordermodel")]
-        //[FeatureBasedAuthorization("Edit User")]
+        [FeatureBasedAuthorization("Create WO")]
         public async Task<ActionResult<CreateWO>> GetCreateWOModel()
         {
             CreateWO wo = null;
@@ -36,6 +37,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getarealocation")]
+        [FeatureBasedAuthorization("Create WO")]
         public async Task<ActionResult<CreateWO>> GetAreaLocation(long id)
         {
             PropDetail prop = await _workOrderService.GetAreaLocation(id);
@@ -44,6 +46,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getsection")]
+        [FeatureBasedAuthorization("Create WO")]
         public async Task<ActionResult<List<SelectItem>>> GetSection(long id)
         {
             List<SelectItem> prop = await _workOrderService.GetSection(id);
@@ -52,6 +55,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("createwo")]
+        [FeatureBasedAuthorization("Create WO")]
         public async Task<ActionResult> CreateWO(CreateWO createWO)
         {
             WorkOrderDetail workOrderDetail = null;
@@ -61,6 +65,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getallworkorder")]
+        [FeatureBasedAuthorization("Get WO")]
         public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, FilterEnumWO filter, int requestedPage)
         {
             Pagination<List<WorkOrderAssigned>> workorderassigned = null;

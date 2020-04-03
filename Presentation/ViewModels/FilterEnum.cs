@@ -12,4 +12,10 @@
         ByAssigned = 2,
         ByStatus = 3
     }
+    public enum FilterEnumWOStage
+    {
+        INITWO=1,
+        WOPROGRESS=2,
+        WOCOMPLETED=3
+    }
 }

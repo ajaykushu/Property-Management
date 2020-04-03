@@ -30,10 +30,12 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string matchString, int requestedPage, FilterEnumWO filter = FilterEnumWO.ByAssigned)
+        public async Task<IActionResult> Index(string matchString, int requestedPage, FilterEnumWOStage stage,string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned)
         {
             ViewBag.searchString = matchString ?? "";
             ViewBag.filter = filter;
+            ViewBag.stage = stage;
+            ViewBag.enddate = endDate;
             Pagination<List<WorkOrderAssigned>> WorkOrderAssigned = null;
             try
             {

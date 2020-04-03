@@ -68,3 +68,350 @@
 2020-04-03 10:23:51.355 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByDate&requestedPage=0 responded 200 in 106.2927 ms
 2020-04-03 10:23:51.817 +05:30 [INF] HTTP GET / responded 404 in 0.2309 ms
 2020-04-03 10:28:45.856 +05:30 [INF] HTTP GET /api/values responded 404 in 49.2397 ms
+2020-04-03 10:53:39.282 +05:30 [INF] HTTP GET /api/values responded 404 in 60.9218 ms
+2020-04-03 10:53:50.628 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3946.9688 ms
+2020-04-03 10:53:51.179 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 169.4006 ms
+2020-04-03 10:53:51.647 +05:30 [INF] HTTP GET / responded 404 in 0.2251 ms
+2020-04-03 10:55:47.900 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 41.9964 ms
+2020-04-03 10:55:54.225 +05:30 [INF] HTTP GET / responded 404 in 0.2467 ms
+2020-04-03 10:56:47.701 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 63.5601 ms
+2020-04-03 10:56:48.441 +05:30 [INF] HTTP GET / responded 404 in 0.1546 ms
+2020-04-03 10:57:32.328 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 28.5321 ms
+2020-04-03 10:57:32.798 +05:30 [INF] HTTP GET / responded 404 in 0.194 ms
+2020-04-03 10:58:14.107 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 22.671 ms
+2020-04-03 10:58:14.720 +05:30 [INF] HTTP GET / responded 404 in 0.1193 ms
+2020-04-03 11:00:05.648 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 24.6063 ms
+2020-04-03 11:00:06.136 +05:30 [INF] HTTP GET / responded 404 in 0.1177 ms
+2020-04-03 11:01:44.445 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 26.4015 ms
+2020-04-03 11:01:45.300 +05:30 [INF] HTTP GET / responded 404 in 0.3245 ms
+2020-04-03 11:04:23.098 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 34.372 ms
+2020-04-03 11:04:30.404 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 75.0162 ms
+2020-04-03 11:04:30.517 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 18.2687 ms
+2020-04-03 11:04:30.640 +05:30 [INF] HTTP GET / responded 404 in 0.5713 ms
+2020-04-03 11:05:16.540 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 40.7172 ms
+2020-04-03 11:05:16.932 +05:30 [INF] HTTP GET / responded 404 in 0.0598 ms
+2020-04-03 11:05:37.999 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 48.7077 ms
+2020-04-03 11:05:38.449 +05:30 [INF] HTTP GET / responded 404 in 0.0593 ms
+2020-04-03 11:07:29.066 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 37.0982 ms
+2020-04-03 11:07:29.460 +05:30 [INF] HTTP GET / responded 404 in 0.0602 ms
+2020-04-03 11:07:47.815 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 17.1022 ms
+2020-04-03 11:07:48.230 +05:30 [INF] HTTP GET / responded 404 in 0.0721 ms
+2020-04-03 11:08:18.282 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 40.4803 ms
+2020-04-03 11:08:18.740 +05:30 [INF] HTTP GET / responded 404 in 0.306 ms
+2020-04-03 11:09:01.505 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 28.6169 ms
+2020-04-03 11:09:01.890 +05:30 [INF] HTTP GET / responded 404 in 0.134 ms
+2020-04-03 11:09:25.472 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 105.8487 ms
+2020-04-03 11:09:25.933 +05:30 [INF] HTTP GET / responded 404 in 0.0285 ms
+2020-04-03 11:10:05.171 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 32.7578 ms
+2020-04-03 11:10:05.556 +05:30 [INF] HTTP GET / responded 404 in 0.025 ms
+2020-04-03 11:10:36.168 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 30.1494 ms
+2020-04-03 11:10:36.308 +05:30 [INF] HTTP GET / responded 404 in 0.0277 ms
+2020-04-03 11:10:42.696 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0 responded 400 in 50.8843 ms
+2020-04-03 11:14:22.750 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 23.4064 ms
+2020-04-03 11:14:23.202 +05:30 [INF] HTTP GET / responded 404 in 0.0357 ms
+2020-04-03 16:44:23.895 +05:30 [INF] HTTP GET /api/values responded 404 in 60.1753 ms
+2020-04-03 16:44:35.313 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5505.2598 ms
+2020-04-03 16:44:36.376 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 205.1358 ms
+2020-04-03 16:44:37.202 +05:30 [INF] HTTP GET / responded 404 in 0.4153 ms
+2020-04-03 16:44:44.714 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 841.3802 ms
+2020-04-03 16:44:45.407 +05:30 [INF] HTTP GET / responded 404 in 0.1997 ms
+2020-04-03 16:45:48.328 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=x1&filter=ByAssigned&requestedPage=0 responded 200 in 664.8442 ms
+2020-04-03 16:45:48.994 +05:30 [INF] HTTP GET / responded 404 in 0.1788 ms
+2020-04-03 16:48:17.101 +05:30 [INF] HTTP GET /api/values responded 404 in 55.9696 ms
+2020-04-03 16:50:42.800 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 11313.5106 ms
+2020-04-03 16:51:54.427 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 288.1646 ms
+2020-04-03 16:51:54.914 +05:30 [INF] HTTP GET / responded 404 in 0.219 ms
+2020-04-03 16:54:49.404 +05:30 [INF] HTTP GET /api/values responded 404 in 318.4572 ms
+2020-04-03 16:54:59.760 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5650.9442 ms
+2020-04-03 16:55:15.078 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 307.6656 ms
+2020-04-03 16:55:15.505 +05:30 [INF] HTTP GET / responded 404 in 0.3012 ms
+2020-04-03 16:56:53.276 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 139.1863 ms
+2020-04-03 16:56:53.776 +05:30 [INF] HTTP GET / responded 404 in 0.2618 ms
+2020-04-03 16:57:15.081 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 86.2452 ms
+2020-04-03 16:57:15.553 +05:30 [INF] HTTP GET / responded 404 in 0.1606 ms
+2020-04-03 17:21:12.533 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 360.2978 ms
+2020-04-03 17:21:20.706 +05:30 [INF] HTTP GET / responded 404 in 0.121 ms
+2020-04-03 17:21:54.873 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 27.7958 ms
+2020-04-03 17:21:56.401 +05:30 [INF] HTTP GET / responded 404 in 0.1201 ms
+2020-04-03 17:22:07.311 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 112.8122 ms
+2020-04-03 17:22:07.784 +05:30 [INF] HTTP GET / responded 404 in 0.1347 ms
+2020-04-03 17:22:50.956 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 20.5616 ms
+2020-04-03 17:22:51.674 +05:30 [INF] HTTP GET / responded 404 in 0.0991 ms
+2020-04-03 17:23:05.431 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 1221.4798 ms
+2020-04-03 17:23:06.371 +05:30 [INF] HTTP GET / responded 404 in 0.1003 ms
+2020-04-03 17:25:03.037 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 146.5046 ms
+2020-04-03 17:25:04.424 +05:30 [INF] HTTP GET / responded 404 in 0.0985 ms
+2020-04-03 17:25:26.402 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 117.8766 ms
+2020-04-03 17:25:27.184 +05:30 [INF] HTTP GET / responded 404 in 0.1165 ms
+2020-04-03 17:27:06.099 +05:30 [INF] HTTP GET /api/values responded 404 in 144.9259 ms
+2020-04-03 17:27:14.622 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4987.5821 ms
+2020-04-03 17:27:18.279 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 179.787 ms
+2020-04-03 17:27:18.727 +05:30 [INF] HTTP GET / responded 404 in 0.2299 ms
+2020-04-03 17:27:33.776 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-03&filter=ByDate&requestedPage=0 responded 200 in 40.8345 ms
+2020-04-03 17:27:33.951 +05:30 [INF] HTTP GET / responded 404 in 0.3511 ms
+2020-04-03 17:30:06.866 +05:30 [INF] HTTP GET /api/values responded 404 in 100.773 ms
+2020-04-03 17:30:15.673 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5309.7195 ms
+2020-04-03 17:30:19.314 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 177.1469 ms
+2020-04-03 17:30:19.821 +05:30 [INF] HTTP GET / responded 404 in 0.25 ms
+2020-04-03 17:30:34.834 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-02&filter=ByDate&requestedPage=0 responded 200 in 32.1718 ms
+2020-04-03 17:30:34.999 +05:30 [INF] HTTP GET / responded 404 in 0.2067 ms
+2020-04-03 17:32:41.547 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-02&filter=ByDate&requestedPage=0 responded 200 in 261.9872 ms
+2020-04-03 17:32:41.989 +05:30 [INF] HTTP GET / responded 404 in 0.3262 ms
+2020-04-03 17:34:21.138 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-02&filter=ByDate&requestedPage=0 responded 200 in 185.8943 ms
+2020-04-03 17:34:21.382 +05:30 [INF] HTTP GET / responded 404 in 0.1731 ms
+2020-04-03 17:43:43.974 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-02&filter=ByDate&requestedPage=0 responded 200 in 276.8807 ms
+2020-04-03 17:43:51.906 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 759.1415 ms
+2020-04-03 17:44:15.039 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 148.6488 ms
+2020-04-03 17:44:15.325 +05:30 [INF] HTTP GET / responded 404 in 0.9146 ms
+2020-04-03 17:45:06.393 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 77.6078 ms
+2020-04-03 17:45:07.060 +05:30 [INF] HTTP GET / responded 404 in 0.1125 ms
+2020-04-03 17:45:19.110 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 28.3622 ms
+2020-04-03 17:45:19.339 +05:30 [INF] HTTP GET / responded 404 in 0.2559 ms
+2020-04-03 17:46:13.597 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 107.5826 ms
+2020-04-03 17:46:14.620 +05:30 [INF] HTTP GET / responded 404 in 0.1048 ms
+2020-04-03 17:46:47.797 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 38.265 ms
+2020-04-03 17:46:48.477 +05:30 [INF] HTTP GET / responded 404 in 0.1132 ms
+2020-04-03 17:47:18.927 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 106.893 ms
+2020-04-03 17:47:19.378 +05:30 [INF] HTTP GET / responded 404 in 0.0866 ms
+2020-04-03 17:50:25.898 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 317.6968 ms
+2020-04-03 17:50:26.583 +05:30 [INF] HTTP GET / responded 404 in 0.0839 ms
+2020-04-03 17:50:57.585 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 20.1109 ms
+2020-04-03 17:50:58.319 +05:30 [INF] HTTP GET / responded 404 in 0.1716 ms
+2020-04-03 17:51:07.501 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 18.5837 ms
+2020-04-03 17:51:07.791 +05:30 [INF] HTTP GET / responded 404 in 0.1365 ms
+2020-04-03 17:51:44.513 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 127.7011 ms
+2020-04-03 17:51:45.124 +05:30 [INF] HTTP GET / responded 404 in 0.0443 ms
+2020-04-03 17:51:51.410 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 14.2361 ms
+2020-04-03 17:51:51.640 +05:30 [INF] HTTP GET / responded 404 in 0.0201 ms
+2020-04-03 17:52:38.128 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 112.3678 ms
+2020-04-03 17:52:38.361 +05:30 [INF] HTTP GET / responded 404 in 0.0233 ms
+2020-04-03 17:52:39.803 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 33.7457 ms
+2020-04-03 17:52:39.975 +05:30 [INF] HTTP GET / responded 404 in 0.0211 ms
+2020-04-03 17:52:54.159 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 18.3831 ms
+2020-04-03 17:52:57.585 +05:30 [INF] HTTP GET / responded 404 in 0.0412 ms
+2020-04-03 17:52:57.698 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 563.0497 ms
+2020-04-03 17:53:02.635 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 13.9358 ms
+2020-04-03 17:53:02.884 +05:30 [INF] HTTP GET / responded 404 in 0.0283 ms
+2020-04-03 17:53:04.688 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 11.6152 ms
+2020-04-03 17:53:04.933 +05:30 [INF] HTTP GET / responded 404 in 0.0509 ms
+2020-04-03 17:53:11.421 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 10.0799 ms
+2020-04-03 17:53:11.446 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 26.0971 ms
+2020-04-03 17:53:11.769 +05:30 [INF] HTTP GET / responded 404 in 0.0215 ms
+2020-04-03 17:53:37.498 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 32.3446 ms
+2020-04-03 17:53:37.804 +05:30 [INF] HTTP GET / responded 404 in 0.0201 ms
+2020-04-03 17:53:40.538 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 414.6968 ms
+2020-04-03 17:53:40.846 +05:30 [INF] HTTP GET / responded 404 in 0.0198 ms
+2020-04-03 17:59:01.459 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 136.4942 ms
+2020-04-03 17:59:02.721 +05:30 [INF] HTTP GET / responded 404 in 0.0201 ms
+2020-04-03 17:59:35.560 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=2020-04-09&filter=ByDate&requestedPage=0 responded 200 in 211.2673 ms
+2020-04-03 17:59:37.250 +05:30 [INF] HTTP GET / responded 404 in 0.0287 ms
+2020-04-03 17:59:42.325 +05:30 [ERR] HTTP GET /api/workorder/getworkordermodel responded 500 in 137.5578 ms
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-03 17:59:42.480 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-03 17:59:42.496 +05:30 [INF] Object reference not set to an instance of an object.
+Stack Trace:    at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-03 18:00:54.112 +05:30 [ERR] HTTP GET /api/workorder/getworkordermodel responded 500 in 60.9771 ms
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-03 18:00:54.158 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-03 18:00:54.165 +05:30 [INF] Object reference not set to an instance of an object.
+Stack Trace:    at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-03 18:01:17.205 +05:30 [ERR] HTTP GET /api/workorder/getworkordermodel responded 500 in 4837.3983 ms
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-03 18:01:17.347 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-03 18:01:38.313 +05:30 [INF] Object reference not set to an instance of an object.
+Stack Trace:    at API.Controllers.WorkOrderController.GetCreateWOModel() in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 31
+   at lambda_method(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-03 18:04:46.265 +05:30 [INF] HTTP GET /api/values responded 404 in 116.4252 ms
+2020-04-03 18:04:55.606 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4257.9169 ms
+2020-04-03 18:04:56.209 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 403 in 21.7341 ms
+2020-04-03 18:05:18.557 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 401 in 3.6901 ms
+2020-04-03 18:05:34.001 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 161.3569 ms
+2020-04-03 18:05:34.304 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 143.0374 ms
+2020-04-03 18:05:34.902 +05:30 [INF] HTTP GET / responded 404 in 0.3432 ms
+2020-04-03 18:05:41.158 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 124.4093 ms
+2020-04-03 18:05:41.612 +05:30 [INF] HTTP GET / responded 404 in 0.1715 ms
+2020-04-03 18:05:45.815 +05:30 [INF] HTTP GET /api/configuration/getrole responded 200 in 96.1939 ms
+2020-04-03 18:05:46.221 +05:30 [INF] HTTP GET / responded 404 in 0.1306 ms
+2020-04-03 18:05:48.674 +05:30 [INF] HTTP GET /api/configuration/getfeatues?id=2 responded 200 in 117.9863 ms
+2020-04-03 18:05:54.211 +05:30 [INF] HTTP POST /api/configuration/updatefeature responded 200 in 789.7671 ms
+2020-04-03 18:06:04.321 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 127.3915 ms
+2020-04-03 18:06:04.583 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0 responded 200 in 89.6603 ms
+2020-04-03 18:06:05.010 +05:30 [INF] HTTP GET / responded 404 in 0.0925 ms
+2020-04-03 18:06:59.852 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 9345.9128 ms
+2020-04-03 18:07:00.435 +05:30 [INF] HTTP GET / responded 404 in 0.0873 ms
