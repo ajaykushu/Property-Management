@@ -104,26 +104,48 @@ namespace Presentation.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(long id)
+        {
+            WorkOrderDetail workOrderDetail = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("wodetail", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?id="+id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    workOrderDetail = JsonConvert.DeserializeObject<WorkOrderDetail>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return View("WorkOrderDetail", workOrderDetail);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder)
         {
             if (ModelState.IsValid)
             {
-                WorkOrderDetail result = null;
+               
                 try
                 {
                     _apiRoute.Value.Routes.TryGetValue("createwo", out string path);
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, workOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        result = JsonConvert.DeserializeObject<WorkOrderDetail>(await response.Content.ReadAsStringAsync());
-                        return PartialView("_WorkOrderDetail", result);
+                        var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                        if(result)
+                        return Ok(StringConstants.SuccessSaved);
+                        else
+                            return BadRequest("Unable To Create");
                     }
                 }
                 catch (Exception)
                 {
                 }
-                return Ok(result);
+                return StatusCode(500, StringConstants.Error);
             }
             else
             {

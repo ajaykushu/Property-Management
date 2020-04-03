@@ -58,8 +58,15 @@ namespace API.Controllers
         [FeatureBasedAuthorization("Create WO")]
         public async Task<ActionResult> CreateWO(CreateWO createWO)
         {
-            WorkOrderDetail workOrderDetail = null;
-            workOrderDetail = await _workOrderService.CreateWO(createWO);
+            var status = await _workOrderService.CreateWO(createWO);
+            return Ok(status);
+        }
+        [HttpGet]
+        [Route("wodetail")]
+        [FeatureBasedAuthorization("GetWO Detail")]
+        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(long id)
+        {
+            var workOrderDetail = await _workOrderService.GetWODetail(id);
             return Ok(workOrderDetail);
         }
 

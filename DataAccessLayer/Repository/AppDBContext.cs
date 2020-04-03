@@ -62,8 +62,8 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
             builder.Entity<Comments>().HasOne(s => s.Parent).WithMany().HasForeignKey(x => x.ParentId);
-            builder.Entity<ApplicationUser>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToId).IsRequired(false);
-            builder.Entity<ApplicationRole>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToRoleId);
+            //builder.Entity<ApplicationUser>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToId).IsRequired(false);
+            //builder.Entity<ApplicationRole>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToRoleId);
 
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()
@@ -167,7 +167,9 @@ namespace DataAccessLayer.Repository
                 if (entityEntry.State == EntityState.Added)
                 {
                     ((Log)entityEntry.Entity).CreatedTime = DateTime.UtcNow;
+                    ((Log)entityEntry.Entity).UpdatedTime = DateTime.UtcNow;
                     ((Log)entityEntry.Entity).CreatedByUserName = user;
+                    ((Log)entityEntry.Entity).UpdatedByUserName = user;
                 }
                 if (entityEntry.State == EntityState.Modified)
                 {

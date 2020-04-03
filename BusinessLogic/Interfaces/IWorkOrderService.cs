@@ -14,7 +14,8 @@ namespace BusinessLogic.Interfaces
 
         Task<List<SelectItem>> GetSection(long id);
 
-        Task<WorkOrderDetail> CreateWO(CreateWO createWO);
+        Task<bool> CreateWO(CreateWO createWO);
+        Task<WorkOrderDetail> GetWODetail(long id);
 
         Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr);
     }

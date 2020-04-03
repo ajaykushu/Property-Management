@@ -39,8 +39,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Payload)
+            @if (Model.Payload != null && Model.Payload.Any())
             {
+                foreach (var item in Model.Payload)
+                {
                 <tr>
                     <td>
                         <input type="button" class="workorderbutton" value="work order">
@@ -49,11 +51,18 @@
                     <td>Assigned to @item.AssignedTo</td>
                     <td>@item.CreatedDate</td>
                     <td>
-                        <a class="btn-outline-primary btn btn-sm">Edit</a>
-                        <a class="btn-outline-primary btn btn-sm">Detail</a>
+                        <a class="btn-outline-primary btn btn-sm"  >Edit</a>
+                        <a class="btn-outline-primary btn btn-sm" asp-action="GetWODetail" asp-route-id="@item.Id">Detail</a>
                     </td>
                 </tr>
+                }
             }
+            else
+            {
+           <tr>
+               <td colspan="5">No Record Found</td>
+           </tr>       
+           }
         </tbody>
     </table>
     <hr />

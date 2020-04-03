@@ -37,7 +37,7 @@ namespace BusinessLogic.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<WorkOrderDetail> CreateWO(CreateWO createWO)
+        public async Task<bool> CreateWO(CreateWO createWO)
         {
             WorkOrder workOrder = new WorkOrder
             {
@@ -49,12 +49,16 @@ namespace BusinessLogic.Services
                 AssignedToRoleId = createWO.Section
             };
             workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
-            await _workOrder.Add(workOrder);
-            var prop = await GetAreaLocation(createWO.Property);
-            var workorder = await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).ThenInclude(x => x.Department).Select(x => new WorkOrderDetail
+            var status=await _workOrder.Add(workOrder);
+            if (status > 0) return true;
+            return false;
+        }
+
+        public async Task<WorkOrderDetail> GetWODetail(long id)
+        {
+            
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).ThenInclude(x => x.Department).Select(x =>new { obj = new WorkOrderDetail
             {
-                Area = prop.Area,
-                Location = prop.Location,
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
                 StageCode = x.Stage.StageCode,
@@ -64,9 +68,16 @@ namespace BusinessLogic.Services
                 UpdatedTime = x.UpdatedTime,
                 Department = x.AssignedToRole.Department.DepartmentName,
                 Section = x.AssignedToRole.Name,
-                AssignedToUser = x.AssignedTo.UserName
-            }).FirstOrDefaultAsync();
-            return workorder;
+                AssignedToUser = x.AssignedTo.UserName,
+                Requestedby=x.RequestedBy,
+                Id=x.Id,
+                UpdatedBy=x.UpdatedByUserName
+            }, Propid =x.PropertyId}).AsNoTracking().FirstOrDefaultAsync();
+            var prop = await GetAreaLocation(workorder.Propid);
+            workorder.obj.Area = prop.Area;
+            workorder.obj.Location = prop.Location;
+            return workorder.obj;
+
         }
 
         public async Task<PropDetail> GetAreaLocation(long id)
