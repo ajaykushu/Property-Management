@@ -27,11 +27,14 @@ namespace DataAccessLayer.Repository
 
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
+
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AppDBContext(DbContextOptions options,IHttpContextAccessor httpContextAccessor) : base(options)
+
+        public AppDBContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -61,8 +64,6 @@ namespace DataAccessLayer.Repository
             builder.Entity<Comments>().HasOne(s => s.Parent).WithMany().HasForeignKey(x => x.ParentId);
             builder.Entity<ApplicationUser>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToId).IsRequired(false);
             builder.Entity<ApplicationRole>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToRoleId);
-
-
 
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()
@@ -152,6 +153,7 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 }
                 );
         }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var entries = ChangeTracker
@@ -164,7 +166,6 @@ namespace DataAccessLayer.Repository
             {
                 if (entityEntry.State == EntityState.Added)
                 {
-                    
                     ((Log)entityEntry.Entity).CreatedTime = DateTime.UtcNow;
                     ((Log)entityEntry.Entity).CreatedByUserName = user;
                 }
@@ -173,11 +174,10 @@ namespace DataAccessLayer.Repository
                     ((Log)entityEntry.Entity).UpdatedTime = DateTime.UtcNow;
                     if (user != null)
                         ((Log)entityEntry.Entity).UpdatedByUserName = user;
-                            }
+                }
             }
 
             return (await base.SaveChangesAsync(true, cancellationToken));
-
         }
     }
 }

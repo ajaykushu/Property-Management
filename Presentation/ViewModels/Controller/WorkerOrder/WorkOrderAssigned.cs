@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Presentation.ViewModels
+﻿namespace Presentation.ViewModels
 {
     public class WorkOrderAssigned
     {

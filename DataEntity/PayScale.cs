@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class PayScale:Log
+    public class PayScale : Log
     {
         public PayScale()
         {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Stage:Log
+    public class Stage : Log
     {
         public Stage()
         {

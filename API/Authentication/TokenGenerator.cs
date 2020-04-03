@@ -22,7 +22,7 @@ namespace API.Authentication
             _cache = cache;
         }
 
-        public Claim[] GetClaims(ApplicationUser applicationuser, HashSet<string> features,IList<string> roles)
+        public Claim[] GetClaims(ApplicationUser applicationuser, HashSet<string> features, IList<string> roles)
         {
             var jti = Guid.NewGuid().ToString().Replace("-", "");
             List<Claim> authClaims = new List<Claim>

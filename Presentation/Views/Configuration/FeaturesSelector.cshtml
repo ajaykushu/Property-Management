@@ -41,28 +41,28 @@
         var falseval = ".false" + $(this).val();
         var trueval = ".true" + $(this).val();
         if ($(this)[0].checked) {
-             $(falseval).prop("hidden", false)
-             $(trueval).prop("hidden", true)
+            $(falseval).prop("hidden", false)
+            $(trueval).prop("hidden", true)
 
         }
         else {
-             $(trueval).prop("hidden", false)
-             $(falseval).prop("hidden", true)
+            $(trueval).prop("hidden", false)
+            $(falseval).prop("hidden", true)
         }
     })
-     $('.updatefeat').submit(function (e) {
-            e.preventDefault();
-       var url = $(this).attr('action');
-       var form = $(this).serialize();
+    $('.updatefeat').submit(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        var form = $(this).serialize();
 
-       $('.fa-spinner').prop("hidden", false);
-       RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', true, function (res) {
-                     alertify.alert('Info', '<p>'+res+'</p>', function () {
-                     });
-       }, function (res) {
-               $('.features').html(res.responseText);
-                        alertify.alert('Error', '<p> Some error Occured </p>', function () {
-               });
-                }, "");
-        });
+        $('.fa-spinner').prop("hidden", false);
+        RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', true, function (res) {
+            alertify.alert('Info', '<p>' + res + '</p>', function () {
+            });
+        }, function (res) {
+            $('.features').html(res.responseText);
+            alertify.alert('Error', '<p> Some error Occured </p>', function () {
+            });
+        }, "");
+    });
 </script>

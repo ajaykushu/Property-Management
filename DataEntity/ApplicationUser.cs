@@ -7,26 +7,24 @@ using System.Threading.Tasks;
 
 namespace DataEntity
 {
-   
     public class ApplicationUser : IdentityUser<long>
     {
         public ApplicationUser()
         {
             this.UserProperties = new HashSet<UserProperty>();
-            this.Comments= new HashSet<Comments>();
+            this.Comments = new HashSet<Comments>();
             this.WorkOrdersAssigned = new HashSet<WorkOrder>();
         }
+
         [Column(TypeName = "varchar(50)")]
         public string FirstName { set; get; }
 
         [Column(TypeName = "varchar(50)")]
-        
         public string LastName { set; get; }
 
         [Column(TypeName = "varchar(10)")]
         public string Suffix { set; get; }
 
-        
         public bool SMSAltert { get; set; }
 
         public Languages Language { get; set; }
@@ -50,7 +48,6 @@ namespace DataEntity
         public bool IsActive { get; set; }
         public virtual ICollection<Comments> Comments { get; set; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
-
     }
 
     public class ApplicationUserPhoneValidator : IUserValidator<ApplicationUser>

@@ -1,86 +1,86 @@
 ﻿@model CreateWorkOrder
-    <partial name="_ValidationScriptsPartial">
+<partial name="_ValidationScriptsPartial">
 
-        <div class="workordertitle">
-            New Work Order
-        </div>
-        <form class="form" enctype="multipart/form-data" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="col">
+    <div class="workordertitle">
+        New Work Order
+    </div>
+    <form class="form" enctype="multipart/form-data" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="Property"> </label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="Property" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="Property" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="Location"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Location" class="form-control-sm custom-input" disabled>
+                                    <span asp-validation-for="Location" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="Area"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Area" class="form-control-sm custom-input" disabled>
+                                    <span asp-validation-for="Area" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label asp-for="Property"> </label>
+                                        <label asp-for="Item"> </label>
                                     </div>
                                     <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="Property" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
+                                        <select class="form-control form-control-sm custom-input" asp-for="Item" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
                                             <option value="">Please select one</option>
                                         </select>
-                                        <span asp-validation-for="Property" class="text-danger"></span>
+                                        <span asp-validation-for="Item" class="text-danger"></span>
                                     </div>
                                 </div>
+                            }
+                            @if (Model.Issues != null && Model.Issues.Any())
+                            {
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
-                                        <label asp-for="Location"> </label>
+                                        <label asp-for="Issue"> </label>
                                     </div>
                                     <div class="col">
-                                        <input asp-for="Location" class="form-control-sm custom-input" disabled>
-                                        <span asp-validation-for="Location" class="text-danger"></span>
+                                        <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                            <option>Please select one</option>
+                                        </select>
+                                        <span asp-validation-for="Issue" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Area"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <input asp-for="Area" class="form-control-sm custom-input" disabled>
-                                        <span asp-validation-for="Area" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="col">
-                                @if (Model.Items != null && Model.Items.Any())
-                                {
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label asp-for="Item"> </label>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="Item" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
-                                                <option value="">Please select one</option>
-                                            </select>
-                                            <span asp-validation-for="Item" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                }
-                                @if (Model.Issues != null && Model.Issues.Any())
-                                {
-                                    <div class="row top-buffer">
-                                        <div class="col-md-3">
-                                            <label asp-for="Issue"> </label>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                                <option>Please select one</option>
-                                            </select>
-                                            <span asp-validation-for="Issue" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="col">
-                                <div class="row">
-                                    @*<div class="col-md-3">
+                            }
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                @*<div class="col-md-3">
                                         <label asp-for="RequestedBy"> </label>
                                     </div>
                                     <div class="col">
@@ -89,87 +89,87 @@
                                         </select>
                                         <span asp-validation-for="RequestedById" class="text-danger"></span>
                                     </div>*@
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="Description"> </label>
                                 </div>
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Description"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <textarea class="form-control custom-input" asp-for="Description" placeholder="additional Details"></textarea>
-                                        <span asp-validation-for="Description" class="text-danger"></span>
-                                    </div>
+                                <div class="col">
+                                    <textarea class="form-control custom-input" asp-for="Description" placeholder="additional Details"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label asp-for="Date "> </label>
-                                    </div>
-                                    <div class="col">
-                                        <input asp-for='Date' value="" type="date" class="form-control-sm custom-input">
-                                        <span asp-validation-for="Date" class="text-danger"></span>
-                                    </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="Date "> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for='Date' value="" type="date" class="form-control-sm custom-input">
+                                    <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Assign To </label>
-                                    </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Assign To </label>
+                                </div>
 
-                                    <div class="col">
-                                        @if (Model.Departments != null && Model.Departments.Any())
-                                        {
-                                            <select class="form-control form-control-sm custom-input" asp-for="Department" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
-                                                <option value="">Department</option>
-                                            </select>
-                                            <span asp-validation-for="Department" class="text-danger"></span>
-                                        }
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="Section">
-                                            <option value="">Section</option>
+                                <div class="col">
+                                    @if (Model.Departments != null && Model.Departments.Any())
+                                    {
+                                        <select class="form-control form-control-sm custom-input" asp-for="Department" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                            <option value="">Department</option>
                                         </select>
-                                        <span asp-validation-for="Section" class="text-danger"></span>
-                                    </div>
+                                        <span asp-validation-for="Department" class="text-danger"></span>
+                                    }
                                 </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="Section">
+                                        <option value="">Section</option>
+                                    </select>
+                                    <span asp-validation-for="Section" class="text-danger"></span>
+                                </div>
+                            </div>
 
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Photo"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <div class="cont">
-                                            <label class="browsebutton">Browse Photo</label>
-                                            <input accept="image/*" asp-for="Photo" class="form-control-sm custom-input Photo">
-                                        </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="Photo"> </label>
+                                </div>
+                                <div class="col">
+                                    <div class="cont">
+                                        <label class="browsebutton">Browse Photo</label>
+                                        <input accept="image/*" asp-for="Photo" class="form-control-sm custom-input Photo">
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr />
-            <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-outline-primary submit">Create To Do</button>
-            @*passing data to controller*@
-        </form>
-        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-outline-primary submit">Create To Do</button>
+        @*passing data to controller*@
+    </form>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             </div>
         </div>
-        </div>
+    </div>
 
-        <script>
+    <script>
         $('.form').submit(function (e) {
             e.preventDefault();
             var form = $('.form');
@@ -232,4 +232,4 @@
                 }, "");
             }
         });
-        </script>
+    </script>

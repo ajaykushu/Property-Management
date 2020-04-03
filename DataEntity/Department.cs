@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Department:Log
+    public class Department : Log
     {
         public Department()
         {
@@ -15,7 +15,6 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        
         [Column(TypeName = "varchar(30)")]
         public string DepartmentName { get; set; }
 

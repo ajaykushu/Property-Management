@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Menu:Log
+    public class Menu : Log
     {
         public Menu()
         {

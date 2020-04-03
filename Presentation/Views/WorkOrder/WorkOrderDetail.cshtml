@@ -4,188 +4,188 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="workordertitle">
-        Work Order Detail
-    </div>
-    @if (Model != null)
-    {
-        <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>
-                        Stage Details
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
+<div class="workordertitle">
+    Work Order Detail
+</div>
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    Stage Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
 
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label for="StageCode">Stage Code</label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.StageCode)
-                                </div>
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="StageCode">Stage Code</label>
                             </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="StageDescription">Stage Description</label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.StageDescription)
-                                </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.StageCode)
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Property Details
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-md-inline-flex myview">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">@Model.PropertyName</h5>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="StageDescription">Stage Description</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.StageDescription)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Property Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="d-md-inline-flex myview">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@Model.PropertyName</h5>
 
-                                    <p class="card-text">
-                                        <address>
-                                            <strong>@Model.Area</strong><br>
-                                            <strong>@Model.Location</strong><br>
-                                        </address>
-                                    </p>
-                                </div>
+                                <p class="card-text">
+                                    <address>
+                                        <strong>@Model.Area</strong><br>
+                                        <strong>@Model.Location</strong><br>
+                                    </address>
+                                </p>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        WO Information
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label asp-for="Issue"></label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.Issue)
-                                </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    WO Information
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label asp-for="Issue"></label>
                             </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Item"></label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.Item)
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="Requestedby">Requested By</label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.Requestedby)
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="CreatedTime">Created Time</label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.CreatedTime)
-                                </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Issue)
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Updated Infomation
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label for="UpdatedBy">Last Updated By</label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.UpdatedBy)
-                                </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Item"></label>
                             </div>
-                            <div class="row top-buffer ">
-                                <div class="col-md-3">
-                                    <label for="UpdatedTime">Last Update Time</label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.UpdatedTime)
-                                </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Item)
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Assigned Info
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label asp-for="Department"></label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.Department)
-                                </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="Requestedby">Requested By</label>
                             </div>
-                            <div class="row top-buffer ">
-                                <div class="col-md-3">
-                                    <label asp-for="Section"></label>
-                                </div>
-                                <div class="col">
-                                    @Html.DisplayFor(x => x.Section)
-                                </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Requestedby)
                             </div>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="CreatedTime">Created Time</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.CreatedTime)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Updated Infomation
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="UpdatedBy">Last Updated By</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.UpdatedBy)
+                            </div>
+                        </div>
+                        <div class="row top-buffer ">
+                            <div class="col-md-3">
+                                <label for="UpdatedTime">Last Update Time</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.UpdatedTime)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Assigned Info
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label asp-for="Department"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Department)
+                            </div>
+                        </div>
+                        <div class="row top-buffer ">
+                            <div class="col-md-3">
+                                <label asp-for="Section"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Section)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
+}
+<div>
+    @Html.ActionLink("Edit", "EditUserView", new { id = Model.Id }) |
+    <a asp-action="GetAllUsers">Back to List</a>
+</div>
+<style>
+    .myview .card {
+        width: 200px;
+        margin: 5px;
     }
-    <div>
-        @Html.ActionLink("Edit", "EditUserView", new { id = Model.Id }) |
-        <a asp-action="GetAllUsers">Back to List</a>
-    </div>
-    <style>
-        .myview .card {
-            width: 200px;
-            margin: 5px;
-        }
 
-        .imagethumbnail {
-            border: 1px solid grey;
-            padding: 4px;
-            border-radius: 50%;
-        }
-    </style>
-    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-    {
-        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+    .imagethumbnail {
+        border: 1px solid grey;
+        padding: 4px;
+        border-radius: 50%;
+    }
+</style>
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-        <script>
+    <script>
      alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-        </script>
-    }
+    </script>
+}

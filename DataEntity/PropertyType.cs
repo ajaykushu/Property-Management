@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class PropertyType:Log
+    public class PropertyType : Log
     {
         public PropertyType()
         {

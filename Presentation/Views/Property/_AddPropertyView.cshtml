@@ -126,24 +126,24 @@
         </div>
     </div>
     <script>
-            $('.addprop').submit(function (e) {
-                e.preventDefault();
-                var url = $(this).attr('action');
-                var form = $(this).serialize();
-                if ($(this).valid()) {
-                    $('.fa-spinner').prop("hidden",false);
-                    RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', false, function (res) {
-                        $('.fa-spinner').prop("hidden",true);
-                        alertify.alert('Info', '<p>' + res + '</p>', function () {
+        $('.addprop').submit(function (e) {
+            e.preventDefault();
+            var url = $(this).attr('action');
+            var form = $(this).serialize();
+            if ($(this).valid()) {
+                $('.fa-spinner').prop("hidden", false);
+                RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', false, function (res) {
+                    $('.fa-spinner').prop("hidden", true);
+                    alertify.alert('Info', '<p>' + res + '</p>', function () {
                         $("input[type=text]").val("");
-                        $('select').prop('selectedIndex',0);
-                        });
+                        $('select').prop('selectedIndex', 0);
+                    });
 
-                    }, function (res) {
-                        $('.fa-spinner').prop("hidden",true);
-                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                        });
-                    },"");
-                }
-            });
+                }, function (res) {
+                    $('.fa-spinner').prop("hidden", true);
+                    alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    });
+                }, "");
+            }
+        });
     </script>

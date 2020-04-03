@@ -2,7 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_callback,token,enctype) {
+function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_callback, token, enctype) {
     $.ajax({
         url: url,
         type: method,
@@ -15,7 +15,7 @@ function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
             if (token != "" || token != undefined)
-            xhr.setRequestHeader("Authorization","Bearer "+token);
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         success: succ_callback,
         error: fail_callback

@@ -50,6 +50,7 @@ namespace Presentation.Controllers
             }
             return View(WorkOrderAssigned);
         }
+
         [HttpGet]
         public async Task<IActionResult> CreateWorkOrder()
         {
@@ -128,6 +129,5 @@ namespace Presentation.Controllers
                 return BadRequest(msg);
             }
         }
-       
     }
 }

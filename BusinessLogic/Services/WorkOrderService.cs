@@ -6,12 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
@@ -27,7 +25,7 @@ namespace BusinessLogic.Services
         private readonly IRepo<Stage> _stage;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage,IHttpContextAccessor httpContextAccessor)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -43,17 +41,17 @@ namespace BusinessLogic.Services
         {
             WorkOrder workOrder = new WorkOrder
             {
-                RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x=>x.Type==ClaimTypes.NameIdentifier).Value,
+                RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value,
                 PropertyId = createWO.Property,
                 IssueId = createWO.Issue,
                 ItemId = createWO.Item,
                 Description = createWO.Description,
-                AssignedToRoleId=createWO.Section
+                AssignedToRoleId = createWO.Section
             };
             workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
             await _workOrder.Add(workOrder);
             var prop = await GetAreaLocation(createWO.Property);
-            var workorder = await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x=>x.AssignedTo).Include(x=>x.AssignedToRole).ThenInclude(x=>x.Department).Select(x => new WorkOrderDetail
+            var workorder = await _workOrder.Get(x => x.Id == workOrder.Id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).ThenInclude(x => x.Department).Select(x => new WorkOrderDetail
             {
                 Area = prop.Area,
                 Location = prop.Location,
@@ -62,11 +60,11 @@ namespace BusinessLogic.Services
                 StageCode = x.Stage.StageCode,
                 StageDescription = x.Stage.StageDescription,
                 Item = x.Item.ItemName,
-                CreatedTime=x.CreatedTime,
-                UpdatedTime=x.UpdatedTime,
-                Department=x.AssignedToRole.Department.DepartmentName,
-                Section=x.AssignedToRole.Name,
-                AssignedToUser=x.AssignedTo.UserName
+                CreatedTime = x.CreatedTime,
+                UpdatedTime = x.UpdatedTime,
+                Department = x.AssignedToRole.Department.DepartmentName,
+                Section = x.AssignedToRole.Name,
+                AssignedToUser = x.AssignedTo.UserName
             }).FirstOrDefaultAsync();
             return workorder;
         }
@@ -150,25 +148,25 @@ namespace BusinessLogic.Services
             int count = 0;
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                workOrderAssigned=await _workOrder.GetAll().Select(x=> new WorkOrderAssigned{ 
-                CreatedDate=x.CreatedTime.ToString("dd/MMM/YYYY"),
-                Description=x.Description,
-                Id=x.Id,
-                AssignedTo=x.AssignedTo.UserName,
-                AssignedToSection=x.AssignedToRole.Name
+                workOrderAssigned = await _workOrder.GetAll().Select(x => new WorkOrderAssigned
+                {
+                    CreatedDate = x.CreatedTime.ToString("dd/MMM/YYYY"),
+                    Description = x.Description,
+                    Id = x.Id,
+                    AssignedTo = x.AssignedTo.UserName,
+                    AssignedToSection = x.AssignedToRole.Name
                 }).AsNoTracking().ToListAsync();
             }
             else
             {
-                workOrderAssigned =await _workOrder.GetAll().Select(x => new WorkOrderAssigned
+                workOrderAssigned = await _workOrder.GetAll().Select(x => new WorkOrderAssigned
                 {
                     CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
                     Description = x.Description,
                     Id = x.Id,
-                    AssignedTo=x.AssignedTo.UserName,
-                    AssignedToSection=x.AssignedToRole.Name
+                    AssignedTo = x.AssignedTo.UserName,
+                    AssignedToSection = x.AssignedToRole.Name
                 }).AsNoTracking().ToListAsync();
-
             }
             if (workOrderAssigned != null)
                 count = workOrderAssigned.Count();

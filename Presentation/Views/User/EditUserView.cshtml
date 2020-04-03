@@ -249,16 +249,16 @@
         var form = $(this).serialize();
         var formData = new FormData(this);
         if ($(this).valid()) {
-            $('.fa-spinner').prop("hidden",false);
+            $('.fa-spinner').prop("hidden", false);
             RESTCALL(url, formData, 'POST', false, false, function (res) {
-                $('.fa-spinner').prop("hidden",true);
+                $('.fa-spinner').prop("hidden", true);
                 alertify.alert('Info', '<p>' + res + '</p>', function () {
                     location.reload();
                 });
             }, function (res) {
-                      $('.fa-spinner').prop("hidden",true);
-                    alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                        $(this).find("input[type=password]").val("");
+                $('.fa-spinner').prop("hidden", true);
+                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    $(this).find("input[type=password]").val("");
                 });
             }, "", "multipart/form-data");
 
