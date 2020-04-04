@@ -73,10 +73,10 @@ namespace API.Controllers
         [HttpGet]
         [Route("getallworkorder")]
         [FeatureBasedAuthorization("Get WO")]
-        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, FilterEnumWO filter, int requestedPage)
+        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, int requestedPage, FilterEnumWOStage stage, string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned)
         {
             Pagination<List<WorkOrderAssigned>> workorderassigned = null;
-            workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString);
+            workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString,stage,endDate);
             return Ok(workorderassigned);
         }
     }

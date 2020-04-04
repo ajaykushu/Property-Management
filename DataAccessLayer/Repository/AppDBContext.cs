@@ -24,6 +24,7 @@ namespace DataAccessLayer.Repository
         public DbSet<Comments> Comments { set; get; }
         public DbSet<Languages> Languages { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
+        public DbSet<Department> Departments { set; get; }
 
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -62,8 +63,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
             builder.Entity<Comments>().HasOne(s => s.Parent).WithMany().HasForeignKey(x => x.ParentId);
-            //builder.Entity<ApplicationUser>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToId).IsRequired(false);
-            //builder.Entity<ApplicationRole>().HasMany(s => s.WorkOrdersAssigned).WithOne().HasForeignKey(x => x.AssignedToRoleId);
+           
 
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()

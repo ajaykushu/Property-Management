@@ -11,4 +11,10 @@
         ByDate = 1,
         ByAssigned = 2
     }
+    public enum FilterEnumWOStage
+    {
+        INITWO = 1,
+        WOPROGRESS = 2,
+        WOCOMPLETED = 3
+    }
 }

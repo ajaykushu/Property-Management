@@ -17,6 +17,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> CreateWO(CreateWO createWO);
         Task<WorkOrderDetail> GetWODetail(long id);
 
-        Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr);
+        Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr,FilterEnumWOStage stage,string enddate);
     }
 }

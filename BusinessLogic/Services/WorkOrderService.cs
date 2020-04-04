@@ -153,7 +153,7 @@ namespace BusinessLogic.Services
             return res;
         }
 
-        public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr)
+        public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr,FilterEnumWOStage  stage,string endDate)
         {
             List<WorkOrderAssigned> workOrderAssigned = null;
             int count = 0;
