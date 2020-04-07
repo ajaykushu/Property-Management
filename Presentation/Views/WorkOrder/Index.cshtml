@@ -47,18 +47,24 @@
 
                     @foreach (var item in Model.Payload)
                     {
-                        <tr>
-                            <td>
-                                <input type="button" class="workorderbutton" value="work order">
-                            </td>
-                            <td>@item.Description</td>
-                            <td>Assigned to @item.AssignedTo</td>
-                            <td>@item.CreatedDate</td>
-                            <td>
-                                <a class="btn-outline-primary btn btn-sm" asp-action="EditWOView" asp-route-id="@item.Id">Edit</a>
-                                <a class="btn-outline-primary btn btn-sm" asp-action="GetWODetail" asp-route-id="@item.Id">Detail</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="workorderbutton" value="work order">
+                        </td>
+                        <td>@item.Description</td>
+                        @if (item.AssignedTo != null)
+                        {
+                            <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                        }
+                        else { 
+                       <td>Assigned to &nbsp;<span class="text-info"><strong>@item.AssignedToSection</strong></span></td>
+                        }
+                        <td>@item.CreatedDate</td>
+                        <td>
+                            <a class="btn-outline-primary btn btn-sm" asp-action="EditWOView" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn-outline-primary btn btn-sm" asp-action="GetWODetail" asp-route-id="@item.Id">Detail</a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
