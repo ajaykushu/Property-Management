@@ -9,7 +9,8 @@
     public enum FilterEnumWO
     {
         ByDate = 1,
-        ByAssigned = 2
+        ByAssigned = 2,
+        ByStatus = 3
     }
     public enum FilterEnumWOStage
     {

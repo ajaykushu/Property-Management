@@ -30,7 +30,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string matchString, int requestedPage, FilterEnumWOStage stage,string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned)
+        public async Task<IActionResult> Index(string matchString, int requestedPage,string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned, FilterEnumWOStage stage = FilterEnumWOStage.INITWO)
         {
             ViewBag.searchString = matchString ?? "";
             ViewBag.filter = filter;
@@ -40,7 +40,7 @@ namespace Presentation.Controllers
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
-                string parameters = "?matchString=" + matchString + "&filter=" + filter + "&requestedPage=" + requestedPage;
+                string parameters = "?matchString=" + matchString + "&filter=" + filter + "&requestedPage=" + requestedPage+ "&stage="+stage+"&endDate="+endDate;
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + parameters, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
@@ -122,27 +122,84 @@ namespace Presentation.Controllers
             }
             return View("WorkOrderDetail", workOrderDetail);
         }
+        [HttpGet]
+        public async Task<IActionResult> EditWOView(long id)
+        {
+            EditWorkOrder editWorkOrder = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("editWOModel", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    editWorkOrder = JsonConvert.DeserializeObject<EditWorkOrder>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return View(editWorkOrder);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditWO(EditWorkOrder editWorkOrder)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _apiRoute.Value.Routes.TryGetValue("editWO", out string path);
+                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, editWorkOrder, this, _token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        bool status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                        if (status)
+                        {
+                            TempData["Success"] = "Successfully Updated";
+                            return RedirectToAction("GetWODetail", new { id = editWorkOrder.Id });
+                        }
+                        else
+                        {
+                            TempData["Error"] = "Unable to Update";
+                        }
+                    }
+                    
+                }
+                catch (Exception)
+                {
+                    TempData["Error"] = StringConstants.Error;
+                }
+            }
+            else{
+                var msg = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
+                TempData["Error"] = msg;
+            }
+            return RedirectToAction("EditWOView", new { id = editWorkOrder.Id });
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder)
         {
             if (ModelState.IsValid)
             {
-               
                 try
                 {
+                    var file = workOrder.File;
+                    workOrder.File = null;
                     _apiRoute.Value.Routes.TryGetValue("createwo", out string path);
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, workOrder, this, _token).ConfigureAwait(false);
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, file,workOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
-                        if(result)
-                        return Ok(StringConstants.SuccessSaved);
+                        if (result)
+                        {
+                            return Ok(StringConstants.SuccessSaved);
+                        }
                         else
                             return BadRequest("Unable To Create");
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                 }
                 return StatusCode(500, StringConstants.Error);
@@ -153,5 +210,48 @@ namespace Presentation.Controllers
                 return BadRequest(msg);
             }
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetComment(long Id,int requestedPage)
+        {
+            ViewBag.workorderId = Id;
+            Pagination<List<Comment>> comments = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getcomment", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+ "?workorderId="+Id+"&pageNumber="+ requestedPage, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    comments = JsonConvert.DeserializeObject<Pagination<List<Comment>>>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return View("CommentOperation",comments);
+        }
+        [HttpPost]
+        public async Task<IActionResult> PostComment(Post post)
+        {
+            bool status =false;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("postcomment", out string path);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, post, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                    if (status)
+                        TempData["Success"] = "Posted Successfully";
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return RedirectToAction("GetComment",new { id=post.WorkOrderId });
+        }
+
+
     }
+   
 }

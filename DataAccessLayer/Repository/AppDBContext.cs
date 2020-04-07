@@ -21,6 +21,7 @@ namespace DataAccessLayer.Repository
         public DbSet<Item> Items { set; get; }
         public DbSet<Stage> Stages { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
+        public DbSet<Reply> Replies { set; get; }
         public DbSet<Comments> Comments { set; get; }
         public DbSet<Languages> Languages { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
@@ -62,9 +63,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
-            builder.Entity<Comments>().HasOne(s => s.Parent).WithMany().HasForeignKey(x => x.ParentId);
            
-
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()
              {
@@ -166,14 +165,14 @@ namespace DataAccessLayer.Repository
             {
                 if (entityEntry.State == EntityState.Added)
                 {
-                    ((Log)entityEntry.Entity).CreatedTime = DateTime.UtcNow;
-                    ((Log)entityEntry.Entity).UpdatedTime = DateTime.UtcNow;
+                    ((Log)entityEntry.Entity).CreatedTime = DateTime.Now;
+                    ((Log)entityEntry.Entity).UpdatedTime = DateTime.Now;
                     ((Log)entityEntry.Entity).CreatedByUserName = user;
                     ((Log)entityEntry.Entity).UpdatedByUserName = user;
                 }
                 if (entityEntry.State == EntityState.Modified)
                 {
-                    ((Log)entityEntry.Entity).UpdatedTime = DateTime.UtcNow;
+                    ((Log)entityEntry.Entity).UpdatedTime = DateTime.Now;
                     if (user != null)
                         ((Log)entityEntry.Entity).UpdatedByUserName = user;
                 }

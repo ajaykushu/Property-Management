@@ -12,6 +12,7 @@ namespace Models.ResponseModels
         public string Department { get; set; }
         public string Section { get; set; }
         public string StageDescription { get; set; }
+        public string Description { get; set; }
         public string StageCode { get; set; }
         public string Issue { get; set; }
         public string Item { get; set; }

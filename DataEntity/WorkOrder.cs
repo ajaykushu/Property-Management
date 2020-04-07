@@ -26,6 +26,7 @@ namespace DataEntity
         public long? AssignedToId { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
         public long? AssignedToRoleId { get; set; }
+        public string AttachmentPath { get; set; }
         public virtual ApplicationRole AssignedToRole { get; set; }
 
         public virtual ICollection<Comments> Comments { get; set; }

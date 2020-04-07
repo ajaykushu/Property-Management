@@ -10,8 +10,8 @@
         public static string PwdNotChangedError = "Some Error Passowrd Not Changed";
         public static string InvalidModel = "Some Values Are Missing {0}";
         public static string RegisterSuccess = "Registration Successfull";
-        public static string ImageFailed = "Successfully Registered & Image Upload Failed";
-        public static string ImageUpload = "Successfull updated & image uploaded";
+        public static string UpdateFailed = "Update Failed";
+        public static string RegisterFailed = "Register Failed";
         public static string SuccessUpdate = "Successfull updated";
         public static string SuccessSaved = "Successfully Saved";
         public static string DeleteFailed = "Unable To Delete Reach Site Owner";

@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200405080455_newmih78")]
+    partial class newmih78
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,14 +58,14 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "3dd4e960-90c5-4393-86fd-ddc69ae25aba",
+                            ConcurrencyStamp = "402debfe-612e-4365-af9a-392ff917b46c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "65b9072d-9a86-4145-9398-47c981d24bf6",
+                            ConcurrencyStamp = "cee76629-fb5a-4482-ad40-5b6ff21eece1",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -196,9 +198,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
@@ -207,6 +206,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("nvarchar(max)");
@@ -218,6 +220,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("WorkOrderId");
 
@@ -547,47 +551,6 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataEntity.Reply", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("CommentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("CommentsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CreatedByUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReplyString")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UpdatedByUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("repliedTo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentsId");
-
-                    b.ToTable("Replies");
-                });
-
             modelBuilder.Entity("DataEntity.RoleMenuMap", b =>
                 {
                     b.Property<int>("Id")
@@ -786,9 +749,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<long?>("AssignedToRoleId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("nvarchar(max)");
 
@@ -873,6 +833,10 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.Comments", b =>
                 {
+                    b.HasOne("DataEntity.Comments", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("Comments")
                         .HasForeignKey("WorkOrderId")
@@ -887,13 +851,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("PropertyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataEntity.Reply", b =>
-                {
-                    b.HasOne("DataEntity.Comments", "Comments")
-                        .WithMany("Replies")
-                        .HasForeignKey("CommentsId");
                 });
 
             modelBuilder.Entity("DataEntity.RoleMenuMap", b =>

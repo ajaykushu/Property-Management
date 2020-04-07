@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Models.RequestModels
 {
-    public class CreateWO
+    public class EditWorkOrder
     {
+        public long Id { get; set; }
         public string Location { get; set; }
         public string Area { get; set; }
         public List<SelectItem> Items { get; set; }
 
         [Required(ErrorMessage = "Please Select Item")]
         public int Item { get; set; }
+        public string PropertyName { get; set; }
 
-        public List<SelectItem> Properties { get; set; }
-
-        [Required(ErrorMessage = "Please Give Property Id")]
-        public long Property { get; set; }
 
         public List<SelectItem> Issues { get; set; }
 
@@ -26,12 +26,16 @@ namespace Models.RequestModels
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
 
+        [Required(ErrorMessage = "Please give Date")]
+        public DateTime CreatedDate { get; set; }
+
         public List<SelectItem> Departments { get; set; }
 
         [Required(ErrorMessage = "Please give Department Id")]
         public int Department { get; set; }
 
         [Required(ErrorMessage = "Please give Section Id")]
-        public int Section { get; set; }
+        public long Section { get; set; }
+        public List<SelectItem> Sections { get; set; }
     }
 }

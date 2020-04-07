@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.AspNetCore.Http;
+using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
@@ -8,15 +9,14 @@ namespace BusinessLogic.Interfaces
 {
     public interface IUserService
     {
-        Task<bool> RegisterUser(RegisterUser model);
+        Task<bool> RegisterUser(RegisterUser model,IFormFile avtaar);
 
         RegisterUser GetRegisterModel();
 
         Task<EditUserModel> GetEditUserModelAsync(long Id);
 
-        Task<bool> UpdateUser(EditUserModel editUser);
+        Task<bool> UpdateUser(EditUserModel editUser,IFormFile avtaar);
 
-        Task<bool> UploadAvtar(string path, string email);
 
         Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchString);
 

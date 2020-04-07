@@ -44,22 +44,15 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                {    var file = register.Photo;
+                     register.Photo = null;
                     _apiRoute.Value.Routes.TryGetValue("register", out string path);
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, register, this, _token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
-                    {
-                        if (register.Photo != null)
-                        {
-                            _apiRoute.Value.Routes.TryGetValue("uploadimage", out string imageuploadpath);
-                            var res = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + imageuploadpath, register.Email, register.Photo, this, _token);
-                            if (res.IsSuccessStatusCode)
-                                return Ok(StringConstants.RegisterSuccess);
-                            else
-                                return Ok(StringConstants.ImageFailed);
-                        }
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,file ,register, this, _token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode) {
+                        if(await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                           return Ok(StringConstants.RegisterSuccess);
                         else
-                            return Ok(StringConstants.RegisterSuccess);
+                            return Ok(StringConstants.RegisterFailed);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return BadRequest(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
@@ -150,21 +143,15 @@ namespace Presentation.Controllers
                 _apiRoute.Value.Routes.TryGetValue("updateuser", out string path);
                 try
                 {
-                    HttpContext.Session.TryGetValue("token", out var token);
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, user, this, _token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                    var file = user.Photo;
+                    user.Photo = null;
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, file,user, this, _token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
                     {
-                        if (user.Photo != null)
-                        {
-                            _apiRoute.Value.Routes.TryGetValue("uploadimage", out string imageuploadpath);
-                            var res = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + imageuploadpath, user.Email, user.Photo, this, _token);
-                            if (res.IsSuccessStatusCode)
-                                return Ok(StringConstants.ImageUpload);
+                            if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                                return Ok(StringConstants.SuccessUpdate);
                             else
-                                return Ok(StringConstants.ImageFailed);
-                        }
-                        else
-                            return Ok(StringConstants.SuccessUpdate);
+                                return Ok(StringConstants.UpdateFailed);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return BadRequest(await response.Content.ReadAsStringAsync());

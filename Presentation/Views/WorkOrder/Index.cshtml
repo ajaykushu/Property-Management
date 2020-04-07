@@ -1,103 +1,104 @@
 ﻿@model Pagination<List<WorkOrderAssigned>>
-<form class="form">
-    <div class="input-group">
-        <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByAssigned) { <text> checked</text>} id="assigned" name="Filter" value='@FilterEnumWO.ByAssigned' class="selector1" required>
-            <label class="label1" for="assigned">@FilterEnumWO.ByAssigned</label>
+    <form class="form">
+        <div class="input-group">
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByAssigned) { <text> checked</text>} id="assigned" name="Filter" value='@FilterEnumWO.ByAssigned' class="selector1" required>
+                <label class="label1" for="assigned">@FilterEnumWO.ByAssigned</label>
+            </div>
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByDate) { <text> checked</text>} id="date" name="Filter" value=@FilterEnumWO.ByDate class="selector2" required>
+                <label class="label2" for="date">@FilterEnumWO.ByDate</label>
+            </div>
+            <div class="cont">
+                <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByStatus) { <text> checked</text>} id="status" name="Filter" value=@FilterEnumWO.ByStatus class="selector2" required>
+                <label class="label2" for="status">@FilterEnumWO.ByStatus</label>
+            </div>
+            <input class="form-control form-control-sm"  style="display:@if (ViewBag.filter == FilterEnumWO.ByStatus) {<text>none;</text> }" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="@if (ViewBag.filter == FilterEnumWO.ByDate) { <text>date</text>} else {<text>text</text> }" placeholder="Search">
+            <select class="form-control form-control-sm" value=@ViewBag.stage style="display:@if (ViewBag.filter == FilterEnumWO.ByStatus)
+            {<text>block;</text>}
+                else { <text>none;</text>}" name="stage"  id="select">
+                <option value=@FilterEnumWOStage.INITWO>@FilterEnumWOStage.INITWO</option>
+                <option value=@FilterEnumWOStage.WOPROGRESS>@FilterEnumWOStage.WOPROGRESS</option>
+                <option value=@FilterEnumWOStage.WOCOMPLETED>@FilterEnumWOStage.WOCOMPLETED</option>
+            </select>
+            &nbsp;<input class="form-control form-control-sm" style="display:@if (ViewBag.filter==FilterEnumWO.ByDate) {<text>block</text> } else {<text>none</text> }" value='@ViewBag.enddate' name="endDate" autocomplete="off" id="endDate" type="date">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info"  type="submit" value="Filter">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info clear" type="button" value="Clear Filter">
         </div>
-        <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByDate) { <text> checked</text>} id="date" name="Filter" value=@FilterEnumWO.ByDate class="selector2" required>
-            <label class="label2" for="date">@FilterEnumWO.ByDate</label>
+        <hr />
+        <div class="workordertitle">
+            Work Orders
         </div>
-        <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByStatus) { <text> checked</text>} id="status" name="Filter" value=@FilterEnumWO.ByStatus class="selector2" required>
-            <label class="label2" for="status">@FilterEnumWO.ByStatus</label>
-        </div>
-        <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
-        <select class="form-control form-control-sm" value='@ViewBag.stage' style="display:none" name="stage" autocomplete="off" id="select" placeholder="select">
-            <option value=@FilterEnumWOStage.INITWO>@FilterEnumWOStage.INITWO</option>
-            <option value=@FilterEnumWOStage.WOPROGRESS>@FilterEnumWOStage.WOPROGRESS</option>
-            <option value=@FilterEnumWOStage.WOCOMPLETED>@FilterEnumWOStage.WOCOMPLETED</option>
-        </select>
-        &nbsp;<input class="form-control form-control-sm" style="display:@if (ViewBag.filter==FilterEnumWO.ByDate) {<text>block</text> } else {<text>none</text> } " value='@ViewBag.enddate' name="endDate" autocomplete="off" id="endDate" type="date">
-&nbsp; &nbsp;<input class="btn btn-sm btn-outline-info" type="submit" value="Filter">
-        &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info clear" type="submit" value="Clear Filter">
-    </div>
-    <hr />
-    <div class="workordertitle">
-        Work Orders
-    </div>
-    <table class="table table-striped wordorderdetail">
-        <thead>
-            <tr>
-                <th scope="col" colspan="3" class="mytitle">
-                    To Do List
-                </th>
-                <th scope="col" colspan="2" class="button">
-                    <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Payload != null && Model.Payload.Any())
-            {
-                foreach (var item in Model.Payload)
-                {
-                <tr>
-                    <td>
-                        <input type="button" class="workorderbutton" value="work order">
-                    </td>
-                    <td>@item.Description</td>
-                    <td>Assigned to @item.AssignedTo</td>
-                    <td>@item.CreatedDate</td>
-                    <td>
-                        <a class="btn-outline-primary btn btn-sm"  >Edit</a>
-                        <a class="btn-outline-primary btn btn-sm" asp-action="GetWODetail" asp-route-id="@item.Id">Detail</a>
-                    </td>
-                </tr>
-                }
-            }
-            else
-            {
-           <tr>
-               <td colspan="5">No Record Found</td>
-           </tr>       
-           }
-        </tbody>
-    </table>
-    <hr />
-    <nav>
-        <ul class="pagination">
-            @{ int current = 0;}
-            <li class="page-item @if (Model.CurrentPage == 0)
-                {<text>disabled</text> }">
-                @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage=ViewBag.stage, enddate=ViewBag.enddate }, new { @class = "page-link" })
-            </li>
 
-            @for (int i = 0; i < Model.PageCount; i++)
-            {
+        @if (Model != null && Model.Payload != null && Model.Payload.Any())
+        {
+            <table class="table table-striped wordorderdetail">
+                <thead>
+                    <tr>
+                        <th scope="col" colspan="3" class="mytitle">
+                            To Do List
+                        </th>
+                        <th scope="col" colspan="2" class="button">
+                            <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                if (Model.CurrentPage == i)
-                {
-                    <li class="page-item active">
-                        <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                    @foreach (var item in Model.Payload)
+                    {
+                        <tr>
+                            <td>
+                                <input type="button" class="workorderbutton" value="work order">
+                            </td>
+                            <td>@item.Description</td>
+                            <td>Assigned to @item.AssignedTo</td>
+                            <td>@item.CreatedDate</td>
+                            <td>
+                                <a class="btn-outline-primary btn btn-sm" asp-action="EditWOView" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn-outline-primary btn btn-sm" asp-action="GetWODetail" asp-route-id="@item.Id">Detail</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <hr />
+            <nav>
+                <ul class="pagination">
+                    @{ int current = 0;}
+                    <li class="page-item @if (Model.CurrentPage == 0) {<text>disabled</text> }">
+                        @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
                     </li>
-                    current = i;
-                }
-                else
-                {
-                    <li class="page-item">
-                        @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", new { requestedPage = i, matchString = ViewBag.searchstring , stage=ViewBag.stage, enddate=ViewBag.enddate}, new { @class = "page-link" })
+
+                    @for (int i = 0; i < Model.PageCount; i++)
+                    {
+
+                        if (Model.CurrentPage == i)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                            </li>
+                            current = i;
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", new { requestedPage = i, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                            </li>
+                        }
+                    }
+                    <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount) {<text>disabled</text> }">
+                        @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", new { requestedPage = current + 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
                     </li>
+                </ul>
+            </nav>
+        }
+        else
+        {
+           <span> No Record Found</span>
+
                 }
-            }
-            <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount)
-                {<text>disabled</text> }">
-                @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", new { requestedPage = current + 1, matchString = ViewBag.searchstring,stage=ViewBag.stage, enddate=ViewBag.enddate }, new { @class = "page-link" })
-            </li>
-        </ul>
-    </nav>
-</form>
+    </form>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
@@ -108,18 +109,38 @@
 }
 <script>
     $("[name='Filter']").change(function () {
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        month = month < 10 ? +"0" + month.toString() : month;
+        day = day < 10 ? +"0" + day.toString() : day;
+        var datestring = d.getFullYear() + "-" + month + "-" + day;
         $('#search').prop("type", 'text');
+        $('#search').val("");
         $('#search').show();
         $('#endDate').hide();
         $('#select').hide();
         console.log($(this).val());
         if ($(this).val() == 'ByDate') {
             $('#search').prop("type", 'date');
-            $('#endDate').show();
+            $('#endDate').prop('max', datestring)
+             $('#search').prop('max', datestring)
+            $('#endDate').prop('disabled', true)
+            $('#endDate').show()
         }
         if ($(this).val() == 'ByStatus') {
             $('#select').show();
             $('#search').hide();
         }
     });
+    $("#search").blur(function () {
+        $('#endDate').prop('disabled', false)
+        $('#endDate').prop('min', $(this).val())
+    });
+    $('.clear').click(function (e) {
+        e.preventDefault();
+        $('#search').val("");
+        $('#endDate').val("");
+    })
+   
 </script>

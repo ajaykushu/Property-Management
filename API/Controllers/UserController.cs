@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities;
@@ -36,11 +37,18 @@ namespace API.Controllers
         [HttpPost]
         [Route("register")]
         [FeatureBasedAuthorization("Add User")]
-        public async Task<ActionResult> Register([FromBody] RegisterUser register)
+        public async Task<ActionResult> Register()
         {
-            //var managerId = HttpContext.User.FindFirstValue(ClaimTypes.Sid);
-            var status = await _userService.RegisterUser(register);
-            return Ok(status);
+            var form = HttpContext.Request.Form;
+            if (form != null && form.Keys.Contains("model"))
+            {
+                    var file = form.Files != null && form.Files.Count == 1 ? form.Files[0] : null;
+                    RegisterUser user= JsonConvert.DeserializeObject<RegisterUser>(form["model"]);
+                    var status = await _userService.RegisterUser(user,file);
+                    return Ok(status);
+            }
+            else
+                return BadRequest("No Data Sent");
         }
 
         [HttpGet]
@@ -62,29 +70,19 @@ namespace API.Controllers
         [HttpPost]
         [Route("updateuser")]
         [FeatureBasedAuthorization("Edit User")]
-        public async Task<ActionResult<EditUserModel>> UpdateUser([FromBody] EditUserModel edit)
+        public async Task<ActionResult<EditUserModel>> UpdateUser()
         {
-            var status = await _userService.UpdateUser(edit);
-            return Ok(status);
-        }
-
-        [HttpPost]
-        [Route("uploadAvtar")]
-        [FeatureBasedAuthorization("Add User,Edit User")]
-        //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<bool>> UploadAvtar(IFormFile files, string email)
-        {
-            if (files == null)
+            var form = HttpContext.Request.Form;
+            if (form != null && form.Keys.Contains("model"))
             {
-                return BadRequest();
-            }
-            var path = await _imageUploadInFile.UploadAsync(files);
-            if (path != null)
-            {
-                var status = await _userService.UploadAvtar(path, email);
+                var file = form.Files != null && form.Files.Count == 1 ? form.Files[0] : null;
+                EditUserModel user = JsonConvert.DeserializeObject<EditUserModel>(form["model"]);
+                var status = await _userService.UpdateUser(user, file);
                 return Ok(status);
             }
-            return StatusCode(500, "Upload Failed");
+            else
+                return BadRequest("No Data Sent");
+            
         }
 
         [Route("getallusers")]

@@ -12,7 +12,6 @@ namespace DataEntity
         public ApplicationUser()
         {
             this.UserProperties = new HashSet<UserProperty>();
-            this.Comments = new HashSet<Comments>();
             this.WorkOrdersAssigned = new HashSet<WorkOrder>();
         }
 
@@ -46,7 +45,6 @@ namespace DataEntity
         public long? ManagerId { set; get; }
         public virtual ApplicationUser Manager { get; set; }
         public bool IsActive { get; set; }
-        public virtual ICollection<Comments> Comments { get; set; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
     }
 

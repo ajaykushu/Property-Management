@@ -16,6 +16,7 @@ namespace Presentation.ViewModels
         public string Issue { get; set; }
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
+        public string Description { get; set; }
         public DateTime UpdatedTime { get; set; }
         public string UpdatedBy { get; set; }
     }
