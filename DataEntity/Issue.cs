@@ -15,7 +15,7 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar(30)")]
+        [Column(TypeName = "varchar(50)")]
         public string IssueName { get; set; }
 
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }

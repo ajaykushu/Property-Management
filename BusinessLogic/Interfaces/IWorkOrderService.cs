@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Models;
+﻿using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
@@ -28,7 +27,9 @@ namespace BusinessLogic.Interfaces
         Task<Pagination<List<CommentDTO>>> GetPaginationComment(long workorderId, int pageNumber);
 
         Task<bool> PostComment(Post post);
+
         Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command);
+
         Task<bool> AssignToUser(long userId, long workOrderId);
     }
 }

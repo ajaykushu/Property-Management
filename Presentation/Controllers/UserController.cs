@@ -45,7 +45,6 @@ namespace Presentation.Controllers
             {
                 try
                 {
-                    
                     _apiRoute.Value.Routes.TryGetValue("register", out string path);
                     var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, register, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)

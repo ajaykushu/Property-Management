@@ -20,7 +20,7 @@ namespace DataEntity
 
         [Column(TypeName = "nvarchar(max)")]
         public string Comment { get; set; }
-
+        [Column(TypeName = "varchar(300)")]
         public string AttachmentPath { get; set; }
         public ICollection<Reply> Replies { get; set; }
     }

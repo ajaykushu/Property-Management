@@ -1,11 +1,9 @@
 ﻿using BusinessLogic.Interfaces;
 using Castle.Core.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities;
@@ -19,12 +17,10 @@ namespace API.Controllers
     {
         public IConfiguration Configuration;
         private readonly IUserService _userService;
-        private readonly IImageUploadInFile _imageUploadInFile;
 
-        public UserController(IUserService userService, IImageUploadInFile imageUploadInFile)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _imageUploadInFile = imageUploadInFile;
         }
 
         /// <summary>
@@ -39,10 +35,8 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Add_User)]
         public async Task<ActionResult> Register([FromForm] RegisterUser user)
         {
-            
-                var status = await _userService.RegisterUser(user);
-                return Ok(status);
-            
+            var status = await _userService.RegisterUser(user);
+            return Ok(status);
         }
 
         [HttpGet]
@@ -66,9 +60,8 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Edit_User)]
         public async Task<ActionResult<EditUserModel>> UpdateUser([FromForm] EditUserModel user)
         {
-          var status = await _userService.UpdateUser(user);
-          return Ok(status);
-            
+            var status = await _userService.UpdateUser(user);
+            return Ok(status);
         }
 
         [Route("getallusers")]

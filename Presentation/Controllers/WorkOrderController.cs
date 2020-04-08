@@ -150,7 +150,7 @@ namespace Presentation.Controllers
                 try
                 {
                     _apiRoute.Value.Routes.TryGetValue("editWO", out string path);
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, editWorkOrder, this, _token).ConfigureAwait(false);
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, editWorkOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
                         bool status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
@@ -198,7 +198,7 @@ namespace Presentation.Controllers
                             return BadRequest("Unable To Create");
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 return StatusCode(500, StringConstants.Error);
@@ -233,14 +233,13 @@ namespace Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> PostComment(Post post)
         {
-            bool status = false;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("postcomment", out string path);
                 var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, post, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                    var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
                         TempData["Success"] = "Posted Successfully";
                 }
@@ -250,31 +249,33 @@ namespace Presentation.Controllers
             }
             return RedirectToAction("GetComment", new { id = post.WorkOrderId });
         }
+
         [HttpGet]
-        public async Task<IActionResult> WorkOrderOperation(long workorderId,ProcessEnumWOStage process)
+        public async Task<IActionResult> WorkOrderOperation(long workorderId, ProcessEnumWOStage process)
         {
-            bool status = false;
+           
             try
             {
                 var urlpayload = "?workOrderId=" + workorderId + "&process=" + process;
                 _apiRoute.Value.Routes.TryGetValue("workorderoperation", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+urlpayload, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                   var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                        TempData["Success"] = process+" Completed Sucessfully";
+                        TempData["Success"] = process + " Completed Sucessfully";
                 }
-            }catch(Exception)
+            }
+            catch (Exception)
             {
-
             }
             return RedirectToAction("GetWODetail", new { id = workorderId });
         }
+
         [HttpPost]
-        public async Task<IActionResult> AssignToUser(long userId,long workOrderId)
+        public async Task<IActionResult> AssignToUser(long userId, long workOrderId)
         {
-            bool status = false;
+            
             if (userId == 0 || workOrderId == 0)
             {
                 TempData["Error"] = StringConstants.Error;
@@ -288,17 +289,16 @@ namespace Presentation.Controllers
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, new { }, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                       var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (status)
                             TempData["Success"] = " Assigned Completed Sucessfully";
                     }
                 }
                 catch (Exception)
                 {
-
                 }
             }
-            return RedirectToAction("GetWODetail", new {id= workOrderId });
+            return RedirectToAction("GetWODetail", new { id = workOrderId });
         }
     }
 }

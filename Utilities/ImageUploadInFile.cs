@@ -9,7 +9,7 @@ namespace Utilities
 {
     public class ImageUploadInFile : IImageUploadInFile
     {
-        private List<string> allowedTypes = new List<string> { ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlx", ".doc", ".docx" };
+        private readonly List<string> allowedTypes = new List<string> { ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlx", ".doc", ".docx" };
 
         public bool Delete(string path)
         {
@@ -43,10 +43,11 @@ namespace Utilities
                     if (!Directory.Exists("ImageFileStore"))
                         Directory.CreateDirectory("ImageFileStore");
 
-                    if (subDirectory != null) {
+                    if (subDirectory != null)
+                    {
                         Directory.SetCurrentDirectory("ImageFileStore");
-                        if(!Directory.Exists(subDirectory))
-                        Directory.CreateDirectory(subDirectory);
+                        if (!Directory.Exists(subDirectory))
+                            Directory.CreateDirectory(subDirectory);
                         path = subDirectory + "/";
                     }
 

@@ -10,7 +10,7 @@
             <label class="label2" for="date">@FilterEnumWO.ByDate</label>
         </div>
         <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByStatus){ <text> checked</text>} id="status" name="Filter" value=@FilterEnumWO.ByStatus class="selector2" required>
+            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByStatus) { <text> checked</text>} id="status" name="Filter" value=@FilterEnumWO.ByStatus class="selector2" required>
             <label class="label2" for="status">@FilterEnumWO.ByStatus</label>
         </div>
         <input class="form-control form-control-sm" style="display:@if (ViewBag.filter == FilterEnumWO.ByStatus) {<text>none;</text> }" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="@if (ViewBag.filter == FilterEnumWO.ByDate) { <text>date</text>} else {<text>text</text> }" placeholder="Search">
@@ -67,7 +67,7 @@
                                 keyValuePairs.Add("id", item.Id + "");
                                 <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
                                 <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
-                               }
+                            }
                         </td>
                     </tr>
                 }
@@ -75,8 +75,8 @@
         </table>
         <div class="">
             <div class="d-inline-flex" style="font-size:small;">
-              <span class="block initwo"></span>
-              <span>&nbsp;INIT</span>
+                <span class="block initwo"></span>
+                <span>&nbsp;INIT</span>
             </div>
             <div class="d-inline-flex" style="font-size:small;">
                 <span class="block woprog"></span>
@@ -134,9 +134,9 @@
 }
 
 <style>
-   .block{
-       height:10px;
-       width:10px;
-       display:block;
-   }
-    </style>
+    .block {
+        height: 10px;
+        width: 10px;
+        display: block;
+    }
+</style>

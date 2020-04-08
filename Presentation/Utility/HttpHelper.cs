@@ -67,10 +67,10 @@ namespace Presentation.Utility
 
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
-            foreach(var item in data.GetType().GetProperties())
-            {   
-                if(!item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data)!=null)
-                multiContent.Add(new StringContent(Convert.ToString(item.GetValue(data)), Encoding.UTF8, "application/json"), item.Name);
+            foreach (var item in data.GetType().GetProperties())
+            {
+                if (!item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
+                    multiContent.Add(new StringContent(Convert.ToString(item.GetValue(data)), Encoding.UTF8, "application/json"), item.Name);
                 else if (item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
                 {
                     var file = item.GetValue(data) as IFormFile;

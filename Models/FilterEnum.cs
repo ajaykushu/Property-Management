@@ -19,30 +19,32 @@
         WOPROG = 2,
         WOCOMP = 3
     }
+
     public enum ProcessEnumWOStage
     {
-        TrackIn=1,
-        TrackOut=2
+        TrackIn = 1,
+        TrackOut = 2
     }
+
     public enum MenuEnum
     {
-        Add_User=1,
-        View_Users=2,
-View_Property=3,
-Edit_User=4,
-Add_Property=5,
-Edit_Property=6,
-ActDct_User=7,
-View_User_Detail=8,
-Delete_Property=9,
-Edit_Feature=10,
-Access_Setting=11,
-Create_WO=12,
-Get_WO=13,
-GetWO_Detail=14,
-Edit_WO=15,
-Post_Comment=16,
-Assign_To_User=17,
-WO_Operation = 18
+        Add_User = 1,
+        View_Users = 2,
+        View_Property = 3,
+        Edit_User = 4,
+        Add_Property = 5,
+        Edit_Property = 6,
+        ActDct_User = 7,
+        View_User_Detail = 8,
+        Delete_Property = 9,
+        Edit_Feature = 10,
+        Access_Setting = 11,
+        Create_WO = 12,
+        Get_WO = 13,
+        GetWO_Detail = 14,
+        Edit_WO = 15,
+        Post_Comment = 16,
+        Assign_To_User = 17,
+        WO_Operation = 18
     }
 }

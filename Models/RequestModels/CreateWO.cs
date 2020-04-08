@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models.RequestModels
 {
-   
     public class CreateWO
     {
         public string Location { get; set; }
@@ -35,6 +33,7 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please give Section Id")]
         public int Section { get; set; }
+
         public IFormFile File { get; set; }
     }
 }

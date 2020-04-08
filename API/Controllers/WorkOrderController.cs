@@ -1,12 +1,9 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -60,7 +57,7 @@ namespace API.Controllers
         [Route("createwo")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO)
-        {   
+        {
             var status = await _workOrderService.CreateWO(createWO);
             return Ok(status);
         }
@@ -78,10 +75,8 @@ namespace API.Controllers
         [Route("getallworkorder")]
         [FeatureBasedAuthorization(MenuEnum.Get_WO)]
         public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, int requestedPage, FilterEnumWOStage stage, string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned)
-
         {
-            Pagination<List<WorkOrderAssigned>> workorderassigned = null;
-            workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString, stage, endDate);
+           var workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString, stage, endDate);
             return Ok(workorderassigned);
         }
 
@@ -90,8 +85,7 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
         public async Task<ActionResult<EditWorkOrder>> GetEditWO(long id)
         {
-            EditWorkOrder editWorkOrder = null;
-            editWorkOrder = await _workOrderService.GetEditWO(id);
+            var editWorkOrder = await _workOrderService.GetEditWO(id);
             return Ok(editWorkOrder);
         }
 
@@ -120,6 +114,7 @@ namespace API.Controllers
             var res = await _workOrderService.PostComment(post);
             return Ok(res);
         }
+
         [HttpGet]
         [Route("workorderoperation")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
@@ -128,6 +123,7 @@ namespace API.Controllers
             bool res = await _workOrderService.WorkOrderOperation(workOrderId, process);
             return Ok(res);
         }
+
         [HttpPost]
         [Route("assigntouser")]
         [FeatureBasedAuthorization(MenuEnum.Assign_To_User)]

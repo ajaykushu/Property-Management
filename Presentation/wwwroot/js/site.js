@@ -101,14 +101,11 @@ $('#wocreate').submit(function (e) {
                 $("input[type=email]").val("");
                 $('select').prop('selectedIndex', 0);
             });
-
         }, function (res) {
             $('.fa-spinner').prop("hidden", true);
             alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
                 $("input[type=password]").val("");
-
             });
         }, "");
     }
 });
-

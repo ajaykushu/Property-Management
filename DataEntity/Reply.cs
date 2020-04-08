@@ -15,7 +15,7 @@ namespace DataEntity
 
         [Column(TypeName = "nvarchar(max)")]
         public string ReplyString { get; set; }
-
-        public string repliedTo { get; set; }
+        [Column(TypeName = "varchar(50)")]
+        public string RepliedTo { get; set; }
     }
 }

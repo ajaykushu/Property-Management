@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Models.ResponseModels
 {
@@ -20,6 +19,7 @@ namespace Models.ResponseModels
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
+        public string Attachment { get; set; }
         public string UpdatedBy { get; set; }
         public string AssignedToUser { get; set; }
         public List<SelectItem> Users { get; set; }

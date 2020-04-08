@@ -12,17 +12,20 @@
         ByAssigned = 2,
         ByStatus = 3
     }
+
     public enum ProcessEnumWOStage
     {
         TrackIn = 1,
         TrackOut = 2
     }
+
     public enum FilterEnumWOStage
     {
         INITWO = 1,
         WOPROG = 2,
         WOCOMP = 3
     }
+
     public enum MenuEnum
     {
         Add_User = 1,

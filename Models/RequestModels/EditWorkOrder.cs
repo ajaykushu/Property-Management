@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,5 +37,6 @@ namespace Models.RequestModels
         public long Section { get; set; }
 
         public List<SelectItem> Sections { get; set; }
+        public IFormFile File { get; set; }
     }
 }
