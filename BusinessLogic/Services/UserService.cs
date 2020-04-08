@@ -40,9 +40,9 @@ namespace BusinessLogic.Services
             _cache = cache;
         }
 
-        public async Task<bool> RegisterUser(RegisterUser model,IFormFile file)
+        public async Task<bool> RegisterUser(RegisterUser model)
         {
-            var filepath =await  _imageUploadInFile.UploadAsync(file);
+            var filepath = await _imageUploadInFile.UploadAsync(model.File);
             var language = _langrepo.Get(x => x.Id == model.Language).FirstOrDefault();
             var prop = _userproperty.GetAll().Include(x => x.Property).ToList();
             IdentityResult identityResult;
@@ -57,7 +57,7 @@ namespace BusinessLogic.Services
                 Suffix = model.Suffix,
                 TimeZone = model.TimeZone,
                 OfficeExt = model.OfficeExt ?? null,
-                PhotoPath=filepath
+                PhotoPath = filepath
             };
             if (model.SelectedProperty != null && model.Role == "User")
             {
@@ -68,7 +68,7 @@ namespace BusinessLogic.Services
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
             if (!identityResult.Succeeded)
             {
-                 _imageUploadInFile.Delete(filepath);
+                _imageUploadInFile.Delete(filepath);
                 throw new BadRequestException(identityResult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
             else
@@ -127,7 +127,7 @@ namespace BusinessLogic.Services
             return editusermodel;
         }
 
-        public async Task<bool> UpdateUser(EditUserModel editUser,IFormFile file)
+        public async Task<bool> UpdateUser(EditUserModel editUser)
         {
             IdentityResult identityResult;
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == editUser.Id).Include(x => x.Language).Include(x => x.UserProperties).FirstOrDefaultAsync();
@@ -144,7 +144,7 @@ namespace BusinessLogic.Services
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
             //handling image update
-            var filepath = await _imageUploadInFile.UploadAsync(file);
+            var filepath = await _imageUploadInFile.UploadAsync(editUser.File);
             var prevpath = applicationUser.PhotoPath;
             if (filepath != null)
                 applicationUser.PhotoPath = filepath;
@@ -169,9 +169,9 @@ namespace BusinessLogic.Services
 
             identityResult = await _userManager.UpdateAsync(applicationUser);
             if (identityResult.Succeeded)
-            {    
-                if(filepath!=null)
-                _imageUploadInFile.Delete(prevpath);
+            {
+                if (filepath != null)
+                    _imageUploadInFile.Delete(prevpath);
                 if (editUser.Password != null) _cache.RemoveItem(applicationUser.Id + "");
                 var roles = await _userManager.GetRolesAsync(applicationUser);
                 var roleDeleted = await _userManager.RemoveFromRolesAsync(applicationUser, roles);
@@ -191,7 +191,6 @@ namespace BusinessLogic.Services
             }
         }
 
-        
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
             int iteminpage = 4;
@@ -221,7 +220,7 @@ namespace BusinessLogic.Services
             var pagination = new Pagination<IList<UsersListModel>>
             {
                 ItemsPerPage = user.Count < iteminpage ? user.Count : iteminpage,
-                PageCount = ((iteminpage*pageNumber) + count) < iteminpage ? 1 : (((iteminpage * pageNumber) + count) / iteminpage) + 1,
+                PageCount = ((iteminpage * pageNumber) + count) < iteminpage ? 1 : (((iteminpage * pageNumber) + count) / iteminpage) + 1,
                 Payload = users,
                 CurrentPage = pageNumber
             };

@@ -1,7 +1,9 @@
 ﻿using BusinessLogic.Interfaces;
+using BusinessLogic.StateMachine;
 using DataAccessLayer.Interfaces;
 using DataEntity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.RequestModels;
@@ -9,11 +11,11 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Utilities;
+using Utilities.CustomException;
 using Utilities.Interface;
 
 namespace BusinessLogic.Services
@@ -21,6 +23,7 @@ namespace BusinessLogic.Services
     public class WorkOrderService : IWorkOrderService
     {
         private readonly IRepo<Issue> _issueRepo;
+        private readonly UserManager<ApplicationUser> _appuser;
         private readonly IRepo<Item> _itemRepo;
         private readonly IRepo<UserProperty> _userProperty;
         private readonly IRepo<Department> _department;
@@ -32,7 +35,7 @@ namespace BusinessLogic.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageuploadinfile;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IRepo<Reply> reply, IImageUploadInFile imageuploadinfile)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IRepo<Reply> reply, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -45,11 +48,11 @@ namespace BusinessLogic.Services
             _comments = comments;
             _reply = reply;
             _imageuploadinfile = imageuploadinfile;
+            _appuser = appuser;
         }
 
-        public async Task<bool> CreateWO(CreateWO createWO,IFormFile file)
+        public async Task<bool> CreateWO(CreateWO createWO)
         {
-
             WorkOrder workOrder = new WorkOrder
             {
                 RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value,
@@ -61,12 +64,12 @@ namespace BusinessLogic.Services
             };
 
             workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
-            if (file != null)
+            if (createWO.File != null)
             {
-                string path = await _imageuploadinfile.UploadAsync(file);
+                string path = await _imageuploadinfile.UploadAsync(createWO.File, "WOFiles");
                 workOrder.AttachmentPath = path;
             }
-                
+
             var status = await _workOrder.Add(workOrder);
             if (status > 0) return true;
             return false;
@@ -74,7 +77,6 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
-
             var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).ThenInclude(x => x.Department).Select(x => new
             {
                 obj = new WorkOrderDetail
@@ -88,19 +90,24 @@ namespace BusinessLogic.Services
                     UpdatedTime = x.UpdatedTime,
                     Department = x.AssignedToRole.Department.DepartmentName,
                     Section = x.AssignedToRole.Name,
-                    AssignedToUser = x.AssignedTo.UserName,
+                    AssignedToUser = x.AssignedTo.UserName+ "("+x.AssignedTo.FirstName+" "+x.AssignedTo.LastName+")",
                     Requestedby = x.RequestedBy,
                     Id = x.Id,
                     UpdatedBy = x.UpdatedByUserName,
-                    Description=x.Description
+                    Description = x.Description,
                 },
                 Propid = x.PropertyId
             }).AsNoTracking().FirstOrDefaultAsync();
+            var users = await _appuser.GetUsersInRoleAsync(workorder.obj.Section);
+            workorder.obj.Users = users.Select(x => new SelectItem
+            {
+                Id=x.Id,
+                PropertyName=x.UserName+ " ("+x.FirstName+" "+x.LastName+")"
+            }).ToList();
             var prop = await GetAreaLocation(workorder.Propid);
             workorder.obj.Area = prop.Area;
             workorder.obj.Location = prop.Location;
             return workorder.obj;
-
         }
 
         public async Task<PropDetail> GetAreaLocation(long id)
@@ -180,63 +187,63 @@ namespace BusinessLogic.Services
         {
             int iteminpage = 8;
             var query = _workOrder.GetAll();
-            
-            if (!string.IsNullOrWhiteSpace(matchStr)  && filter == FilterEnumWO.ByDate)
+
+            if (!string.IsNullOrWhiteSpace(matchStr) && filter == FilterEnumWO.ByDate)
             {
                 var startDate = Convert.ToDateTime(matchStr);
                 if (!string.IsNullOrWhiteSpace(endDate))
                 {
                     var enddate = Convert.ToDateTime(endDate);
-                   query= query.Where(x => x.CreatedTime.Date >= startDate.Date && x.CreatedTime.Date <= enddate.Date);
+                    query = query.Where(x => x.CreatedTime.Date >= startDate.Date && x.CreatedTime.Date <= enddate.Date);
                 }
                 else
                 {
-                    query=query.Where(x => x.CreatedTime.Date >= startDate.Date);
+                    query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
                 }
             }
-            else if(filter==FilterEnumWO.ByStatus)
+            else if (filter == FilterEnumWO.ByStatus)
             {
                 string stageCode = "";
                 if (stage == FilterEnumWOStage.INITWO)
                     stageCode = "INITWO";
-                if (stage == FilterEnumWOStage.WOCOMPLETED)
-                    stageCode = "WOCOMPLETED";
-                if (stage == FilterEnumWOStage.WOPROGRESS)
-                    stageCode = "WOPROGRESS";
-                query= query.Include(x=>x.Stage).Where(x => x.Stage.StageCode == stageCode);
-
+                if (stage == FilterEnumWOStage.WOCOMP)
+                    stageCode = "WOCOMP";
+                if (stage == FilterEnumWOStage.WOPROG)
+                    stageCode = "WOPROG";
+                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode == stageCode);
             }
             else if (filter == FilterEnumWO.ByAssigned)
             {
-
             }
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             query = query.Include(x => x.AssignedToRole);
-            if (!role.Equals("Admin")) {
+            if (!role.Equals("Admin"))
+            {
                 query = query.Where(x => x.AssignedToRole.Name.Equals(role));
             }
-            
-             workOrderAssigned = await query.Include(x=>x.AssignedTo).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
-                {
-                    CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
-                    Description = x.Description,
-                    Id = x.Id,
-                    AssignedTo = x.AssignedTo.UserName,
-                    AssignedToSection = x.AssignedToRole.Name
-             }).AsNoTracking().ToListAsync();
+
+            workOrderAssigned = await query.Include(x => x.AssignedTo).Include(x=>x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            {
+                CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
+                Description = x.Description,
+                Id = x.Id,
+                Stage = x.Stage.StageCode.ToLower(),
+                AssignedTo = x.AssignedTo.UserName,
+                AssignedToSection = x.AssignedToRole.Name
+            }).AsNoTracking().ToListAsync();
             foreach (var item in workOrderAssigned)
-                if (item.AssignedTo!=null && item.AssignedTo.Equals(username))
+                if (item.AssignedTo != null && item.AssignedTo.Equals(username))
                     item.AssignedTo = "me";
-            
+
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
                 Payload = workOrderAssigned,
                 CurrentPage = pageNumber,
                 ItemsPerPage = count > iteminpage ? iteminpage : count,
-                PageCount  =   count <= iteminpage ? 1 :  count / iteminpage + 1
+                PageCount = count <= iteminpage ? 1 : count / iteminpage + 1
             };
 
             return pagination;
@@ -289,6 +296,7 @@ namespace BusinessLogic.Services
         public async Task<bool> EditWO(EditWorkOrder editWorkOrder)
         {
             var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).FirstOrDefaultAsync();
+            
             if (wo != null)
             {
                 wo.Description = editWorkOrder.Description;
@@ -296,37 +304,39 @@ namespace BusinessLogic.Services
                 wo.IssueId = editWorkOrder.Issue;
                 wo.ItemId = editWorkOrder.Item;
             }
+            
             var status = await _workOrder.Update(wo);
             if (status > 0)
                 return true;
             return false;
         }
 
-        public async Task<Pagination<List<CommentDTO>>> GetPaginationComment(long workorderId,int pageNumber)
+        public async Task<Pagination<List<CommentDTO>>> GetPaginationComment(long workorderId, int pageNumber)
         {
             var itemsinpage = 4;
             var count = _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Count();
-            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.CreatedTime).OrderByDescending(x=>x.CreatedTime).Select(x => new CommentDTO() { 
-            CommentBy=x.CreatedByUserName,
-            CommentDate=x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-            CommentString=x.Comment,
-            Id=x.Id,
-            Reply= x.Replies.Select(x=> new ReplyDTO { 
-               Id=x.Id,
-               RepliedTo=x.repliedTo,
-               ReplyString=x.ReplyString,
-               RepliedDate=x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-               RepliedBy=x.CreatedByUserName
-            }).ToList()
-            }).Skip(itemsinpage*pageNumber).Take(itemsinpage).ToListAsync();
+            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.CreatedTime).OrderByDescending(x => x.CreatedTime).Select(x => new CommentDTO()
+            {
+                CommentBy = x.CreatedByUserName,
+                CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                CommentString = x.Comment,
+                Id = x.Id,
+                Reply = x.Replies.Select(x => new ReplyDTO
+                {
+                    Id = x.Id,
+                    RepliedTo = x.repliedTo,
+                    ReplyString = x.ReplyString,
+                    RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                    RepliedBy = x.CreatedByUserName
+                }).ToList()
+            }).Skip(itemsinpage * pageNumber).Take(itemsinpage).ToListAsync();
 
             Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>();
             pagedcomments.Payload = obj;
-            pagedcomments.PageCount =  count <= itemsinpage ? 1 : count / itemsinpage + 1;
+            pagedcomments.PageCount = count <= itemsinpage ? 1 : count / itemsinpage + 1;
             pagedcomments.CurrentPage = pageNumber;
-            
-            return pagedcomments;
 
+            return pagedcomments;
         }
 
         public async Task<bool> PostComment(Post post)
@@ -340,9 +350,8 @@ namespace BusinessLogic.Services
                     {
                         WorkOrderId = post.WorkOrderId,
                         Comment = post.Comment,
-
                     };
-                    var res=await _comments.Add(comment);
+                    var res = await _comments.Add(comment);
                     status = res > 0 ? true : false;
                 }
                 else
@@ -357,15 +366,60 @@ namespace BusinessLogic.Services
                             ReplyString = post.Comment,
                             repliedTo = post.RepliedTo,
                         });
-                        var res=await _comments.Update(comm);
+                        var res = await _comments.Update(comm);
                         status = res > 0 ? true : false;
                     }
-
                 }
             }
             return status;
         }
 
+        public async Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command)
+        {
+            var wo = await _workOrder.Get(x => x.Id == workOrderId).Include(x=>x.Stage).Include(x=>x.Comments).FirstOrDefaultAsync();
+            var nextstate = WorkOrderState.GetNextState((FilterEnumWOStage)wo.Stage.Id,command);
+            if (nextstate == (FilterEnumWOStage)wo.StageId && command==ProcessEnumWOStage.TrackIn)
+                throw new BadRequestException("WO Completed");
+            if(nextstate == (FilterEnumWOStage)wo.StageId && command == ProcessEnumWOStage.TrackOut)
+                throw new BadRequestException("WO Reached Start Stage");
+            wo.Comments.Add(new Comments
+            {
+                Comment = "Work Order Stage Changed From " + wo.Stage.StageCode + " To " + nextstate,
+            });
+            wo.StageId = (int)nextstate;
+            if (wo.Comments == null)
+                wo.Comments = new List<Comments>();
+            
+            var status=await _workOrder.Update(wo);
+            if (status > 0)
+                return true;
+            return false;
+         }
 
+        public async  Task<bool> AssignToUser(long userId, long workOrderId)
+        {
+            var wo = _workOrder.Get(x => x.Id == workOrderId).Include(x=>x.AssignedToRole).FirstOrDefault();
+            if (wo != null)
+            {
+                var user =await  _appuser.FindByIdAsync(userId + "");
+                //check userid is in role
+                var status=await _appuser.IsInRoleAsync(user, wo.AssignedToRole.Name);
+                if(status)
+                {
+                    wo.AssignedToId = userId;
+                    if (wo.Comments == null) wo.Comments = new List<Comments>();
+                    wo.Comments.Add(
+                        new Comments
+                        {
+                            Comment="Assigned To User: "+user.UserName+ " ("+user.FirstName+" "+user.LastName+")"
+                        }
+                    );
+                    var updateStatus=await _workOrder.Update(wo);
+                    if (updateStatus > 0)
+                        return true;
+                }
+            }
+            return false;
+        }
     }
 }

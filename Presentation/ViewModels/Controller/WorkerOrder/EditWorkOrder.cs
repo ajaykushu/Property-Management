@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Presentation.ViewModels
 {
@@ -16,6 +14,7 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Select Item")]
         public int Item { get; set; }
+
         public string PropertyName { get; set; }
 
         public List<SelectItem> Issues { get; set; }
@@ -28,14 +27,16 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please give Date")]
         public DateTime CreatedDate { get; set; }
+
         public List<SelectItem> Departments { get; set; }
 
         [Required(ErrorMessage = "Please give Department Id")]
         public int Department { get; set; }
+
         [Required(ErrorMessage = "Please give Section Id")]
         public long Section { get; set; }
+
         public List<SelectItem> Sections { get; set; }
         public IFormFile File { get; set; }
-
     }
 }

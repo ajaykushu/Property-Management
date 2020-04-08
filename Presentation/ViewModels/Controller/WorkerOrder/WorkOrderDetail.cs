@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
 {
@@ -18,6 +20,8 @@ namespace Presentation.ViewModels
         public DateTime CreatedTime { get; set; }
         public string Description { get; set; }
         public DateTime UpdatedTime { get; set; }
+        public string AssignedToUser { get; set; }
         public string UpdatedBy { get; set; }
+        public List<SelectItem> Users { get; set; }
     }
 }

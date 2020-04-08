@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
@@ -20,12 +21,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [FeatureBasedAuthorization("Add Property")]
+        [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         [Route("getproperty")]
         public async Task<PropertyOperationModel> GetPropertyType(long id) => await _propertyService.GetProperty(id);
 
         [HttpPost]
-        [FeatureBasedAuthorization("Edit Property")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_Property)]
         [Route("updateproperty")]
         public async Task<IActionResult> UpdateProperty(PropertyOperationModel prop)
         {
@@ -35,14 +36,14 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("listproperties")]
-        [FeatureBasedAuthorization("View Property")]
+        [FeatureBasedAuthorization(MenuEnum.View_Property)]
         public async Task<ActionResult<List<PropertiesModel>>> GetProperties()
         {
             List<PropertiesModel> properties = await _propertyService.GetProperties();
             return properties;
         }
 
-        [FeatureBasedAuthorization("Add Property")]
+        [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         [HttpPost]
         [Route("addproperty")]
         public async Task<ActionResult<bool>> AddProperty([FromBody] PropertyOperationModel modal)
@@ -53,7 +54,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getPropertyTypes")]
-        [FeatureBasedAuthorization("Add Property")]
+        [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         public ActionResult<PropertyOperationModel> GetPropertyTypes()
         {
             return _propertyService.GetPropertyType();
@@ -61,7 +62,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("deleteproperty")]
-        [FeatureBasedAuthorization("Delete Property")]
+        [FeatureBasedAuthorization(MenuEnum.Delete_Property)]
         public async Task<ActionResult<bool>> DeleteProperty(int id)
         {
             var status = await _propertyService.DeleteProperty(id);

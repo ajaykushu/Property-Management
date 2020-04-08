@@ -12,9 +12,10 @@ namespace Presentation.Utility.Interface
 
         Task<HttpResponseMessage> PostDataAsync(string urlstring, object data, Controller controller, string token = null);
 
-        Task<HttpResponseMessage> PostFileDataAsync(string urlstring, IFormFile data, object payload, Controller controller, string token = null);
+        Task<HttpResponseMessage> PostFileDataAsync(string urlstring, object payload, Controller controller, string token = null);
 
         void RemoveHeader();
+
         //void SendByte(object data, IFormFile file);
     }
 }

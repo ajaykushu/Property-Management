@@ -8,7 +8,7 @@
 @if (Model != null)
 {
     <p>
-        <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New' bclass="btn btn-sm btn-success" feature="Add User"></auth-link>
+        <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New' bclass="btn btn-sm btn-success" feature=@MenuEnum.Add_User></auth-link>
     </p>
 
     <form class="form">
@@ -84,18 +84,18 @@
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                     keyValuePairs.Add("id", item.Id + "");
                                 }
-                                <auth-link bclass="btn btn-sm btn-outline-success" feature="Edit User" routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                <auth-link bclass="btn btn-sm btn-outline-info" feature="View User Detail" routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-outline-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.View_User_Detail routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                                 @{keyValuePairs.Add("page", Model.CurrentPage + "");}
                                 @if (item.IsActive)
                                 {
                                     keyValuePairs.Add("operation", "0");
-                                    <auth-link bclass="btn btn-sm btn-outline-danger" feature="ActDct User" routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
+                                    <auth-link bclass="btn btn-sm btn-outline-danger" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
                                 }
                                 else
                                 {
                                     keyValuePairs.Add("operation", "1");
-                                    <auth-link bclass="btn btn-sm btn-outline-info" feature="ActDct User" routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link> @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
+                                    <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link> @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
                                 }
                             </td>
                         </tr>

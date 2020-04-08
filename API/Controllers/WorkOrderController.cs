@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
@@ -26,7 +28,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getworkordermodel")]
-        [FeatureBasedAuthorization("Create WO")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult<CreateWO>> GetCreateWOModel()
         {
             CreateWO wo = null;
@@ -38,7 +40,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getarealocation")]
-        [FeatureBasedAuthorization("Create WO")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult<CreateWO>> GetAreaLocation(long id)
         {
             PropDetail prop = await _workOrderService.GetAreaLocation(id);
@@ -47,7 +49,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getsection")]
-        [FeatureBasedAuthorization("Create WO")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult<List<SelectItem>>> GetSection(long id)
         {
             List<SelectItem> prop = await _workOrderService.GetSection(id);
@@ -56,24 +58,16 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("createwo")]
-        [FeatureBasedAuthorization("Create WO")]
-        public async Task<ActionResult> CreateWO()
-        {
-            var form = HttpContext.Request.Form;
-            if (form != null && form.Keys.Contains("model"))
-            {
-                var file = form.Files != null && form.Files.Count == 1 ? form.Files[0] : null;
-                CreateWO createWO = JsonConvert.DeserializeObject<CreateWO>(form["model"]);
-                var status = await _workOrderService.CreateWO(createWO,file);
-                return Ok(status);
-            }
-            else
-                return BadRequest("No Data Send");
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
+        public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO)
+        {   
+            var status = await _workOrderService.CreateWO(createWO);
+            return Ok(status);
         }
 
         [HttpGet]
         [Route("wodetail")]
-        [FeatureBasedAuthorization("GetWO Detail")]
+        [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
         public async Task<ActionResult<WorkOrderDetail>> GetWODetail(long id)
         {
             var workOrderDetail = await _workOrderService.GetWODetail(id);
@@ -82,48 +76,65 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getallworkorder")]
-        [FeatureBasedAuthorization("Get WO")]
+        [FeatureBasedAuthorization(MenuEnum.Get_WO)]
         public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, int requestedPage, FilterEnumWOStage stage, string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned)
-        
+
         {
             Pagination<List<WorkOrderAssigned>> workorderassigned = null;
-            workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString,stage,endDate);
+            workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString, stage, endDate);
             return Ok(workorderassigned);
         }
+
         [HttpGet]
         [Route("editWOModel")]
-        [FeatureBasedAuthorization("Edit WO")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
         public async Task<ActionResult<EditWorkOrder>> GetEditWO(long id)
         {
             EditWorkOrder editWorkOrder = null;
             editWorkOrder = await _workOrderService.GetEditWO(id);
             return Ok(editWorkOrder);
         }
+
         [HttpPost]
         [Route("editWO")]
-        [FeatureBasedAuthorization("Edit WO")]
-        public async Task<ActionResult<bool>> EditWO(EditWorkOrder editWorkOrder)
+        [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
+        public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder)
         {
             bool status = await _workOrderService.EditWO(editWorkOrder);
             return Ok(status);
         }
+
         [HttpGet]
         [Route("getcomment")]
         public async Task<ActionResult<Pagination<List<CommentDTO>>>> GetComment(long workorderId, int pageNumber)
         {
-           
-            var res = await _workOrderService.GetPaginationComment(workorderId,pageNumber);
+            var res = await _workOrderService.GetPaginationComment(workorderId, pageNumber);
             return Ok(res);
         }
+
         [HttpPost]
         [Route("postcomment")]
+        [FeatureBasedAuthorization(MenuEnum.Post_Comment)]
         public async Task<ActionResult<Pagination<List<CommentDTO>>>> PostComment(Post post)
         {
-
             var res = await _workOrderService.PostComment(post);
             return Ok(res);
         }
-       
-
+        [HttpGet]
+        [Route("workorderoperation")]
+        [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
+        public async Task<ActionResult<bool>> WorkOrderOperation(long workOrderId, ProcessEnumWOStage process)
+        {
+            bool res = await _workOrderService.WorkOrderOperation(workOrderId, process);
+            return Ok(res);
+        }
+        [HttpPost]
+        [Route("assigntouser")]
+        [FeatureBasedAuthorization(MenuEnum.Assign_To_User)]
+        public async Task<IActionResult> AssignToUser(long userId, long workOrderId)
+        {
+            bool res = await _workOrderService.AssignToUser(userId, workOrderId);
+            return Ok(res);
+        }
     }
 }

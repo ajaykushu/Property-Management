@@ -9,14 +9,13 @@ namespace BusinessLogic.Interfaces
 {
     public interface IUserService
     {
-        Task<bool> RegisterUser(RegisterUser model,IFormFile avtaar);
+        Task<bool> RegisterUser(RegisterUser model);
 
         RegisterUser GetRegisterModel();
 
         Task<EditUserModel> GetEditUserModelAsync(long Id);
 
-        Task<bool> UpdateUser(EditUserModel editUser,IFormFile avtaar);
-
+        Task<bool> UpdateUser(EditUserModel editUser);
 
         Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchString);
 

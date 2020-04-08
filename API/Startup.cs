@@ -21,7 +21,6 @@ using Models;
 using Serilog;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Formatting;
 using System.Text;
 using Utilities;
 using Utilities.Interface;
@@ -46,9 +45,8 @@ namespace API
                 {
                     return new BadRequestObjectResult(action.ModelState.Where(model => model.Value.Errors.Count > 0).Select(modelError => modelError.Value.Errors.FirstOrDefault().ErrorMessage));
                 };
-               
             });
-            
+
             services.AddDbContext<AppDBContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>(op =>
             {
@@ -128,7 +126,6 @@ namespace API
             app.UseAuthorization();
             app.UseSerilogRequestLogging();
             app.UseMvc();
-            
         }
     }
 }

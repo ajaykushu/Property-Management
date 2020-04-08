@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
-{[Serializable]
+{
+    [Serializable]
     public class CreateWorkOrder
     {
         public string Location { get; set; }
@@ -31,6 +32,7 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
+
         public List<SelectItem> Departments { get; set; }
 
         [Required(ErrorMessage = "Please Select Department")]
@@ -38,7 +40,7 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Select Section")]
         public int Section { get; set; }
+
         public IFormFile File { get; set; }
-        
     }
 }

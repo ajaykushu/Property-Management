@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="ImageFileStore\" />
+    <Folder Include="ImageFileStore\WOFiles\" />
   </ItemGroup>
 
 </Project>

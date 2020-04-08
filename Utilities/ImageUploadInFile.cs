@@ -9,8 +9,8 @@ namespace Utilities
 {
     public class ImageUploadInFile : IImageUploadInFile
     {
-        private List<string> allowedTypes=new List<string> {".jpg",".jpeg",".png",".pdf",".xls",".xlx",".doc",".docx" };
-        
+        private List<string> allowedTypes = new List<string> { ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlx", ".doc", ".docx" };
+
         public bool Delete(string path)
         {
             try
@@ -29,22 +29,28 @@ namespace Utilities
             }
         }
 
-        public async Task<string> UploadAsync(IFormFile file)
+        public async Task<string> UploadAsync(IFormFile file, string subDirectory = null)
         {
             var id = Guid.NewGuid().ToString().Replace("-", "");
-            if (file!=null && file.Length > 0)
+            if (file != null && file.Length > 0)
             {
-
                 try
                 {
-                    var type=System.IO.Path.GetExtension(file.FileName);
+                    String path = "ImageFileStore/";
+                    var type = System.IO.Path.GetExtension(file.FileName);
                     if (!allowedTypes.Contains(type))
                         return null;
                     if (!Directory.Exists("ImageFileStore"))
-                    {
                         Directory.CreateDirectory("ImageFileStore");
+
+                    if (subDirectory != null) {
+                        Directory.SetCurrentDirectory("ImageFileStore");
+                        if(!Directory.Exists(subDirectory))
+                        Directory.CreateDirectory(subDirectory);
+                        path = subDirectory + "/";
                     }
-                    string path = "ImageFileStore/" + id + file.FileName;
+
+                    path = path + id + file.FileName;
                     using (FileStream filestream = System.IO.File.Create(path))
                     {
                         await file.CopyToAsync(filestream);

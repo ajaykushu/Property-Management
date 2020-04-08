@@ -1,5 +1,4 @@
 ﻿using DataAccessLayer.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -17,35 +16,36 @@ namespace DataAccessLayer.Repository
             Console.WriteLine(context.GetType().GetHashCode());
         }
 
-        public  Task<int> Add(TEntity entity)
+        public Task<int> Add(TEntity entity)
         {
             this.context.Add<TEntity>(entity);
             return this.context.SaveChangesAsync();
         }
 
-        public  Task<int> Delete(TEntity entity)
+        public Task<int> Delete(TEntity entity)
         {
             this.context.Remove<TEntity>(entity);
             return this.context.SaveChangesAsync();
         }
 
-        public  IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
+        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
         {
             IQueryable<TEntity> query = context.Set<TEntity>().Where(predicate);
             return query;
         }
 
-        public  IQueryable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
             IQueryable<TEntity> query = context.Set<TEntity>();
             return query;
         }
 
-        public  Task<int> Update(TEntity entity)
+        public Task<int> Update(TEntity entity)
         {
             context.Update<TEntity>(entity);
             return context.SaveChangesAsync();
         }
+
         public AppDBContext GetObj()
         {
             return this.context;

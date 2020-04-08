@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Models.RequestModels
 {
@@ -15,8 +13,8 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Select Item")]
         public int Item { get; set; }
-        public string PropertyName { get; set; }
 
+        public string PropertyName { get; set; }
 
         public List<SelectItem> Issues { get; set; }
 
@@ -36,6 +34,7 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please give Section Id")]
         public long Section { get; set; }
+
         public List<SelectItem> Sections { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getfeatues")]
-        [FeatureBasedAuthorization("Edit Feature")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_Feature)]
         public async Task<ActionResult<List<FeatureRoleModel>>> GetAllRolesAndFeatues(long id)
         {
             var data = await _configService.GetFeatureRoles(id);
@@ -30,7 +30,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getrole")]
-        [FeatureBasedAuthorization("Edit Feature")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_Feature)]
         public async Task<ActionResult<List<SelectItem>>> GetRoles()
         {
             var data = await _configService.GetRoles();
@@ -39,7 +39,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("updatefeature")]
-        [FeatureBasedAuthorization("Edit Feature")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_Feature)]
         public async Task<ActionResult<bool>> UpdateFeature(KeyValuePair<int, List<string>> valuePairs)
         {
             var data = await _configService.UpdateFeature(valuePairs);

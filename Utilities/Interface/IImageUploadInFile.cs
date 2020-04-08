@@ -5,7 +5,7 @@ namespace Utilities.Interface
 {
     public interface IImageUploadInFile
     {
-        Task<string> UploadAsync(IFormFile file);
+        Task<string> UploadAsync(IFormFile file, string directory = null);
 
         bool Delete(string path);
     }

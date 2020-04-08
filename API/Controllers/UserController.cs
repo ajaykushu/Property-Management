@@ -36,24 +36,18 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("register")]
-        [FeatureBasedAuthorization("Add User")]
-        public async Task<ActionResult> Register()
+        [FeatureBasedAuthorization(MenuEnum.Add_User)]
+        public async Task<ActionResult> Register([FromForm] RegisterUser user)
         {
-            var form = HttpContext.Request.Form;
-            if (form != null && form.Keys.Contains("model"))
-            {
-                    var file = form.Files != null && form.Files.Count == 1 ? form.Files[0] : null;
-                    RegisterUser user= JsonConvert.DeserializeObject<RegisterUser>(form["model"]);
-                    var status = await _userService.RegisterUser(user,file);
-                    return Ok(status);
-            }
-            else
-                return BadRequest("No Data Sent");
+            
+                var status = await _userService.RegisterUser(user);
+                return Ok(status);
+            
         }
 
         [HttpGet]
         [Route("getregisterrequestmodel")]
-        [FeatureBasedAuthorization("Add User")]
+        [FeatureBasedAuthorization(MenuEnum.Add_User)]
         public ActionResult<RegisterUser> GetRegisterRequestModel()
         {
             return _userService.GetRegisterModel();
@@ -61,7 +55,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getedituserrequestmodel")]
-        [FeatureBasedAuthorization("Edit User")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_User)]
         public async Task<ActionResult<EditUserModel>> GeUserEditRequestModel(long Id)
         {
             return await _userService.GetEditUserModelAsync(Id);
@@ -69,24 +63,16 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("updateuser")]
-        [FeatureBasedAuthorization("Edit User")]
-        public async Task<ActionResult<EditUserModel>> UpdateUser()
+        [FeatureBasedAuthorization(MenuEnum.Edit_User)]
+        public async Task<ActionResult<EditUserModel>> UpdateUser([FromForm] EditUserModel user)
         {
-            var form = HttpContext.Request.Form;
-            if (form != null && form.Keys.Contains("model"))
-            {
-                var file = form.Files != null && form.Files.Count == 1 ? form.Files[0] : null;
-                EditUserModel user = JsonConvert.DeserializeObject<EditUserModel>(form["model"]);
-                var status = await _userService.UpdateUser(user, file);
-                return Ok(status);
-            }
-            else
-                return BadRequest("No Data Sent");
+          var status = await _userService.UpdateUser(user);
+          return Ok(status);
             
         }
 
         [Route("getallusers")]
-        [FeatureBasedAuthorization("View Users")]
+        [FeatureBasedAuthorization(MenuEnum.View_Users)]
         [HttpGet]
         public async Task<ActionResult<Pagination<IList<UsersListModel>>>> GetAllUsers(string matchString, FilterEnum filter, int requestedPage)
         {
@@ -96,7 +82,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [FeatureBasedAuthorization("ActDct User")]
+        [FeatureBasedAuthorization(MenuEnum.ActDct_User)]
         [Route("deact_actuser")]
         public async Task<IActionResult> Deact_Actuser(long userId, int operation)
         {
@@ -107,7 +93,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [FeatureBasedAuthorization("View User Detail")]
+        [FeatureBasedAuthorization(MenuEnum.View_User_Detail)]
         [Route("userdetail")]
         public async Task<IActionResult> GetUserDetail(long Id)
         {

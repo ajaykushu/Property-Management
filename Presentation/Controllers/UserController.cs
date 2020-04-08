@@ -44,13 +44,14 @@ namespace Presentation.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {    var file = register.Photo;
-                     register.Photo = null;
+                {
+                    
                     _apiRoute.Value.Routes.TryGetValue("register", out string path);
-                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,file ,register, this, _token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode) {
-                        if(await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
-                           return Ok(StringConstants.RegisterSuccess);
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, register, this, _token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                            return Ok(StringConstants.RegisterSuccess);
                         else
                             return Ok(StringConstants.RegisterFailed);
                     }
@@ -143,15 +144,13 @@ namespace Presentation.Controllers
                 _apiRoute.Value.Routes.TryGetValue("updateuser", out string path);
                 try
                 {
-                    var file = user.Photo;
-                    user.Photo = null;
-                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, file,user, this, _token).ConfigureAwait(false);
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, user, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                            if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
-                                return Ok(StringConstants.SuccessUpdate);
-                            else
-                                return Ok(StringConstants.UpdateFailed);
+                        if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                            return Ok(StringConstants.SuccessUpdate);
+                        else
+                            return Ok(StringConstants.UpdateFailed);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return BadRequest(await response.Content.ReadAsStringAsync());

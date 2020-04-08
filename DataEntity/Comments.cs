@@ -10,6 +10,7 @@ namespace DataEntity
         {
             Replies = new HashSet<Reply>();
         }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
@@ -19,8 +20,8 @@ namespace DataEntity
 
         [Column(TypeName = "nvarchar(max)")]
         public string Comment { get; set; }
+
         public string AttachmentPath { get; set; }
         public ICollection<Reply> Replies { get; set; }
-
     }
 }

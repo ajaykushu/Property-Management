@@ -15,13 +15,20 @@ namespace BusinessLogic.Interfaces
 
         Task<List<SelectItem>> GetSection(long id);
 
-        Task<bool> CreateWO(CreateWO createWO,IFormFile file);
+        Task<bool> CreateWO(CreateWO createWO);
+
         Task<WorkOrderDetail> GetWODetail(long id);
 
-        Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr,FilterEnumWOStage stage,string enddate);
+        Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr, FilterEnumWOStage stage, string enddate);
+
         Task<EditWorkOrder> GetEditWO(long id);
+
         Task<bool> EditWO(EditWorkOrder editWorkOrder);
+
         Task<Pagination<List<CommentDTO>>> GetPaginationComment(long workorderId, int pageNumber);
+
         Task<bool> PostComment(Post post);
+        Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command);
+        Task<bool> AssignToUser(long userId, long workOrderId);
     }
 }

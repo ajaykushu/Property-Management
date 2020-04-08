@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models.RequestModels
@@ -52,6 +53,6 @@ namespace Models.RequestModels
         [Compare("Password", ErrorMessage = "Password Not Same")]
         public string ConfirmPassword { get; set; }
 
-        //public IFormFile Photo { get; set; }
+        public IFormFile File { get; set; }
     }
 }

@@ -6,9 +6,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,21 +57,28 @@ namespace Presentation.Utility
             return res;
         }
 
-        public async Task<HttpResponseMessage> PostFileDataAsync(string url,IFormFile paramObjs,object data, Controller controller, string token = null)
+        public async Task<HttpResponseMessage> PostFileDataAsync(string url, object data, Controller controller, string token = null)
         {
+            _httpClient.DefaultRequestHeaders.Clear();
             if (!string.IsNullOrWhiteSpace(token))
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
-            if (paramObjs != null)
-            {
-                BinaryReader reader = new BinaryReader(paramObjs.OpenReadStream());
-                var imagebytes = reader.ReadBytes((int)paramObjs.Length);
-                multiContent.Add(new ByteArrayContent(imagebytes), "files", paramObjs.FileName);
+            foreach(var item in data.GetType().GetProperties())
+            {   
+                if(!item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data)!=null)
+                multiContent.Add(new StringContent(Convert.ToString(item.GetValue(data)), Encoding.UTF8, "application/json"), item.Name);
+                else if (item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
+                {
+                    var file = item.GetValue(data) as IFormFile;
+                    BinaryReader reader = new BinaryReader(file.OpenReadStream());
+                    var imagebytes = reader.ReadBytes((int)file.Length);
+                    multiContent.Add(new ByteArrayContent(imagebytes), "File", file.FileName);
+                }
             }
-            multiContent.Add(new StringContent(SerializeToString(data), Encoding.UTF8, "application/json"), "model");
             var res = await _httpClient.PostAsync(url, multiContent).ConfigureAwait(false);
             await SetTempData(res, controller);
             return res;
@@ -107,10 +112,9 @@ namespace Presentation.Utility
         {
             return JsonConvert.SerializeObject(toBeSerializedObj);
         }
+
         //public  void SendByte(object data, IFormFile file)
         //{
-            
-            
         //    using (MemoryStream ms = new MemoryStream())
         //    {
         //        file.CopyTo(ms);
@@ -122,12 +126,10 @@ namespace Presentation.Utility
         //        multipartFormDataContent.Add(new ByteArrayContent(imagebytes), "files", file.FileName);
         //        ByteArrayContent x = new ByteArrayContent(ms.ToArray());
         //        multipartFormDataContent.Add(x);
-                
+
         //        multipartFormDataContent.Add(new StringContent(SerializeToString(data),Encoding.UTF8,"application/json"),"model");
         //       var res= _httpClient.PostAsync("https://localhost:44302/api/workorder/test",multipartFormDataContent).Result;
-                
-        //    }
 
-        
+        //    }
     }
 }

@@ -17,6 +17,7 @@ namespace DataAccessLayer.Interfaces
         Task<int> Update(TEntity entity);
 
         Task<int> Add(TEntity entity);
+
         AppDBContext GetObj();
     }
 }

@@ -155,26 +155,32 @@ th {
 }
 
 .workorderbutton {
-    background-color: rgb(255,155,47);
     border: none !important;
     border-radius: 1px;
     color: white;
-    outline: none;
+    display: block;
+    padding-left: 2px;
+    padding-right: 2px;
+    width:84px;
     box-shadow: 1px 1px lightgrey;
 }
-
-    .workorderbutton:active {
+    .initwo {
+        background-color: rgba(238, 70, 70, 0.90);
+    }
+    .woprog {
         background-color: rgba(255,155,47,0.8);
-        animation-delay: 0.2s;
-        animation: ease-in-out;
+    }
+    .wocomp {
+        background-color: rgba(65, 153, 66,0.8);
     }
 
-.table {
-    padding: 0px;
-    background-color: white;
-    margin: 0px;
-    border: 3px solid lightgrey;
-}
+
+    .table {
+        padding: 0px;
+        background-color: white;
+        margin: 0px;
+        border: 3px solid lightgrey;
+    }
 
 .mytitle {
     align-content: center;

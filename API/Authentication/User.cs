@@ -91,7 +91,7 @@ namespace API.Authentication
                     Role = "Admin",
                     Password = "Testuser123@",
                     TimeZone = "India +5:30"
-                },null);
+                });
             }
             ApplicationUser identityUser;
             TokenResponseModel returnToken;
