@@ -8,7 +8,7 @@
 @if (Model != null)
 {
     <p>
-        <auth-link bclass="btn btn-sm btn-success addmodal" feature="Add Property" data-toggle="modal" data-target=".bd-example-modal-lg" content='<i class="fa fa-plus-circle fa-1x" alt="Add"></i>&nbsp;Create New'></auth-link>
+        <auth-link bclass="btn btn-sm btn-success addmodal" feature=@MenuEnum.Add_Property data-toggle="modal" data-target=".bd-example-modal-lg" content='<i class="fa fa-plus-circle fa-1x" alt="Add"></i>&nbsp;Create New'></auth-link>
         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
