@@ -5,7 +5,7 @@
         New Work Order
     </div>
     <form class="form" enctype="multipart/form-data" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
-        <table class="table">
+        <table class="table table_container">
             <tbody>
                 <tr>
                     <td>
@@ -123,7 +123,7 @@
                                 <div class="col">
                                     <div class="cont">
                                         <label class="browsebutton">Browse File</label>
-                                        <input asp-for="File" class="form-control-sm custom-input Photo">
+                                        <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input Photo">
                                     </div>
                                     <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
                                 </div>
@@ -134,7 +134,7 @@
             </tbody>
         </table>
         <hr />
-        <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-outline-primary submit">Create To Do</button>
+        <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-primary submit">Create</button>
         @*passing data to controller*@
     </form>
     <div>

@@ -96,17 +96,6 @@
                                 @Html.DisplayFor(x => x.Requestedby)
                             </div>
                         </div>
-                        @if (Model.AssignedToUser != null)
-                        {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="AsignedTo">Assigned To User</label>
-                                </div>
-                                <div class="col">
-                                    <span class="wocomp">@Model.AssignedToUser</span>
-                                </div>
-                            </div>
-                        }
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="CreatedTime">Created Time</label>
@@ -193,6 +182,17 @@
                                 @Html.DisplayFor(x => x.Section)
                             </div>
                         </div>
+                        @if (Model.AssignedToUser != null)
+                        {
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="AsignedTo">Assigned To User</label>
+                                </div>
+                                <div class="col">
+                                    <span class="wocomp">@Model.AssignedToUser</span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </td>
             </tr>

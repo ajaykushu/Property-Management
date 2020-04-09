@@ -22,15 +22,15 @@
                 <label class="label2" for="firstname">@FilterEnum.ByFirstName</label>
             </div>
             <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
-            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info" type="submit" value="Filter">
-            &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info clear" type="submit" value="Clear Filter">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Filter">
+            &nbsp; &nbsp;<input class="btn btn-sm btn-info clear" type="submit" value="Clear Filter">
         </div>
         <hr />
         <div class="workordertitle">
             Users List
         </div>
 
-        <table class="table table-responsive-sm">
+        <table class="table_container table table-responsive-sm">
             <thead>
                 <tr>
                     <th>
@@ -84,18 +84,18 @@
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                     keyValuePairs.Add("id", item.Id + "");
                                 }
-                                <auth-link bclass="btn btn-sm btn-outline-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.View_User_Detail routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.View_User_Detail routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                                 @{keyValuePairs.Add("page", Model.CurrentPage + "");}
                                 @if (item.IsActive)
                                 {
                                     keyValuePairs.Add("operation", "0");
-                                    <auth-link bclass="btn btn-sm btn-outline-danger" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
+                                    <auth-link bclass="btn btn-sm btn-danger" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
                                 }
                                 else
                                 {
                                     keyValuePairs.Add("operation", "1");
-                                    <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link> @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
+                                    <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link> @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
                                 }
                             </td>
                         </tr>

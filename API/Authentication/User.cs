@@ -9,6 +9,7 @@ using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.CustomException;
@@ -43,15 +44,10 @@ namespace API.Authentication
             if (user == null)
                 throw new BadRequestException("Email not Found");
             string token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            await _emailSender.SendAsync(email,
-                "Password Change Token",
-                "<html>" +
-                "<h1>Click on change to change Password</h1>" +
-                "<p this link is valid for limited peroid of time please change as soon as possible></p>" +
-                "<a href='" + verificationPath + "?token=" + token + "&email=" + email + "'>change</a>" +
-                "</html>",
-                true
-                );
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("<html> <h1>Click on change to change Password</h1> <p this link is valid for limited peroid of time please change as soon as possible></p><a href='").Append(verificationPath).Append("?token=").Append(token).Append("&email=").Append(email).Append("'>change</a></html>");
+            var message = stringBuilder.ToString();
+            await _emailSender.SendAsync(email, "Password Change Token", message, true);
             return true;
         }
 
@@ -112,7 +108,7 @@ namespace API.Authentication
                     var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
 
                     var claims = _tokenGenerator.GetClaims(identityUser, submenu, roles);
-
+                   
                     returnToken = new TokenResponseModel()
                     {
                         FullName = identityUser.FirstName + " " + identityUser.LastName + " " + identityUser.Suffix,

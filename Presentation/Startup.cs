@@ -61,10 +61,7 @@ namespace Presentation
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
-            //app.UseMiddleware<CustomAuthorize>();
-            //app.UseAuthentication();
             app.UseRouting();
-            //app.UseAuthorization();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {

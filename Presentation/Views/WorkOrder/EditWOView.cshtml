@@ -5,7 +5,7 @@
         Edit WorkOder
     </div>
     <form class="form" enctype="multipart/form-data" asp-action="EditWO" asp-controller="WorkOrder">
-        <table class="table">
+        <table class="table_container table">
             <tbody>
                 <tr>
                     <td>
@@ -147,8 +147,9 @@
                                 <div class="col">
                                     <div class="cont">
                                         <label class="browsebutton">Browse File</label>
-                                        <input asp-for="File" class="form-control-sm custom-input Photo">
+                                        <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input Photo">
                                     </div>
+                                    <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
                                 </div>
                             </div>
                         </div>

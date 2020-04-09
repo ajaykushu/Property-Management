@@ -39,6 +39,7 @@ namespace Presentation.Controllers
             Pagination<List<WorkOrderAssigned>> WorkOrderAssigned = null;
             try
             {
+                StringBuilder routeBuilder = new StringBuilder();
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
                 string parameters = "?matchString=" + matchString + "&filter=" + filter + "&requestedPage=" + requestedPage + "&stage=" + stage + "&endDate=" + endDate;
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + parameters, this, _token).ConfigureAwait(false);

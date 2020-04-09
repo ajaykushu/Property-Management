@@ -22,8 +22,8 @@
             <option value=@FilterEnumWOStage.WOCOMP>WOCOMPLETED</option>
         </select>
         &nbsp;<input class="form-control form-control-sm" style="display:@if (ViewBag.filter==FilterEnumWO.ByDate) {<text>block</text> } else {<text>none</text> }" value='@ViewBag.enddate' name="endDate" autocomplete="off" id="endDate" type="date">
-        &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info" type="submit" value="Filter">
-        &nbsp; &nbsp;<input class="btn btn-sm btn-outline-info clear" type="reset" value="Clear Filter">
+        &nbsp; &nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Filter">
+        &nbsp; &nbsp;<input class="btn btn-sm btn-info clear" type="reset" value="Clear Filter">
     </div>
     <hr />
     <div class="workordertitle">
@@ -32,7 +32,7 @@
 
     @if (Model != null && Model.Payload != null && Model.Payload.Any())
     {
-        <table class="table table-striped wordorderdetail">
+        <table class="table table-striped wordorderdetail table_container">
             <thead>
                 <tr>
                     <th scope="col" colspan="3" class="mytitle">
@@ -65,8 +65,8 @@
                             @{
                                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                 keyValuePairs.Add("id", item.Id + "");
-                                <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                <auth-link bclass="btn btn-sm btn-outline-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                             }
                         </td>
                     </tr>

@@ -3,43 +3,70 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<div class="table_container">
+
     <div class="workordertitle">
-        Access Control
+        Configuration Control
     </div>
-    <table class="table table-responsive-lg">
-        @if (Model != null)
-        {
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row d-lg-table-row">
-                                <label>Select Role</label>
-                                <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
-                                    <option value="">Please select one</option>
-                                </select>
+    <div class="table_container">
+        <table class="table table-responsive-lg">
+            @if (Model != null)
+            {
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="col">
+                                <div class="d-lg-table-row">
+                                    <label>Assign Menu To Role</label>
+                                </div>
+                                <div class="d-lg-table-row">
+                                    <label>Select Role</label>
+                                    <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                </div>
+                                <hr />
+                                <section>
+                                    <div class="d-lg-table-row">
+                                        <label>Role Operation</label>
+                                    </div>
+                                    <div class="d-lg-table-row">
+                                        <label>Enter Role</label>
+                                        <input class="form-control form-control-sm custom-input" />
+                                    </div>
+                                    <hr />
+                                    <div class="d-lg-table-row">
+                                        <label>Language Operation</label>
+                                    </div>
+                                    <div class="d-lg-table-row">
+                                        <label>Enter Language</label>
+                                        <input class="form-control form-control-sm custom-input" />
+                                    </div>
+                                    <hr />
+                                    <div class="d-lg-table-row">
+                                        <label>Department Operation</label>
+                                    </div>
+                                    <div class="d-lg-table-row">
+                                        <label>Enter Department</label>
+                                        <input class="form-control form-control-sm custom-input" />
+                                    </div>
+                                    <hr />
+                                    <div class="d-lg-table-row">
+                                        <input type="button" value="Add" class="btn btn-sm btn-primary" />
+                                        &nbsp;<input type="button" value="Remove" class="btn btn-sm btn-danger" />
+                                    </div>
+                                </section>
                             </div>
-                            <hr />
-                            <div class="row d-lg-table-row">
-                                <label>Adding New Role</label>
+                        </td>
+                        <td class="features">
+                            <div class="spinner">
+                                <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
                             </div>
-                            <div class="row d-lg-table-row">
-                                <label>Enter Role</label>
-                                <input class="form-control form-control-sm custom-input" />
-                            </div>
-                        </div>
-                    </td>
-                    <td class="features">
-                        <div class="spinner">
-                            <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        }
-    </table>
-</div>
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
 <div class="spinner">
     <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
 </div>

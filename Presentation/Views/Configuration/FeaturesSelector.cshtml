@@ -5,10 +5,10 @@
         foreach (var item in Model.Features)
         {
             <div class="row">
-                <div class="col">
+                <div class="col-md-4">
                     @item.PropertyName
                 </div>
-                <div class="col">
+                <div class="col-md-2">
                     @{ var varclass = "toggle-label false" + item.Id; var varclass1 = "toggle-label true" + item.Id;}
                     <label class='@varclass1' style="color:red" value="@item.Id" name=@item.Id @if (item.Selected == true) { <text> hidden</text>} for=@item.Id><i class="fas fa-toggle-off fa-1x"></i></label>
                     <label class='@varclass' style="color:blue" value="@item.Id" name=@item.Id @if (item.Selected == false) { <text> hidden</text>} for=@item.Id><i class="fas fa-toggle-on fa-1x"></i></label>
