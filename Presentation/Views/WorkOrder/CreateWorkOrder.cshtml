@@ -5,6 +5,12 @@
         New Work Order
     </div>
     <form class="form" enctype="multipart/form-data" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
+@if (Model == null)
+{
+    <p>No Record Found</p>
+}
+else
+{
         <table class="table table_container">
             <tbody>
                 <tr>
@@ -133,9 +139,11 @@
                 </tr>
             </tbody>
         </table>
+
         <hr />
         <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-primary submit">Create</button>
         @*passing data to controller*@
+}
     </form>
     <div>
         <a asp-action="Index">Back to List</a>

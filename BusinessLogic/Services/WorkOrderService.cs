@@ -210,20 +210,22 @@ namespace BusinessLogic.Services
                     stageCode = "WOPROG";
                 query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode == stageCode);
             }
-            else if (filter == FilterEnumWO.ByAssigned)
+            else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
             {
+                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower()));
             }
+
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            query = query.Include(x => x.AssignedToRole);
+            query = query.Include(x => x.AssignedToRole).Include(x => x.AssignedTo);
             if (!role.Equals("Admin"))
             {
                 query = query.Where(x => x.AssignedToRole.Name.Equals(role));
             }
 
-            workOrderAssigned = await query.Include(x => x.AssignedTo).Include(x => x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Include(x => x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -234,7 +236,7 @@ namespace BusinessLogic.Services
             }).AsNoTracking().ToListAsync();
             foreach (var item in workOrderAssigned)
                 if (item.AssignedTo != null && item.AssignedTo.Equals(username))
-                    item.AssignedTo = "me";
+                    item.AssignedTo = "Me";
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
