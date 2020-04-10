@@ -115,7 +115,7 @@ namespace Presentation.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        
         private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, List<MenuProperty>> menuView)
         {
             foreach (var menu in _menuDetails.Value.Menus)

@@ -57,7 +57,6 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateFeature()
         {
             int val = 0;

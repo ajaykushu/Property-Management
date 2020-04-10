@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
@@ -9,6 +10,7 @@ namespace Presentation.ViewModels
 
         [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]
         [Required]
+        [Remote("CheckProperty","Property")]
         public string PropertyName { get; set; }
 
         [Required(ErrorMessage = "Please Choose Property Type")]

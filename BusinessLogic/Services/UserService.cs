@@ -194,13 +194,12 @@ namespace BusinessLogic.Services
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
             int iteminpage = 4;
-            List<ApplicationUser> user;
+            var query=_userManager.Users;
             if (matchStr != null && filter == FilterEnum.ByEmail)
-                user = await _userManager.Users.Where(x => x.Email.ToLower().Contains(matchStr.ToLower())).Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
+                query = query.Where(x => x.Email.Contains(matchStr, StringComparison.InvariantCultureIgnoreCase));
             else if (matchStr != null && filter == FilterEnum.ByFirstName)
-                user = await _userManager.Users.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower())).Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
-            else
-                user = await _userManager.Users.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
+                query = query.Where(x => x.FirstName.StartsWith(matchStr, StringComparison.InvariantCultureIgnoreCase));
+            var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
             List<UsersListModel> users = new List<UsersListModel>();
             var count = user.Count();
             foreach (var item in user)
@@ -229,7 +228,7 @@ namespace BusinessLogic.Services
         }
 
         public async Task<bool> Deact_Actuser(long userId, int operation)
-        {
+        {  
             var iduser = await _userManager.FindByIdAsync(userId + "");
             iduser.IsActive = Convert.ToBoolean(operation);
             var identityresult = await _userManager.UpdateAsync(iduser);
@@ -255,7 +254,7 @@ namespace BusinessLogic.Services
                     EmailAddress = x.Email,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
-                    PhotoPath = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + x.PhotoPath,
+                    PhotoPath = string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/" , x.PhotoPath),
                     ListProperties = x.UserProperties.Select(x => new PropertiesModel
                     {
                         Id = x.Property.Id,
@@ -304,7 +303,7 @@ namespace BusinessLogic.Services
         public async Task<bool> CheckUserName(string userName)
         {
             bool status = false;
-            var res = await _userManager.Users.Where(x => x.UserName.ToLower().Equals(userName.Trim().ToLower())).FirstOrDefaultAsync();
+            var res = await _userManager.Users.Where(x => x.UserName.Equals(userName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefaultAsync();
             status = res == null ? false : true;
             return status;
         }

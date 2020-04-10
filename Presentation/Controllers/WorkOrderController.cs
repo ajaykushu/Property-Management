@@ -41,7 +41,7 @@ namespace Presentation.Controllers
             {
                 StringBuilder routeBuilder = new StringBuilder();
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
-                string parameters = "?matchString=" + matchString + "&filter=" + filter + "&requestedPage=" + requestedPage + "&stage=" + stage + "&endDate=" + endDate;
+                string parameters = string.Concat("?matchString=" , matchString , "&filter=" , filter , "&requestedPage=" , requestedPage , "&stage=" , stage , "&endDate=" , endDate);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + parameters, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
@@ -257,7 +257,7 @@ namespace Presentation.Controllers
            
             try
             {
-                var urlpayload = "?workOrderId=" + workorderId + "&process=" + process;
+                var urlpayload = string.Concat("?workOrderId=" , workorderId , "&process=" , process);
                 _apiRoute.Value.Routes.TryGetValue("workorderoperation", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
@@ -285,7 +285,7 @@ namespace Presentation.Controllers
             {
                 try
                 {
-                    var urlpayload = "?userId=" + userId + "&workOrderId=" + workOrderId;
+                    var urlpayload = string.Concat("?userId=" , userId , "&workOrderId=" , workOrderId);
                     _apiRoute.Value.Routes.TryGetValue("assigntouser", out string path);
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, new { }, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)

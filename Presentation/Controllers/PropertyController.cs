@@ -184,5 +184,25 @@ namespace Presentation.Controllers
 
             return RedirectToAction("UserDetailView", "User", new { id = userId });
         }
+
+        [HttpGet]
+        public async Task<JsonResult> CheckProperty(string propertyName)
+        {
+            Boolean result;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("checkproperty", out var path);
+                var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?propertyName=" + propertyName, this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    result = Convert.ToBoolean(await res.Content.ReadAsStringAsync());
+                    if (result)
+                        return Json("Property Name Already Present");
+                }
+            }
+            catch (Exception) { }
+            return Json(true);
+        }
+        
     }
 }

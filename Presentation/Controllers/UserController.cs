@@ -178,7 +178,7 @@ namespace Presentation.Controllers
             _apiRoute.Value.Routes.TryGetValue("getallusers", out string path);
             try
             {
-                string parameters = "?matchString=" + matchString + "&filter=" + filter + "&requestedPage=" + requestedPage;
+                string parameters =string.Concat("?matchString=" , matchString , "&filter=" , filter , "&requestedPage=" , requestedPage);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + parameters, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     usersLists = JsonConvert.DeserializeObject<Pagination<IList<UsersList>>>(await response.Content.ReadAsStringAsync());

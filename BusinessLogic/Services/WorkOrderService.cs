@@ -92,7 +92,7 @@ namespace BusinessLogic.Services
                     Id = x.Id,
                     UpdatedBy = x.UpdatedByUserName,
                     Description = x.Description,
-                    Attachment = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/ImageFileStore/" + x.AttachmentPath
+                    Attachment =string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/ImageFileStore/" , x.AttachmentPath)
                 },
                 Propid = x.PropertyId
             }).AsNoTracking().FirstOrDefaultAsync();
@@ -208,11 +208,11 @@ namespace BusinessLogic.Services
                     stageCode = "WOCOMP";
                 if (stage == FilterEnumWOStage.WOPROG)
                     stageCode = "WOPROG";
-                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode == stageCode);
+                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.Equals(stageCode, StringComparison.InvariantCultureIgnoreCase));
             }
             else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
             {
-                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower()));
+                query = query.Where(x => x.AssignedTo.UserName.StartsWith(matchStr, StringComparison.InvariantCultureIgnoreCase));
             }
 
             List<WorkOrderAssigned> workOrderAssigned = null;
@@ -222,7 +222,7 @@ namespace BusinessLogic.Services
             query = query.Include(x => x.AssignedToRole).Include(x => x.AssignedTo);
             if (!role.Equals("Admin"))
             {
-                query = query.Where(x => x.AssignedToRole.Name.Equals(role));
+                query = query.Where(x => x.AssignedToRole.Name.Equals(role,StringComparison.InvariantCultureIgnoreCase));
             }
 
             workOrderAssigned = await query.Include(x => x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
@@ -235,7 +235,7 @@ namespace BusinessLogic.Services
                 AssignedToSection = x.AssignedToRole.Name
             }).AsNoTracking().ToListAsync();
             foreach (var item in workOrderAssigned)
-                if (item.AssignedTo != null && item.AssignedTo.Equals(username))
+                if (item.AssignedTo != null && item.AssignedTo.Equals(username, StringComparison.InvariantCultureIgnoreCase))
                     item.AssignedTo = "Me";
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
@@ -391,14 +391,18 @@ namespace BusinessLogic.Services
         public async Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command)
         {
             var wo = await _workOrder.Get(x => x.Id == workOrderId).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
+
             var nextstate = WorkOrderState.GetNextState((FilterEnumWOStage)wo.Stage.Id, command);
+
             if (nextstate == (FilterEnumWOStage)wo.StageId && command == ProcessEnumWOStage.TrackIn)
                 throw new BadRequestException("WO Completed");
+
             if (nextstate == (FilterEnumWOStage)wo.StageId && command == ProcessEnumWOStage.TrackOut)
                 throw new BadRequestException("WO Reached Start Stage");
+
             wo.Comments.Add(new Comments
             {
-                Comment = "Work Order Stage Changed From " + wo.Stage.StageCode + " To " + nextstate,
+                Comment = string.Concat("Work Order Stage Changed From " , wo.Stage.StageCode , " To " , nextstate)
             });
             wo.StageId = (int)nextstate;
             if (wo.Comments == null)
@@ -425,7 +429,7 @@ namespace BusinessLogic.Services
                     wo.Comments.Add(
                         new Comments
                         {
-                            Comment = "Assigned To User: " + user.UserName + " (" + user.FirstName + " " + user.LastName + ")"
+                            Comment = string.Concat("Assigned To User: " , user.UserName , " (" , user.FirstName , " " + user.LastName , ")")
                         }
                     );
                     var updateStatus = await _workOrder.Update(wo);

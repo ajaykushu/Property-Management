@@ -13,7 +13,6 @@ namespace DataAccessLayer.Repository
         public Repo(AppDBContext context)
         {
             this.context = context;
-            Console.WriteLine(context.GetType().GetHashCode());
         }
 
         public Task<int> Add(TEntity entity)

@@ -57,7 +57,8 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         public ActionResult<PropertyOperationModel> GetPropertyTypes()
         {
-            return _propertyService.GetPropertyType();
+            var res= _propertyService.GetPropertyType();
+            return Ok(res);
         }
 
         [HttpGet]
@@ -75,6 +76,14 @@ namespace API.Controllers
         {
             bool status = await _propertyService.MarkPrimary(id, userId);
             return Ok(status);
+        }
+        
+        [HttpGet]
+        [Route("checkproperty")]
+        public async Task<ActionResult<bool>> CheckProperty(string propertyName)
+        {
+            var res = await _propertyService.CheckProperty(propertyName);
+            return Ok(res);
         }
     }
 }

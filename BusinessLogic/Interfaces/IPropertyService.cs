@@ -20,5 +20,6 @@ namespace BusinessLogic.Interfaces
         PropertyOperationModel GetPropertyType();
 
         Task<bool> MarkPrimary(long id, long userId);
+        Task<bool> CheckProperty(string userName);
     }
 }
