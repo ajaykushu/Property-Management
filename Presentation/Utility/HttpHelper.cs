@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Presentation.Utility.Interface;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -69,7 +70,13 @@ namespace Presentation.Utility
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
             foreach (var item in data.GetType().GetProperties())
             {
-                if (!item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
+                
+                if(item.PropertyType.Name.Equals("List`1") && item.GetValue(data) != null)
+                {
+                    foreach(var val in item.GetValue(data) as List<string>)
+                        multiContent.Add(new StringContent(val), item.Name);
+                }
+                else if (!item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
                     multiContent.Add(new StringContent(Convert.ToString(item.GetValue(data)), Encoding.UTF8, "application/json"), item.Name);
                 else if (item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
                 {
