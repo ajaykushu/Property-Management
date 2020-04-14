@@ -93,10 +93,10 @@ namespace Presentation.Controllers
                     "menu",
                     JsonConvert.SerializeObject(menuView)
                     );
-                    if (tokenResponse.Roles.Contains("User"))
-                        return RedirectToAction("Index", "WorkOrder");
-                    else
+                    if (tokenResponse.Roles.Contains("Admin"))
                         return RedirectToAction("GetAllUsers", "User");
+                    else
+                        return RedirectToAction("Index", "WorkOrder");
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {

@@ -76,7 +76,7 @@ namespace API.Authentication
         {
             if (_userManager.Users.Count() == 0)
             {
-                await _user.RegisterUser(new RegisterUser
+               var newuser= new RegisterUser
                 {
                     UserName = "TestUser",
                     Email = "test@test.com",
@@ -86,8 +86,11 @@ namespace API.Authentication
                     Language = 1,
                     Role = "Admin",
                     Password = "Testuser123@",
-                    TimeZone = "India +5:30"
-                });
+                    TimeZone = "India +5:30",
+                    File = null,
+                    OfficeExt = "234",
+                };
+                await _user.RegisterUser(newuser);
             }
             ApplicationUser identityUser;
             TokenResponseModel returnToken;

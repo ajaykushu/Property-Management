@@ -43,7 +43,6 @@ namespace BusinessLogic.Services
         public async Task<bool> RegisterUser(RegisterUser model)
         {
             var filepath = await _imageUploadInFile.UploadAsync(model.File);
-            var language = _langrepo.Get(x => x.Id == model.Language).FirstOrDefault();
             var prop = _userproperty.GetAll().Include(x => x.Property).ToList();
             IdentityResult identityResult;
             ApplicationUser applicationUser = new ApplicationUser
@@ -53,14 +52,13 @@ namespace BusinessLogic.Services
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Language = language,
+                LanguageId = model.Language,
                 Suffix = model.Suffix,
                 TimeZone = model.TimeZone,
                 OfficeExt = model.OfficeExt ?? null,
                 PhotoPath = filepath
             };
-            if (model.SelectedProperty != null && model.Role == "User")
-            {
+             if (model.SelectedProperty != null && (model.Role.Equals("Property Manager") || model.Role.Equals("Property Owner"))) { 
                 foreach (var item in prop)
                     if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
                         applicationUser.UserProperties.Add(item);
@@ -90,9 +88,9 @@ namespace BusinessLogic.Services
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Properties = _property.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
             };
-            var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower() == "english").FirstOrDefault();
+            var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower().Equals("english")).FirstOrDefault();
             var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").FirstOrDefault();
-            registerRequest.Language = langId != null ? langId.Id : 0;
+            registerRequest.Language =(int)langId.Id;
             registerRequest.Role = roleid?.PropertyName;
             return registerRequest;
         }
@@ -151,7 +149,7 @@ namespace BusinessLogic.Services
 
             if (editUser.Role == "Admin")
                 applicationUser.UserProperties.Clear();
-            else if (editUser.SelectedProperty != null && editUser.Role == "User")
+            else if (editUser.SelectedProperty != null && (editUser.Role.Equals("Property Manager")|| editUser.Role.Equals("Property Owner")))
             {
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)
@@ -196,9 +194,9 @@ namespace BusinessLogic.Services
             int iteminpage = 4;
             var query=_userManager.Users;
             if (matchStr != null && filter == FilterEnum.ByEmail)
-                query = query.Where(x => x.Email.Contains(matchStr, StringComparison.InvariantCultureIgnoreCase));
+                query = query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.ByFirstName)
-                query = query.Where(x => x.FirstName.StartsWith(matchStr, StringComparison.InvariantCultureIgnoreCase));
+                query = query.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower()));
             var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
             List<UsersListModel> users = new List<UsersListModel>();
             var count = user.Count();
@@ -303,7 +301,7 @@ namespace BusinessLogic.Services
         public async Task<bool> CheckUserName(string userName)
         {
             bool status = false;
-            var res = await _userManager.Users.Where(x => x.UserName.Equals(userName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefaultAsync();
+            var res = await _userManager.Users.Where(x => x.UserName.ToLower().Equals(userName.ToLower())).FirstOrDefaultAsync();
             status = res == null ? false : true;
             return status;
         }

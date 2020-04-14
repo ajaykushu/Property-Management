@@ -26,10 +26,10 @@ $('.select-mul').change(function (e) {
     $('.select-input').val($(this).val());
 });
 $('#Role').on("change load", function (e) {
-    if ($(this).val() == "Admin")
-        $('.mainprop').hide();
-    else
+    if ($(this).val() == "Property Manager" || $(this).val() == "Property Owner")
         $('.mainprop').show();
+   else
+        $('.mainprop').hide();
 })
 
 $('.Photo').change(function (e) {

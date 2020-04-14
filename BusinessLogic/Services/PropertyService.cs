@@ -40,7 +40,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> AddProperty(PropertyOperationModel modal)
         {
-            var property = _property.Get(x => x.PropertyName.Equals(modal.PropertyName,StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            var property = _property.Get(x => x.PropertyName.ToLower().Equals(modal.PropertyName.ToLower())).FirstOrDefault();
             if (property != null)
             {
                 throw new BadRequestException("Property Name already available");
@@ -185,7 +185,7 @@ namespace BusinessLogic.Services
         public async Task<bool> CheckProperty(string propertyName)
         {
             bool status;
-            var res = await _property.Get(x => x.PropertyName.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefaultAsync();
+            var res = await _property.Get(x => x.PropertyName.ToLower().Equals(propertyName.ToLower())).FirstOrDefaultAsync();
             status = res == null ? false : true;
             return status;
         }

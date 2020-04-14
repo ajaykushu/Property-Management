@@ -10,7 +10,7 @@ namespace Presentation.ViewModels
 
         [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]
         [Required]
-        [Remote("CheckProperty","Property")]
+        //[Remote("CheckProperty","Property")]
         public string PropertyName { get; set; }
 
         [Required(ErrorMessage = "Please Choose Property Type")]
@@ -27,7 +27,7 @@ namespace Presentation.ViewModels
         public string Locality { set; get; }
 
         [Required(ErrorMessage = "Please Enter Street")]
-        [StringLength(50, MinimumLength = 10, ErrorMessage = "Must between than 5-50 characters")]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]
         public string Street { set; get; }
 
         [StringLength(100, MinimumLength = 0, ErrorMessage = "Must between than 0-100 characters")]

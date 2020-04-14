@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Castle.Core.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.RequestModels;

@@ -23,7 +23,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> Roles { get; set; }
 
         [Required(ErrorMessage = "Please Choose Language")]
-        public long Language { get; set; }
+        public int Language { get; set; }
 
         public List<SelectItem> Languages { get; set; }
 

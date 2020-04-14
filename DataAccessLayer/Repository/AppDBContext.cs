@@ -64,18 +64,52 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
             .WithMany().HasForeignKey(x => x.ManagerId);
 
+            builder.Entity<Department>().HasData(
+                new Department()
+                {
+                    Id=1,
+                    DepartmentName="Administration",
+                },
+                new Department()
+                {
+                    Id = 2,
+                    DepartmentName = "Management",
+                },
+                new Department()
+                {
+                    Id = 3,
+                    DepartmentName = "Engineering",
+                }
+                );
+
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()
              {
                  Id = 1,
                  Name = "Admin",
-                 NormalizedName = "ADMIN"
+                 NormalizedName = "ADMIN",
+                 DepartmentId=1
              },
               new ApplicationRole()
               {
                   Id = 2,
-                  Name = "User",
-                  NormalizedName = "USER"
+                  Name = "Electician",
+                  NormalizedName = "ELECTRICIAN",
+                  DepartmentId=3,
+              },
+              new ApplicationRole()
+              {
+                  Id = 3,
+                  Name = "Property Manager",
+                  NormalizedName = "PROPERTY MANAGER",
+                  DepartmentId = 2,
+              },
+              new ApplicationRole()
+              {
+                  Id = 4,
+                  Name = "Plumber",
+                  NormalizedName = "PLUMBER",
+                  DepartmentId = 3,
               });
             builder.Entity<Languages>().HasData(
                 new Languages()
@@ -90,54 +124,83 @@ namespace DataAccessLayer.Repository
                 new Menu()
                 {
                     Id = 1,
-                    MenuName = "Add User"
+                    MenuName = "Add_User"
                 },
                 new Menu()
                 {
                     Id = 2,
-                    MenuName = "View Users"
+                    MenuName = "View_Users"
                 }, new Menu()
                 {
                     Id = 3,
-                    MenuName = "View Property"
+                    MenuName = "View_Property"
                 }
             , new Menu()
             {
                 Id = 4,
-                MenuName = "Edit User"
+                MenuName = "Edit_User"
             }
             , new Menu()
             {
                 Id = 5,
-                MenuName = "Add Property"
+                MenuName = "Add_Property"
             }
             , new Menu()
             {
                 Id = 6,
-                MenuName = "Edit Property"
+                MenuName = "Edit_Property"
             }
             , new Menu()
             {
                 Id = 7,
-                MenuName = "ActDct User"
+                MenuName = "ActDct_User"
             }, new Menu()
             {
                 Id = 8,
-                MenuName = "View User Detail"
+                MenuName = "View_User_Detail"
             },
              new Menu()
              {
                  Id = 9,
-                 MenuName = "Delete Property"
+                 MenuName = "Delete_Property"
              }, new Menu()
              {
                  Id = 10,
-                 MenuName = "Edit Feature"
+                 MenuName = "Edit_Feature"
              }, new Menu()
              {
                  Id = 11,
-                 MenuName = "Access Setting"
-             });
+                 MenuName = "Access_Setting"
+             }, new Menu()
+             {
+                 Id = 12,
+                 MenuName = "Create_WO"
+             }, new Menu()
+             {
+                 Id = 13,
+                 MenuName = "Get_WO"
+             }, new Menu()
+             {
+                 Id = 14,
+                 MenuName = " GetWO_Detail"
+             }, new Menu()
+             {
+                Id = 15,
+                 MenuName = "Edit_WO"
+             }, new Menu()
+             {
+                 Id = 16,
+                 MenuName = "Post_Comment"
+             }
+             ,new Menu(){
+                Id = 17,
+                 MenuName = "Assign_To_User"
+             }
+              , new Menu()
+              {
+                  Id = 18,
+                  MenuName = "WO_Operation"
+              });
 
             builder.Entity<RoleMenuMap>().HasData(
                 new RoleMenuMap { Id = 1, MenuId = 1, RoleId = 1 },
@@ -149,7 +212,15 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 7, MenuId = 7, RoleId = 1 },
                 new RoleMenuMap { Id = 8, MenuId = 8, RoleId = 1 },
                 new RoleMenuMap { Id = 9, MenuId = 9, RoleId = 1 },
-                new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 }
+                new RoleMenuMap { Id = 10, MenuId = 10, RoleId = 1 },
+                 new RoleMenuMap { Id = 11, MenuId = 11, RoleId = 1 },
+                  new RoleMenuMap { Id = 12, MenuId = 12, RoleId = 1 },
+                   new RoleMenuMap { Id = 13, MenuId = 13, RoleId = 1 },
+                    new RoleMenuMap { Id = 14, MenuId = 14, RoleId = 1 },
+                    new RoleMenuMap { Id = 15, MenuId = 15, RoleId = 1 },
+                    new RoleMenuMap { Id = 16, MenuId = 16, RoleId = 1 },
+                     new RoleMenuMap { Id = 17, MenuId = 17, RoleId = 1 },
+                     new RoleMenuMap { Id = 18, MenuId = 18, RoleId = 1 }
                 );
         }
 
@@ -160,21 +231,21 @@ namespace DataAccessLayer.Repository
            .Where(e => e.Entity is Log && (
                 e.State == EntityState.Added
                 || e.State == EntityState.Modified));
-            var user = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var user = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier);
             foreach (var entityEntry in entries)
             {
                 if (entityEntry.State == EntityState.Added)
                 {
                     ((Log)entityEntry.Entity).CreatedTime = DateTime.Now;
                     ((Log)entityEntry.Entity).UpdatedTime = DateTime.Now;
-                    ((Log)entityEntry.Entity).CreatedByUserName = user;
-                    ((Log)entityEntry.Entity).UpdatedByUserName = user;
+                    ((Log)entityEntry.Entity).CreatedByUserName = user!=null?user.Value:"System Admin";
+                    ((Log)entityEntry.Entity).UpdatedByUserName = user!=null?user.Value:null;
                 }
                 if (entityEntry.State == EntityState.Modified)
                 {
                     ((Log)entityEntry.Entity).UpdatedTime = DateTime.Now;
                     if (user != null)
-                        ((Log)entityEntry.Entity).UpdatedByUserName = user;
+                        ((Log)entityEntry.Entity).UpdatedByUserName = user != null ? user.Value : "System Admin";
                 }
             }
 

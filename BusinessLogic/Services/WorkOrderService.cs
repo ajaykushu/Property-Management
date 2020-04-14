@@ -208,7 +208,7 @@ namespace BusinessLogic.Services
                     stageCode = "WOCOMP";
                 if (stage == FilterEnumWOStage.WOPROG)
                     stageCode = "WOPROG";
-                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.Equals(stageCode, StringComparison.InvariantCultureIgnoreCase));
+                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.ToLower().Equals(stageCode.ToLower()));
             }
             else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
             {
@@ -222,7 +222,7 @@ namespace BusinessLogic.Services
             query = query.Include(x => x.AssignedToRole).Include(x => x.AssignedTo);
             if (!role.Equals("Admin"))
             {
-                query = query.Where(x => x.AssignedToRole.Name.Equals(role,StringComparison.InvariantCultureIgnoreCase));
+                query = query.Where(x => x.AssignedToRole.Name.ToLower().Equals(role.ToLower()));
             }
 
             workOrderAssigned = await query.Include(x => x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
