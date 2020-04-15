@@ -171,9 +171,9 @@ namespace BusinessLogic.Services
             return wo;
         }
 
-        public Task<List<SelectItem>> GetSection(long id)
+        public async Task<List<SelectItem>> GetSection(long id)
         {
-            var res = _role.GetAll().Where(x => x.DepartmentId == id).Select(x => new SelectItem
+            var res = await  _role.GetAll().Where(x => x.DepartmentId == id).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.Name
@@ -212,7 +212,7 @@ namespace BusinessLogic.Services
             }
             else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
             {
-                query = query.Where(x => x.AssignedTo.UserName.StartsWith(matchStr, StringComparison.InvariantCultureIgnoreCase));
+                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower()));
             }
 
             List<WorkOrderAssigned> workOrderAssigned = null;

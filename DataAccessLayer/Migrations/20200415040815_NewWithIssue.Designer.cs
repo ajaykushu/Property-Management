@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200415040815_NewWithIssue")]
+    partial class NewWithIssue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "7f0b1b5e-7d13-45ae-a1ee-eabe24071450",
+                            ConcurrencyStamp = "03466515-2394-461c-ac6d-31a5908b2672",
                             DepartmentId = 1,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -64,15 +66,15 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "3107d7e9-b655-41f4-ad13-00c026a1d3d9",
+                            ConcurrencyStamp = "3d96b2ef-82e8-4565-8c6d-feb1025dbbe4",
                             DepartmentId = 3,
-                            Name = "Electrician",
+                            Name = "Electician",
                             NormalizedName = "ELECTRICIAN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "0d66e4a3-9605-4b91-82a4-f5ccb802352f",
+                            ConcurrencyStamp = "3a57c2d5-1488-4a49-957f-49126dd7f589",
                             DepartmentId = 2,
                             Name = "Property Manager",
                             NormalizedName = "PROPERTY MANAGER"
@@ -80,7 +82,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 4L,
-                            ConcurrencyStamp = "06d4e872-809f-4054-ae8d-8b53aaa2b9c3",
+                            ConcurrencyStamp = "96c167f9-0dde-48be-b893-b86ce3d55d7e",
                             DepartmentId = 3,
                             Name = "Plumber",
                             NormalizedName = "PLUMBER"
@@ -536,7 +538,7 @@ namespace DataAccessLayer.Migrations
                         {
                             Id = 14L,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MenuName = "GetWO_Detail",
+                            MenuName = " GetWO_Detail",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -925,32 +927,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "INITWO",
-                            StageDescription = "Work Order Created",
-                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "WOPROG",
-                            StageDescription = "Work Order in Progress",
-                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "WOCOMP",
-                            StageDescription = "Work Order Completed",
-                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("DataEntity.UserProperty", b =>

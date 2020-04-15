@@ -55,7 +55,7 @@ namespace DataEntity
             var appuser = await manager.FindByIdAsync(user.Id.ToString());
             if (appuser != null)
             {
-                if (manager.Users.Where(x => x.PhoneNumber == user.PhoneNumber && appuser.Id!=x.Id).FirstOrDefault() != null)
+                if (manager.Users.Where(x => x.PhoneNumber == user.PhoneNumber && appuser.Id != x.Id).FirstOrDefault() != null)
                     return IdentityResult.Failed(new IdentityError { Description = "Phone number is already present" });
             }
             else

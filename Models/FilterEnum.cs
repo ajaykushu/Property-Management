@@ -17,7 +17,7 @@
     {
         INITWO = 1,
         WOPROG = 2,
-        WOCOMP = 3
+        WOCOMP = 3,
     }
 
     public enum ProcessEnumWOStage
