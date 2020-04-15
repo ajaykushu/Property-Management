@@ -99,6 +99,9 @@ $('#wocreate').submit(function (e) {
                 $("input[type=password]").val("");
                 $("input[type=text]").val("");
                 $("input[type=email]").val("");
+                $("#Description").val("");
+                $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
+                $('.browsebutton')[0].innerText = "Browse";
                 $('select').prop('selectedIndex', 0);
             });
         }, function (res) {

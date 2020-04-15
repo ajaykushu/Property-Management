@@ -229,6 +229,7 @@
                     $("input[type=password]").val("");
                     $("input[type=text]").val("");
                     $("input[type=email]").val("");
+                     $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
                     $('select').prop('selectedIndex', 0);
                 });
 
