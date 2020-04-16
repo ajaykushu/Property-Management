@@ -40,7 +40,7 @@ namespace Presentation.ViewModels
 
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
-        [RegularExpression(@"([+][0-9]{2,3}[-]{1})?[1-9]{1}[0-9]{9}", ErrorMessage = "Please Enter Valid Phone Number")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
 
         [Remote("CheckUserName", "User")]

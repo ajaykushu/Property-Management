@@ -34,7 +34,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> TimeZones { set; get; }
 
         [Required(ErrorMessage = "Please Enter  Phone Number")]
-        [RegularExpression(@"([+][0-9]{2,3}[-]{1})?[1-9]{1}[0-9]{9}", ErrorMessage = "Please Enter Valid Phone Number")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
 
         public string UserName { set; get; }

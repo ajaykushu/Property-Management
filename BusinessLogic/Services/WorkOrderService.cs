@@ -224,10 +224,15 @@ namespace BusinessLogic.Services
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             query = query.Include(x => x.AssignedToRole).Include(x => x.AssignedTo);
-            if (!role.Equals("Admin"))
+            if (role.Equals("User"))
+            {
+                query = query.Where(x => x.CreatedByUserName.Equals(username));
+            }
+            else if (!role.Equals("Admin"))
             {
                 query = query.Where(x => x.AssignedToRole.Name.ToLower().Equals(role.ToLower()));
             }
+            
 
             workOrderAssigned = await query.Include(x => x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
