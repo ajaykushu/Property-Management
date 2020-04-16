@@ -16,6 +16,9 @@ namespace DataAccessLayer.Repository
     {
         public DbSet<Property> Properties { set; get; }
         public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
+        public DbSet<Location> Locations { set; get; }
+        public DbSet<Area> Areas { set; get; }
+
         public DbSet<Menu> Menu { set; get; }
         public DbSet<Issue> Issues { set; get; }
         public DbSet<Item> Items { set; get; }

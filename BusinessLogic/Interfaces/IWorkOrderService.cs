@@ -10,8 +10,6 @@ namespace BusinessLogic.Interfaces
     {
         Task<CreateWO> GetCreateWOModel(long userId);
 
-        Task<PropDetail> GetAreaLocation(long id);
-
         Task<List<SelectItem>> GetSection(long id);
 
         Task<bool> CreateWO(CreateWO createWO);
@@ -31,5 +29,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command);
 
         Task<bool> AssignToUser(long userId, long workOrderId);
+        Task<List<SelectItem>> GetArea(long id);
     }
 }

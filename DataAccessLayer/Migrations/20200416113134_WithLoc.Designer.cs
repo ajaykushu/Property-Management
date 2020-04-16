@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200416113134_WithLoc")]
+    partial class WithLoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "b3faa393-c744-4b14-87d9-91113898e82e",
+                            ConcurrencyStamp = "04b4dae4-4f75-401d-9305-062c9c0afc79",
                             DepartmentId = 1,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -64,7 +66,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "8c0f19b2-4fc6-48f8-96fc-84ae1d254a83",
+                            ConcurrencyStamp = "92b8bcde-4deb-4090-91f6-17d588b5ff91",
                             DepartmentId = 2,
                             Name = "User",
                             NormalizedName = "USER"
@@ -72,7 +74,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "95c7a5f2-34c7-4d26-b94c-8035a203b44b",
+                            ConcurrencyStamp = "75f3dc33-63c4-432f-8767-b1365866f3dc",
                             DepartmentId = 3,
                             Name = "Plumber",
                             NormalizedName = "PLUMBER"
@@ -80,7 +82,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 4L,
-                            ConcurrencyStamp = "737bc7f1-f568-4adf-945f-122c9179c7eb",
+                            ConcurrencyStamp = "395005fb-3382-4fcb-b571-13b87a23ecb0",
                             DepartmentId = 3,
                             Name = "Electrician",
                             NormalizedName = "ELECTRICIAN"
@@ -224,7 +226,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Area");
                 });
 
             modelBuilder.Entity("DataEntity.Comments", b =>
@@ -446,7 +448,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Location");
                 });
 
             modelBuilder.Entity("DataEntity.Menu", b =>

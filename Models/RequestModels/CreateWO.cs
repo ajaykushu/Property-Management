@@ -7,8 +7,10 @@ namespace Models.RequestModels
 {
     public class CreateWO
     {
-        public string Location { get; set; }
-        public string Area { get; set; }
+        public List<SelectItem> Location { get; set; }
+        [Required]
+        public int LocationId { get; set; }
+        public int AreaId { get; set; }
         public List<SelectItem> Items { get; set; }
 
         [Required(ErrorMessage = "Please Select Item")]

@@ -8,9 +8,13 @@ namespace Presentation.ViewModels
     [Serializable]
     public class CreateWorkOrder
     {
+
+        public List<SelectItem> Location { get; set; }
+        [Required]
+        public int LocationId { get; set; }
        
-        public string Location { get; set; }
-        public string Area { get; set; }
+        [Required]
+        public int AreaId { get; set; }
         public List<SelectItem> Items { get; set; }
 
         [Required(ErrorMessage = "Please Select Item")]

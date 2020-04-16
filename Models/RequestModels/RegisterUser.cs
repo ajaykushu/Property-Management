@@ -32,7 +32,7 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Select Time Zone")]
         public string TimeZone { set; get; }
-
+        [StringLength(10, MinimumLength = 0, ErrorMessage = "Please keep length less than 11")]
         public string OfficeExt { get; set; }
         public List<SelectItem> TimeZones { set; get; }
 

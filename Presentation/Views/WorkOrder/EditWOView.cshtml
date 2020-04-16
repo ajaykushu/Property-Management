@@ -26,25 +26,36 @@
                                         <span asp-validation-for="PropertyName" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Location"> </label>
+                                @if (Model.Location != null && Model.Location.Any())
+                                {
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Location"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Location, "Id", "PropertyName"))">
+                                                <option value="">Please select one</option>
+                                            </select>
+                                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <input asp-for="Location" class="form-control-sm custom-input" disabled>
-                                        <span asp-validation-for="Location" class="text-danger"></span>
+                                }
+                                @if (Model.Area != null && Model.Area.Any())
+                                {
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Area"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm custom-input" asp-for="AreaId" asp-items="@(new SelectList(Model.Area, "Id", "PropertyName"))">
+                                                <option value="">Please select one</option>
+                                            </select>
+                                            <span asp-validation-for="AreaId" class="text-danger"></span>
+                                        </div>
                                     </div>
+                                }
                                 </div>
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Area"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <input asp-for="Area" class="form-control-sm custom-input" disabled>
-                                        <span asp-validation-for="Area" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                                
                         </td>
                     </tr>
                     <tr>
@@ -157,14 +168,15 @@
         <a asp-action="Index">Back to List</a>
     </div>
     <script>
-        $('#Property').change(function () {
-            console.log($(this).val());
-            $.get('@Url.Action("GetAreaLocation","WorkOrder")' + "?id=" + $(this).val(),
+        $('#LocationId').change(function () {
+            $.get('@Url.Action("GetArea","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
-                    console.log(data);
+                    
                     if (data != null || data != undefined) {
-                        $('#Area').val(data.area);
-                        $('#Location').val(data.location);
+                       $("#AreaId").html("<option value=''>Area</option>")
+                        for (var i = 0; i < data.length; i++) {
+                            $("#AreaId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                        }
                     }
                 });
         });

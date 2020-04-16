@@ -51,6 +51,7 @@ namespace Models.RequestModels
         public List<SelectItem> Properties { get; set; }
         public List<string> SelectedProperty { get; set; }
         public bool SMSAlert { set; get; }
+        [StringLength(10,MinimumLength=0,ErrorMessage ="Please keep length less than 11")]
         public string OfficeExt { get; set; }
         public string ClockType { get; set; }
         public IFormFile File { get; set; }
