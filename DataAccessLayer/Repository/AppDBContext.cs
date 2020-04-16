@@ -90,27 +90,28 @@ namespace DataAccessLayer.Repository
                  NormalizedName = "ADMIN",
                  DepartmentId = 1
              },
+            
               new ApplicationRole()
               {
                   Id = 2,
-                  Name = "Electrician",
-                  NormalizedName = "ELECTRICIAN",
-                  DepartmentId = 3,
-              },
-              new ApplicationRole()
-              {
-                  Id = 3,
-                  Name = "Property Manager",
-                  NormalizedName = "PROPERTY MANAGER",
+                  Name = "User",
+                  NormalizedName = "USER",
                   DepartmentId = 2,
               },
-              new ApplicationRole()
-              {
-                  Id = 4,
-                  Name = "Plumber",
-                  NormalizedName = "PLUMBER",
-                  DepartmentId = 3,
-              });
+            new ApplicationRole()
+            {
+                Id = 3,
+                Name = "Plumber",
+                NormalizedName = "PLUMBER",
+                DepartmentId = 3,
+            },
+            new ApplicationRole()
+            {
+                Id = 4,
+                Name = "Electrician",
+                NormalizedName = "ELECTRICIAN",
+                DepartmentId = 3,
+            });
             builder.Entity<Languages>().HasData(
                 new Languages()
                 {

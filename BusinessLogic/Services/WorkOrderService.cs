@@ -57,7 +57,8 @@ namespace BusinessLogic.Services
                 IssueId = createWO.Issue,
                 ItemId = createWO.Item,
                 Description = createWO.Description,
-                AssignedToRoleId = createWO.Section
+                AssignedToRoleId = createWO.Section,
+                DueDate=createWO.DueDate
             };
 
             workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
@@ -84,6 +85,7 @@ namespace BusinessLogic.Services
                     StageDescription = x.Stage.StageDescription,
                     Item = x.Item.ItemName,
                     CreatedTime = x.CreatedTime,
+                    DueDate=x.DueDate,
                     UpdatedTime = x.UpdatedTime,
                     Department = x.AssignedToRole.Department.DepartmentName,
                     Section = x.AssignedToRole.Name,
@@ -165,7 +167,9 @@ namespace BusinessLogic.Services
 
                 Area = primaryprop != null ? primaryprop.Property.Street : "",
                 Location = sb.ToString(),
-                Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).ToListAsync()
+                Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).ToListAsync(),
+                DueDate = DateTime.Now,
+                
             };
 
             return wo;
@@ -263,7 +267,8 @@ namespace BusinessLogic.Services
                     Item = x.ItemId,
                     CreatedDate = x.CreatedTime,
                     Department = x.AssignedToRole.DepartmentId.GetValueOrDefault(),
-                    Section = x.AssignedToRole.Id
+                    Section = x.AssignedToRole.Id,
+                    DueDate=x.DueDate
                 },
                 propId = x.PropertyId
             }).AsNoTracking().FirstOrDefaultAsync();
@@ -311,6 +316,7 @@ namespace BusinessLogic.Services
                 wo.AssignedToRoleId = editWorkOrder.Section;
                 wo.IssueId = editWorkOrder.Issue;
                 wo.ItemId = editWorkOrder.Item;
+                wo.DueDate = editWorkOrder.DueDate;
             }
 
             var status = await _workOrder.Update(wo);

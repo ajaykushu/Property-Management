@@ -34,8 +34,8 @@ namespace Presentation.ViewModels
         public string StreetLine2 { set; get; }
 
         [Required(ErrorMessage = "Please Enter PinCode")]
-        [RegularExpression(@"^[1-9]{1}[0-9]{5,9}$", ErrorMessage = "Please Enter Valid Zip Code")]
-        [StringLength(10, MinimumLength = 6, ErrorMessage = "Please Enter Valid Zip Code")]
+        //[RegularExpression(@"^[1-9]{1}[0-9]{5,9}$", ErrorMessage = "Please Enter Valid Zip Code")]
+        //[StringLength(10, MinimumLength = 6, ErrorMessage = "Please Enter Valid Zip Code")]
         public string PinCode { set; get; }
 
         [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]

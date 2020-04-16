@@ -84,17 +84,6 @@
                     <tr>
                         <td>
                             <div class="col">
-                                <div class="row">
-                                    @*<div class="col-md-3">
-                                        <label asp-for="RequestedBy"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="RequestedById" asp-items="@(new SelectList(Model.RequestedBy, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="RequestedById" class="text-danger"></span>
-                                    </div>*@
-                                </div>
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
                                         <label asp-for="Description"> </label>
@@ -104,21 +93,15 @@
                                         <span asp-validation-for="Description" class="text-danger"></span>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="col">
-                                @*<div class="row">
+                                <div class="row top-buffer">
                                     <div class="col-md-3">
-                                        <label asp-for="Date "> </label>
+                                        <label for="DueDate">Due Date</label>
                                     </div>
                                     <div class="col">
-                                        <input asp-for='Date' value="" type="date" class="form-control-sm custom-input">
-                                        <span asp-validation-for="Date" class="text-danger"></span>
+                                        <input class="form-control custom-input" asp-for="DueDate">
+                                        <span asp-validation-for="DueDate" class="text-danger"></span>
                                     </div>
-                                </div>*@
+                                </div>
                             </div>
                         </td>
                     </tr>

@@ -7,6 +7,7 @@ namespace Presentation.ViewModels
 {
     public class EditWorkOrder
     {
+       
         public long Id { get; set; }
         public string Location { get; set; }
         public string Area { get; set; }
@@ -35,7 +36,10 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please give Section Id")]
         public long Section { get; set; }
-
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{dd/MMM/yyyy}")]
+        public DateTime DueDate { get; set; }
         public List<SelectItem> Sections { get; set; }
         public IFormFile File { get; set; }
     }

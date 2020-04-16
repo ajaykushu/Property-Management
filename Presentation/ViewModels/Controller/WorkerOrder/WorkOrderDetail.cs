@@ -15,6 +15,7 @@ namespace Presentation.ViewModels
         public string StageDescription { get; set; }
         public string StageCode { get; set; }
         public string Issue { get; set; }
+        public DateTime DueDate { get; set; }
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
         public string Description { get; set; }

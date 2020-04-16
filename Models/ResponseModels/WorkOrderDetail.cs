@@ -19,6 +19,7 @@ namespace Models.ResponseModels
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
+        public DateTime DueDate { get; set; }
         public string Attachment { get; set; }
         public string UpdatedBy { get; set; }
         public string AssignedToUser { get; set; }

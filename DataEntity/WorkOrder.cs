@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,7 @@ namespace DataEntity
         public long? AssignedToRoleId { get; set; }
         [Column(TypeName = "varchar(300)")]
         public string AttachmentPath { get; set; }
+        public DateTime DueDate { get; set; }
         public virtual ApplicationRole AssignedToRole { get; set; }
 
         public virtual ICollection<Comments> Comments { get; set; }

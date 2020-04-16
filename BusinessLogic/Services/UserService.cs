@@ -58,7 +58,7 @@ namespace BusinessLogic.Services
                 OfficeExt = model.OfficeExt ?? null,
                 PhotoPath = filepath
             };
-             if (model.SelectedProperty != null && (model.Role.Equals("Property Manager") || model.Role.Equals("Property Owner"))) { 
+             if (model.SelectedProperty != null && (model.Role.Equals("User"))) { 
                 foreach (var item in prop)
                     if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
                         applicationUser.UserProperties.Add(item);
@@ -149,7 +149,7 @@ namespace BusinessLogic.Services
 
             if (editUser.Role == "Admin")
                 applicationUser.UserProperties.Clear();
-            else if (editUser.SelectedProperty != null && (editUser.Role.Equals("Property Manager")|| editUser.Role.Equals("Property Owner")))
+            else if (editUser.SelectedProperty != null && (editUser.Role.Equals("User")))
             {
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)

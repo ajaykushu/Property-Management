@@ -26,7 +26,7 @@ $('.select-mul').change(function (e) {
     $('.select-input').val($(this).val());
 });
 $('#Role').on("change load", function (e) {
-    if ($(this).val() == "Property Manager" || $(this).val() == "Property Owner")
+    if ($(this).val() == "User")
         $('.mainprop').show();
    else
         $('.mainprop').hide();

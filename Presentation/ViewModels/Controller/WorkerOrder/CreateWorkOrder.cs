@@ -8,6 +8,7 @@ namespace Presentation.ViewModels
     [Serializable]
     public class CreateWorkOrder
     {
+       
         public string Location { get; set; }
         public string Area { get; set; }
         public List<SelectItem> Items { get; set; }
@@ -40,7 +41,10 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Select Section")]
         public int Section { get; set; }
-
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString ="{0:MM/dd/yyyy}")]
+        public DateTime DueDate { get; set; }
         public IFormFile File { get; set; }
     }
 }

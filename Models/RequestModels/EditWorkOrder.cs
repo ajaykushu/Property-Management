@@ -35,7 +35,7 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please give Section Id")]
         public long Section { get; set; }
-
+        public DateTime DueDate { get; set; }
         public List<SelectItem> Sections { get; set; }
         public IFormFile File { get; set; }
     }
