@@ -14,5 +14,6 @@ namespace DataEntity
         public string AreaName { get; set; }
         public int LocationId { get; set; }
         public Location Location { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

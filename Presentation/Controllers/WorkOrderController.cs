@@ -257,7 +257,7 @@ namespace Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
-                    if (status)
+                    
                        // TempData["Success"] = "Posted Successfully";
                 }
             }

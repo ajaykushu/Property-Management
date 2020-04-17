@@ -203,7 +203,7 @@ namespace Presentation.Controllers
             catch (Exception) { }
             return Json(true);
         }
-
+        [HttpGet]
         public async Task<IActionResult> PropertyConfig(long Id)
         {
             PropertyConfig result =null;
@@ -217,7 +217,7 @@ namespace Presentation.Controllers
                 }
             }
             catch (Exception) { }
-            return PartialView("_PropertyConfig",result);
+            return View("PropertyConfig",result);
         }
         [HttpPost]
         public async Task<IActionResult> PropertyConfig(PropertyConfig propertyConfig)
@@ -229,23 +229,22 @@ namespace Presentation.Controllers
                 {
                     _apiRoute.Value.Routes.TryGetValue("propertyconfig", out var path);
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, propertyConfig, this, _token);
-                    if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync() == "true")
-                        return Ok(StringConstants.SuccessSaved);
-                    else if (response.StatusCode == HttpStatusCode.BadRequest)
-                        return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-                    else
-                        return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var status = await response.Content.ReadAsStringAsync();
+                        if(status=="true")
+                        TempData["Success"] = StringConstants.SuccessSaved;
+                        
+                    }
+                   
                 }
                 catch (Exception)
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
+                    TempData["Error"] = StringConstants.Error;
                 }
             }
-            else
-            {
-                var msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
-                return StatusCode(500, msg);
-            }
+                return RedirectToAction("PropertyConfig",new {Id=propertyConfig.PropertyId}); 
+           
         }
         [HttpGet]
         public async Task<JsonResult> GetArea(int id)

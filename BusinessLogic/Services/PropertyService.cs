@@ -210,12 +210,12 @@ namespace BusinessLogic.Services
 
         public async Task<bool> SavePropertyConfig(PropertyConfig propertyConfig)
         {
-            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.Areas).FirstOrDefaultAsync();
-            string[] areas = null;
+            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.Areas).ThenInclude(x=>x.WorkOrders).FirstOrDefaultAsync();
+            HashSet<string> areas = null;
             if (!string.IsNullOrWhiteSpace(propertyConfig.Area))
             {
                 if (propertyConfig.Area.Contains(','))
-                    areas = propertyConfig.Area.Split(',');
+                    areas = propertyConfig.Area.Split(',').ToHashSet();
                 else
                     areas.Append(propertyConfig.Area);
 
@@ -240,18 +240,49 @@ namespace BusinessLogic.Services
                 var location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault() ;
                 if (location != null)
                 {
-                    if (location.Areas == null) location.Areas = new List<Area>();
-                    else location.Areas.Clear();
-                    foreach (var item in areas)
-                    {
-                        location.Areas.Add(new Area
+                    if (location.Areas == null) { location.Areas = new List<Area>();
+                        foreach (var item in areas)
                         {
-                            AreaName = item
-                        });
+                            location.Areas.Add(new Area
+                            {
+                                AreaName = item
+                            });
+                        }
+                    }
+                    else
+                    {
+                       
+                        for (int i=0;i<location.Areas.Count;)
+                        {
+                            if (!areas.Contains(location.Areas.ElementAt(i).AreaName))
+                            {
+                                if (location.Areas.ElementAt(i).WorkOrders.Count==0)
+                                    location.Areas.Remove(location.Areas.ElementAt(i));
+                                else
+                                    throw new BadRequestException(location.Areas.ElementAt(i).AreaName +" is assigned to workorder Ids: " + string.Join(",",location.Areas.ElementAt(i).WorkOrders.Select(x => x.Id).ToList()));
+                            }
+                            else
+                            {
+                                areas.Remove(location.Areas.ElementAt(i).AreaName);
+                                i++;
+                            }
+                        }
+                        foreach (var item in areas)
+                        {
+                            location.Areas.Add(new Area
+                            {
+                                AreaName = item
+                            });
+                        }
                     }
                     
                 }
             }
+            propertyConfig.Locations = prop.Locations.Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.LocationName
+            }).ToList();
             var status = await _property.Update(prop);
             if (status > 0)
                 return true;

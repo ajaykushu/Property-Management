@@ -15,5 +15,6 @@ namespace DataEntity
         public long PropertyId { get; set; }
         public Property Property { get; set; }
         public virtual ICollection<Area> Areas { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }
