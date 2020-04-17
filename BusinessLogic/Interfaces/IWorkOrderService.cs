@@ -30,5 +30,6 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> AssignToUser(long userId, long workOrderId);
         Task<List<SelectItem>> GetArea(long id);
+        Task<List<SelectItem>> GetLocation(long id);
     }
 }

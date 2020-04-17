@@ -1,0 +1,97 @@
+﻿@model PropertyConfig
+    <partial name="_ValidationScriptsPartial">
+        <div class="table_container">
+            <div class="workordertitle">
+                Add Property
+            </div>
+            <form asp-action="PropertyConfig" class="addconfig" >
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    @if (Model.Locations != null && Model.Locations.Any())
+                                    {
+                                        <div class="row ">
+                                            <div class="col-md-3">
+                                                <label for="Locations">Location Available</label>
+                                            </div>
+                                            <div class="col">
+
+                                                <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="LocationId" class="text-danger"></span>
+                                                
+                                            </div>
+                                        </div>
+                                    }
+                                        <div class="row top-buffer">
+                                            <div class="col-md-3">
+                                                <label for="NewLocation">New Location</label>
+                                            </div>
+                                            <div class="col">
+                                                <input asp-for="NewLocation" class="form-control form-control-sm custom-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                       </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <label for="Locations">Add Area</label>
+                                        </div>
+                                        <div class="col">
+                                            <textarea asp-for="Area" class="form-control form-control-sm custom-input"></textarea>
+                                            <span class="text-danger">Enter , speparated Areas</span><br />
+                                            <span class="text-info">Area will come prepopulated if available to corresponding location</span>
+                                        </div>
+                                       
+                                    </div>
+                                    </div>
+                            </td>
+                        <tr>
+                        <td>
+                            <input asp-for="PropertyId" hidden>
+                               <input type="submit" value="submit">
+                           </td>
+                        </tr>
+                    </tbody>
+                    </table>
+            </form>
+         </div>
+<script>
+     $('.addconfig').submit(function (e) {
+            e.preventDefault();
+            var url = $(this).attr('action');
+            var form = $(this).serialize();
+            if ($(this).valid()) {
+                $('.fa-spinner').prop("hidden", false);
+                RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', false, function (res) {
+                    $('.fa-spinner').prop("hidden", true);
+                    alertify.alert('Info', '<p>' + res + '</p>', function () {
+                        $("input[type=text]").val("");
+                        $('#Area').val("");
+                        $('select').prop('selectedIndex', 0);
+                    });
+
+                }, function (res) {
+                    $('.fa-spinner').prop("hidden", true);
+                    alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    });
+                }, "");
+            }
+     });
+    $('#LocationId').change(function () {
+         $.get('@Url.Action("GetArea","Property")' + "?id=" + $(this).val(),
+                function (data) {
+                    if (data != null || data != undefined) {
+                       $("#Area").val(data)
+                    }
+                });
+    })
+</script>

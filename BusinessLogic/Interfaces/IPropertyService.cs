@@ -1,4 +1,5 @@
-﻿using Models.RequestModels;
+﻿using Models;
+using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,5 +22,8 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> MarkPrimary(long id, long userId);
         Task<bool> CheckProperty(string userName);
+        Task<PropertyConfig> GetPropertyConfig(long id);
+        Task<bool> SavePropertyConfig(PropertyConfig propertyConfig);
+        Task<string> GetArea(int id);
     }
 }

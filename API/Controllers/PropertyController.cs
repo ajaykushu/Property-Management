@@ -85,5 +85,26 @@ namespace API.Controllers
             var res = await _propertyService.CheckProperty(propertyName);
             return Ok(res);
         }
+        [HttpGet]
+        [Route("propertyconfig")]
+        public async Task<ActionResult<PropertyConfig>> PropertyConfig(long Id)
+        {
+            var res = await _propertyService.GetPropertyConfig(Id);
+            return Ok(res);
+        }
+        [HttpPost]
+        [Route("propertyconfig")]
+        public async Task<ActionResult<bool>> PropertyConfig(PropertyConfig propertyConfig)
+        {
+            bool res = await _propertyService.SavePropertyConfig(propertyConfig);
+            return Ok(res);
+        }
+        [HttpGet]
+        [Route("getareaprop")]
+        public async Task<ActionResult<string>> GetArea(int id)
+        {
+            string res = await _propertyService.GetArea(id);
+            return Ok(res);
+        }
     }
 }

@@ -22,7 +22,7 @@ else
                                 </div>
                                 <div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="Property" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
+                                        <option value="">Please select Property</option>
                                     </select>
                                     <span asp-validation-for="Property" class="text-danger"></span>
                                 </div>
@@ -35,7 +35,7 @@ else
                                     </div>
                                     <div class="col">
                                         <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Location, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
+                                            <option value="">Please select Location</option>
                                         </select>
                                         <span asp-validation-for="LocationId" class="text-danger"></span>
                                     </div>
@@ -47,7 +47,7 @@ else
                                     </div>
                                     <div class="col">
                                         <select class="form-control form-control-sm custom-input" asp-for="AreaId">
-                                            <option value="">Please select one</option>
+                                            <option value="">Please select Area</option>
                                         </select>
                                         <span asp-validation-for="AreaId" class="text-danger"></span>
                                     </div>
@@ -168,15 +168,27 @@ else
         $('#LocationId').change(function () {
             $.get('@Url.Action("GetArea","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
-                    
+                    $("#AreaId").html("<option value=''>Please select Area</option>")
                     if (data != null || data != undefined) {
-                       $("#AreaId").html("<option value=''>Area</option>")
                         for (var i = 0; i < data.length; i++) {
                             $("#AreaId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                         }
                     }
                 });
         });
+        $('#Property').change(function () {
+            console.log($(this).val());
+            $.get('@Url.Action("GetLocation","WorkOrder")' + "?id=" + $(this).val(),
+                function (data) {
+                    $("#LocationId").html("<option value=''>Please select Location</option>")
+                     $("#AreaId").html("<option value=''>Please select Area</option>")
+                    if (data != null || data != undefined) {
+                        for (var i = 0; i < data.length; i++) {
+                            $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                        }
+                    }
+                });
+         });
          $('#Department').change(function () {
             console.log($(this).val());
             $.get('@Url.Action("GetSection","WorkOrder")' + "?id=" + $(this).val(),
@@ -186,6 +198,19 @@ else
                          $("#Section").html("<option value=''>Section</option>")
                         for (var i = 0; i < data.length; i++) {
                             $("#Section").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                        }
+                    }
+                });
+         });
+         $('#Property').change(function () {
+            console.log($(this).val());
+            $.get('@Url.Action("GetLocation","WorkOrder")' + "?id=" + $(this).val(),
+                function (data) {
+                    console.log(data);
+                    if (data != null || data != undefined) {
+                         $("#Location").html("<option value=''>Section</option>")
+                        for (var i = 0; i < data.length; i++) {
+                            $("#Location").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                         }
                     }
                 });

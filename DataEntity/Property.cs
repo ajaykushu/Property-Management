@@ -47,7 +47,7 @@ namespace DataEntity
         [Required]
         [Column(TypeName = "varchar(50)")]
         public string Country { set; get; }
-
+        public virtual ICollection<Location> Locations { get; set; }
         public virtual ICollection<UserProperty> UserProperties { get; set; }
     }
 }

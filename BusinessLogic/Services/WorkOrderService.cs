@@ -25,6 +25,7 @@ namespace BusinessLogic.Services
         private readonly UserManager<ApplicationUser> _appuser;
         private readonly IRepo<Item> _itemRepo;
         private readonly IRepo<UserProperty> _userProperty;
+        private readonly IRepo<Property> _property;
         private readonly IRepo<Department> _department;
         private readonly IRepo<ApplicationRole> _role;
         private readonly IRepo<WorkOrder> _workOrder;
@@ -35,7 +36,7 @@ namespace BusinessLogic.Services
         private readonly IRepo<Area> _area;
         private readonly IImageUploadInFile _imageuploadinfile;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<Location> location, IRepo<Area> area)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<Location> location, IRepo<Area> area, IRepo<Property> property)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -50,6 +51,7 @@ namespace BusinessLogic.Services
             _appuser = appuser;
             _area = area;
             _location = location;
+            _property = property;
         }
 
         public async Task<bool> CreateWO(CreateWO createWO)
@@ -115,17 +117,17 @@ namespace BusinessLogic.Services
 
         public async Task<CreateWO> GetCreateWOModel(long userId)
         {
-            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).AsNoTracking().ToListAsync();
-            var primaryprop = property.Where(x => x.IsPrimary == true).FirstOrDefault();
+            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x=>x.Locations).ThenInclude(x=>x.Areas).AsNoTracking().ToListAsync();
+            var primaryprop = property.Where(x => x.IsPrimary == true).Select(x=>x.Property).FirstOrDefault();
             StringBuilder sb = new StringBuilder();
             if (primaryprop != null)
             {
-                if (!string.IsNullOrWhiteSpace(primaryprop.Property.Locality))
+                if (!string.IsNullOrWhiteSpace(primaryprop.Locality))
                 {
-                    sb.Append(primaryprop.Property.Locality);
+                    sb.Append(primaryprop.Locality);
                     sb.Append(", ");
                 }
-                sb.Append(primaryprop.Property.City);
+                sb.Append(primaryprop.City);
             }
 
             CreateWO wo = new CreateWO()
@@ -135,7 +137,7 @@ namespace BusinessLogic.Services
                     Id = x.Property.Id,
                     PropertyName = x.Property.PropertyName
                 }).ToList(),
-                Property = primaryprop != null ? primaryprop.PropertyId : 0,
+                Property = primaryprop != null ? primaryprop.Id: 0,
                 Issues = await _issueRepo.GetAll().Select(x => new SelectItem
                 {
                     Id = x.Id,
@@ -146,12 +148,12 @@ namespace BusinessLogic.Services
                     Id = x.Id,
                     PropertyName = x.ItemName
                 }).ToListAsync(),
-
-                Location = await _location.GetAll().Select(x => new SelectItem {Id=x.Id,PropertyName=x.LocationName }).ToListAsync(),
                 Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).ToListAsync(),
                 DueDate = DateTime.Now,
                 
             };
+            if (primaryprop != null && primaryprop.Locations != null)
+                wo.Location = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
 
             return wo;
         }
@@ -242,11 +244,12 @@ namespace BusinessLogic.Services
         public async Task<EditWorkOrder> GetEditWO(long id)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).Include(x => x.AssignedToRole).Select(x => 
+            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).Include(x=>x.Property).Select(x => 
                   new EditWorkOrder
                 {
                     Id = x.Id,
                     PropertyName = x.Property.PropertyName,
+                    Location=x.Property.Locations.Select(x=>new SelectItem {Id=x.Id,PropertyName=x.LocationName }).ToList(),
                     Description = x.Description,
                     Issue = x.IssueId,
                     Item = x.ItemId,
@@ -273,9 +276,6 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.DepartmentName
             }).ToListAsync();
-            editwo.Location = await _location.GetAll()
-                .Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName })
-                .ToListAsync();
             editwo.Area = await _area.GetAll().Where(x=>x.LocationId==editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).ToListAsync();
             editwo.Sections = await _role.Get(x => x.DepartmentId == editwo.Department).Select(x => new SelectItem
             {
@@ -444,6 +444,18 @@ namespace BusinessLogic.Services
                 PropertyName=x.AreaName
             }).ToListAsync();
             return res;
+        }
+
+        public Task<List<SelectItem>> GetLocation(long id)
+        {
+            var res = _property.Get(x => x.Id == id).Include(x => x.Locations).Select(x =>
+                    x.Locations.Select(y => new SelectItem
+                    {
+                        Id = y.Id,
+                        PropertyName = y.LocationName
+                    }).ToList()).AsNoTracking().FirstOrDefaultAsync();
+            return res;
+           
         }
     }
 }

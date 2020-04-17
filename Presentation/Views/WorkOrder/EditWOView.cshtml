@@ -34,7 +34,7 @@
                                         </div>
                                         <div class="col">
                                             <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Location, "Id", "PropertyName"))">
-                                                <option value="">Please select one</option>
+                                                <option value="">Please select Location</option>
                                             </select>
                                             <span asp-validation-for="LocationId" class="text-danger"></span>
                                         </div>
@@ -48,7 +48,7 @@
                                         </div>
                                         <div class="col">
                                             <select class="form-control form-control-sm custom-input" asp-for="AreaId" asp-items="@(new SelectList(Model.Area, "Id", "PropertyName"))">
-                                                <option value="">Please select one</option>
+                                                <option value="">Please select Area</option>
                                             </select>
                                             <span asp-validation-for="AreaId" class="text-danger"></span>
                                         </div>
@@ -171,23 +171,34 @@
         $('#LocationId').change(function () {
             $.get('@Url.Action("GetArea","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
-                    
+                    $("#AreaId").html("<option value=''>Please select Area</option>")
                     if (data != null || data != undefined) {
-                       $("#AreaId").html("<option value=''>Area</option>")
                         for (var i = 0; i < data.length; i++) {
                             $("#AreaId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                         }
                     }
                 });
         });
+        $('#Property').change(function () {
+            console.log($(this).val());
+            $.get('@Url.Action("GetLocation","WorkOrder")' + "?id=" + $(this).val(),
+                function (data) {
+                    $("#LocationId").html("<option value=''>Please select Location</option>")
+                     $("#AreaId").html("<option value=''>Please select Area</option>")
+                    if (data != null || data != undefined) {
+                        for (var i = 0; i < data.length; i++) {
+                            $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                        }
+                    }
+                });
+         });
          $('#Department').change(function () {
             console.log($(this).val());
             $.get('@Url.Action("GetSection","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
-                    console.log(data);
+                     $("#Section").html("<option value=''>Section</option>")
                     if (data != null || data != undefined) {
                         for (var i = 0; i < data.length; i++) {
-                            $("#Section").html("<option value=''>Section</option>")
                             $("#Section").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                         }
                     }

@@ -87,6 +87,22 @@ namespace Presentation.Controllers
             }
             return Ok(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetLocation(long id)
+        {
+            List<SelectItem> result = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getlocation", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+            }
+            return Ok(result);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetSection(long id)
@@ -242,7 +258,7 @@ namespace Presentation.Controllers
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                        TempData["Success"] = "Posted Successfully";
+                       // TempData["Success"] = "Posted Successfully";
                 }
             }
             catch (Exception)

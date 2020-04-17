@@ -18,12 +18,16 @@ namespace BusinessLogic.Services
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
         private readonly IRepo<ApplicationUser> _user;
+        private readonly IRepo<Location> _loc;
+        private readonly IRepo<Area> _area;
 
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user)
+        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user, IRepo<Location> loc, IRepo<Area> area)
         {
             _property = property;
             _proptype = proptype;
             _user = user;
+            _loc = loc;
+            _area = area;
         }
 
         public PropertyOperationModel GetPropertyType()
@@ -188,6 +192,76 @@ namespace BusinessLogic.Services
             var res = await _property.Get(x => x.PropertyName.ToLower().Equals(propertyName.ToLower())).FirstOrDefaultAsync();
             status = res == null ? false : true;
             return status;
+        }
+
+        public async Task<PropertyConfig> GetPropertyConfig(long id)
+        {
+            var res= await _loc.Get(x => x.PropertyId == id).Select(x => new SelectItem {
+            Id=x.Id,
+            PropertyName=x.LocationName
+            }).ToListAsync();
+            var proprtyconfig = new PropertyConfig
+            {
+                Locations = res,
+                PropertyId=id
+            };
+            return proprtyconfig;
+        }
+
+        public async Task<bool> SavePropertyConfig(PropertyConfig propertyConfig)
+        {
+            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.Areas).FirstOrDefaultAsync();
+            string[] areas = null;
+            if (!string.IsNullOrWhiteSpace(propertyConfig.Area))
+            {
+                if (propertyConfig.Area.Contains(','))
+                    areas = propertyConfig.Area.Split(',');
+                else
+                    areas.Append(propertyConfig.Area);
+
+            }
+            if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
+            {
+                if (prop.Locations == null) prop.Locations = new List<Location>();
+                var location = new Location();
+                location.LocationName = propertyConfig.NewLocation;
+                location.Areas = new List<Area>();
+                foreach(var item in areas)
+                {
+                    location.Areas.Add(new Area
+                    {
+                        AreaName = item
+                    });
+                }
+                prop.Locations.Add(location);
+            }
+            else if (propertyConfig.LocationId != 0)
+            {
+                var location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault() ;
+                if (location != null)
+                {
+                    if (location.Areas == null) location.Areas = new List<Area>();
+                    else location.Areas.Clear();
+                    foreach (var item in areas)
+                    {
+                        location.Areas.Add(new Area
+                        {
+                            AreaName = item
+                        });
+                    }
+                    
+                }
+            }
+            var status = await _property.Update(prop);
+            if (status > 0)
+                return true;
+            return false;
+        }
+
+        public async Task<string> GetArea(int id)
+        {
+            var res = await _area.Get(x => x.LocationId == id).Select(x => x.AreaName).ToListAsync();
+                return string.Join(',',res);
         }
     }
 }

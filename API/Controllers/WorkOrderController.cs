@@ -43,6 +43,14 @@ namespace API.Controllers
             List<SelectItem> prop = await _workOrderService.GetArea(id);
             return Ok(prop);
         }
+        [HttpGet]
+        [Route("getlocation")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
+        public async Task<ActionResult<SelectItem>> GetLocation(long id)
+        {
+            List<SelectItem> prop = await _workOrderService.GetLocation(id);
+            return Ok(prop);
+        }
 
         [HttpGet]
         [Route("getsection")]

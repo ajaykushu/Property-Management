@@ -2480,3 +2480,15 @@ Stack Trace:    at Microsoft.EntityFrameworkCore.Update.ReaderModificationComman
 2020-04-16 17:39:16.323 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 175.8824 ms
 2020-04-16 17:39:52.210 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 200.239 ms
 2020-04-16 17:40:41.995 +05:30 [INF] HTTP GET /api/workorder/getarea?id=1 responded 200 in 100.9464 ms
+2020-04-16 21:43:53.358 +05:30 [INF] HTTP GET /api/values responded 404 in 53.5226 ms
+2020-04-16 21:44:02.641 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3931.5402 ms
+2020-04-16 21:44:03.549 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 155.6083 ms
+2020-04-16 21:44:08.826 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=1 responded 200 in 54.2355 ms
+2020-04-16 21:44:11.267 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 62.885 ms
+2020-04-16 21:44:17.377 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 107.5753 ms
+2020-04-16 21:44:21.809 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=5 responded 200 in 202.4701 ms
+2020-04-16 21:44:28.057 +05:30 [INF] HTTP GET /api/workorder/getarea?id=2 responded 200 in 90.5035 ms
+2020-04-16 21:44:34.186 +05:30 [INF] HTTP GET /api/workorder/getarea?id=1 responded 200 in 21.6781 ms
+2020-04-16 21:44:45.013 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 110.5668 ms
+2020-04-16 21:44:48.469 +05:30 [INF] HTTP GET /api/workorder/getarea?id=1 responded 200 in 24.0446 ms
+2020-04-16 21:44:52.712 +05:30 [INF] HTTP GET /api/workorder/getarea?id=2 responded 200 in 24.7469 ms

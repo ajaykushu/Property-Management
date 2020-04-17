@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200417065317_Withthreelevel")]
+    partial class Withthreelevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "7df7d67e-c1e2-41ff-b2f3-2e758efaa9a7",
+                            ConcurrencyStamp = "0fafff48-aef6-45bb-a512-3f000c127efc",
                             DepartmentId = 1,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -64,7 +66,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "ad44d1c0-3c61-46b6-89dc-5569b6879788",
+                            ConcurrencyStamp = "3fcbfd28-15f2-4504-b85e-197f0e876e68",
                             DepartmentId = 2,
                             Name = "User",
                             NormalizedName = "USER"
@@ -72,7 +74,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "3644e5ec-0d48-41fe-8dc2-a3a3f90fb3d2",
+                            ConcurrencyStamp = "400e5bab-4a5c-4fd3-8e19-9eb1c35d330e",
                             DepartmentId = 3,
                             Name = "Plumber",
                             NormalizedName = "PLUMBER"
@@ -80,7 +82,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 4L,
-                            ConcurrencyStamp = "81aa425c-5b5d-487e-9947-f9417182a496",
+                            ConcurrencyStamp = "cd40cbac-f04e-48ab-ba7b-a6a349be5eb4",
                             DepartmentId = 3,
                             Name = "Electrician",
                             NormalizedName = "ELECTRICIAN"
@@ -444,12 +446,15 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("LocationName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("PropertyId")
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("PropertyId1")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyId");
+                    b.HasIndex("PropertyId1");
 
                     b.ToTable("Locations");
                 });
@@ -1165,9 +1170,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("DataEntity.Property", "Property")
                         .WithMany("Locations")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PropertyId1");
                 });
 
             modelBuilder.Entity("DataEntity.Property", b =>
