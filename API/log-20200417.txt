@@ -1974,3 +1974,22 @@ Stack Trace:    at BusinessLogic.Services.PropertyService.SavePropertyConfig(Pro
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2020-04-17 16:49:20.826 +05:30 [INF] HTTP GET /api/property/propertyconfig?Id=1 responded 200 in 12.6106 ms
+2020-04-17 16:55:01.298 +05:30 [INF] HTTP GET /api/values responded 404 in 156.6483 ms
+2020-04-17 16:55:08.308 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4622.4786 ms
+2020-04-17 16:55:09.428 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 172.3978 ms
+2020-04-17 16:55:18.127 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 169.8138 ms
+2020-04-17 16:55:39.424 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 282.7348 ms
+2020-04-17 16:56:11.463 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=6 responded 200 in 178.1009 ms
+2020-04-17 16:56:17.154 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 446.4254 ms
+2020-04-17 16:56:17.288 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 40.4987 ms
+2020-04-17 16:56:21.716 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 23.5267 ms
+2020-04-17 16:56:32.593 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Electrician&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 122.4003 ms
+2020-04-17 16:58:39.600 +05:30 [INF] HTTP GET /api/values responded 404 in 78.898 ms
+2020-04-17 16:58:51.548 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4361.4099 ms
+2020-04-17 16:58:52.568 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 182.2484 ms
+2020-04-17 16:58:58.518 +05:30 [INF] HTTP GET /api/property/listproperties responded 200 in 100.4569 ms
+2020-04-17 16:59:00.749 +05:30 [INF] HTTP GET /api/property/propertyconfig?Id=1 responded 200 in 52.3791 ms
+2020-04-17 16:59:07.118 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 140.9842 ms
+2020-04-17 16:59:11.387 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=6 responded 200 in 229.2501 ms
+2020-04-17 16:59:22.450 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Electrician&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 138.8852 ms
+2020-04-17 16:59:28.422 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 41.3884 ms

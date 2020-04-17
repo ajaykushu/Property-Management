@@ -199,7 +199,7 @@ namespace BusinessLogic.Services
             }
             else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
             {
-                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower()));
+                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower()) || x.AssignedToRole.NormalizedName.StartsWith(matchStr.ToUpper()));
             }
 
             List<WorkOrderAssigned> workOrderAssigned = null;
