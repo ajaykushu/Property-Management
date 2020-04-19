@@ -8,7 +8,7 @@ namespace DataEntity
     {
         public Department()
         {
-            this.UserType = new HashSet<ApplicationRole>();
+            this.ApplicationUsers = new HashSet<ApplicationUser>();
         }
 
         [Key]
@@ -18,6 +18,6 @@ namespace DataEntity
         [Column(TypeName = "varchar(50)")]
         public string DepartmentName { get; set; }
 
-        public virtual ICollection<ApplicationRole> UserType { get; set; }
+        public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

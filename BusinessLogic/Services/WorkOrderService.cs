@@ -1,5 +1,4 @@
 ﻿using BusinessLogic.Interfaces;
-using BusinessLogic.StateMachine;
 using DataAccessLayer.Interfaces;
 using DataEntity;
 using Microsoft.AspNetCore.Http;
@@ -27,29 +26,27 @@ namespace BusinessLogic.Services
         private readonly IRepo<UserProperty> _userProperty;
         private readonly IRepo<Property> _property;
         private readonly IRepo<Department> _department;
-        private readonly IRepo<ApplicationRole> _role;
         private readonly IRepo<WorkOrder> _workOrder;
         private readonly IRepo<Stage> _stage;
         private readonly IRepo<Comments> _comments;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepo<Location> _location;
-        private readonly IRepo<Area> _area;
+        private readonly IRepo<SubLocation> _sublocation;
         private readonly IImageUploadInFile _imageuploadinfile;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<ApplicationRole> role, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<Location> location, IRepo<Area> area, IRepo<Property> property)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<Location> location, IRepo<SubLocation> sublocation, IRepo<Property> property)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
             _userProperty = userProperty;
             _department = department;
             _workOrder = workOrder;
-            _role = role;
             _stage = stage;
             _httpContextAccessor = httpContextAccessor;
             _comments = comments;
             _imageuploadinfile = imageuploadinfile;
             _appuser = appuser;
-            _area = area;
+            _sublocation = sublocation;
             _location = location;
             _property = property;
         }
@@ -59,17 +56,17 @@ namespace BusinessLogic.Services
             WorkOrder workOrder = new WorkOrder
             {
                 RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value,
-                PropertyId = createWO.Property,
-                IssueId = createWO.Issue,
-                ItemId = createWO.Item,
+                PropertyId = createWO.PropertyId,
+                IssueId = createWO.IssueId,
+                ItemId = createWO.ItemId,
                 Description = createWO.Description,
-                AssignedToRoleId = createWO.Section,
+                AssignedToId = createWO.UserId,
                 DueDate=createWO.DueDate,
                 LocationId=createWO.LocationId,
-                AreaId=createWO.AreaId
+                SubLocationId=createWO.SubLocationId
             };
 
-            workOrder.StageId = _stage.Get(x => x.StageCode == "INITWO").Select(x => x.Id).FirstOrDefault();
+            workOrder.StageId = _stage.Get(x => x.StageCode == "OPEN").Select(x => x.Id).FirstOrDefault();
             if (createWO.File != null)
             {
                 string path = await _imageuploadinfile.UploadAsync(createWO.File, "WOFiles");
@@ -83,7 +80,7 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).ThenInclude(x => x.Department).Include(x=>x.Area).Include(x=>x.Location).Select(x => new
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x=>x.SubLocation).Include(x=>x.Location).Select(x => new
                 WorkOrderDetail
                 {
                     PropertyName = x.Property.PropertyName,
@@ -94,22 +91,20 @@ namespace BusinessLogic.Services
                     CreatedTime = x.CreatedTime,
                     DueDate=x.DueDate,
                     UpdatedTime = x.UpdatedTime,
-                    Department = x.AssignedToRole.Department.DepartmentName,
-                    Section = x.AssignedToRole.Name,
+                    Department = x.AssignedTo.Department.DepartmentName,
                     AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
                     Requestedby = x.RequestedBy,
                     Id = x.Id,
                     UpdatedBy = x.UpdatedByUserName,
                     Description = x.Description,
                     Location=x.Location.LocationName,
-                    Area=x.Area.AreaName,
-                    Attachment =string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/ImageFileStore/" , x.AttachmentPath)
+                    SubLocation=x.SubLocation.AreaName,
+                    Attachment =string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/" , x.AttachmentPath)
             }).AsNoTracking().FirstOrDefaultAsync();
-            var users = await _appuser.GetUsersInRoleAsync(workorder.Section);
-            workorder.Users = users.Select(x => new SelectItem
+            workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = x.UserName + " (" + x.FirstName + " " + x.LastName + ")"
+                PropertyName =string.Concat(x.StageCode,"(",x.StageDescription,")")
             }).ToList();
             return workorder;
         }
@@ -117,19 +112,9 @@ namespace BusinessLogic.Services
 
         public async Task<CreateWO> GetCreateWOModel(long userId)
         {
-            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x=>x.Locations).ThenInclude(x=>x.Areas).AsNoTracking().ToListAsync();
+            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x=>x.Locations).ThenInclude(x=>x.SubLocations).AsNoTracking().ToListAsync();
             var primaryprop = property.Where(x => x.IsPrimary == true).Select(x=>x.Property).FirstOrDefault();
-            StringBuilder sb = new StringBuilder();
-            if (primaryprop != null)
-            {
-                if (!string.IsNullOrWhiteSpace(primaryprop.Locality))
-                {
-                    sb.Append(primaryprop.Locality);
-                    sb.Append(", ");
-                }
-                sb.Append(primaryprop.City);
-            }
-
+           
             CreateWO wo = new CreateWO()
             {
                 Properties = property.Select(x => new SelectItem
@@ -137,7 +122,7 @@ namespace BusinessLogic.Services
                     Id = x.Property.Id,
                     PropertyName = x.Property.PropertyName
                 }).ToList(),
-                Property = primaryprop != null ? primaryprop.Id: 0,
+                PropertyId = primaryprop != null ? primaryprop.Id: 0,
                 Issues = await _issueRepo.GetAll().Select(x => new SelectItem
                 {
                     Id = x.Id,
@@ -153,24 +138,24 @@ namespace BusinessLogic.Services
                 
             };
             if (primaryprop != null && primaryprop.Locations != null)
-                wo.Location = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
+                wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
 
             return wo;
         }
 
-        public async Task<List<SelectItem>> GetSection(long id)
+        public async Task<List<SelectItem>> GetUsersByDepartment(long id)
         {
-            var res = await  _role.GetAll().Where(x => x.DepartmentId == id).Select(x => new SelectItem
+            var res = await  _appuser.Users.Where(x => x.DepartmentId == id).Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = x.Name
+                PropertyName = String.Concat(x.UserName,"(",x.FirstName," ",x.LastName,")")
             }).AsNoTracking().ToListAsync();
             return res;
         }
 
         public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr, FilterEnumWOStage stage, string endDate)
         {
-            int iteminpage = 8;
+            int iteminpage = 20;
             var query = _workOrder.GetAll();
 
             if (!string.IsNullOrWhiteSpace(matchStr) && filter == FilterEnumWO.ByDate)
@@ -186,50 +171,48 @@ namespace BusinessLogic.Services
                     query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
                 }
             }
-            else if (filter == FilterEnumWO.ByStatus)
+            else if (filter == FilterEnumWO.ByStatus && stage!=FilterEnumWOStage.NA)
             {
                 string stageCode = "";
-                if (stage == FilterEnumWOStage.INITWO)
-                    stageCode = "INITWO";
-                if (stage == FilterEnumWOStage.WOCOMP)
-                    stageCode = "WOCOMP";
-                if (stage == FilterEnumWOStage.WOPROG)
-                    stageCode = "WOPROG";
+                if (stage == FilterEnumWOStage.OPEN)
+                    stageCode = "OPEN";
+                else if (stage == FilterEnumWOStage.BIDACCEPTED)
+                    stageCode = "BIDACCEPTED";
+                else if (stage == FilterEnumWOStage.INPROGRESS)
+                    stageCode = "INPROGRESS";
+                else if (stage == FilterEnumWOStage.COMPLETED)
+                    stageCode = "COMPLETED";
+                else if (stage == FilterEnumWOStage.PENDINGAPPROVAL)
+                    stageCode = "PENDINGAPPROVAL";
                 query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.ToLower().Equals(stageCode.ToLower()));
             }
             else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
             {
-                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower()) || x.AssignedToRole.NormalizedName.StartsWith(matchStr.ToUpper()));
+                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower())|| x.AssignedTo.FirstName.ToLower().StartsWith(matchStr.ToLower()));
             }
 
             List<WorkOrderAssigned> workOrderAssigned = null;
-            var count = query.Count();
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            query = query.Include(x => x.AssignedToRole).Include(x => x.AssignedTo);
+            query = query.Include(x => x.AssignedTo);
             if (role.Equals("User"))
             {
                 query = query.Where(x => x.CreatedByUserName.Equals(username));
             }
-            else if (!role.Equals("Admin"))
-            {
-                query = query.Where(x => x.AssignedToRole.Name.ToLower().Equals(role.ToLower()));
-            }
-            
-
-            workOrderAssigned = await query.Include(x => x.Stage).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            var count = query.Count();
+            workOrderAssigned = await query.Include(x => x.Stage).Include(x=>x.Property).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
                 Stage = x.Stage.StageCode.ToLower(),
-                AssignedTo = x.AssignedTo.UserName,
-                AssignedToSection = x.AssignedToRole.Name
+                AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
+                Property = new SelectItem {Id=x.PropertyId,PropertyName=x.Property.PropertyName}
             }).AsNoTracking().ToListAsync();
             foreach (var item in workOrderAssigned)
-                if (item.AssignedTo != null && item.AssignedTo.Equals(username, StringComparison.InvariantCultureIgnoreCase))
-                    item.AssignedTo = "Me";
-
+                if (item.AssignedToUser != null && item.AssignedToUser.StartsWith(username, StringComparison.InvariantCultureIgnoreCase))
+                    item.AssignedToUser = "Me";
+            
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
                 Payload = workOrderAssigned,
@@ -244,21 +227,21 @@ namespace BusinessLogic.Services
         public async Task<EditWorkOrder> GetEditWO(long id)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.AssignedToRole).Include(x=>x.Property).Select(x => 
+            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x=>x.Property).Select(x => 
                   new EditWorkOrder
                 {
                     Id = x.Id,
                     PropertyName = x.Property.PropertyName,
-                    Location=x.Property.Locations.Select(x=>new SelectItem {Id=x.Id,PropertyName=x.LocationName }).ToList(),
+                    Locations=x.Property.Locations.Select(x=>new SelectItem {Id=x.Id,PropertyName=x.LocationName }).ToList(),
                     Description = x.Description,
-                    Issue = x.IssueId,
-                    Item = x.ItemId,
+                    IssueId = x.IssueId,
+                    ItemId = x.ItemId,
                     CreatedDate = x.CreatedTime,
-                    Department = x.AssignedToRole.DepartmentId.GetValueOrDefault(),
-                    Section = x.AssignedToRole.Id,
+                    DepartmentId = x.AssignedTo.DepartmentId.GetValueOrDefault(),
+                    UserId = x.AssignedTo.Id,
                     DueDate=x.DueDate,
                     LocationId=x.LocationId.GetValueOrDefault(),
-                    AreaId=x.AreaId.GetValueOrDefault()
+                    SubLocationId=x.SubLocationId.GetValueOrDefault()
                 }
             ).AsNoTracking().FirstOrDefaultAsync();
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
@@ -276,11 +259,11 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.DepartmentName
             }).ToListAsync();
-            editwo.Area = await _area.GetAll().Where(x=>x.LocationId==editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).ToListAsync();
-            editwo.Sections = await _role.Get(x => x.DepartmentId == editwo.Department).Select(x => new SelectItem
+            editwo.SubLocations = await _sublocation.GetAll().Where(x=>x.LocationId==editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).ToListAsync();
+            editwo.Users = await _appuser.Users.Where(x => x.DepartmentId == editwo.DepartmentId).Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = x.Name
+                PropertyName = String.Concat(x.UserName+"(",x.FirstName," ",x.LastName,")")
             }).AsNoTracking().ToListAsync();
             return editwo;
         }
@@ -300,12 +283,12 @@ namespace BusinessLogic.Services
                     }
                 }
                 wo.Description = editWorkOrder.Description;
-                wo.AssignedToRoleId = editWorkOrder.Section;
-                wo.IssueId = editWorkOrder.Issue;
-                wo.ItemId = editWorkOrder.Item;
+                wo.AssignedToId = editWorkOrder.UserId;
+                wo.IssueId = editWorkOrder.IssueId;
+                wo.ItemId = editWorkOrder.ItemId;
                 wo.DueDate = editWorkOrder.DueDate;
                 wo.LocationId = editWorkOrder.LocationId;
-                wo.AreaId = editWorkOrder.AreaId;
+                wo.SubLocationId = editWorkOrder.SubLocationId;
 
             }
 
@@ -384,61 +367,30 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        public async Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command)
+        public async Task<bool> WorkOrderStageChange(long Id, int stageId)
         {
-            var wo = await _workOrder.Get(x => x.Id == workOrderId).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
-
-            var nextstate = WorkOrderState.GetNextState((FilterEnumWOStage)wo.Stage.Id, command);
-
-            if (nextstate == (FilterEnumWOStage)wo.StageId && command == ProcessEnumWOStage.TrackIn)
-                throw new BadRequestException("WO Completed");
-
-            if (nextstate == (FilterEnumWOStage)wo.StageId && command == ProcessEnumWOStage.TrackOut)
-                throw new BadRequestException("WO Reached Start Stage");
-
-            wo.Comments.Add(new Comments
-            {
-                Comment = string.Concat("Work Order Stage Changed From " , wo.Stage.StageCode , " To " , nextstate)
-            });
-            wo.StageId = (int)nextstate;
-            if (wo.Comments == null)
-                wo.Comments = new List<Comments>();
-
-            var status = await _workOrder.Update(wo);
-            if (status > 0)
-                return true;
-            return false;
-        }
-
-        public async Task<bool> AssignToUser(long userId, long workOrderId)
-        {
-            var wo = _workOrder.Get(x => x.Id == workOrderId).Include(x => x.AssignedToRole).FirstOrDefault();
-            if (wo != null)
-            {
-                var user = await _appuser.FindByIdAsync(userId + "");
-                //check userid is in role
-                var status = await _appuser.IsInRoleAsync(user, wo.AssignedToRole.Name);
-                if (status)
+            var wo = await _workOrder.Get(x => x.Id == Id).Include(x=>x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
+            var stage = await _stage.Get(x => x.Id == stageId).FirstOrDefaultAsync();
+            if (stage != null) {
+                if (wo.Comments == null)
+                    wo.Comments = new List<Comments>();
+                wo.Comments.Add(new Comments
                 {
-                    wo.AssignedToId = userId;
-                    if (wo.Comments == null) wo.Comments = new List<Comments>();
-                    wo.Comments.Add(
-                        new Comments
-                        {
-                            Comment = string.Concat("Assigned To User: " , user.UserName , " (" , user.FirstName , " " + user.LastName , ")")
-                        }
-                    );
-                    var updateStatus = await _workOrder.Update(wo);
-                    if (updateStatus > 0)
-                        return true;
-                }
+                    Comment = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ",stage.StageCode )
+                });
+                wo.StageId = stageId;
+                var status = await _workOrder.Update(wo);
+                if (status > 0)
+                    return true;
             }
             return false;
         }
 
-        public async  Task<List<SelectItem>> GetArea(long id)
+        
+
+        public async  Task<List<SelectItem>> GetSubLocation(long id)
         {
-            var res =await  _area.GetAll().Where(x => x.LocationId == id).Select(x => new SelectItem
+            var res =await  _sublocation.GetAll().Where(x => x.LocationId == id).Select(x => new SelectItem
             {
                 Id=x.Id,
                 PropertyName=x.AreaName

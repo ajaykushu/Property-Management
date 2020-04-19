@@ -8,23 +8,24 @@ namespace Models.RequestModels
     public class EditWorkOrder
     {
         public long Id { get; set; }
-        public List<SelectItem> Location { get; set; }
+        public List<SelectItem> Locations { get; set; }
         [Required]
         public int LocationId { get; set; }
-        public List<SelectItem> Area { get; set; }
+        public List<SelectItem> SubLocations { get; set; }
         [Required]
-        public int AreaId { get; set; }
+        public int SubLocationId { get; set; }
         public List<SelectItem> Items { get; set; }
 
         [Required(ErrorMessage = "Please Select Item")]
-        public int Item { get; set; }
+        public int ItemId { get; set; }
+
 
         public string PropertyName { get; set; }
 
         public List<SelectItem> Issues { get; set; }
 
         [Required(ErrorMessage = "Please Select Issue Id")]
-        public int Issue { get; set; }
+        public int IssueId { get; set; }
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
@@ -34,13 +35,11 @@ namespace Models.RequestModels
 
         public List<SelectItem> Departments { get; set; }
 
-        [Required(ErrorMessage = "Please give Department Id")]
-        public int Department { get; set; }
-
+        public int DepartmentId { get; set; }
         [Required(ErrorMessage = "Please give Section Id")]
-        public long Section { get; set; }
+        public long UserId { get; set; }
         public DateTime DueDate { get; set; }
-        public List<SelectItem> Sections { get; set; }
+        public List<SelectItem> Users { get; set; }
         public IFormFile File { get; set; }
     }
 }

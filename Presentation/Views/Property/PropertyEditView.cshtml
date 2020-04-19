@@ -30,7 +30,7 @@
                             </div>
                             <div class="row top-buffer ">
                                 <div class="col-md-3">
-                                    <label for="PropertyName">Property Name </label>
+                                    <label asp-for="PropertyName"></label>
                                 </div>
                                 <div class="col">
                                     <input asp-for="PropertyName" class="form-control-sm custom-input">
@@ -45,38 +45,20 @@
                         <div class="col">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <label for="HouseNumber">House Number</label>
+                                    <label asp-for="StreetAddress1"></label>
                                 </div>
                                 <div class="col">
-                                    <input asp-for="HouseNumber" class="form-control-sm custom-input">
-                                    <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                                    <input asp-for="StreetAddress1" class="form-control-sm custom-input">
+                                    <span asp-validation-for="StreetAddress1" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row top-buffer">
                                 <div class="col-md-3">
-                                    <label for="Street">Street</label>
+                                    <label asp-for="StreetAddress2"></label>
                                 </div>
                                 <div class="col">
-                                    <input asp-for="Street" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Street" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="LandMark">Street Line 2</label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="StreetLine2" class="form-control-sm custom-input">
-                                    <span asp-validation-for="StreetLine2" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Locality"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="Locality" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Locality" class="text-danger"></span>
+                                    <input asp-for="StreetAddress2" class="form-control-sm custom-input">
+                                    <span asp-validation-for="StreetAddress2" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -97,11 +79,20 @@
                             </div>
                             <div class="row top-buffer">
                                 <div class="col-md-3">
-                                    <label for="PinCode">Zip Code</label>
+                                    <label asp-for="ZipCode"></label>
                                 </div>
                                 <div class="col">
-                                    <input asp-for="PinCode" class="form-control-sm custom-input">
-                                    <span asp-validation-for="PinCode" class="text-danger"></span>
+                                    <input asp-for="ZipCode" class="form-control-sm custom-input">
+                                    <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="State"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="State" class="form-control-sm custom-input">
+                                    <span asp-validation-for="State" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row top-buffer">

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200415045408_NEWmig")]
-    partial class NEWmig
+    [Migration("20200419114051_INIT")]
+    partial class INIT
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,9 +32,6 @@ namespace DataAccessLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -44,8 +41,6 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -58,34 +53,23 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "7f0b1b5e-7d13-45ae-a1ee-eabe24071450",
-                            DepartmentId = 1,
+                            ConcurrencyStamp = "046980e9-30c9-40ca-b8d4-e01479e202d5",
+                            Name = "Master Admin",
+                            NormalizedName = "MASTER ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            ConcurrencyStamp = "8f346fb3-74ef-4006-931f-bfcc067631d2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = 2L,
-                            ConcurrencyStamp = "3107d7e9-b655-41f4-ad13-00c026a1d3d9",
-                            DepartmentId = 3,
-                            Name = "Electrician",
-                            NormalizedName = "ELECTRICIAN"
-                        },
-                        new
-                        {
                             Id = 3L,
-                            ConcurrencyStamp = "0d66e4a3-9605-4b91-82a4-f5ccb802352f",
-                            DepartmentId = 2,
-                            Name = "Property Manager",
-                            NormalizedName = "PROPERTY MANAGER"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            ConcurrencyStamp = "06d4e872-809f-4054-ae8d-8b53aaa2b9c3",
-                            DepartmentId = 3,
-                            Name = "Plumber",
-                            NormalizedName = "PLUMBER"
+                            ConcurrencyStamp = "71bf7d0e-6769-44ae-ac37-dfcdd355a492",
+                            Name = "User",
+                            NormalizedName = "USER"
                         });
                 });
 
@@ -107,6 +91,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -137,9 +124,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("ManagerId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -149,7 +133,7 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("OfficeExt")
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -172,7 +156,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Suffix")
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("TimeZone")
                         .HasColumnType("varchar(100)");
@@ -186,13 +170,13 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("LanguageId");
-
-                    b.HasIndex("ManagerId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -394,7 +378,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Language")
-                        .HasColumnType("varchar(40)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
@@ -416,6 +400,26 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DataEntity.Location", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LocationName")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("Locations");
+                });
+
             modelBuilder.Entity("DataEntity.Menu", b =>
                 {
                     b.Property<long>("Id")
@@ -430,7 +434,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MenuName")
-                        .HasColumnType("varchar(30)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
@@ -592,26 +596,20 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("HouseNumber")
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("Locality")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("PinCode")
-                        .IsRequired()
-                        .HasColumnType("varchar(8)");
-
                     b.Property<string>("PropertyName")
                         .HasColumnType("varchar(50)");
 
                     b.Property<int>("PropertyTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Street")
+                    b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("StreetLine2")
+                    b.Property<string>("StreetAddress1")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("StreetAddress2")
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("UpdatedByUserName")
@@ -619,6 +617,10 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -913,7 +915,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("StageCode")
-                        .HasColumnType("varchar(7)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("StageDescription")
                         .HasColumnType("varchar(100)");
@@ -953,6 +955,26 @@ namespace DataAccessLayer.Migrations
                             StageDescription = "Work Order Completed",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
+                });
+
+            modelBuilder.Entity("DataEntity.SubLocation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AreaName")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Areas");
                 });
 
             modelBuilder.Entity("DataEntity.UserProperty", b =>
@@ -1004,9 +1026,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<long?>("AssignedToId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("AssignedToRoleId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("AttachmentPath")
                         .HasColumnType("varchar(300)");
 
@@ -1019,10 +1038,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("varchar(200)");
 
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("IssueId")
                         .HasColumnType("int");
 
                     b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<long>("PropertyId")
@@ -1032,6 +1057,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<int>("StageId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SubLocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedByUserName")
@@ -1044,15 +1072,17 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("AssignedToId");
 
-                    b.HasIndex("AssignedToRoleId");
-
                     b.HasIndex("IssueId");
 
                     b.HasIndex("ItemId");
 
+                    b.HasIndex("LocationId");
+
                     b.HasIndex("PropertyId");
 
                     b.HasIndex("StageId");
+
+                    b.HasIndex("SubLocationId");
 
                     b.ToTable("WorkOrders");
                 });
@@ -1072,24 +1102,17 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("DataEntity.ApplicationRole", b =>
-                {
-                    b.HasOne("DataEntity.Department", "Department")
-                        .WithMany("UserType")
-                        .HasForeignKey("DepartmentId");
-                });
-
             modelBuilder.Entity("DataEntity.ApplicationUser", b =>
                 {
+                    b.HasOne("DataEntity.Department", "Department")
+                        .WithMany("ApplicationUsers")
+                        .HasForeignKey("DepartmentId");
+
                     b.HasOne("DataEntity.Languages", "Language")
                         .WithMany("Users")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DataEntity.ApplicationUser", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
                 });
 
             modelBuilder.Entity("DataEntity.Comments", b =>
@@ -1097,6 +1120,15 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("Comments")
                         .HasForeignKey("WorkOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataEntity.Location", b =>
+                {
+                    b.HasOne("DataEntity.Property", "Property")
+                        .WithMany("Locations")
+                        .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1132,6 +1164,15 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DataEntity.SubLocation", b =>
+                {
+                    b.HasOne("DataEntity.Location", "Location")
+                        .WithMany("SubLocations")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DataEntity.UserProperty", b =>
                 {
                     b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
@@ -1153,10 +1194,6 @@ namespace DataAccessLayer.Migrations
                         .WithMany("WorkOrdersAssigned")
                         .HasForeignKey("AssignedToId");
 
-                    b.HasOne("DataEntity.ApplicationRole", "AssignedToRole")
-                        .WithMany("WorkOrdersAssigned")
-                        .HasForeignKey("AssignedToRoleId");
-
                     b.HasOne("DataEntity.Issue", "Issue")
                         .WithMany("WorkOrders")
                         .HasForeignKey("IssueId")
@@ -1169,6 +1206,10 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataEntity.Location", "Location")
+                        .WithMany("WorkOrders")
+                        .HasForeignKey("LocationId");
+
                     b.HasOne("DataEntity.Property", "Property")
                         .WithMany()
                         .HasForeignKey("PropertyId")
@@ -1180,6 +1221,10 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DataEntity.SubLocation", "SubLocation")
+                        .WithMany("WorkOrders")
+                        .HasForeignKey("SubLocationId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>

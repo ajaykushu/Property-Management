@@ -25,17 +25,14 @@ namespace DataEntity
         [Column(TypeName = "varchar(50)")]
         public string RequestedBy { get; set; }
         public long? AssignedToId { get; set; }
-        public virtual ApplicationUser AssignedTo { get; set; }
-        public long? AssignedToRoleId { get; set; }
         [Column(TypeName = "varchar(300)")]
         public string AttachmentPath { get; set; }
         public DateTime DueDate { get; set; }
         public int? LocationId { get; set; }
         public Location Location { get; set; }
-        public int? AreaId { get; set; }
-        public Area Area { get; set; }
-        public virtual ApplicationRole AssignedToRole { get; set; }
-
+        public int? SubLocationId { get; set; }
+        public SubLocation SubLocation { get; set; }
+        public virtual ApplicationUser AssignedTo { get; set; }
         public virtual ICollection<Comments> Comments { get; set; }
     }
 }

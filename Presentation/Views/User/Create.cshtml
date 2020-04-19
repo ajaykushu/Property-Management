@@ -62,10 +62,24 @@
                                 <div class="col">
                                     @if (Model.Roles.Any())
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="Role" class="text-danger"></span>
+                                    <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="Role" class="text-danger"></span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="DepartmentId"> </label>
+                                </div>
+                                <div class="col">
+                                    @if (Model.Departments!=null && Model.Departments.Any())
+                                    {
+                                    <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                     }
                                 </div>
                             </div>

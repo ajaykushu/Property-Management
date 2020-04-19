@@ -112,3 +112,5 @@ $('#wocreate').submit(function (e) {
         }, "");
     }
 });
+
+$('input[type=reset]').click(function () { $('input[type=submit]').click() });

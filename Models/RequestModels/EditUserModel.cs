@@ -22,7 +22,12 @@ namespace Models.RequestModels
         [Required(ErrorMessage = "Please Choose Language")]
         public int Language { get; set; }
 
+
         public List<SelectItem> Languages { get; set; }
+        public List<SelectItem> Departments { get; set; }
+
+        [Required(ErrorMessage = "Please give Department Id")]
+        public int DepartmentId { get; set; }
 
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
@@ -51,7 +56,7 @@ namespace Models.RequestModels
         public List<SelectItem> Properties { get; set; }
         public List<string> SelectedProperty { get; set; }
         public bool SMSAlert { set; get; }
-        [StringLength(10,MinimumLength=0,ErrorMessage ="Please keep length less than 11")]
+        [StringLength(50,ErrorMessage ="Please keep length less than 50")]
         public string OfficeExt { get; set; }
         public string ClockType { get; set; }
         public IFormFile File { get; set; }

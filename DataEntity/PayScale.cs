@@ -15,10 +15,10 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar(5)")]
+        [Column(TypeName = "varchar(50)")]
         public string Code { get; set; }
 
-        [Column(TypeName = "varchar(10)")]
+        [Column(TypeName = "varchar(50)")]
         public string Billingtype { get; set; }
 
         [Column(TypeName = "money")]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
@@ -7,10 +8,9 @@ namespace Presentation.ViewModels
     public class PropertyOperation
     {
         public long Id { get; set; }
-
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]
+        [DisplayName("Property Name")]
+        [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         [Required]
-        //[Remote("CheckProperty","Property")]
         public string PropertyName { get; set; }
 
         [Required(ErrorMessage = "Please Choose Property Type")]
@@ -18,31 +18,29 @@ namespace Presentation.ViewModels
 
         public List<SelectItem> PropertyTypes { get; set; }
 
-        [Display(ShortName = "Property Number")]
-        [Required(ErrorMessage = "Please Enter Property Number")]
-        [StringLength(10, MinimumLength = 1, ErrorMessage = "Must between than 1-10 characters")]
-        public string HouseNumber { set; get; }
-
-        [StringLength(50, MinimumLength = 0, ErrorMessage = "Must between than 0-50 characters")]
-        public string Locality { set; get; }
-
+        [DisplayName("Street Address 1")]
         [Required(ErrorMessage = "Please Enter Street")]
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]
-        public string Street { set; get; }
+        [StringLength(100, ErrorMessage = "Must less than 100 characters")]
+        public string StreetAddress1 { set; get; }
 
-        [StringLength(100, MinimumLength = 0, ErrorMessage = "Must between than 0-100 characters")]
-        public string StreetLine2 { set; get; }
+        [DisplayName("Street Address 2")]
+        [StringLength(100, ErrorMessage = "Must less than 100 characters")]
+        public string StreetAddress2 { set; get; }
 
+        [DisplayName("Zip Code")]
         [Required(ErrorMessage = "Please Enter PinCode")]
-        //[RegularExpression(@"^[1-9]{1}[0-9]{5,9}$", ErrorMessage = "Please Enter Valid Zip Code")]
-        //[StringLength(10, MinimumLength = 6, ErrorMessage = "Please Enter Valid Zip Code")]
-        public string PinCode { set; get; }
+        [RegularExpression(@"^[1-9]{1}[0-9]{5,9}$", ErrorMessage = "Please Enter Valid Zip Code")]
+        [StringLength(50, ErrorMessage = "Must less than 50 characters")]
+        public string ZipCode { set; get; }
 
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 5-50 characters")]
+        [StringLength(50, ErrorMessage = "Must between than 50 characters")]
         [Required(ErrorMessage = "Please Enter City")]
         public string City { set; get; }
+        [StringLength(50, ErrorMessage = "Must less than 50 characters")]
+        [Required(ErrorMessage = "Please Enter City")]
+        public string State { set; get; }
 
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Must between than 4-50 characters")]
+        [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         [Required(ErrorMessage = "Please Enter Country")]
         public string Country { set; get; }
     }

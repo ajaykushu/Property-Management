@@ -15,16 +15,14 @@
 
     public enum FilterEnumWOStage
     {
-        INITWO = 1,
-        WOPROG = 2,
-        WOCOMP = 3,
+        NA=0,
+        OPEN = 1,
+        BIDACCEPTED = 2,
+        INPROGRESS = 3,
+        PENDINGAPPROVAL = 4,
+        COMPLETED = 5,
     }
 
-    public enum ProcessEnumWOStage
-    {
-        TrackIn = 1,
-        TrackOut = 2
-    }
 
     public enum MenuEnum
     {

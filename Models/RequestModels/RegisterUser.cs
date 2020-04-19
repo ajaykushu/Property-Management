@@ -32,9 +32,13 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Select Time Zone")]
         public string TimeZone { set; get; }
-        [StringLength(10, MinimumLength = 0, ErrorMessage = "Please keep length less than 11")]
+        [StringLength(50, MinimumLength = 0, ErrorMessage = "Please keep length less than 50")]
         public string OfficeExt { get; set; }
         public List<SelectItem> TimeZones { set; get; }
+        public List<SelectItem> Departments { get; set; }
+
+        [Required(ErrorMessage = "Please give Department Id")]
+        public int DepartmentId { get; set; }
 
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]

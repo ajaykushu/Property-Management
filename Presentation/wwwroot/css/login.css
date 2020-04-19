@@ -154,28 +154,6 @@ th {
     outline: none;
 }
 
-.workorderbutton {
-    border: none !important;
-    border-radius: 1px;
-    color: white;
-    display: block;
-    padding-left: 2px;
-    padding-right: 2px;
-    width: 84px;
-    box-shadow: 1px 1px lightgrey;
-}
-
-.initwo {
-    background-color: rgba(238, 70, 70, 0.90);
-}
-
-.woprog {
-    background-color: rgba(255,155,47,0.8);
-}
-
-.wocomp {
-    background-color: rgba(65, 153, 66,0.8);
-}
 
 .table {
     padding: 0px;
@@ -197,11 +175,14 @@ th {
 }
 
 @media only screen and (max-width: 580px) {
-    .wordorderdetail, .wordorderdetail thead, .wordorderdetail tbody, .wordorderdetail th, .wordorderdetail td, .wordorderdetail tr {
+    .usersview, .wordorderdetail, .usersview tbody, .wordorderdetail tbody, .usersview th, .wordorderdetail th, .usersview td, .wordorderdetail td, .usersview tr, .wordorderdetail tr {
         display: block;
     }
+        .usersview thead{
+            display:none;
+        }
 
-        .wordorderdetail th {
+        .usersview th, .wordorderdetail th {
             border: none !important;
             text-align: center;
         }
@@ -210,16 +191,36 @@ th {
         text-align: inherit;
     }
 
-    .wordorderdetail tbody td {
+    .usersview tbody td, .wordorderdetail tbody td {
         text-wrap: normal !important;
     }
 
-    .wordorderdetail td:before {
+    .usersview td:before, .wordorderdetail td:before {
         white-space: nowrap;
         display: table-cell;
         color: black;
         font-weight: bold;
     }
+    .usersview td:nth-of-type(1):before {
+        content: "#";
+    }
+
+    .usersview td:nth-of-type(2):before {
+        content: "Full Name";
+    }
+
+    .usersview td:nth-of-type(3):before {
+        content: "Email";
+    }
+
+    .usersview td:nth-of-type(4):before {
+        content: "Roles";
+    }
+
+    .usersview td:nth-of-type(5):before {
+        content: "User Id";
+    }
+
 
     .wordorderdetail td:nth-of-type(1):before {
         content: "Status";
@@ -232,8 +233,10 @@ th {
     .wordorderdetail td:nth-of-type(3):before {
         content: "Assigned To";
     }
-
     .wordorderdetail td:nth-of-type(4):before {
+        content: "Property";
+    }
+    .wordorderdetail td:nth-of-type(5):before {
         content: "Date";
     }
 }

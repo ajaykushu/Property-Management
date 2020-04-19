@@ -30,7 +30,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string matchString, int requestedPage, string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned, FilterEnumWOStage stage = FilterEnumWOStage.INITWO)
+        public async Task<IActionResult> Index(string matchString, int requestedPage, string endDate, FilterEnumWOStage stage,FilterEnumWO filter = FilterEnumWO.ByAssigned)
         {
             ViewBag.searchString = matchString ?? "";
             ViewBag.filter = filter;
@@ -72,12 +72,12 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetArea(long id)
+        public async Task<IActionResult> GetSubLocation(long id)
         {
             List<SelectItem> result = null;
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("getarea", out string path);
+                _apiRoute.Value.Routes.TryGetValue("getsublocation", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
@@ -105,12 +105,12 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSection(long id)
+        public async Task<IActionResult> GetUserByDept(long id)
         {
             List<SelectItem> result = null;
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("getsection", out string path);
+                _apiRoute.Value.Routes.TryGetValue("getusersbydepartment", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
@@ -268,54 +268,27 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> WorkOrderOperation(long workorderId, ProcessEnumWOStage process)
+        public async Task<IActionResult> WorkOrderStageChange(long Id, int stageId)
         {
            
             try
             {
-                var urlpayload = string.Concat("?workOrderId=" , workorderId , "&process=" , process);
-                _apiRoute.Value.Routes.TryGetValue("workorderoperation", out string path);
+                var urlpayload = string.Concat("?Id=" , Id , "&stageId=", stageId);
+                _apiRoute.Value.Routes.TryGetValue("workorderstagechange", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                    var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                        TempData["Success"] = process + " Completed Sucessfully";
+                        TempData["Success"] ="Status Changed Sucessfully";
                 }
             }
             catch (Exception)
             {
             }
-            return RedirectToAction("GetWODetail", new { id = workorderId });
+            return RedirectToAction("GetWODetail", new { id = Id });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AssignToUser(long userId, long workOrderId)
-        {
-            
-            if (userId == 0 || workOrderId == 0)
-            {
-                TempData["Error"] = StringConstants.Error;
-            }
-            else
-            {
-                try
-                {
-                    var urlpayload = string.Concat("?userId=" , userId , "&workOrderId=" , workOrderId);
-                    _apiRoute.Value.Routes.TryGetValue("assigntouser", out string path);
-                    var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, new { }, this, _token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode)
-                    {
-                       var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
-                        if (status)
-                            TempData["Success"] = " Assigned Completed Sucessfully";
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-            return RedirectToAction("GetWODetail", new { id = workOrderId });
-        }
+      
     }
 }

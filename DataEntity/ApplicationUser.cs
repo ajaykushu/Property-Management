@@ -21,7 +21,7 @@ namespace DataEntity
         [Column(TypeName = "varchar(50)")]
         public string LastName { set; get; }
 
-        [Column(TypeName = "varchar(10)")]
+        [Column(TypeName = "varchar(50)")]
         public string Suffix { set; get; }
 
         public bool SMSAltert { get; set; }
@@ -37,13 +37,14 @@ namespace DataEntity
         [Column(TypeName = "varchar(2)")]
         public string ClockType { set; get; }
 
-        [Column(TypeName = "varchar(10)")]
+        [Column(TypeName = "varchar(50)")]
         public string OfficeExt { set; get; }
 
         public string PhotoPath { set; get; }
         public virtual ICollection<UserProperty> UserProperties { set; get; }
-        public long? ManagerId { set; get; }
-        public virtual ApplicationUser Manager { get; set; }
+        public int? DepartmentId { set; get; }
+        public Department Department { set; get; }
+       
         public bool IsActive { get; set; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
     }

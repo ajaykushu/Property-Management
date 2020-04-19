@@ -26,31 +26,31 @@
                                         <span asp-validation-for="PropertyName" class="text-danger"></span>
                                     </div>
                                 </div>
-                                @if (Model.Location != null && Model.Location.Any())
+                                @if (Model.Locations != null && Model.Locations.Any())
                                 {
                                     <div class="row top-buffer">
                                         <div class="col-md-3">
-                                            <label asp-for="Location"> </label>
+                                            <label asp-for="LocationId"> </label>
                                         </div>
                                         <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Location, "Id", "PropertyName"))">
+                                            <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
                                                 <option value="">Please select Location</option>
                                             </select>
                                             <span asp-validation-for="LocationId" class="text-danger"></span>
                                         </div>
                                     </div>
                                 }
-                                @if (Model.Area != null && Model.Area.Any())
+                                @if (Model.SubLocations != null && Model.SubLocations.Any())
                                 {
                                     <div class="row top-buffer">
                                         <div class="col-md-3">
-                                            <label asp-for="Area"> </label>
+                                            <label asp-for="SubLocationId"> </label>
                                         </div>
                                         <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="AreaId" asp-items="@(new SelectList(Model.Area, "Id", "PropertyName"))">
-                                                <option value="">Please select Area</option>
+                                            <select class="form-control form-control-sm custom-input" asp-for="SubLocationId" asp-items="@(new SelectList(Model.SubLocations, "Id", "PropertyName"))">
+                                                <option value="">Please select Sub Location</option>
                                             </select>
-                                            <span asp-validation-for="AreaId" class="text-danger"></span>
+                                            <span asp-validation-for="SubLocationId" class="text-danger"></span>
                                         </div>
                                     </div>
                                 }
@@ -65,13 +65,13 @@
                                 {
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label asp-for="Item"> </label>
+                                            <label asp-for="ItemId"> </label>
                                         </div>
                                         <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="Item" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                            <select class="form-control form-control-sm custom-input" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
                                                 <option value="">Please select one</option>
                                             </select>
-                                            <span asp-validation-for="Item" class="text-danger"></span>
+                                            <span asp-validation-for="ItemId" class="text-danger"></span>
                                         </div>
                                     </div>
                                 }
@@ -79,13 +79,13 @@
                                 {
                                     <div class="row top-buffer">
                                         <div class="col-md-3">
-                                            <label asp-for="Issue"> </label>
+                                            <label asp-for="IssueId"> </label>
                                         </div>
                                         <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="Issue" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                            <select class="form-control form-control-sm custom-input" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
                                                 <option>Please select one</option>
                                             </select>
-                                            <span asp-validation-for="Issue" class="text-danger"></span>
+                                            <span asp-validation-for="IssueId" class="text-danger"></span>
                                         </div>
                                     </div>
                                 }
@@ -127,17 +127,17 @@
                                     <div class="col">
                                         @if (Model.Departments != null && Model.Departments.Any())
                                         {
-                                            <select class="form-control form-control-sm custom-input" asp-for="Department" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                            <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
                                                 <option value="">Department</option>
                                             </select>
-                                            <span asp-validation-for="Department" class="text-danger"></span>
+                                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                         }
                                     </div>
                                     <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="Section" asp-items="@(new SelectList(Model.Sections, "Id", "PropertyName"));">
-                                            <option value="">Section</option>
+                                        <select class="form-control form-control-sm custom-input" asp-for="UserId" asp-items="@(new SelectList(Model.Users, "Id", "PropertyName"));">
+                                            <option value="">Select User</option>
                                         </select>
-                                        <span asp-validation-for="Section" class="text-danger"></span>
+                                        <span asp-validation-for="UserId" class="text-danger"></span>
                                     </div>
                                 </div>
 

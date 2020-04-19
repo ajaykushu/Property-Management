@@ -6,11 +6,12 @@ using System.Text;
 
 namespace DataEntity
 {
-    public class Area
+    public class SubLocation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Column(TypeName = "varchar(50)")]
         public string AreaName { get; set; }
         public int LocationId { get; set; }
         public Location Location { get; set; }

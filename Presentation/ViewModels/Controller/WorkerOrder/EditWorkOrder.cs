@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
@@ -9,23 +10,26 @@ namespace Presentation.ViewModels
     {
        
         public long Id { get; set; }
-        public List<SelectItem> Location { get; set; }
+        public List<SelectItem> Locations { get; set; }
         [Required]
+        [DisplayName("Location Id")]
         public int LocationId { get; set; }
-        public List<SelectItem> Area { get; set; }
+        public List<SelectItem> SubLocations { get; set; }
         [Required]
-        public int AreaId { get; set; }
+        [DisplayName("Sub Location")]
+        public int SubLocationId { get; set; }
         public List<SelectItem> Items { get; set; }
 
         [Required(ErrorMessage = "Please Select Item")]
-        public int Item { get; set; }
+        [DisplayName("Item")]
+        public int ItemId { get; set; }
 
         public string PropertyName { get; set; }
 
         public List<SelectItem> Issues { get; set; }
-
+         [DisplayName("Issue")]
         [Required(ErrorMessage = "Please Select Issue Id")]
-        public int Issue { get; set; }
+        public int IssueId { get; set; }
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
@@ -36,10 +40,12 @@ namespace Presentation.ViewModels
         public List<SelectItem> Departments { get; set; }
 
         [Required(ErrorMessage = "Please give Department Id")]
-        public int Department { get; set; }
-
-        [Required(ErrorMessage = "Please give Section Id")]
-        public long Section { get; set; }
+        [DisplayName("Department")]
+        public int DepartmentId { get; set; }
+        public List<SelectItem> Users { get; set; }
+        [Required(ErrorMessage = "Please give User")]
+        [DisplayName("User")]
+        public long UserId { get; set; }
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd/MMM/yyyy}")]

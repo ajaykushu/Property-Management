@@ -19,30 +19,27 @@ namespace DataEntity
         public string PropertyName { get; set; }
 
         [Column(TypeName = "int")]
-        //which type of property it is like hotel,mall,restrurent
         public int PropertyTypeId { get; set; }
 
         public virtual PropertyType PropertyTypes { get; set; }
-
-        [Column(TypeName = "varchar(10)")]
-        public string HouseNumber { set; get; }
-
-        [Column(TypeName = "varchar(50)")]
-        public string Locality { set; get; }
-
-        [Column(TypeName = "varchar(50)")]
-        public string Street { set; get; }
+        
+       
+        [Column(TypeName = "varchar(100)")]
+        public string StreetAddress1 { set; get; }
 
         [Column(TypeName = "varchar(100)")]
-        public string StreetLine2 { set; get; }
+        public string StreetAddress2 { set; get; }
 
         [Required]
-        [Column(TypeName = "varchar(8)")]
-        public string PinCode { set; get; }
+        [Column(TypeName = "varchar(50)")]
+        public string ZipCode { set; get; }
 
         [Required]
         [Column(TypeName = "varchar(50)")]
         public string City { set; get; }
+        [Required]
+        [Column(TypeName = "varchar(50)")]
+        public string State { set; get; }
 
         [Required]
         [Column(TypeName = "varchar(50)")]

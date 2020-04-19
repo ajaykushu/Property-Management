@@ -17,9 +17,11 @@
         <select class="form-control form-control-sm" value=@ViewBag.stage style="display:@if (ViewBag.filter == FilterEnumWO.ByStatus)
             {<text>block;</text>}
                 else { <text>none;</text>}" name="stage" id="select">
-            <option value=@FilterEnumWOStage.INITWO>INITWO</option>
-            <option value=@FilterEnumWOStage.WOPROG>WOPROGRESS</option>
-            <option value=@FilterEnumWOStage.WOCOMP>WOCOMPLETED</option>
+            <option  selected="selected">Select</option>
+            <option value=@FilterEnumWOStage.OPEN>OPEN</option>
+            <option value=@FilterEnumWOStage.BIDACCEPTED>BID ACCEPTED</option>
+            <option value=@FilterEnumWOStage.PENDINGAPPROVAL>PENDING APPROVAL</option>
+            <option value=@FilterEnumWOStage.COMPLETED>COMPLETED</option>
         </select>
         &nbsp;<input class="form-control form-control-sm" style="display:@if (ViewBag.filter==FilterEnumWO.ByDate) {<text>block</text> } else {<text>none</text> }" value='@ViewBag.enddate' name="endDate" autocomplete="off" id="endDate" type="date">
         &nbsp; &nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Filter">
@@ -32,10 +34,10 @@
 
     @if (Model != null && Model.Payload != null && Model.Payload.Any())
     {
-        <table class="table table-striped wordorderdetail table_container">
+        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
             <thead>
                 <tr>
-                    <th scope="col" colspan="3" class="mytitle">
+                    <th scope="col" colspan="4" class="mytitle">
                         To Do List
                     </th>
                     <th scope="col" colspan="2" class="button">
@@ -49,18 +51,12 @@
                 {
                     <tr>
                         <td>
-                            <span class="workorderbutton @item.Stage" value="work order">work order</span>
+                            <span ><strong>@item.Stage.ToUpper()</strong></span>
                         </td>
-                        <td>@item.Description</td>
-                        @if (item.AssignedTo != null)
-                        {
-                            <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
-                        }
-                        else
-                        {
-                            <td>Assigned to&nbsp;<span class="text-info"><strong>@item.AssignedToSection</strong></span></td>
-                        }
-                        <td>@item.CreatedDate</td>
+                        <td><span class="text-wrap">@item.Description</span></td>
+                         <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedToUser</strong></span></td>
+                         <td><span class="text-dark">@item.Property.PropertyName</span></td>
+                        <td >@item.CreatedDate</td>
                         <td>
                             @{
                                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
@@ -73,20 +69,6 @@
                 }
             </tbody>
         </table>
-        <div class="">
-            <div class="d-inline-flex" style="font-size:small;">
-                <span class="block initwo"></span>
-                <span>&nbsp;INIT</span>
-            </div>
-            <div class="d-inline-flex" style="font-size:small;">
-                <span class="block woprog"></span>
-                <span>&nbsp; WOPROG</span>
-            </div>
-            <div class="d-inline-flex" style="font-size:small;">
-                <span class="block wocomp"></span>
-                <span>&nbsp; WOCOMP</span>
-            </div>
-        </div>
         <hr />
         <nav>
             <ul class="pagination">
@@ -132,11 +114,3 @@
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
     </script>
 }
-
-<style>
-    .block {
-        height: 10px;
-        width: 10px;
-        display: block;
-    }
-</style>

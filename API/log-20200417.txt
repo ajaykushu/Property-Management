@@ -1993,3 +1993,296 @@ Stack Trace:    at BusinessLogic.Services.PropertyService.SavePropertyConfig(Pro
 2020-04-17 16:59:11.387 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=6 responded 200 in 229.2501 ms
 2020-04-17 16:59:22.450 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Electrician&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 138.8852 ms
 2020-04-17 16:59:28.422 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 41.3884 ms
+2020-04-17 19:31:42.550 +05:30 [INF] HTTP GET /api/values responded 404 in 63.198 ms
+2020-04-17 19:33:13.954 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3700.7632 ms
+2020-04-17 19:33:15.229 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 229.5398 ms
+2020-04-17 19:33:20.468 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 200 in 304.7121 ms
+2020-04-17 19:33:25.557 +05:30 [INF] HTTP GET /api/user/userdetail?Id=2 responded 200 in 51.7493 ms
+2020-04-17 19:33:29.952 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=2 responded 200 in 459.0126 ms
+2020-04-17 19:34:05.608 +05:30 [WRN] User 2 validation failed: DuplicateEmail.
+2020-04-17 19:34:07.164 +05:30 [ERR] HTTP POST /api/user/updateuser responded 500 in 1954.9175 ms
+Utilities.CustomException.BadRequestException: Email 'test@test.com' is already taken.
+   at BusinessLogic.Services.UserService.UpdateUser(EditUserModel editUser) in E:\Newmyproj\mrproj - Copy\BusinessLogic\Services\UserService.cs:line 188
+   at API.Controllers.UserController.UpdateUser(EditUserModel user) in E:\Newmyproj\mrproj - Copy\API\Controllers\UserController.cs:line 64
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-17 19:34:08.685 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Utilities.CustomException.BadRequestException: Email 'test@test.com' is already taken.
+   at BusinessLogic.Services.UserService.UpdateUser(EditUserModel editUser) in E:\Newmyproj\mrproj - Copy\BusinessLogic\Services\UserService.cs:line 188
+   at API.Controllers.UserController.UpdateUser(EditUserModel user) in E:\Newmyproj\mrproj - Copy\API\Controllers\UserController.cs:line 64
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 30
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-17 19:34:08.707 +05:30 [INF] Email 'test@test.com' is already taken.
+Stack Trace:    at BusinessLogic.Services.UserService.UpdateUser(EditUserModel editUser) in E:\Newmyproj\mrproj - Copy\BusinessLogic\Services\UserService.cs:line 188
+   at API.Controllers.UserController.UpdateUser(EditUserModel user) in E:\Newmyproj\mrproj - Copy\API\Controllers\UserController.cs:line 64
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 30
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-17 19:34:18.916 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 150.5591 ms
+2020-04-17 19:34:26.852 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 216.4327 ms
+2020-04-17 19:34:32.768 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 65.7988 ms
+2020-04-17 19:34:38.952 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 120.3871 ms
+2020-04-17 19:34:48.451 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 75.5618 ms
+2020-04-17 19:35:01.137 +05:30 [WRN] Invalid password for user 4.
+2020-04-17 19:35:02.001 +05:30 [ERR] HTTP POST /api/login/userlogin responded 500 in 907.7997 ms
+Utilities.CustomException.UnAuthorizedException: Invalid Password
+   at API.Authentication.User.DoLogin(LoginUserModel loginDTO) in E:\Newmyproj\mrproj - Copy\API\Authentication\User.cs:line 102
+   at API.Controllers.LoginController.UserLogin(LoginUserModel login) in E:\Newmyproj\mrproj - Copy\API\Controllers\LoginController.cs:line 35
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-17 19:35:02.232 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Utilities.CustomException.UnAuthorizedException: Invalid Password
+   at API.Authentication.User.DoLogin(LoginUserModel loginDTO) in E:\Newmyproj\mrproj - Copy\API\Authentication\User.cs:line 102
+   at API.Controllers.LoginController.UserLogin(LoginUserModel login) in E:\Newmyproj\mrproj - Copy\API\Controllers\LoginController.cs:line 35
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-17 19:35:02.242 +05:30 [INF] Invalid Password
+Stack Trace:    at API.Authentication.User.DoLogin(LoginUserModel loginDTO) in E:\Newmyproj\mrproj - Copy\API\Authentication\User.cs:line 102
+   at API.Controllers.LoginController.UserLogin(LoginUserModel login) in E:\Newmyproj\mrproj - Copy\API\Controllers\LoginController.cs:line 35
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-17 19:35:12.086 +05:30 [WRN] Invalid password for user 4.
+2020-04-17 19:35:12.770 +05:30 [ERR] HTTP POST /api/login/userlogin responded 500 in 717.9174 ms
+Utilities.CustomException.UnAuthorizedException: Invalid Password
+   at API.Authentication.User.DoLogin(LoginUserModel loginDTO) in E:\Newmyproj\mrproj - Copy\API\Authentication\User.cs:line 102
+   at API.Controllers.LoginController.UserLogin(LoginUserModel login) in E:\Newmyproj\mrproj - Copy\API\Controllers\LoginController.cs:line 35
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-17 19:35:13.019 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Utilities.CustomException.UnAuthorizedException: Invalid Password
+   at API.Authentication.User.DoLogin(LoginUserModel loginDTO) in E:\Newmyproj\mrproj - Copy\API\Authentication\User.cs:line 102
+   at API.Controllers.LoginController.UserLogin(LoginUserModel login) in E:\Newmyproj\mrproj - Copy\API\Controllers\LoginController.cs:line 35
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-17 19:35:13.029 +05:30 [INF] Invalid Password
+Stack Trace:    at API.Authentication.User.DoLogin(LoginUserModel loginDTO) in E:\Newmyproj\mrproj - Copy\API\Authentication\User.cs:line 102
+   at API.Controllers.LoginController.UserLogin(LoginUserModel login) in E:\Newmyproj\mrproj - Copy\API\Controllers\LoginController.cs:line 35
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 40
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-17 19:35:22.125 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 48.1174 ms
+2020-04-17 19:35:22.292 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 35.4613 ms
+2020-04-17 19:35:25.214 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=6 responded 200 in 240.2975 ms
+2020-04-17 19:35:29.154 +05:30 [INF] HTTP GET /api/workorder/getworkordermodel responded 200 in 52.23 ms
+2020-04-17 19:35:32.703 +05:30 [INF] HTTP GET /api/workorder/getarea?id=4 responded 200 in 36.2602 ms
+2020-04-17 19:35:36.808 +05:30 [INF] HTTP GET /api/workorder/getsection?id=1 responded 200 in 36.3564 ms
+2020-04-17 19:36:47.445 +05:30 [INF] HTTP POST /api/workorder/createwo responded 200 in 549.6414 ms
+2020-04-17 19:36:50.619 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 24.186 ms
+2020-04-17 19:36:54.869 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 45.2329 ms
+2020-04-17 19:37:05.202 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 57.1856 ms
+2020-04-17 19:37:10.067 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 56.7254 ms
+2020-04-17 19:37:15.155 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 29.7012 ms
+2020-04-17 19:37:18.681 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=6 responded 200 in 54.0851 ms
+2020-04-17 19:37:27.907 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 91.1929 ms
+2020-04-17 19:37:27.995 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 18.5417 ms
+2020-04-17 19:37:33.154 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 15.2773 ms
+2020-04-17 19:37:35.699 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 51.0035 ms
+2020-04-17 19:37:38.189 +05:30 [INF] HTTP GET /ImageFileStore/WOFiles/0efd7b88840b49e4a9e043e23015777cform13pdf.pdf responded 404 in 0.0404 ms
+2020-04-17 19:40:40.207 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 51.0961 ms
+2020-04-17 19:40:52.210 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=6 responded 200 in 105.4193 ms
+2020-04-17 19:42:03.498 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 59956.6357 ms
+2020-04-17 19:42:03.630 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=6 responded 200 in 42.6485 ms
+2020-04-17 19:44:31.787 +05:30 [INF] HTTP GET /api/values responded 404 in 58.1218 ms
+2020-04-17 19:44:51.991 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 5079.2851 ms
+2020-04-17 19:44:53.178 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 192.8429 ms
+2020-04-17 19:45:00.124 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 205.7014 ms
+2020-04-17 19:45:43.166 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 32390.5591 ms
+2020-04-17 19:45:43.461 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 155.2718 ms
+2020-04-17 19:45:48.690 +05:30 [INF] HTTP GET /ImageFileStore/WOFiles/8747ba499eb546c69118203c8b065f61form13pdf.pdf responded 404 in 0.1785 ms
+2020-04-17 19:47:18.537 +05:30 [INF] HTTP GET /api/values responded 404 in 53.1713 ms
+2020-04-17 19:47:25.587 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3119.5985 ms
+2020-04-17 19:47:27.051 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 262.8717 ms
+2020-04-17 19:47:37.153 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 231.8145 ms
+2020-04-17 19:47:42.115 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 181.3286 ms
+2020-04-17 19:55:50.027 +05:30 [INF] HTTP GET /api/values responded 404 in 77.7967 ms
+2020-04-17 19:55:57.741 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4115.6932 ms
+2020-04-17 19:55:59.530 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 261.3714 ms
+2020-04-17 19:56:06.698 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 268.5248 ms
+2020-04-17 19:56:50.590 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 35586.4 ms
+2020-04-17 19:56:50.866 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 132.5089 ms
+2020-04-17 19:56:58.084 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 36.0021 ms
+2020-04-17 19:57:06.559 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 50.3552 ms
+2020-04-17 19:57:25.986 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 2023.2683 ms
+2020-04-17 19:57:26.122 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 38.5168 ms
+2020-04-17 19:57:30.612 +05:30 [INF] HTTP GET /ImageFileStore/WOFiles/73ee741ce5284f7b8d9708159e0de71eNIELIT%20Calicut.pdf responded 404 in 0.2769 ms
+2020-04-17 19:59:37.541 +05:30 [INF] HTTP GET /api/values responded 404 in 54.6026 ms
+2020-04-17 19:59:44.761 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4128.9412 ms
+2020-04-17 19:59:46.327 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 266.3183 ms
+2020-04-17 19:59:52.853 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 351.0139 ms
+2020-04-17 20:00:02.940 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 2474.9635 ms
+2020-04-17 20:00:03.219 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 148.5437 ms
+2020-04-17 20:00:07.253 +05:30 [INF] HTTP GET /ImageFileStore/ImageFileStore/3766786709774ec2a81461a803ed091eApplicationHome.pdf responded 404 in 0.0942 ms
+2020-04-17 20:02:10.657 +05:30 [INF] HTTP GET /api/values responded 404 in 74.5243 ms
+2020-04-17 20:02:18.217 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 4010.0476 ms
+2020-04-17 20:02:19.618 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 199.3608 ms
+2020-04-17 20:02:24.585 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 188.9943 ms
+2020-04-17 20:02:29.147 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 174.435 ms
+2020-04-17 20:02:33.972 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 33.2945 ms
+2020-04-17 20:02:38.002 +05:30 [INF] HTTP GET /api/workorder/editWOModel?id=7 responded 200 in 41.0094 ms
+2020-04-17 20:02:49.062 +05:30 [INF] HTTP POST /api/workorder/editWO responded 200 in 2837.2556 ms
+2020-04-17 20:02:49.297 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 64.0339 ms
+2020-04-17 20:02:54.450 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=INITWO&endDate= responded 200 in 23.9611 ms
+2020-04-17 20:02:56.339 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 32.3463 ms
+2020-04-17 20:03:00.644 +05:30 [INF] HTTP GET /api/workorder/wodetail?id=7 responded 200 in 32.8344 ms
+2020-04-17 20:03:13.917 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 55.3161 ms
+2020-04-17 20:03:14.303 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 52.6708 ms
+2020-04-17 20:03:18.224 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 200 in 129.2834 ms
+2020-04-17 20:03:23.155 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 200 in 32.2279 ms
+2020-04-17 20:03:26.506 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 361.3191 ms
+2020-04-17 20:03:46.103 +05:30 [INF] HTTP POST /api/user/updateuser responded 200 in 2548.8284 ms
+2020-04-17 20:03:47.953 +05:30 [INF] HTTP GET /api/user/getedituserrequestmodel?Id=1 responded 200 in 50.1367 ms
+2020-04-17 20:03:50.540 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 57.0265 ms
+2020-04-17 20:03:52.831 +05:30 [INF] HTTP GET /api/user/userdetail?Id=1 responded 200 in 48.299 ms
+2020-04-17 20:03:57.662 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 55.1317 ms
+2020-04-17 20:03:57.791 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 19.269 ms

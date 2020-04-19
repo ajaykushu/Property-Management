@@ -10,7 +10,7 @@ namespace BusinessLogic.Interfaces
     {
         Task<CreateWO> GetCreateWOModel(long userId);
 
-        Task<List<SelectItem>> GetSection(long id);
+        Task<List<SelectItem>> GetUsersByDepartment(long id);
 
         Task<bool> CreateWO(CreateWO createWO);
 
@@ -26,10 +26,9 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> PostComment(Post post);
 
-        Task<bool> WorkOrderOperation(long workOrderId, ProcessEnumWOStage command);
+        Task<bool> WorkOrderStageChange(long Id, int stageId);
 
-        Task<bool> AssignToUser(long userId, long workOrderId);
-        Task<List<SelectItem>> GetArea(long id);
+        Task<List<SelectItem>> GetSubLocation(long id);
         Task<List<SelectItem>> GetLocation(long id);
     }
 }

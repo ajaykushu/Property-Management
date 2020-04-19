@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
@@ -8,32 +9,28 @@ namespace Presentation.ViewModels
     [Serializable]
     public class CreateWorkOrder
     {
-
-        public List<SelectItem> Location { get; set; }
-        [Required]
+        [DisplayName("Location")]
         public int LocationId { get; set; }
-       
+        public List<SelectItem> Locations { get; set; }
         [Required]
-        public int AreaId { get; set; }
+        [DisplayName("Sub Location")]
+        public int SubLocationId { get; set; }
+        public List<SelectItem> SubLocation { get; set; }
         public List<SelectItem> Items { get; set; }
-
+        [DisplayName("Item")]
         [Required(ErrorMessage = "Please Select Item")]
-        public int Item { get; set; }
+        public int ItemId { get; set; }
 
         public List<SelectItem> Properties { get; set; }
 
         [Required(ErrorMessage = "Please Select Property")]
-        public long Property { get; set; }
+        [DisplayName("Property")]
+        public long PropertyId { get; set; }
 
         public List<SelectItem> Issues { get; set; }
-
+        [DisplayName("Issue")]
         [Required(ErrorMessage = "Please Select Issue")]
-        public int Issue { get; set; }
-
-        public List<SelectItem> RequestedBy { get; set; }
-
-        [Required(ErrorMessage = "Please Select Requested By")]
-        public int RequestedById { get; set; }
+        public int IssueId { get; set; }
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
@@ -41,10 +38,12 @@ namespace Presentation.ViewModels
         public List<SelectItem> Departments { get; set; }
 
         [Required(ErrorMessage = "Please Select Department")]
-        public int Department { get; set; }
+        [DisplayName("Department")]
+        public int DepartmentId { get; set; }
 
         [Required(ErrorMessage = "Please Select Section")]
-        public int Section { get; set; }
+        [DisplayName("User")]
+        public int UserId { get; set; }
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString ="{0:MM/dd/yyyy}")]

@@ -23,12 +23,13 @@ namespace BusinessLogic.Services
         private readonly IRepo<Languages> _langrepo;
         private readonly IRepo<Property> _property;
         private readonly IRepo<UserProperty> _userproperty;
+        private readonly IRepo<Department> _department;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
 
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -38,6 +39,7 @@ namespace BusinessLogic.Services
             _httpContextAccessor = httpContextAccessor;
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
+            _department = department;
         }
 
         public async Task<bool> RegisterUser(RegisterUser model)
@@ -56,7 +58,8 @@ namespace BusinessLogic.Services
                 Suffix = model.Suffix,
                 TimeZone = model.TimeZone,
                 OfficeExt = model.OfficeExt ?? null,
-                PhotoPath = filepath
+                PhotoPath = filepath,
+                DepartmentId=model.DepartmentId
             };
              if (model.SelectedProperty != null && (model.Role.Equals("User"))) { 
                 foreach (var item in prop)
@@ -84,6 +87,7 @@ namespace BusinessLogic.Services
             RegisterUser registerRequest = new RegisterUser
             {
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
+                Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Properties = _property.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
@@ -107,6 +111,7 @@ namespace BusinessLogic.Services
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
+                Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
                 Email = applicationUser.Email,
                 UserName = applicationUser.UserName,
                 FirstName = applicationUser.FirstName,
@@ -119,6 +124,7 @@ namespace BusinessLogic.Services
                 ClockType = applicationUser.ClockType,
                 OfficeExt = applicationUser.OfficeExt,
                 PhoneNumber = applicationUser.PhoneNumber,
+                DepartmentId=applicationUser.DepartmentId.GetValueOrDefault(),
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
                 Id = applicationUser.Id
             };
@@ -141,6 +147,8 @@ namespace BusinessLogic.Services
             applicationUser.OfficeExt = editUser.OfficeExt;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;
+            applicationUser.DepartmentId = editUser.DepartmentId;
+
             //handling image update
             var filepath = await _imageUploadInFile.UploadAsync(editUser.File);
             var prevpath = applicationUser.PhotoPath;
@@ -191,15 +199,15 @@ namespace BusinessLogic.Services
 
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
-            int iteminpage = 4;
+            int iteminpage = 20;
             var query=_userManager.Users;
             if (matchStr != null && filter == FilterEnum.ByEmail)
                 query = query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.ByFirstName)
                 query = query.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower()));
+            var count = query.Count();
             var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
             List<UsersListModel> users = new List<UsersListModel>();
-            var count = user.Count();
             foreach (var item in user)
             {
                 var roles = await _userManager.GetRolesAsync(item);
@@ -217,7 +225,7 @@ namespace BusinessLogic.Services
             var pagination = new Pagination<IList<UsersListModel>>
             {
                 ItemsPerPage = user.Count < iteminpage ? user.Count : iteminpage,
-                PageCount = ((iteminpage * pageNumber) + count) < iteminpage ? 1 : (((iteminpage * pageNumber) + count) / iteminpage) + 1,
+                PageCount = count <= iteminpage ? 1 : count / iteminpage + 1,
                 Payload = users,
                 CurrentPage = pageNumber
             };
@@ -244,7 +252,7 @@ namespace BusinessLogic.Services
 
         public async Task<UserDetailModel> GetUserDetail(long id)
         {
-            var user = _userManager.Users.Where(x => x.Id == id).Include(x => x.UserProperties).Select(x => new
+            var user = _userManager.Users.Where(x => x.Id == id).Include(x => x.UserProperties).Include(x => x.Department).Select(x => new
             {
                 applicationUser = x,
                 UserModel = new UserDetailModel
@@ -258,16 +266,16 @@ namespace BusinessLogic.Services
                         Id = x.Property.Id,
                         City = x.Property.City,
                         Country = x.Property.Country,
-                        HouseNumber = x.Property.HouseNumber,
-                        StreetLine2 = x.Property.StreetLine2,
-                        Locality = x.Property.Locality,
-                        PinCode = x.Property.PinCode,
+                        StreetAddress1 = x.Property.StreetAddress1,
+                        ZipCode = x.Property.ZipCode,
                         PropertyName = x.Property.PropertyName,
                         PropertyType = x.Property.PropertyTypes.PropertyTypeName,
-                        Street = x.Property.Street,
-                        IsPrimary = x.IsPrimary
+                        StreetAddress2 = x.Property.StreetAddress2,
+                        IsPrimary = x.IsPrimary,
+                        State=x.Property.State,
                     }).ToList(),
                     PhoneNumber = x.PhoneNumber,
+                    Department=x.Department.DepartmentName,
                     UserId = x.UserName,
                     OfficeExtension = x.OfficeExt,
                     IsActive = x.IsActive,

@@ -18,7 +18,7 @@ namespace DataEntity
         [Column(TypeName = "varchar(100)")]
         public string StageDescription { get; set; }
 
-        [Column(TypeName = "varchar(7)")]
+        [Column(TypeName = "varchar(50)")]
         public string StageCode { get; set; }
 
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }

@@ -15,7 +15,7 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { set; get; }
 
-        [Column(TypeName = "varchar(30)")]
+        [Column(TypeName = "varchar(50)")]
         public string MenuName { set; get; }
 
         public ICollection<RoleMenuMap> RoleMenuMaps { set; get; }

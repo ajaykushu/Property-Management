@@ -36,11 +36,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("getarea")]
+        [Route("getsublocation")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<SelectItem>> GetArea(long id)
+        public async Task<ActionResult<SelectItem>> GetSubLocation(long id)
         {
-            List<SelectItem> prop = await _workOrderService.GetArea(id);
+            List<SelectItem> prop = await _workOrderService.GetSubLocation(id);
             return Ok(prop);
         }
         [HttpGet]
@@ -53,11 +53,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("getsection")]
+        [Route("getusersbydepartment")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<List<SelectItem>>> GetSection(long id)
+        public async Task<ActionResult<List<SelectItem>>> GetUsersByDepartment(long id)
         {
-            List<SelectItem> prop = await _workOrderService.GetSection(id);
+            List<SelectItem> prop = await _workOrderService.GetUsersByDepartment(id);
             return Ok(prop);
         }
 
@@ -124,21 +124,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("workorderoperation")]
+        [Route("workorderstagechange")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
-        public async Task<ActionResult<bool>> WorkOrderOperation(long workOrderId, ProcessEnumWOStage process)
+        public async Task<ActionResult<bool>> WorkOrderStageChange(long Id, int stageId)
         {
-            bool res = await _workOrderService.WorkOrderOperation(workOrderId, process);
+            bool res = await _workOrderService.WorkOrderStageChange(Id, stageId);
             return Ok(res);
         }
 
-        [HttpPost]
-        [Route("assigntouser")]
-        [FeatureBasedAuthorization(MenuEnum.Assign_To_User)]
-        public async Task<IActionResult> AssignToUser(long userId, long workOrderId)
-        {
-            bool res = await _workOrderService.AssignToUser(userId, workOrderId);
-            return Ok(res);
-        }
+        
     }
 }

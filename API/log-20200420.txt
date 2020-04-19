@@ -1,0 +1,229 @@
+2020-04-20 00:00:35.955 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=OPEN&endDate= responded 200 in 19.4699 ms
+2020-04-20 00:00:36.141 +05:30 [INF] HTTP GET / responded 404 in 0.0535 ms
+2020-04-20 00:01:22.682 +05:30 [INF] HTTP GET /api/values responded 404 in 56.9083 ms
+2020-04-20 00:01:32.414 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3076.353 ms
+2020-04-20 00:01:33.449 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=OPEN&endDate= responded 200 in 178.1757 ms
+2020-04-20 00:01:35.337 +05:30 [INF] HTTP GET / responded 404 in 0.2618 ms
+2020-04-20 00:02:18.838 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=OPEN&endDate= responded 200 in 42.7091 ms
+2020-04-20 00:02:18.985 +05:30 [INF] HTTP GET / responded 404 in 0.1936 ms
+2020-04-20 00:03:21.951 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=OPEN&endDate= responded 200 in 49.1363 ms
+2020-04-20 00:03:28.696 +05:30 [INF] HTTP GET / responded 404 in 0.186 ms
+2020-04-20 00:04:14.771 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 3635.8603 ms
+2020-04-20 00:04:14.919 +05:30 [INF] HTTP GET / responded 404 in 0.2813 ms
+2020-04-20 00:04:48.988 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 2095.0316 ms
+2020-04-20 00:05:12.626 +05:30 [INF] HTTP GET / responded 404 in 0.1318 ms
+2020-04-20 00:06:04.504 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 4121.69 ms
+2020-04-20 00:06:08.825 +05:30 [INF] HTTP GET / responded 404 in 0.0864 ms
+2020-04-20 00:06:14.747 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 31.4308 ms
+2020-04-20 00:06:19.032 +05:30 [INF] HTTP GET / responded 404 in 0.1256 ms
+2020-04-20 00:06:24.274 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=OPEN&endDate= responded 200 in 21.8058 ms
+2020-04-20 00:06:26.384 +05:30 [INF] HTTP GET / responded 404 in 0.0849 ms
+2020-04-20 00:08:17.221 +05:30 [INF] HTTP GET /api/values responded 404 in 64.9528 ms
+2020-04-20 00:08:24.977 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3311.8724 ms
+2020-04-20 00:08:26.010 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 400 in 39.3895 ms
+2020-04-20 00:08:32.215 +05:30 [INF] HTTP GET / responded 404 in 0.2547 ms
+2020-04-20 00:08:43.917 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 400 in 8.357 ms
+2020-04-20 00:08:44.067 +05:30 [INF] HTTP GET / responded 404 in 0.186 ms
+2020-04-20 00:09:36.560 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 400 in 31.7694 ms
+2020-04-20 00:09:36.762 +05:30 [INF] HTTP GET / responded 404 in 0.153 ms
+2020-04-20 00:10:15.106 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 400 in 4.5282 ms
+2020-04-20 00:10:15.373 +05:30 [INF] HTTP GET / responded 404 in 0.1227 ms
+2020-04-20 00:14:09.594 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 400 in 7.7224 ms
+2020-04-20 00:14:09.799 +05:30 [INF] HTTP GET / responded 404 in 0.1228 ms
+2020-04-20 00:14:41.850 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 400 in 9.4977 ms
+2020-04-20 00:14:42.088 +05:30 [INF] HTTP GET / responded 404 in 0.224 ms
+2020-04-20 00:14:48.636 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 400 in 5.3121 ms
+2020-04-20 00:14:48.826 +05:30 [INF] HTTP GET / responded 404 in 0.3032 ms
+2020-04-20 00:14:59.718 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 400 in 3.7357 ms
+2020-04-20 00:14:59.883 +05:30 [INF] HTTP GET / responded 404 in 0.1014 ms
+2020-04-20 00:15:04.229 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 400 in 3.6267 ms
+2020-04-20 00:15:04.443 +05:30 [INF] HTTP GET / responded 404 in 0.0679 ms
+2020-04-20 00:15:42.917 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 400 in 19.8324 ms
+2020-04-20 00:15:48.060 +05:30 [INF] HTTP GET / responded 404 in 0.0916 ms
+2020-04-20 00:16:16.699 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 400 in 5.0536 ms
+2020-04-20 00:16:16.959 +05:30 [INF] HTTP GET / responded 404 in 0.0343 ms
+2020-04-20 00:17:24.895 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 400 in 3.1963 ms
+2020-04-20 00:17:25.137 +05:30 [INF] HTTP GET / responded 404 in 0.0749 ms
+2020-04-20 00:18:28.208 +05:30 [INF] HTTP GET /api/values responded 404 in 41.7039 ms
+2020-04-20 00:18:35.203 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3214.0151 ms
+2020-04-20 00:18:48.706 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 5045.3759 ms
+2020-04-20 00:18:50.724 +05:30 [INF] HTTP GET / responded 404 in 0.5447 ms
+2020-04-20 00:18:56.831 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 1207.5521 ms
+2020-04-20 00:18:56.996 +05:30 [INF] HTTP GET / responded 404 in 0.205 ms
+2020-04-20 00:19:51.758 +05:30 [ERR] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 500 in 46747.1994 ms
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at BusinessLogic.Services.WorkOrderService.GetWO(Int32 pageNumber, FilterEnumWO filter, String matchStr, FilterEnumWOStage stage, String endDate)
+   at API.Controllers.WorkOrderController.GetWO(String matchString, Int32 requestedPage, FilterEnumWOStage stage, String endDate, FilterEnumWO filter) in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 87
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2020-04-20 00:19:52.010 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at BusinessLogic.Services.WorkOrderService.GetWO(Int32 pageNumber, FilterEnumWO filter, String matchStr, FilterEnumWOStage stage, String endDate)
+   at API.Controllers.WorkOrderController.GetWO(String matchString, Int32 requestedPage, FilterEnumWOStage stage, String endDate, FilterEnumWO filter) in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 87
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 30
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-20 00:19:54.354 +05:30 [INF] Object reference not set to an instance of an object.
+Stack Trace:    at BusinessLogic.Services.WorkOrderService.GetWO(Int32 pageNumber, FilterEnumWO filter, String matchStr, FilterEnumWOStage stage, String endDate)
+   at API.Controllers.WorkOrderController.GetWO(String matchString, Int32 requestedPage, FilterEnumWOStage stage, String endDate, FilterEnumWO filter) in E:\Newmyproj\mrproj - Copy\API\Controllers\WorkOrderController.cs:line 87
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at API.BlackListCheckMiddleware.Invoke(HttpContext httpContext) in E:\Newmyproj\mrproj - Copy\API\BlackListCheckMiddleware.cs:line 30
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2020-04-20 00:19:54.654 +05:30 [INF] HTTP GET / responded 404 in 0.1982 ms
+2020-04-20 00:20:00.673 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 200 in 940.6572 ms
+2020-04-20 00:20:00.866 +05:30 [INF] HTTP GET / responded 404 in 0.1375 ms
+2020-04-20 00:20:08.850 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=OPEN&endDate= responded 200 in 1992.8818 ms
+2020-04-20 00:20:08.975 +05:30 [INF] HTTP GET / responded 404 in 0.2076 ms
+2020-04-20 00:20:57.675 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=OPEN&endDate= responded 200 in 1868.3226 ms
+2020-04-20 00:20:57.825 +05:30 [INF] HTTP GET / responded 404 in 0.0548 ms
+2020-04-20 00:21:10.048 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 200 in 26.3425 ms
+2020-04-20 00:21:10.230 +05:30 [INF] HTTP GET / responded 404 in 0.0858 ms
+2020-04-20 00:21:14.370 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=OPEN&endDate= responded 200 in 29.9134 ms
+2020-04-20 00:21:14.514 +05:30 [INF] HTTP GET / responded 404 in 0.1223 ms
+2020-04-20 00:21:17.654 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 39.2039 ms
+2020-04-20 00:21:17.839 +05:30 [INF] HTTP GET / responded 404 in 0.2418 ms
+2020-04-20 00:22:09.949 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 31.7783 ms
+2020-04-20 00:22:17.234 +05:30 [INF] HTTP GET / responded 404 in 0.0655 ms
+2020-04-20 00:22:19.794 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=0&endDate= responded 200 in 29.9861 ms
+2020-04-20 00:22:19.914 +05:30 [INF] HTTP GET / responded 404 in 0.0404 ms
+2020-04-20 00:22:24.540 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 23.0612 ms
+2020-04-20 00:22:24.677 +05:30 [INF] HTTP GET / responded 404 in 0.064 ms
+2020-04-20 00:22:30.756 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=PENDINGAPPROVAL&endDate= responded 200 in 19.169 ms
+2020-04-20 00:22:30.847 +05:30 [INF] HTTP GET / responded 404 in 0.0816 ms
+2020-04-20 00:23:16.290 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=PENDINGAPPROVAL&endDate= responded 200 in 22.5494 ms
+2020-04-20 00:23:17.974 +05:30 [INF] HTTP GET / responded 404 in 0.0712 ms
+2020-04-20 00:23:21.728 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 19.2934 ms
+2020-04-20 00:23:22.139 +05:30 [INF] HTTP GET / responded 404 in 0.0672 ms
+2020-04-20 00:24:39.749 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 30.7596 ms
+2020-04-20 00:24:41.657 +05:30 [INF] HTTP GET / responded 404 in 0.1039 ms
+2020-04-20 00:25:32.678 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByStatus&requestedPage=0&stage=BIDACCEPTED&endDate= responded 200 in 25.003 ms
+2020-04-20 00:25:32.867 +05:30 [INF] HTTP GET / responded 404 in 0.0324 ms
+2020-04-20 00:25:43.770 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Ajay&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 66.6827 ms
+2020-04-20 00:25:43.988 +05:30 [INF] HTTP GET / responded 404 in 0.0368 ms
+2020-04-20 00:27:09.276 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Ajay&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 65995.53 ms
+2020-04-20 00:27:09.461 +05:30 [INF] HTTP GET / responded 404 in 0.041 ms
+2020-04-20 00:27:46.012 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Ajay&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 33124.2041 ms
+2020-04-20 00:27:46.232 +05:30 [INF] HTTP GET / responded 404 in 0.0268 ms
+2020-04-20 00:29:28.776 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=Ajay&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 4068.673 ms
+2020-04-20 00:29:28.942 +05:30 [INF] HTTP GET / responded 404 in 0.0453 ms
+2020-04-20 00:29:31.299 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 13.0394 ms
+2020-04-20 00:29:31.444 +05:30 [INF] HTTP GET / responded 404 in 0.2256 ms
+2020-04-20 00:29:34.809 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 15.5902 ms
+2020-04-20 00:29:34.977 +05:30 [INF] HTTP GET / responded 404 in 0.0519 ms
+2020-04-20 00:29:45.096 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 44.3981 ms
+2020-04-20 00:29:45.215 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 46.2325 ms
+2020-04-20 00:29:45.481 +05:30 [INF] HTTP GET / responded 404 in 0.0219 ms
+2020-04-20 00:30:05.076 +05:30 [INF] HTTP GET /api/user/getregisterrequestmodel responded 200 in 388.2529 ms
+2020-04-20 00:30:05.351 +05:30 [INF] HTTP GET / responded 404 in 0.0641 ms
+2020-04-20 00:30:10.259 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 51.9802 ms
+2020-04-20 00:30:11.234 +05:30 [INF] HTTP GET / responded 404 in 0.025 ms
+2020-04-20 00:30:25.464 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=shukla&filter=ByEmail&requestedPage=0 responded 200 in 48.6233 ms
+2020-04-20 00:30:25.617 +05:30 [INF] HTTP GET / responded 404 in 0.0692 ms
+2020-04-20 00:30:27.225 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 18.9119 ms
+2020-04-20 00:30:27.441 +05:30 [INF] HTTP GET / responded 404 in 0.0332 ms
+2020-04-20 00:30:42.673 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 15.3147 ms
+2020-04-20 00:30:42.877 +05:30 [INF] HTTP GET / responded 404 in 0.0654 ms
+2020-04-20 00:31:37.654 +05:30 [INF] HTTP GET /api/values responded 404 in 64.4688 ms
+2020-04-20 00:31:53.142 +05:30 [INF] HTTP POST /api/login/userlogin responded 200 in 3155.295 ms
+2020-04-20 00:31:54.288 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 242.3953 ms
+2020-04-20 00:31:56.134 +05:30 [INF] HTTP GET / responded 404 in 0.2689 ms
+2020-04-20 00:32:17.053 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 45.8206 ms
+2020-04-20 00:32:17.194 +05:30 [INF] HTTP GET / responded 404 in 0.1397 ms
+2020-04-20 00:32:49.078 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 82.431 ms
+2020-04-20 00:32:58.083 +05:30 [INF] HTTP GET / responded 404 in 0.1752 ms
+2020-04-20 00:37:20.094 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 32.0667 ms
+2020-04-20 00:37:20.250 +05:30 [INF] HTTP GET / responded 404 in 0.203 ms
+2020-04-20 00:37:32.599 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 48.6869 ms
+2020-04-20 00:37:32.758 +05:30 [INF] HTTP GET / responded 404 in 0.2243 ms
+2020-04-20 00:38:47.774 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 41.6375 ms
+2020-04-20 00:38:47.927 +05:30 [INF] HTTP GET / responded 404 in 0.1163 ms
+2020-04-20 00:38:57.642 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 45.4838 ms
+2020-04-20 00:38:57.814 +05:30 [INF] HTTP GET / responded 404 in 0.2958 ms
+2020-04-20 00:39:18.183 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 26.3245 ms
+2020-04-20 00:39:19.760 +05:30 [INF] HTTP GET / responded 404 in 0.0673 ms
+2020-04-20 00:40:28.337 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 88.078 ms
+2020-04-20 00:40:28.561 +05:30 [INF] HTTP GET / responded 404 in 0.0711 ms
+2020-04-20 00:40:36.136 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 32.9486 ms
+2020-04-20 00:40:36.268 +05:30 [INF] HTTP GET / responded 404 in 0.1443 ms
+2020-04-20 00:40:50.319 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 27.8028 ms
+2020-04-20 00:40:50.505 +05:30 [INF] HTTP GET / responded 404 in 0.0824 ms
+2020-04-20 00:41:04.749 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 31.8296 ms
+2020-04-20 00:41:04.976 +05:30 [INF] HTTP GET / responded 404 in 0.2619 ms
+2020-04-20 00:42:37.372 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 34.0973 ms
+2020-04-20 00:42:38.787 +05:30 [INF] HTTP GET / responded 404 in 0.083 ms
+2020-04-20 00:45:16.975 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 43.9889 ms
+2020-04-20 00:45:17.167 +05:30 [INF] HTTP GET / responded 404 in 0.05 ms
+2020-04-20 00:45:37.097 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 30.2743 ms
+2020-04-20 00:45:37.247 +05:30 [INF] HTTP GET / responded 404 in 0.06 ms
+2020-04-20 00:45:46.301 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 20.1452 ms
+2020-04-20 00:45:46.490 +05:30 [INF] HTTP GET / responded 404 in 0.0278 ms
+2020-04-20 00:46:53.140 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 37.5126 ms
+2020-04-20 00:46:53.417 +05:30 [INF] HTTP GET / responded 404 in 0.0302 ms
+2020-04-20 00:47:23.860 +05:30 [INF] HTTP GET /api/workorder/getallworkorder?matchString=&filter=ByAssigned&requestedPage=0&stage=0&endDate= responded 200 in 34.9779 ms
+2020-04-20 00:47:24.145 +05:30 [INF] HTTP GET / responded 404 in 0.0717 ms
+2020-04-20 00:47:31.804 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 33.9482 ms
+2020-04-20 00:47:32.040 +05:30 [INF] HTTP GET / responded 404 in 0.026 ms
+2020-04-20 00:51:40.769 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 421.3076 ms
+2020-04-20 00:51:40.948 +05:30 [INF] HTTP GET / responded 404 in 0.0296 ms
+2020-04-20 00:51:49.931 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 22.0497 ms
+2020-04-20 00:51:50.108 +05:30 [INF] HTTP GET / responded 404 in 0.0255 ms
+2020-04-20 00:54:23.366 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 32.0172 ms
+2020-04-20 00:54:24.982 +05:30 [INF] HTTP GET / responded 404 in 0.027 ms
+2020-04-20 00:58:19.461 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 39.555 ms
+2020-04-20 00:58:21.019 +05:30 [INF] HTTP GET / responded 404 in 0.0261 ms
+2020-04-20 00:59:59.338 +05:30 [INF] HTTP GET /api/user/userdetail?Id=2 responded 200 in 256.6007 ms
+2020-04-20 00:59:59.582 +05:30 [INF] HTTP GET / responded 404 in 0.0234 ms
+2020-04-20 00:59:59.811 +05:30 [INF] HTTP GET / responded 404 in 0.0244 ms
+2020-04-20 01:00:02.858 +05:30 [INF] HTTP GET /api/user/getallusers?matchString=&filter=ByEmail&requestedPage=0 responded 200 in 18.7236 ms
+2020-04-20 01:00:03.031 +05:30 [INF] HTTP GET / responded 404 in 0.0278 ms

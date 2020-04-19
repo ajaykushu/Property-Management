@@ -3,10 +3,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class init : Migration
+    public partial class INIT : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
@@ -68,7 +83,7 @@ namespace DataAccessLayer.Migrations
                     UpdatedTime = table.Column<DateTime>(nullable: false),
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    Language = table.Column<string>(type: "varchar(40)", nullable: true)
+                    Language = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,7 +100,7 @@ namespace DataAccessLayer.Migrations
                     UpdatedTime = table.Column<DateTime>(nullable: false),
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    MenuName = table.Column<string>(type: "varchar(30)", nullable: true)
+                    MenuName = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,33 +135,11 @@ namespace DataAccessLayer.Migrations
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     StageDescription = table.Column<string>(type: "varchar(100)", nullable: true),
-                    StageCode = table.Column<string>(type: "varchar(7)", nullable: true)
+                    StageCode = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    DepartmentId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoles_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -171,60 +164,29 @@ namespace DataAccessLayer.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(type: "varchar(50)", nullable: true),
                     LastName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    Suffix = table.Column<string>(type: "varchar(10)", nullable: true),
+                    Suffix = table.Column<string>(type: "varchar(50)", nullable: true),
                     SMSAltert = table.Column<bool>(nullable: false, defaultValue: false),
                     LanguageId = table.Column<int>(nullable: false, defaultValue: 1),
                     TimeZone = table.Column<string>(type: "varchar(100)", nullable: true),
                     ClockType = table.Column<string>(type: "varchar(2)", nullable: true, defaultValue: "12"),
-                    OfficeExt = table.Column<string>(type: "varchar(10)", nullable: true),
+                    OfficeExt = table.Column<string>(type: "varchar(50)", nullable: true),
                     PhotoPath = table.Column<string>(nullable: true),
-                    ManagerId = table.Column<long>(nullable: true),
+                    DepartmentId = table.Column<int>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AspNetUsers_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_AspNetUsers_Languages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "Languages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_AspNetUsers_ManagerId",
-                        column: x => x.ManagerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Properties",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
-                    UpdatedTime = table.Column<DateTime>(nullable: false),
-                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    PropertyName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    PropertyTypeId = table.Column<int>(type: "int", nullable: false),
-                    HouseNumber = table.Column<string>(type: "varchar(10)", nullable: true),
-                    Locality = table.Column<string>(type: "varchar(50)", nullable: true),
-                    Street = table.Column<string>(type: "varchar(50)", nullable: true),
-                    StreetLine2 = table.Column<string>(type: "varchar(100)", nullable: true),
-                    PinCode = table.Column<string>(type: "varchar(8)", nullable: false),
-                    City = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Country = table.Column<string>(type: "varchar(50)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Properties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Properties_PropertyType_PropertyTypeId",
-                        column: x => x.PropertyTypeId,
-                        principalTable: "PropertyType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -260,6 +222,36 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Properties",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    PropertyName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    PropertyTypeId = table.Column<int>(type: "int", nullable: false),
+                    StreetAddress1 = table.Column<string>(type: "varchar(100)", nullable: true),
+                    StreetAddress2 = table.Column<string>(type: "varchar(100)", nullable: true),
+                    ZipCode = table.Column<string>(type: "varchar(50)", nullable: false),
+                    City = table.Column<string>(type: "varchar(50)", nullable: false),
+                    State = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Country = table.Column<string>(type: "varchar(50)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Properties", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Properties_PropertyType_PropertyTypeId",
+                        column: x => x.PropertyTypeId,
+                        principalTable: "PropertyType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
@@ -279,6 +271,26 @@ namespace DataAccessLayer.Migrations
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LocationName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    PropertyId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Locations_Properties_PropertyId",
+                        column: x => x.PropertyId,
+                        principalTable: "Properties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -315,6 +327,26 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Areas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AreaName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    LocationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Areas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Areas_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkOrders",
                 columns: table => new
                 {
@@ -331,8 +363,10 @@ namespace DataAccessLayer.Migrations
                     Description = table.Column<string>(type: "varchar(200)", nullable: true),
                     RequestedBy = table.Column<string>(type: "varchar(50)", nullable: true),
                     AssignedToId = table.Column<long>(nullable: true),
-                    AssignedToRoleId = table.Column<long>(nullable: true),
-                    AttachmentPath = table.Column<string>(type: "varchar(300)", nullable: true)
+                    AttachmentPath = table.Column<string>(type: "varchar(300)", nullable: true),
+                    DueDate = table.Column<DateTime>(nullable: false),
+                    LocationId = table.Column<int>(nullable: true),
+                    SubLocationId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -341,12 +375,6 @@ namespace DataAccessLayer.Migrations
                         name: "FK_WorkOrders_AspNetUsers_AssignedToId",
                         column: x => x.AssignedToId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_WorkOrders_AspNetRoles_AssignedToRoleId",
-                        column: x => x.AssignedToRoleId,
-                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -362,6 +390,12 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_WorkOrders_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_WorkOrders_Properties_PropertyId",
                         column: x => x.PropertyId,
                         principalTable: "Properties",
@@ -373,6 +407,12 @@ namespace DataAccessLayer.Migrations
                         principalTable: "Stages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkOrders_Areas_SubLocationId",
+                        column: x => x.SubLocationId,
+                        principalTable: "Areas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -428,6 +468,16 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { 1L, "046980e9-30c9-40ca-b8d4-e01479e202d5", "Master Admin", "MASTER ADMIN" },
+                    { 2L, "8f346fb3-74ef-4006-931f-bfcc067631d2", "Admin", "ADMIN" },
+                    { 3L, "71bf7d0e-6769-44ae-ac37-dfcdd355a492", "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "DepartmentName", "UpdatedByUserName", "UpdatedTime" },
                 values: new object[,]
@@ -435,6 +485,24 @@ namespace DataAccessLayer.Migrations
                     { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Administration", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Management", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Engineering", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Issues",
+                columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "IssueName", "UpdatedByUserName", "UpdatedTime" },
+                values: new object[,]
+                {
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Power Problem", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Item Not Available", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Items",
+                columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "ItemName", "UpdatedByUserName", "UpdatedTime" },
+                values: new object[,]
+                {
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AC", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tv", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -447,18 +515,18 @@ namespace DataAccessLayer.Migrations
                 columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "MenuName", "UpdatedByUserName", "UpdatedTime" },
                 values: new object[,]
                 {
+                    { 11L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Access_Setting", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 18L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WO_Operation", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 17L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Assign_To_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 16L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Post_Comment", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 15L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 14L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), " GetWO_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 14L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "GetWO_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 13L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Get_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 12L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Create_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 11L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Access_Setting", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 10L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Feature", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 8L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_User_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 18L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WO_Operation", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 7L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ActDct_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 6L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_User_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ActDct_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 5L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Add_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 4L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 3L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
@@ -470,17 +538,20 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.InsertData(
                 table: "PropertyType",
                 columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "PropertyTypeName", "UpdatedByUserName", "UpdatedTime" },
-                values: new object[] { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Hotel", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "DepartmentId", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "8f00521d-a29c-4a61-bd3a-84512c534398", 1, "Admin", "ADMIN" },
-                    { 3L, "185bc7b4-aa8e-4547-a7e1-74178f697091", 2, "Property Manager", "PROPERTY MANAGER" },
-                    { 2L, "c96f30c2-0526-4a35-80ce-b32d1934011e", 3, "Electician", "ELECTRICIAN" },
-                    { 4L, "f1e925f5-e9e8-4e87-93b6-ed6d79bc54f5", 3, "Plumber", "PLUMBER" }
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Hotel", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "PG", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Stages",
+                columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "StageCode", "StageDescription", "UpdatedByUserName", "UpdatedTime" },
+                values: new object[,]
+                {
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOPROG", "Work Order in Progress", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "INITWO", "Work Order Created", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOCOMP", "Work Order Completed", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -509,9 +580,9 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoles_DepartmentId",
-                table: "AspNetRoles",
-                column: "DepartmentId");
+                name: "IX_Areas_LocationId",
+                table: "Areas",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -526,6 +597,11 @@ namespace DataAccessLayer.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_DepartmentId",
+                table: "AspNetUsers",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_Email",
                 table: "AspNetUsers",
                 column: "Email",
@@ -536,11 +612,6 @@ namespace DataAccessLayer.Migrations
                 name: "IX_AspNetUsers_LanguageId",
                 table: "AspNetUsers",
                 column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ManagerId",
-                table: "AspNetUsers",
-                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -565,6 +636,11 @@ namespace DataAccessLayer.Migrations
                 name: "IX_Comments_WorkOrderId",
                 table: "Comments",
                 column: "WorkOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Locations_PropertyId",
+                table: "Locations",
+                column: "PropertyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_PropertyName",
@@ -616,11 +692,6 @@ namespace DataAccessLayer.Migrations
                 column: "AssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkOrders_AssignedToRoleId",
-                table: "WorkOrders",
-                column: "AssignedToRoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_IssueId",
                 table: "WorkOrders",
                 column: "IssueId");
@@ -631,6 +702,11 @@ namespace DataAccessLayer.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WorkOrders_LocationId",
+                table: "WorkOrders",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_PropertyId",
                 table: "WorkOrders",
                 column: "PropertyId");
@@ -639,6 +715,11 @@ namespace DataAccessLayer.Migrations
                 name: "IX_WorkOrders_StageId",
                 table: "WorkOrders",
                 column: "StageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkOrders_SubLocationId",
+                table: "WorkOrders",
+                column: "SubLocationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -662,13 +743,13 @@ namespace DataAccessLayer.Migrations
                 name: "Menu");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "WorkOrders");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Issues");
@@ -677,16 +758,22 @@ namespace DataAccessLayer.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Properties");
+                name: "Stages");
 
             migrationBuilder.DropTable(
-                name: "Stages");
+                name: "Areas");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "Languages");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "Properties");
 
             migrationBuilder.DropTable(
                 name: "PropertyType");

@@ -17,7 +17,7 @@ namespace DataAccessLayer.Repository
         public DbSet<Property> Properties { set; get; }
         public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
         public DbSet<Location> Locations { set; get; }
-        public DbSet<Area> Areas { set; get; }
+        public DbSet<SubLocation> Areas { set; get; }
 
         public DbSet<Menu> Menu { set; get; }
         public DbSet<Issue> Issues { set; get; }
@@ -50,11 +50,7 @@ namespace DataAccessLayer.Repository
             builder.Ignore<IdentityUserLogin<long>>();
             builder.Ignore<IdentityUserClaim<long>>();
             builder.Ignore<IdentityRoleClaim<long>>();
-            //configuration
-            //disabling on delete cascade
-            //var entityfk = builder.Model.GetEntityTypes().SelectMany(t=>t.GetForeignKeys()).Where(fk=>!fk.IsOwnership && fk.DeleteBehavior==DeleteBehavior.Cascade);
-            //foreach(var fk in entityfk)
-            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
+           
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             builder.Entity<Property>().HasIndex(x => x.PropertyName).IsUnique();
@@ -64,9 +60,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
-            builder.Entity<ApplicationUser>().HasOne(s => s.Manager)
-            .WithMany().HasForeignKey(x => x.ManagerId);
-
+            
             builder.Entity<Department>().HasData(
                 new Department()
                 {
@@ -89,32 +83,23 @@ namespace DataAccessLayer.Repository
              new ApplicationRole()
              {
                  Id = 1,
-                 Name = "Admin",
-                 NormalizedName = "ADMIN",
-                 DepartmentId = 1
+                 Name = "Master Admin",
+                 NormalizedName = "MASTER ADMIN"
              },
-            
+
               new ApplicationRole()
               {
                   Id = 2,
-                  Name = "User",
-                  NormalizedName = "USER",
-                  DepartmentId = 2,
+                  Name = "Admin",
+                  NormalizedName = "ADMIN"
               },
             new ApplicationRole()
             {
                 Id = 3,
-                Name = "Plumber",
-                NormalizedName = "PLUMBER",
-                DepartmentId = 3,
-            },
-            new ApplicationRole()
-            {
-                Id = 4,
-                Name = "Electrician",
-                NormalizedName = "ELECTRICIAN",
-                DepartmentId = 3,
+                Name = "User",
+                NormalizedName = "USER"
             });
+           
             builder.Entity<Languages>().HasData(
                 new Languages()
                 {
@@ -129,7 +114,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<Issue>()
                  .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
             builder.Entity<Stage>()
-                .HasData(new Stage() { Id = 1, StageCode = "INITWO",StageDescription="Work Order Created" }, new Stage() { Id = 2, StageCode = "WOPROG",StageDescription="Work Order in Progress" }, new Stage() { Id = 3, StageCode = "WOCOMP", StageDescription = "Work Order Completed" });
+                .HasData(new Stage() { Id = 1, StageCode = "OPEN",StageDescription="Work Order Open State" }, new Stage() { Id = 2, StageCode = "BIDACCEPTED",StageDescription="Bid Sucessfull" }, new Stage() { Id = 3, StageCode = "INPROGRESS", StageDescription = "Work Order in Progress" },new Stage() { Id = 4, StageCode = "COMPLETED", StageDescription = "Work Order Completed" });
           
 
             builder.Entity<Menu>().HasData(

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
@@ -17,10 +18,15 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Choose Role")]
         public string Role { get; set; }
+        public List<SelectItem> Roles { get; set; }
+        public List<SelectItem> Departments { get; set; }
+        [Required(ErrorMessage = "Please Choose Department")]
+        [DisplayName("Department")]
+        public int DepartmentId { get; set; }
 
         public List<SelectItem> Properties { get; set; }
         public List<string> SelectedProperty { get; set; }
-        public List<SelectItem> Roles { get; set; }
+       
 
         [Required(ErrorMessage = "Please Choose Language")]
         public int Language { get; set; }

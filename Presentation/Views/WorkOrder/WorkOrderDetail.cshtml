@@ -38,6 +38,20 @@
                                 @Html.DisplayFor(x => x.StageDescription)
                             </div>
                         </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="">Stage Change</label>
+                            </div>
+                            <div class="col">
+                                <form action="WorkOrderStageChange" >
+                                <select class="form-control form-control-sm custom-input" name="StageId"  asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))">
+                                    <option value="">Select Stage</option>
+                                </select>
+                                <input asp-for="Id" hidden>
+                                <input type="submit" value="Change" class="btn btn-sm btn-primary top-buffer">
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -56,7 +70,7 @@
                                 <p class="card-text">
                                     <address>
                                         Location: <strong>@Model.Location</strong><br>
-                                        Area: <strong>@Model.Area</strong>
+                                        Area: <strong>@Model.SubLocation</strong>
                                     </address>
                                 </p>
                             </div>
@@ -182,14 +196,7 @@
                                 @Html.DisplayFor(x => x.Department)
                             </div>
                         </div>
-                        <div class="row top-buffer ">
-                            <div class="col-md-3">
-                                <label asp-for="Section"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.Section)
-                            </div>
-                        </div>
+                       
                         @if (Model.AssignedToUser != null)
                         {
                             <div class="row top-buffer">
@@ -201,46 +208,6 @@
                                 </div>
                             </div>
                         }
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Operation
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="col">
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label for="Stage">Stage Change</label>
-                            </div>
-                            <div class="col">
-                                @{
-                                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                                    keyValuePairs.Add("workorderId", Model.Id + "");
-                                    keyValuePairs.Add("process", ProcessEnumWOStage.TrackIn.ToString());
-                                    <auth-link bclass="btn btn-sm btn-outline-info" feature="@MenuEnum.WO_Operation" routedata=@keyValuePairs action="WorkOrderOperation" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Track In'></auth-link>
-                                    keyValuePairs["process"] = ProcessEnumWOStage.TrackOut.ToString();
-                                    <auth-link bclass="btn btn-sm btn-outline-info" feature="@MenuEnum.WO_Operation" routedata=@keyValuePairs action="WorkOrderOperation" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Track Out'></auth-link>
-                                }
-                            </div>
-                        </div>
-                        <div class="row top-buffer ">
-                            <div class="col-md-3">
-                                <label>Assign to user</label>
-                            </div>
-                            <div class="col">
-                                <form asp-action="AssignToUser" class="form-inline">
-                                    <input name="workOrderId" hidden value="@Model.Id">
-                                    <select name="userId" class="form-control form-control-sm custom-input" asp-items="@(new SelectList(Model.Users, "Id", "PropertyName"))" required>
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    &nbsp;<button class="btn btn-sm btn-primary" type="submit">Assign</button>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </td>
             </tr>

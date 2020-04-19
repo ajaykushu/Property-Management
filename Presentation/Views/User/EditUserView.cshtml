@@ -63,10 +63,24 @@
                                 <div class="col">
                                     @if (Model.Roles != null)
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="Role" class="text-danger"></span>
+                                    <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="Role" class="text-danger"></span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="DepartmentId"> </label>
+                                </div>
+                                <div class="col">
+                                    @if (Model.Departments!=null && Model.Departments.Any())
+                                    {
+                                    <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                     }
                                 </div>
                             </div>
@@ -77,11 +91,11 @@
                                 <div class="col">
                                     @if (Model.Properties != null && Model.Properties.Any())
                                     {
-                                        <input type="text" value="@if (Model.SelectedProperty.Any())
+                                    <input type="text" value="@if (Model.SelectedProperty.Any())
                                             { <text>@string.Join(",", Model.SelectedProperty)</text> }" disabled class="form-control form-control-sm custom-input select-input" placeholder="select item">
-                                        <select class="custom-input select-mul" asp-for="SelectedProperty" asp-items="@(new SelectList(Model.Properties, "PropertyName", "PropertyName"))" multiple="multiple">
-                                            <option value="">Select Option</option>
-                                        </select>
+                                    <select class="custom-input select-mul" asp-for="SelectedProperty" asp-items="@(new SelectList(Model.Properties, "PropertyName", "PropertyName"))" multiple="multiple">
+                                        <option value="">Select Option</option>
+                                    </select>
                                     }
                                     <span asp-validation-for="SelectedProperty" class="text-danger"></span>
                                 </div>
