@@ -60,6 +60,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
+            builder.Entity<Property>().Property(x => x.IsActive).HasDefaultValue(true);
             
             builder.Entity<Department>().HasData(
                 new Department()

@@ -12,5 +12,6 @@
         public string StreetAddress2 { get; set; }
         public string StreetAddress1 { get; set; }
         public string State { get; set; }
+        public bool IsActive { get; set; }
     }
 }

@@ -12,5 +12,6 @@
         public string State { set; get; }
         public string Country { set; get; }
         public bool IsPrimary { set; get; }
+        public bool IsActive { get; set; }
     }
 }

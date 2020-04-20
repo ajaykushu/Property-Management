@@ -84,7 +84,8 @@ namespace BusinessLogic.Services
                     PropertyName = x.PropertyName,
                     PropertyType = x.PropertyTypes.PropertyTypeName,
                     StreetAddress1= x.StreetAddress2,
-                    State=x.State
+                    State=x.State,
+                    IsActive=x.IsActive
                 }
                 ).AsNoTracking().ToListAsync();
 
@@ -99,9 +100,10 @@ namespace BusinessLogic.Services
             {
                 if (prop.UserProperties != null && prop.UserProperties.Count != 0)
                 {
-                    throw new BadRequestException("Unable to delete as this is propery is allocated to [ " + string.Join(",", prop.UserProperties.Select(x => x.ApplicationUser.UserName).ToList()) + " ]");
+                    throw new BadRequestException("Unable to deactivate as this is propery is allocated to [ " + string.Join(",", prop.UserProperties.Select(x => x.ApplicationUser.UserName).ToList()) + " ]");
                 }
-                int status = await _property.Delete(prop);
+                prop.IsActive = false;
+                int status = await _property.Update(prop);
                 if (status > 0)
                 {
                     return true;
