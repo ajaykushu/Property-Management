@@ -11,6 +11,6 @@ namespace Models.RequestModels
         public List<SelectItem> Locations { set; get; }
         public int LocationId { get; set; }
         public string NewLocation { get; set; }
-        public string Area { set; get; }
+        public string SubLocation { set; get; }
     }
 }

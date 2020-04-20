@@ -39,6 +39,7 @@ namespace Presentation.ViewModels
 
         public List<SelectItem> TimeZones { set; get; }
 
+        [DisplayName("Cell Number")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }

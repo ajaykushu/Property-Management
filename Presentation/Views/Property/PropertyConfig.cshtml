@@ -46,12 +46,12 @@
                         <div class="col">
                             <div class="row ">
                                 <div class="col-md-3">
-                                    <label for="Locations">Add Area</label>
+                                    <label asp-for="SubLocation"></label>
                                 </div>
                                 <div class="col">
-                                    <textarea asp-for="Area" class="form-control form-control-sm custom-input"></textarea>
-                                    <span class="text-danger">Enter , speparated Areas</span><br />
-                                    <span class="text-info">Area will come prepopulated if available to corresponding location</span>
+                                    <textarea asp-for="SubLocation" class="form-control form-control-sm custom-input"></textarea>
+                                    <span class="text-danger">Enter , speparated Sub Location</span><br />
+                                    <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
                                 </div>
 
                             </div>
@@ -66,6 +66,9 @@
             </tbody>
         </table>
     </form>
+</div>
+<div>
+    <a asp-action="ListProperties" asp-controller="Property">Back</a>
 </div>
 <script>
 

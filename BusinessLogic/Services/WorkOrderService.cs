@@ -66,7 +66,7 @@ namespace BusinessLogic.Services
                 SubLocationId=createWO.SubLocationId
             };
 
-            workOrder.StageId = _stage.Get(x => x.StageCode == "OPEN").Select(x => x.Id).FirstOrDefault();
+            workOrder.StageId = _stage.Get(x => x.StageCode == "OPEN").AsNoTracking().Select(x => x.Id).FirstOrDefault();
             if (createWO.File != null)
             {
                 string path = await _imageuploadinfile.UploadAsync(createWO.File, "WOFiles");
@@ -101,6 +101,7 @@ namespace BusinessLogic.Services
                     SubLocation=x.SubLocation.AreaName,
                     Attachment =string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/" , x.AttachmentPath)
             }).AsNoTracking().FirstOrDefaultAsync();
+           
             workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -148,8 +149,8 @@ namespace BusinessLogic.Services
             var res = await  _appuser.Users.Where(x => x.DepartmentId == id).Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = String.Concat(x.UserName,"(",x.FirstName," ",x.LastName,")")
-            }).AsNoTracking().ToListAsync();
+                PropertyName = String.Concat(x.FirstName," ",x.LastName,"(", x.UserName, ")")
+            }).AsNoTracking().OrderBy(x => x.PropertyName).ToListAsync();
             return res;
         }
 
@@ -306,7 +307,7 @@ namespace BusinessLogic.Services
         {
             var itemsinpage = 4;
             var count = _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Count();
-            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.CreatedTime).OrderByDescending(x => x.CreatedTime).Select(x => new CommentDTO()
+            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.CreatedTime).Select(x => new CommentDTO()
             {
                 CommentBy = x.CreatedByUserName,
                 CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),

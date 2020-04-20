@@ -43,12 +43,12 @@
                                 <label for="">Stage Change</label>
                             </div>
                             <div class="col">
-                                <form action="WorkOrderStageChange" >
-                                <select class="form-control form-control-sm custom-input" name="StageId"  asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))">
-                                    <option value="">Select Stage</option>
-                                </select>
-                                <input asp-for="Id" hidden>
-                                <input type="submit" value="Change" class="btn btn-sm btn-primary top-buffer">
+                                <form action="WorkOrderStageChange">
+                                    <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))">
+                                        <option value="">Select Stage</option>
+                                    </select>
+                                    <input asp-for="Id" hidden>
+                                    <input type="submit" value="Change" class="btn btn-sm btn-primary top-buffer">
                                 </form>
                             </div>
                         </div>
@@ -136,14 +136,6 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label for="Comments">Comments</label>
-                            </div>
-                            <div class="col">
-                                <a asp-action="GetComment" asp-route-Id=@Model.Id class="btn btn-sm btn-outline-primary comment"><i class="fa fa-comment-alt"></i>&nbsp;Comments</a>
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
                                 <label asp-for="Attachment"></label>
                             </div>
                             <div class="col">
@@ -196,7 +188,7 @@
                                 @Html.DisplayFor(x => x.Department)
                             </div>
                         </div>
-                       
+
                         @if (Model.AssignedToUser != null)
                         {
                             <div class="row top-buffer">
@@ -209,6 +201,14 @@
                             </div>
                         }
                     </div>
+                </td>
+            </tr>
+            <tr><td>
+                <div class="row">
+                    <div class="col">
+                 <a asp-action="GetComment" asp-route-Id=@Model.Id class="btn btn-sm btn-outline-primary comment">&nbsp;Comments</a>
+                        </div>
+                </div>
                 </td>
             </tr>
         </tbody>

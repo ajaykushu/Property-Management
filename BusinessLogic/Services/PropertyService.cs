@@ -209,12 +209,12 @@ namespace BusinessLogic.Services
         {
             var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x=>x.WorkOrders).FirstOrDefaultAsync();
             HashSet<string> areas = null;
-            if (!string.IsNullOrWhiteSpace(propertyConfig.Area))
+            if (!string.IsNullOrWhiteSpace(propertyConfig.SubLocation))
             {
-                if (propertyConfig.Area.Contains(','))
-                    areas = propertyConfig.Area.Split(',').ToHashSet();
+                if (propertyConfig.SubLocation.Contains(','))
+                    areas = propertyConfig.SubLocation.Split(',').ToHashSet();
                 else
-                    areas.Append(propertyConfig.Area);
+                    areas.Append(propertyConfig.SubLocation);
 
             }
             if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))

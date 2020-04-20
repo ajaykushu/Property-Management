@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> Locations { set; get; }
         public int LocationId { get; set; }
         public string NewLocation { get; set; }
-        public string Area { set; get; }
+        [DisplayName("Sub Location")]
+        public string SubLocation { set; get; }
     }
 }

@@ -1,11 +1,12 @@
 ﻿@model Pagination<List<Comment>>
-
 @{
+
     ViewData["Title"] = "Comments";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h4>Comments</h4>
+
 <form asp-action='PostComment' method='post'>
     <p>
         <div class="mycon">

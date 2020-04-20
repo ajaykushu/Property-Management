@@ -43,7 +43,7 @@ namespace Presentation.ViewModels
 
         public string OfficeExt { get; set; }
         public List<SelectItem> TimeZones { set; get; }
-
+        [DisplayName("Cell Number")]
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
