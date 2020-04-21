@@ -1,111 +1,126 @@
-﻿@model Pagination<List<WorkOrderAssigned>>
-<form class="form">
-    <div class="input-group">
-        <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByAssigned) { <text> checked</text>} id="assigned" name="Filter" value='@FilterEnumWO.ByAssigned' class="selector1" required>
-            <label class="label1" for="assigned">@FilterEnumWO.ByAssigned</label>
+﻿@model WOFilterModel
+@{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
+    <form class="form">
+        <div class="card wofilter">
+            <div class="card-body">
+                <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
+                <div class="form-row">
+                    <div class="col-xs-5">
+                        <label>Email</label>
+                        <input asp-for="Email" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-xs-5">
+                        <label>User Name</label>
+                        <input asp-for="UserName" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-xs-5">
+                        <label>PropertyName</label>
+                        <input asp-for="PropertyName" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Creation Start Date</label>
+                        <input asp-for="CreationStartDate" type="date" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Creation End Date</label>
+                        <input asp-for="CreationEndDate" type="date" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Status</label>
+                        <select asp-for="Status" class="form-control form-control-sm">
+                            <option value="" >Select One</option>
+                            <option value="@FilterEnumWOStage.OPEN">@FilterEnumWOStage.OPEN</option>
+                            <option value="@FilterEnumWOStage.BIDACCEPTED">@FilterEnumWOStage.BIDACCEPTED</option>
+                            <option value="@FilterEnumWOStage.INPROGRESS">@FilterEnumWOStage.INPROGRESS</option>
+                            <option value="@FilterEnumWOStage.COMPLETED">@FilterEnumWOStage.COMPLETED</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
+                <input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
+            </div>
         </div>
-        <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByDate) { <text> checked</text>} id="date" name="Filter" value=@FilterEnumWO.ByDate class="selector2" required>
-            <label class="label2" for="date">@FilterEnumWO.ByDate</label>
-        </div>
-        <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnumWO.ByStatus) { <text> checked</text>} id="status" name="Filter" value=@FilterEnumWO.ByStatus class="selector2" required>
-            <label class="label2" for="status">@FilterEnumWO.ByStatus</label>
-        </div>
-        <input class="form-control form-control-sm" style="display:@if (ViewBag.filter == FilterEnumWO.ByStatus) {<text>none;</text> }" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="@if (ViewBag.filter == FilterEnumWO.ByDate) { <text>date</text>} else {<text>text</text> }" placeholder="Search">
-        <select class="form-control form-control-sm" value=@ViewBag.stage style="display:@if (ViewBag.filter == FilterEnumWO.ByStatus)
-            {<text>block;</text>}
-                else { <text>none;</text>}" name="stage" id="select">
-            <option  selected="selected">Select</option>
-            <option value=@FilterEnumWOStage.OPEN>OPEN</option>
-            <option value=@FilterEnumWOStage.BIDACCEPTED>BID ACCEPTED</option>
-            <option value=@FilterEnumWOStage.PENDINGAPPROVAL>PENDING APPROVAL</option>
-            <option value=@FilterEnumWOStage.COMPLETED>COMPLETED</option>
-        </select>
-        &nbsp;<input class="form-control form-control-sm" style="display:@if (ViewBag.filter==FilterEnumWO.ByDate) {<text>block</text> } else {<text>none</text> }" value='@ViewBag.enddate' name="endDate" autocomplete="off" id="endDate" type="date">
-        &nbsp; &nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Filter">
-        &nbsp; &nbsp;<input class="btn btn-sm btn-info clear" type="reset" value="Clear Filter">
-    </div>
-    <hr />
-    <div class="workordertitle">
-        Work Orders
-    </div>
-
-    @if (Model != null && Model.Payload != null && Model.Payload.Any())
-    {
-        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
-            <thead>
-                <tr>
-                    <th scope="col" colspan="4" class="mytitle">
-                        To Do List
-                    </th>
-                    <th scope="col" colspan="2" class="button">
-                        <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var item in Model.Payload)
-                {
-                    <tr>
-                        <td>
-                            <span ><strong>@item.Stage.ToUpper()</strong></span>
-                        </td>
-                        <td><span class="text-wrap">@item.Description</span></td>
-                         <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedToUser</strong></span></td>
-                         <td><span class="text-dark">@item.Property.PropertyName</span></td>
-                        <td >@item.CreatedDate</td>
-                        <td>
-                            @{
-                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                                keyValuePairs.Add("id", item.Id + "");
-                                <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
         <hr />
-        <nav>
-            <ul class="pagination">
-                @{ int current = 0;}
-                <li class="page-item @if (Model.CurrentPage == 0) {<text>disabled</text> }">
-                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                </li>
+        <div class="workordertitle">
+            Work Orders
+            <a href="#" class="filter float-right" style="color:white;padding:5px;"><i class="fa fa-filter"></i></a>
+        </div>
+        @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
+        {
+            <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+                <thead>
+                    <tr>
+                        <th scope="col" colspan="4" class="mytitle">
+                            To Do List
+                        </th>
+                        <th scope="col" colspan="2" class="button">
+                            <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                @for (int i = 0; i < Model.PageCount; i++)
-                {
-
-                    if (Model.CurrentPage == i)
+                    @foreach (var item in ResponseModel.Payload)
                     {
-                        <li class="page-item active">
-                            <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-                        </li>
-                        current = i;
+                        <tr>
+                            <td>
+                                <span><strong>@item.Stage.ToUpper()</strong></span>
+                            </td>
+                            <td><span class="text-wrap">@item.Description</span></td>
+                            <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedToUser</strong></span></td>
+                            <td><span class="text-dark">@item.Property.PropertyName</span></td>
+                            <td>@item.CreatedDate</td>
+                            <td>
+                                @{
+                                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                    keyValuePairs.Add("id", item.Id + "");
+                                    <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                    <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                }
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <li class="page-item">
-                            @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", new { requestedPage = i, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                        </li>
-                    }
-                }
-                <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount) {<text>disabled</text> }">
-                    @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", new { requestedPage = current + 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                </li>
-            </ul>
-        </nav>
-    }
-    else
-    {
-        <span> No Record Found</span>
+                </tbody>
+            </table>
+            <hr />
+            <nav>
+                <ul class="pagination">
+                    @{ int current = 0;}
+                    <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
+                        @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                    </li>
 
-    }
-</form>
+                    @for (int i = 0; i < ResponseModel.PageCount; i++)
+                    {
+
+                        if (ResponseModel.CurrentPage == i)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                            </li>
+                            current = i;
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                @{ Model.PageNumber = i;}
+                                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                            </li>
+                        }
+                    }
+                    @{ Model.PageNumber = current+1;}
+                    <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
+                        @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                    </li>
+                </ul>
+            </nav>
+        }
+        else
+        {
+            <span> No Record Found</span>
+
+        }
+    </form>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
@@ -114,3 +129,15 @@
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
     </script>
 }
+
+
+<script>
+   
+    $('.filter').click(function () {
+        $('.wofilter').show().animate({});
+    });
+    $('.closefilter').click(function () {
+        console.log('hii');
+        $('.wofilter').hide(100);
+    });
+</script>

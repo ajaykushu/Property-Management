@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,6 +33,8 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please give Date")]
         public DateTime CreatedDate { get; set; }
+        public List<KeyValuePair<string, string>> FileAvailable { get; set; }
+        
 
         public List<SelectItem> Departments { get; set; }
 
@@ -40,6 +43,8 @@ namespace Models.RequestModels
         public long UserId { get; set; }
         public DateTime DueDate { get; set; }
         public List<SelectItem> Users { get; set; }
-        public IFormFile File { get; set; }
+        public string FilesRemoved { get; set; }
+        public int Priority { get; set; }
+        // public IFormFileCollection File { get; set; }
     }
 }

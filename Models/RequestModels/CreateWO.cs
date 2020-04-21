@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -36,6 +37,7 @@ namespace Models.RequestModels
         public int UserId { get; set; }
         [Required]
         public DateTime DueDate { get; set; }
-        public IFormFile File { get; set; }
+        public int Priority { get; set; }
+       // public IFormFileCollection File { get; set; }
     }
 }

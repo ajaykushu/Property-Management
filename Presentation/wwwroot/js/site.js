@@ -51,40 +51,22 @@ $('.clear').click(function () {
     $("input[type=text]").val("");
 })
 
-$("[name='Filter']").change(function () {
-    var d = new Date();
-    var month = d.getMonth() + 1;
-    var day = d.getDate();
-    month = month < 10 ? +"0" + month.toString() : month;
-    day = day < 10 ? +"0" + day.toString() : day;
-    var datestring = d.getFullYear() + "-" + month + "-" + day;
-    $('#search').prop("type", 'text');
-    $('#search').val("");
-    $('#search').show();
-    $('#endDate').hide();
-    $('#select').hide();
-    console.log($(this).val());
-    if ($(this).val() == 'ByDate') {
-        $('#search').prop("type", 'date');
-        $('#endDate').prop('max', datestring)
-        $('#search').prop('max', datestring)
-        $('#endDate').prop('disabled', true)
-        $('#endDate').show()
-    }
-    if ($(this).val() == 'ByStatus') {
-        $('#select').show();
-        $('#search').hide();
-    }
-});
-$("#search").blur(function () {
-    $('#endDate').prop('disabled', false)
-    $('#endDate').prop('min', $(this).val())
-});
-$('.clear').click(function (e) {
-    e.preventDefault();
-    $('#search').val("");
-    $('#endDate').val("");
+var d = new Date();
+var month = d.getMonth() + 1;
+var day = d.getDate();
+month = month < 10 ? +"0" + month.toString() : month;
+day = day < 10 ? +"0" + day.toString() : day;
+var datestring = d.getFullYear() + "-" + month + "-" + day;
+$('#CreationEndDate').prop("max", datestring);
+$('#CreationStartDate').prop("max", datestring);
+if ($('#CreationEndDate').val() == "" || $('#CreationEndDate').val() == undefined) {
+    $('#CreationEndDate').val(datestring);
+}
+$('#CreationEndDate').change(function () {
+    $('#CreationStartDate').prop("max",$('#EndDate').val());
 })
+
+
 
 $('#wocreate').submit(function (e) {
     e.preventDefault();
@@ -112,5 +94,13 @@ $('#wocreate').submit(function (e) {
         }, "");
     }
 });
-
-$('input[type=reset]').click(function () { $('input[type=submit]').click() });
+$('input[type="reset"]').click(function (e) {
+    $('.wofilter :input').each(function (x) {
+        var node = $('.wofilter :input')[x];
+        if (node.type == "text" || node.type == "date") {
+            node.setAttribute("value", "");
+        }
+    })
+    $('#Status').val("");
+    $('input[type="submit"]').click();
+})

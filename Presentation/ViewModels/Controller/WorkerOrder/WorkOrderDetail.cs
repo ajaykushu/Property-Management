@@ -18,8 +18,9 @@ namespace Presentation.ViewModels
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
         public string Description { get; set; }
+        public int Priority { get; set; }
         public DateTime UpdatedTime { get; set; }
-        public string Attachment { get; set; }
+        public List<KeyValuePair<string, string>> Attachment { get; set; }
         public string AssignedToUser { get; set; }
         public string UpdatedBy { get; set; }
         public List<SelectItem> Stages { get; set; }

@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+
+namespace DataEntity
+{
+    public class WOAttachments:Log
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Key { get; set; }
+        [Column(TypeName = "varchar(100)")]
+        public string FileName { get; set; }
+        [Column(TypeName ="varchar(300)")]
+        public string FilePath { get; set; }
+        public long WorkOrderId { get; set; }
+        public WorkOrder WorkOrder { get; set; }
+    }
+}

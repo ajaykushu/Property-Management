@@ -38,6 +38,8 @@
     <Compile Remove="Migrations\20200402154822_nemg46.Designer.cs" />
     <Compile Remove="Migrations\20200406050203_nemig45.cs" />
     <Compile Remove="Migrations\20200406050203_nemig45.Designer.cs" />
+    <Compile Remove="Migrations\20200421163211_witpriority.cs" />
+    <Compile Remove="Migrations\20200421163211_witpriority.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

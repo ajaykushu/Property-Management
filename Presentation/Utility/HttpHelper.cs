@@ -71,20 +71,32 @@ namespace Presentation.Utility
             foreach (var item in data.GetType().GetProperties())
             {
                 
-                if(item.PropertyType.Name.Equals("List`1") && item.GetValue(data) != null)
+                if (item.Name.Equals("File") && item.GetValue(data) != null)
                 {
-                    foreach(var val in item.GetValue(data) as List<string>)
+                    if (item.PropertyType.Name.Equals("IFormFile"))
+                    {
+                        var file = item.GetValue(data) as IFormFile;
+                        BinaryReader reader = new BinaryReader(file.OpenReadStream());
+                        var imagebytes = reader.ReadBytes((int)file.Length);
+                        multiContent.Add(new ByteArrayContent(imagebytes), "File", file.FileName);
+                    }
+                    else
+                    {
+                        foreach(var items in item.GetValue(data) as List<IFormFile>)
+                        {
+                            BinaryReader reader = new BinaryReader(items.OpenReadStream());
+                            var imagebytes = reader.ReadBytes((int)items.Length);
+                            multiContent.Add(new ByteArrayContent(imagebytes), "File", items.FileName);
+                        }
+                    }
+                }
+                else if(item.PropertyType.Name.Equals("List`1") && item.GetValue(data) != null)
+                {
+                    foreach (var val in item.GetValue(data) as List<string>)
                         multiContent.Add(new StringContent(val), item.Name);
                 }
-                else if (!item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
+                else if (item.GetValue(data) != null)
                     multiContent.Add(new StringContent(Convert.ToString(item.GetValue(data)), Encoding.UTF8, "application/json"), item.Name);
-                else if (item.PropertyType.Name.Equals("IFormFile") && item.GetValue(data) != null)
-                {
-                    var file = item.GetValue(data) as IFormFile;
-                    BinaryReader reader = new BinaryReader(file.OpenReadStream());
-                    var imagebytes = reader.ReadBytes((int)file.Length);
-                    multiContent.Add(new ByteArrayContent(imagebytes), "File", file.FileName);
-                }
             }
             var res = await _httpClient.PostAsync(url, multiContent).ConfigureAwait(false);
             await SetTempData(res, controller);

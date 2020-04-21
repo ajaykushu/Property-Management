@@ -40,6 +40,14 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
+                                <label asp-for="Priority"></label>
+                            </div>
+                            <div class="col">
+                                Priority P @Html.DisplayFor(x => x.Priority)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
                                 <label for="">Stage Change</label>
                             </div>
                             <div class="col">
@@ -134,14 +142,20 @@
                                 @Html.DisplayFor(x => x.DueDate)
                             </div>
                         </div>
+                        @if (Model.Attachment != null)
+                        {
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label asp-for="Attachment"></label>
                             </div>
+                            @foreach (var file in Model.Attachment)
+                            {
                             <div class="col">
-                                <a href="@Model.Attachment" download="random">Click to View File</a>
+                                <a href="@file.Value" download="random">@file.Key</a>
                             </div>
+                            }
                         </div>
+                        }
                     </div>
                 </td>
             </tr>

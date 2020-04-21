@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200420135755_WithMultipleFils")]
+    partial class WithMultipleFils
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "0196f078-73b6-423b-a028-d3d67ecc0f6d",
+                            ConcurrencyStamp = "15fa2a48-e212-4445-a177-2b404ef2d14a",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "256f32b4-4799-48e4-8c56-95fd31f9dc8f",
+                            ConcurrencyStamp = "13de8caa-f4e7-4a0a-aac2-ce8b977a5f24",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "8d49b15f-9930-409c-b03e-1ec7ee741ae8",
+                            ConcurrencyStamp = "6dd016d7-e8c2-4e5a-9af9-9a7a222a4c69",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -1092,11 +1094,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
-
-                    b.Property<int>("Priority")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
 
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");

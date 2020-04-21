@@ -38,6 +38,11 @@ namespace Presentation.ViewModels
         public DateTime CreatedDate { get; set; }
 
         public List<SelectItem> Departments { get; set; }
+        public List<KeyValuePair<string, string>> FileAvailable { get; set; }
+        public string FilesRemoved { get; set; }
+        [Required]
+        [Range(0,3)]
+        public int Priority { get; set; }
 
         [Required(ErrorMessage = "Please give Department Id")]
         [DisplayName("Department")]
@@ -51,6 +56,6 @@ namespace Presentation.ViewModels
         [DisplayFormat(DataFormatString = "{dd/MMM/yyyy}")]
         public DateTime DueDate { get; set; }
         public List<SelectItem> Sections { get; set; }
-        public IFormFile File { get; set; }
+        public IList<IFormFile> File { get; set; }
     }
 }

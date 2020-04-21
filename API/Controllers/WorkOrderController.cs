@@ -64,9 +64,9 @@ namespace API.Controllers
         [HttpPost]
         [Route("createwo")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO)
+        public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO, List<IFormFile> File)
         {
-            var status = await _workOrderService.CreateWO(createWO);
+            var status = await _workOrderService.CreateWO(createWO,File);
             return Ok(status);
         }
 
@@ -79,19 +79,19 @@ namespace API.Controllers
             return Ok(workOrderDetail);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("getallworkorder")]
         [FeatureBasedAuthorization(MenuEnum.Get_WO)]
-        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(string matchString, int requestedPage, FilterEnumWOStage stage, string endDate, FilterEnumWO filter = FilterEnumWO.ByAssigned)
+        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel)
         {
-           var workorderassigned = await _workOrderService.GetWO(requestedPage, filter, matchString, stage, endDate);
+           var workorderassigned = await _workOrderService.GetWO(wOFilterModel);
             return Ok(workorderassigned);
         }
 
         [HttpGet]
         [Route("editWOModel")]
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
-        public async Task<ActionResult<EditWorkOrder>> GetEditWO(long id)
+        public async Task<ActionResult> GetEditWO(long id)
         {
             var editWorkOrder = await _workOrderService.GetEditWO(id);
             return Ok(editWorkOrder);
@@ -100,9 +100,9 @@ namespace API.Controllers
         [HttpPost]
         [Route("editWO")]
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
-        public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder)
+        public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder,List<IFormFile> File)
         {
-            bool status = await _workOrderService.EditWO(editWorkOrder);
+            bool status = await _workOrderService.EditWO(editWorkOrder,File);
             return Ok(status);
         }
 

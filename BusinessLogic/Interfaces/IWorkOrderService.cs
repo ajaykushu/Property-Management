@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.AspNetCore.Http;
+using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
@@ -12,15 +13,15 @@ namespace BusinessLogic.Interfaces
 
         Task<List<SelectItem>> GetUsersByDepartment(long id);
 
-        Task<bool> CreateWO(CreateWO createWO);
+        Task<bool> CreateWO(CreateWO createWO,List<IFormFile> File);
 
         Task<WorkOrderDetail> GetWODetail(long id);
 
-        Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr, FilterEnumWOStage stage, string enddate);
+        Task<Pagination<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel);
 
         Task<EditWorkOrder> GetEditWO(long id);
 
-        Task<bool> EditWO(EditWorkOrder editWorkOrder);
+        Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File);
 
         Task<Pagination<List<CommentDTO>>> GetPaginationComment(long workorderId, int pageNumber);
 

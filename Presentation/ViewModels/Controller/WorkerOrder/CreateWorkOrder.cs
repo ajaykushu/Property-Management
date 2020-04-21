@@ -48,6 +48,9 @@ namespace Presentation.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString ="{0:MM/dd/yyyy}")]
         public DateTime DueDate { get; set; }
-        public IFormFile File { get; set; }
+        public IList<IFormFile> File { get; set; }
+        [Required]
+        [Range(0, 3)]
+        public int Priority { get; set; }
     }
 }

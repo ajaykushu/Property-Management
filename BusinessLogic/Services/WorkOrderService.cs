@@ -51,7 +51,7 @@ namespace BusinessLogic.Services
             _property = property;
         }
 
-        public async Task<bool> CreateWO(CreateWO createWO)
+        public async Task<bool> CreateWO(CreateWO createWO,List<IFormFile> File)
         {
             WorkOrder workOrder = new WorkOrder
             {
@@ -63,14 +63,25 @@ namespace BusinessLogic.Services
                 AssignedToId = createWO.UserId,
                 DueDate=createWO.DueDate,
                 LocationId=createWO.LocationId,
-                SubLocationId=createWO.SubLocationId
+                SubLocationId=createWO.SubLocationId,
+                Priority=createWO.Priority
             };
 
             workOrder.StageId = _stage.Get(x => x.StageCode == "OPEN").AsNoTracking().Select(x => x.Id).FirstOrDefault();
-            if (createWO.File != null)
+            if (File != null)
             {
-                string path = await _imageuploadinfile.UploadAsync(createWO.File, "WOFiles");
-                workOrder.AttachmentPath = path;
+                foreach (var item in File)
+                {
+                    string path = await _imageuploadinfile.UploadAsync(item);
+                    if (path != null)
+                        if (workOrder.WOAttachments == null)
+                            workOrder.WOAttachments = new List<WOAttachments>();
+                    workOrder.WOAttachments.Add(new WOAttachments
+                    {
+                        FileName = item.FileName,
+                        FilePath = path
+                    });
+                }
             }
 
             var status = await _workOrder.Add(workOrder);
@@ -80,7 +91,7 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x=>x.SubLocation).Include(x=>x.Location).Select(x => new
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x=>x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x=>x.SubLocation).Include(x=>x.Location).Select(x => new
                 WorkOrderDetail
                 {
                     PropertyName = x.Property.PropertyName,
@@ -95,11 +106,16 @@ namespace BusinessLogic.Services
                     AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
                     Requestedby = x.RequestedBy,
                     Id = x.Id,
+                    Priority=x.Priority,
                     UpdatedBy = x.UpdatedByUserName,
                     Description = x.Description,
                     Location=x.Location.LocationName,
                     SubLocation=x.SubLocation.AreaName,
-                    Attachment =string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/" , x.AttachmentPath)
+                    Attachment =x.WOAttachments.Select(x=>new KeyValuePair<string, string> (
+                    x.FileName,
+                    string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                    )).ToList()
+                    
             }).AsNoTracking().FirstOrDefaultAsync();
            
             workorder.Stages = _stage.GetAll().Select(x => new SelectItem
@@ -146,25 +162,25 @@ namespace BusinessLogic.Services
 
         public async Task<List<SelectItem>> GetUsersByDepartment(long id)
         {
-            var res = await  _appuser.Users.Where(x => x.DepartmentId == id).Select(x => new SelectItem
+            var res = await  _appuser.Users.Where(x => x.DepartmentId == id).OrderBy(x => x.FirstName).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = String.Concat(x.FirstName," ",x.LastName,"(", x.UserName, ")")
-            }).AsNoTracking().OrderBy(x => x.PropertyName).ToListAsync();
+            }).AsNoTracking().ToListAsync();
             return res;
         }
 
-        public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(int pageNumber, FilterEnumWO filter, string matchStr, FilterEnumWOStage stage, string endDate)
+        public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel)
         {
             int iteminpage = 20;
             var query = _workOrder.GetAll();
 
-            if (!string.IsNullOrWhiteSpace(matchStr) && filter == FilterEnumWO.ByDate)
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
-                var startDate = Convert.ToDateTime(matchStr);
-                if (!string.IsNullOrWhiteSpace(endDate))
+                var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
+                if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
                 {
-                    var enddate = Convert.ToDateTime(endDate);
+                    var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
                     query = query.Where(x => x.CreatedTime.Date >= startDate.Date && x.CreatedTime.Date <= enddate.Date);
                 }
                 else
@@ -172,24 +188,21 @@ namespace BusinessLogic.Services
                     query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
                 }
             }
-            else if (filter == FilterEnumWO.ByStatus && stage!=FilterEnumWOStage.NA)
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
-                string stageCode = "";
-                if (stage == FilterEnumWOStage.OPEN)
-                    stageCode = "OPEN";
-                else if (stage == FilterEnumWOStage.BIDACCEPTED)
-                    stageCode = "BIDACCEPTED";
-                else if (stage == FilterEnumWOStage.INPROGRESS)
-                    stageCode = "INPROGRESS";
-                else if (stage == FilterEnumWOStage.COMPLETED)
-                    stageCode = "COMPLETED";
-                else if (stage == FilterEnumWOStage.PENDINGAPPROVAL)
-                    stageCode = "PENDINGAPPROVAL";
-                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.ToLower().Equals(stageCode.ToLower()));
+                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
             }
-            else if (filter == FilterEnumWO.ByAssigned && !string.IsNullOrWhiteSpace(matchStr))
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
             {
-                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(matchStr.ToLower())|| x.AssignedTo.FirstName.ToLower().StartsWith(matchStr.ToLower()));
+                query.Where(x => x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.Email.ToLower()));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.UserName))
+            {
+                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(wOFilterModel.UserName.ToLower()));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
+            {
+                query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName.ToLower()));
             }
 
             List<WorkOrderAssigned> workOrderAssigned = null;
@@ -201,7 +214,7 @@ namespace BusinessLogic.Services
                 query = query.Where(x => x.CreatedByUserName.Equals(username));
             }
             var count = query.Count();
-            workOrderAssigned = await query.Include(x => x.Stage).Include(x=>x.Property).OrderByDescending(x => x.CreatedTime).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Include(x => x.Stage).Include(x=>x.Property).OrderByDescending(x => x.CreatedTime).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -213,13 +226,13 @@ namespace BusinessLogic.Services
             foreach (var item in workOrderAssigned)
                 if (item.AssignedToUser != null && item.AssignedToUser.StartsWith(username, StringComparison.InvariantCultureIgnoreCase))
                     item.AssignedToUser = "Me";
-            
+
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
                 Payload = workOrderAssigned,
-                CurrentPage = pageNumber,
+                CurrentPage = wOFilterModel.PageNumber,
                 ItemsPerPage = count > iteminpage ? iteminpage : count,
-                PageCount = count <= iteminpage ? 1 : count / iteminpage + 1
+                PageCount = count <= iteminpage ? 1 : count % iteminpage == 0 ? count / iteminpage : count / iteminpage + 1
             };
 
             return pagination;
@@ -228,7 +241,7 @@ namespace BusinessLogic.Services
         public async Task<EditWorkOrder> GetEditWO(long id)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x=>x.Property).Select(x => 
+            var editwo = await _workOrder.Get(x => x.Id == id).Include(x=>x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x=>x.Property).Select(x => 
                   new EditWorkOrder
                 {
                     Id = x.Id,
@@ -240,9 +253,11 @@ namespace BusinessLogic.Services
                     CreatedDate = x.CreatedTime,
                     DepartmentId = x.AssignedTo.DepartmentId.GetValueOrDefault(),
                     UserId = x.AssignedTo.Id,
+                    Priority=x.Priority,
                     DueDate=x.DueDate,
                     LocationId=x.LocationId.GetValueOrDefault(),
-                    SubLocationId=x.SubLocationId.GetValueOrDefault()
+                    SubLocationId=x.SubLocationId.GetValueOrDefault(),
+                    FileAvailable=x.WOAttachments.Select(x=> new KeyValuePair<string, string>(x.FileName,x.FilePath)).ToList()
                 }
             ).AsNoTracking().FirstOrDefaultAsync();
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
@@ -269,18 +284,24 @@ namespace BusinessLogic.Services
             return editwo;
         }
 
-        public async Task<bool> EditWO(EditWorkOrder editWorkOrder)
+        public async Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
-            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).FirstOrDefaultAsync();
-            var prevpath = wo.AttachmentPath;
+            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).Include(x=>x.WOAttachments).FirstOrDefaultAsync();
             if (wo != null)
             {
-                if (editWorkOrder.File != null)
+                if (File != null)
                 {
-                    var path = await _imageuploadinfile.UploadAsync(editWorkOrder.File, "WOFiles");
-                    if (path != null)
+                    foreach (var item in File)
                     {
-                        wo.AttachmentPath = path;
+                        var path = await _imageuploadinfile.UploadAsync(item);
+                        if (path != null)
+                            if (wo.WOAttachments == null) wo.WOAttachments = new List<WOAttachments>();
+                        wo.WOAttachments.Add(new WOAttachments
+                        {
+                            FileName = item.FileName,
+                            FilePath = path
+                        });
+
                     }
                 }
                 wo.Description = editWorkOrder.Description;
@@ -289,15 +310,24 @@ namespace BusinessLogic.Services
                 wo.ItemId = editWorkOrder.ItemId;
                 wo.DueDate = editWorkOrder.DueDate;
                 wo.LocationId = editWorkOrder.LocationId;
+                wo.Priority = editWorkOrder.Priority;
                 wo.SubLocationId = editWorkOrder.SubLocationId;
 
             }
-
+            if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
+            {
+                var remove = editWorkOrder.FilesRemoved.Contains(',')?editWorkOrder.FilesRemoved.Split(","):new String[] { editWorkOrder.FilesRemoved };
+                foreach (var item in remove)
+                {
+                    _imageuploadinfile.Delete(item);
+                    var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(item)).FirstOrDefault();
+                    wo.WOAttachments.Remove(woAttch);
+                }
+            }
             var status = await _workOrder.Update(wo);
             if (status > 0)
             {
-                if (prevpath != null)
-                    _imageuploadinfile.Delete(prevpath);
+               
                 return true;
             }
             return false;

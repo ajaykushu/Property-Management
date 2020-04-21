@@ -224,8 +224,8 @@ namespace BusinessLogic.Services
             }
             var pagination = new Pagination<IList<UsersListModel>>
             {
-                ItemsPerPage = user.Count < iteminpage ? user.Count : iteminpage,
-                PageCount = count <= iteminpage ? 1 : count / iteminpage + 1,
+                ItemsPerPage = count > iteminpage ? iteminpage : count,
+                PageCount = count <= iteminpage ? 1 : count % iteminpage ==0? count / iteminpage: count / iteminpage+1,
                 Payload = users,
                 CurrentPage = pageNumber
             };

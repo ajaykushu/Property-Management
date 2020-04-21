@@ -61,7 +61,8 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
             builder.Entity<Property>().Property(x => x.IsActive).HasDefaultValue(true);
-            
+            builder.Entity<WorkOrder>().Property(x => x.Priority).HasDefaultValue(0);
+
             builder.Entity<Department>().HasData(
                 new Department()
                 {

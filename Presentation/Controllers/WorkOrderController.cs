@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Presentation.ConstModal;
 using Presentation.Utility.Interface;
@@ -30,28 +31,26 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string matchString, int requestedPage, string endDate, FilterEnumWOStage stage,FilterEnumWO filter = FilterEnumWO.ByAssigned)
+        public async Task<IActionResult> Index(WOFilterModel wOFilterModel) 
         {
-            ViewBag.searchString = matchString ?? "";
-            ViewBag.filter = filter;
-            ViewBag.stage = stage;
-            ViewBag.enddate = endDate;
-            Pagination<List<WorkOrderAssigned>> WorkOrderAssigned = null;
+            
             try
             {
-                StringBuilder routeBuilder = new StringBuilder();
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
-                string parameters = string.Concat("?matchString=" , matchString , "&filter=" , filter , "&requestedPage=" , requestedPage , "&stage=" , stage , "&endDate=" , endDate);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + parameters, this, _token).ConfigureAwait(false);
+                StringBuilder query = new StringBuilder();
+               
+                
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,wOFilterModel, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
+                   var WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
+                    ViewBag.Response = WorkOrderAssigned;
                 }
             }
             catch (Exception)
             {
             }
-            return View(WorkOrderAssigned);
+            return View(wOFilterModel);
         }
 
         [HttpGet]
