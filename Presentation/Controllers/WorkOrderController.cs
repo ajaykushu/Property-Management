@@ -19,8 +19,7 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
-
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, ISessionStorage sessionStorage)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -28,18 +27,17 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
+           
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(WOFilterModel wOFilterModel) 
         {
-            
             try
             {
+                
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
                 StringBuilder query = new StringBuilder();
-               
-                
                 var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,wOFilterModel, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {

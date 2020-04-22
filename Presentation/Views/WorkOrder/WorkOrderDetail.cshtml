@@ -43,7 +43,7 @@
                                 <label asp-for="Priority"></label>
                             </div>
                             <div class="col">
-                                Priority P @Html.DisplayFor(x => x.Priority)
+                                <span>Priority P</span>@Html.DisplayFor(x => x.Priority)
                             </div>
                         </div>
                         <div class="row top-buffer">
@@ -210,7 +210,7 @@
                                     <label for="AsignedTo">Assigned To User</label>
                                 </div>
                                 <div class="col">
-                                    <span class="wocomp">@Model.AssignedToUser</span>
+                                    <span class="text-info">@Model.AssignedToUser</span>
                                 </div>
                             </div>
                         }

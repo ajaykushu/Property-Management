@@ -237,7 +237,7 @@ th {
         content: "Property";
     }
     .wordorderdetail td:nth-of-type(5):before {
-        content: "Date";
+        content: "Due Date";
     }
 }
 /*end todo*/

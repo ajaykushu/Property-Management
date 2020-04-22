@@ -102,5 +102,6 @@ $('input[type="reset"]').click(function (e) {
         }
     })
     $('#Status').val("");
+    $('#Priority').val("-1");
     $('input[type="submit"]').click();
 })

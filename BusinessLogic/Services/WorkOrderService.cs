@@ -200,6 +200,15 @@ namespace BusinessLogic.Services
             {
                 query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(wOFilterModel.UserName.ToLower()));
             }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
+            {
+                var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
+                query = query.Where(x => x.DueDate.Date==dueDate.Date);
+            }
+            if (wOFilterModel.Priority>=0)
+            {
+                query = query.Where(x => x.Priority == wOFilterModel.Priority);
+            }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
             {
                 query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName.ToLower()));
@@ -216,7 +225,7 @@ namespace BusinessLogic.Services
             var count = query.Count();
             workOrderAssigned = await query.Include(x => x.Stage).Include(x=>x.Property).OrderByDescending(x => x.CreatedTime).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
-                CreatedDate = x.CreatedTime.ToString("dd-MMM-yy"),
+                DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
                 Stage = x.Stage.StageCode.ToLower(),
