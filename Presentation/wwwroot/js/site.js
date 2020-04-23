@@ -26,7 +26,7 @@ $('.select-mul').change(function (e) {
     $('.select-input').val($(this).val());
 });
 $('#Role').on("change load", function (e) {
-    if ($(this).val() == "User")
+    if ($(this).val() == "Admin")
         $('.mainprop').show();
     else
         $('.mainprop').hide();

@@ -216,7 +216,7 @@ namespace BusinessLogic.Services
                 query = query.Where(x => x.CreatedByUserName.Equals(username));
             }
             var count = query.Count();
-            workOrderAssigned = await query.Include(x => x.Stage).Include(x => x.Property).OrderByDescending(x => x.CreatedTime).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Include(x => x.Stage).Include(x => x.Property).OrderByDescending(x => x.DueDate).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,

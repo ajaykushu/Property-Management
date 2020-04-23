@@ -116,7 +116,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<Issue>()
                  .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
             builder.Entity<Stage>()
-                .HasData(new Stage() { Id = 1, StageCode = "OPEN", StageDescription = "Work Order Open State" }, new Stage() { Id = 2, StageCode = "BIDACCEPTED", StageDescription = "Bid Sucessfull" }, new Stage() { Id = 3, StageCode = "INPROGRESS", StageDescription = "Work Order in Progress" }, new Stage() { Id = 4, StageCode = "COMPLETED", StageDescription = "Work Order Completed" });
+                .HasData(new Stage() { Id = 1, StageCode = "OPEN", StageDescription = "Work Order Open State" }, new Stage() { Id = 2, StageCode = "BID ACCEPTED", StageDescription = "Bid Sucessfull" }, new Stage() { Id = 3, StageCode = "IN PROGRESS", StageDescription = "Work Order in Progress" }, new Stage() { Id = 4, StageCode = "COMPLETED", StageDescription = "Work Order Completed" });
 
             builder.Entity<Menu>().HasData(
                 new Menu()

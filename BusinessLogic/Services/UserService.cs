@@ -59,7 +59,7 @@ namespace BusinessLogic.Services
                 PhotoPath = filepath,
                 DepartmentId = model.DepartmentId
             };
-            if (model.SelectedProperty != null && (model.Role.Equals("User")))
+            if (model.SelectedProperty != null && (model.Role.Equals("Admin")))
             {
                 foreach (var item in prop)
                     if (model.SelectedProperty.Contains(item.PropertyName))
@@ -94,7 +94,7 @@ namespace BusinessLogic.Services
                 Properties = _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
             };
             var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower().Equals("english")).FirstOrDefault();
-            var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").FirstOrDefault();
+            var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "admin").FirstOrDefault();
             registerRequest.Language = (int)langId.Id;
             registerRequest.Role = roleid?.PropertyName;
             return registerRequest;
@@ -156,9 +156,9 @@ namespace BusinessLogic.Services
             if (filepath != null)
                 applicationUser.PhotoPath = filepath;
 
-            if (editUser.Role == "Admin")
+            if (editUser.Role == "Master Admin"|| editUser.Role == "User")
                 applicationUser.UserProperties.Clear();
-            else if (editUser.SelectedProperty != null && (editUser.Role.Equals("User")))
+            else if (editUser.SelectedProperty != null && (editUser.Role.Equals("Admin")))
             {
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)

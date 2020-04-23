@@ -229,14 +229,15 @@
                     }
                 });
          });
-         $('#Department').change(function () {
+         $('#DepartmentId').change(function () {
             console.log($(this).val());
-            $.get('@Url.Action("GetSection","WorkOrder")' + "?id=" + $(this).val(),
+            $.get('@Url.Action("GetUserByDept","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
-                     $("#Section").html("<option value=''>Section</option>")
+                    console.log(data);
                     if (data != null || data != undefined) {
+                         $("#UserId").html("<option value=''>Please Choose User</option>")
                         for (var i = 0; i < data.length; i++) {
-                            $("#Section").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                            $("#UserId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                         }
                     }
                 });

@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using DataAccessLayer.Interfaces;
 using DataEntity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.RequestModels;
@@ -8,6 +9,8 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Utilities.CustomException;
 
@@ -17,17 +20,21 @@ namespace BusinessLogic.Services
     {
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
+        private readonly IRepo<UserProperty> _userProperty;
         private readonly IRepo<ApplicationUser> _user;
         private readonly IRepo<Location> _loc;
         private readonly IRepo<SubLocation> _subloaction;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user, IRepo<Location> loc, IRepo<SubLocation> subloaction)
+        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor)
         {
             _property = property;
             _proptype = proptype;
             _user = user;
             _loc = loc;
             _subloaction = subloaction;
+            _userProperty = userProperty;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public PropertyOperationModel GetPropertyType()
@@ -73,23 +80,55 @@ namespace BusinessLogic.Services
 
         public async Task<List<PropertiesModel>> GetProperties()
         {
-            var prop = await _property.GetAll().Select(
-                x => new PropertiesModel
+            
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                var username = _httpContextAccessor.HttpContext.User.Claims.Where(x=>x.Type==ClaimTypes.NameIdentifier).FirstOrDefault();
+                if (username != null)
                 {
-                    City = x.City,
-                    Country = x.Country,
-                    Id = x.Id,
-                    StreetAddress2 = x.StreetAddress2,
-                    ZipCode = x.ZipCode,
-                    PropertyName = x.PropertyName,
-                    PropertyType = x.PropertyTypes.PropertyTypeName,
-                    StreetAddress1 = x.StreetAddress2,
-                    State = x.State,
-                    IsActive = x.IsActive
+                    var prop = await _userProperty.GetAll().Where(x => x.ApplicationUser.UserName == username.Value).Include(x=>x.Property).Select(
+                   x => new PropertiesModel
+                   {
+                       City = x.Property.City,
+                       Country = x.Property.Country,
+                       Id = x.Id,
+                       StreetAddress2 = x.Property.StreetAddress2,
+                       ZipCode = x.Property.ZipCode,
+                       PropertyName = x.Property.PropertyName,
+                       PropertyType = x.Property.PropertyTypes.PropertyTypeName,
+                       StreetAddress1 = x.Property.StreetAddress2,
+                       State = x.Property.State,
+                       IsActive = x.Property.IsActive
+                   }
+                   ).AsNoTracking().ToListAsync();
+                   return prop;
                 }
-                ).AsNoTracking().ToListAsync();
-
-            return prop;
+                else
+                {
+                    throw new BadRequestException("No Properties Asscociated");
+                }
+              
+            }
+            else
+            {
+                var prop =  await _property.GetAll().Select(
+                   x => new PropertiesModel
+                   {
+                       City = x.City,
+                       Country = x.Country,
+                       Id = x.Id,
+                       StreetAddress2 = x.StreetAddress2,
+                       ZipCode = x.ZipCode,
+                       PropertyName = x.PropertyName,
+                       PropertyType = x.PropertyTypes.PropertyTypeName,
+                       StreetAddress1 = x.StreetAddress2,
+                       State = x.State,
+                       IsActive = x.IsActive
+                   }
+                   ).AsNoTracking().ToListAsync();
+                return prop;
+            }
+           
         }
 
         public async Task<bool> ActDeactProperty(int id, bool operation)
@@ -98,10 +137,6 @@ namespace BusinessLogic.Services
 
             if (prop != null)
             {
-                //if (prop.UserProperties != null && prop.UserProperties.Count != 0)
-                //{
-                //    throw new BadRequestException("Unable to deactivate as this is propery is allocated to [ " + string.Join(",", prop.UserProperties.Select(x => x.ApplicationUser.UserName).ToList()) + " ]");
-                //}
                 prop.IsActive = operation;
                 int status = await _property.Update(prop);
                 if (status > 0)

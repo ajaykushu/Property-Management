@@ -28,8 +28,6 @@ namespace Presentation.ViewModels
         public string StreetAddress2 { set; get; }
 
         [DisplayName("Zip Code")]
-        [Required(ErrorMessage = "Please Enter PinCode")]
-        [RegularExpression(@"^[1-9]{1}[0-9]{5,9}$", ErrorMessage = "Please Enter Valid Zip Code")]
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         public string ZipCode { set; get; }
 
@@ -38,11 +36,9 @@ namespace Presentation.ViewModels
         public string City { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
-        [Required(ErrorMessage = "Please Enter City")]
         public string State { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
-        [Required(ErrorMessage = "Please Enter Country")]
         public string Country { set; get; }
     }
 }
