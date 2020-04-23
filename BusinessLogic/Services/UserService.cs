@@ -22,20 +22,18 @@ namespace BusinessLogic.Services
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IRepo<Languages> _langrepo;
         private readonly IRepo<Property> _property;
-        private readonly IRepo<UserProperty> _userproperty;
         private readonly IRepo<Department> _department;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
 
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IRepo<UserProperty> userproperty, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _langrepo = langrepo;
             _property = property;
-            _userproperty = userproperty;
             _httpContextAccessor = httpContextAccessor;
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
