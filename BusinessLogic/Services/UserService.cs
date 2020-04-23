@@ -45,7 +45,7 @@ namespace BusinessLogic.Services
         public async Task<bool> RegisterUser(RegisterUser model)
         {
             var filepath = await _imageUploadInFile.UploadAsync(model.File);
-            var prop = _userproperty.GetAll().Include(x => x.Property).ToList();
+            var prop = _property.GetAll().ToList();
             IdentityResult identityResult;
             ApplicationUser applicationUser = new ApplicationUser
             {
@@ -64,8 +64,10 @@ namespace BusinessLogic.Services
             if (model.SelectedProperty != null && (model.Role.Equals("User")))
             {
                 foreach (var item in prop)
-                    if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
-                        applicationUser.UserProperties.Add(item);
+                    if (model.SelectedProperty.Contains(item.PropertyName))
+                        applicationUser.UserProperties.Add(new UserProperty { 
+                        PropertyId=item.Id
+                        });
             }
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
             if (!identityResult.Succeeded)

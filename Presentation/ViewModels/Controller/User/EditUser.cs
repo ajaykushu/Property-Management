@@ -61,6 +61,7 @@ namespace Presentation.ViewModels
         public bool SMSAlert { set; get; }
         public string OfficeExt { get; set; }
         public string ClockType { get; set; }
-        public IFormFile Photo { get; set; }
+        [DisplayName("Photo")]
+        public IFormFile File { get; set; }
     }
 }

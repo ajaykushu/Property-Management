@@ -65,6 +65,7 @@ namespace Presentation.ViewModels
         [Compare("Password", ErrorMessage = "Password Not Same")]
         public string ConfirmPassword { get; set; }
 
-        public IFormFile Photo { get; set; }
+        [DisplayName("Photo")]
+        public IFormFile File { get; set; }
     }
 }
