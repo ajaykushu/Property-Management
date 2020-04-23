@@ -22,7 +22,7 @@ namespace API
              .ReadFrom.Configuration(Configuration)
              .Enrich.FromLogContext()
              .WriteTo.Debug()
-             .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
+             .WriteTo.File("Log/log-.txt", rollingInterval: RollingInterval.Day)
              .CreateLogger();
 
             CreateWebHostBuilder(args).Build().Run();

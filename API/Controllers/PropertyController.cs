@@ -57,16 +57,16 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         public ActionResult<PropertyOperationModel> GetPropertyTypes()
         {
-            var res= _propertyService.GetPropertyType();
+            var res = _propertyService.GetPropertyType();
             return Ok(res);
         }
 
         [HttpGet]
-        [Route("deleteproperty")]
-        [FeatureBasedAuthorization(MenuEnum.Delete_Property)]
-        public async Task<ActionResult<bool>> DeleteProperty(int id)
+        [Route("actdeactproperty")]
+        [FeatureBasedAuthorization(MenuEnum.Act_Deact_Property)]
+        public async Task<ActionResult<bool>> ActDeactProperty(int id, bool operation)
         {
-            var status = await _propertyService.DeleteProperty(id);
+            var status = await _propertyService.ActDeactProperty(id, operation);
             return Ok(status);
         }
 
@@ -77,7 +77,7 @@ namespace API.Controllers
             bool status = await _propertyService.MarkPrimary(id, userId);
             return Ok(status);
         }
-        
+
         [HttpGet]
         [Route("checkproperty")]
         public async Task<ActionResult<bool>> CheckProperty(string propertyName)
@@ -85,6 +85,7 @@ namespace API.Controllers
             var res = await _propertyService.CheckProperty(propertyName);
             return Ok(res);
         }
+
         [HttpGet]
         [Route("propertyconfig")]
         public async Task<ActionResult<PropertyConfig>> PropertyConfig(long Id)
@@ -92,6 +93,7 @@ namespace API.Controllers
             var res = await _propertyService.GetPropertyConfig(Id);
             return Ok(res);
         }
+
         [HttpPost]
         [Route("propertyconfig")]
         public async Task<ActionResult<bool>> PropertyConfig(PropertyConfig propertyConfig)
@@ -99,12 +101,14 @@ namespace API.Controllers
             bool res = await _propertyService.SavePropertyConfig(propertyConfig);
             return Ok(res);
         }
+
         [HttpGet]
-        [Route("getareaprop")]
-        public async Task<ActionResult<string>> GetArea(int id)
+        [Route("getsublocation")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
+        public async Task<ActionResult<SelectItem>> GetSubLocation(long id)
         {
-            string res = await _propertyService.GetArea(id);
-            return Ok(res);
+            List<SelectItem> prop = await _propertyService.GetSubLocation(id);
+            return Ok(prop);
         }
     }
 }

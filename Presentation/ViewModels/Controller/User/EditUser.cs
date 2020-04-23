@@ -21,6 +21,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> Roles { get; set; }
 
         public List<SelectItem> Departments { get; set; }
+
         [Required(ErrorMessage = "Please Choose Department")]
         [DisplayName("Department")]
         public int DepartmentId { get; set; }

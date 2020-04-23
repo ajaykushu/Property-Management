@@ -76,7 +76,7 @@ namespace API.Authentication
         {
             if (_userManager.Users.Count() == 0)
             {
-               var newuser= new RegisterUser
+                var newuser = new RegisterUser
                 {
                     UserName = "TestUser",
                     Email = "test@test.com",
@@ -111,7 +111,7 @@ namespace API.Authentication
                     var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
 
                     var claims = _tokenGenerator.GetClaims(identityUser, submenu, roles);
-                   
+
                     returnToken = new TokenResponseModel()
                     {
                         FullName = identityUser.FirstName + " " + identityUser.LastName + " " + identityUser.Suffix,

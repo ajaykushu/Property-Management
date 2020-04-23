@@ -25,7 +25,6 @@
                                             <option value="">Please select one</option>
                                         </select>
                                         <span asp-validation-for="LocationId" class="text-danger"></span>
-
                                     </div>
                                 </div>
                             }
@@ -38,7 +37,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </td>
                 </tr>
                 <tr>
@@ -53,7 +51,6 @@
                                     <span class="text-danger">Enter , speparated Sub Location</span><br />
                                     <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
                                 </div>
-
                             </div>
                         </div>
                     </td>
@@ -73,10 +70,17 @@
 <script>
 
     $('#LocationId').change(function () {
-         $.get('@Url.Action("GetArea","Property")' + "?id=" + $(this).val(),
+         $.get('@Url.Action("GetSubLocation","Property")' + "?id=" + $(this).val(),
                 function (data) {
                     if (data != null || data != undefined) {
-                       $("#Area").val(data)
+                        var string = "";
+                        for (var i = 0; i < data.length; i++){
+                            if (i == data.length-1)
+                                string = string + data[i].propertyName;
+                            else
+                            string = string + data[i].propertyName+',';
+                        }
+                         $("#SubLocation").val(string)
                     }
                 });
     })

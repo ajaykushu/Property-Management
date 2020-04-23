@@ -44,7 +44,7 @@ namespace DataEntity
         public virtual ICollection<UserProperty> UserProperties { set; get; }
         public int? DepartmentId { set; get; }
         public Department Department { set; get; }
-       
+
         public bool IsActive { get; set; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
     }

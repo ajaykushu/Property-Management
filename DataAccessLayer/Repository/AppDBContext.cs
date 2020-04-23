@@ -50,7 +50,7 @@ namespace DataAccessLayer.Repository
             builder.Ignore<IdentityUserLogin<long>>();
             builder.Ignore<IdentityUserClaim<long>>();
             builder.Ignore<IdentityRoleClaim<long>>();
-           
+
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             builder.Entity<Property>().HasIndex(x => x.PropertyName).IsUnique();
@@ -101,7 +101,7 @@ namespace DataAccessLayer.Repository
                 Name = "User",
                 NormalizedName = "USER"
             });
-           
+
             builder.Entity<Languages>().HasData(
                 new Languages()
                 {
@@ -116,8 +116,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<Issue>()
                  .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
             builder.Entity<Stage>()
-                .HasData(new Stage() { Id = 1, StageCode = "OPEN",StageDescription="Work Order Open State" }, new Stage() { Id = 2, StageCode = "BIDACCEPTED",StageDescription="Bid Sucessfull" }, new Stage() { Id = 3, StageCode = "INPROGRESS", StageDescription = "Work Order in Progress" },new Stage() { Id = 4, StageCode = "COMPLETED", StageDescription = "Work Order Completed" });
-          
+                .HasData(new Stage() { Id = 1, StageCode = "OPEN", StageDescription = "Work Order Open State" }, new Stage() { Id = 2, StageCode = "BIDACCEPTED", StageDescription = "Bid Sucessfull" }, new Stage() { Id = 3, StageCode = "INPROGRESS", StageDescription = "Work Order in Progress" }, new Stage() { Id = 4, StageCode = "COMPLETED", StageDescription = "Work Order Completed" });
 
             builder.Entity<Menu>().HasData(
                 new Menu()
@@ -161,7 +160,7 @@ namespace DataAccessLayer.Repository
              new Menu()
              {
                  Id = 9,
-                 MenuName = "Delete_Property"
+                 MenuName = "Act_Deact_Property"
              }, new Menu()
              {
                  Id = 10,

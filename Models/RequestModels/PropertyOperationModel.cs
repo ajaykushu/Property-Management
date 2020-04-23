@@ -16,7 +16,6 @@ namespace Models.RequestModels
 
         public List<SelectItem> PropertyTypes { get; set; }
 
-
         [Required(ErrorMessage = "Please Enter Street")]
         [StringLength(100, ErrorMessage = "Must less than 100 characters")]
         public string StreetAddress1 { set; get; }
@@ -26,12 +25,13 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Enter ZipCode")]
         [RegularExpression(@"^[1-9]{1}[0-9]{5,9}$", ErrorMessage = "Please Enter Valid Zip Code")]
-        [StringLength(50 , ErrorMessage = "Must less than 50 characters")]
+        [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         public string ZipCode { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         [Required(ErrorMessage = "Please Enter City")]
         public string City { set; get; }
+
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         [Required(ErrorMessage = "Please Enter City")]
         public string State { set; get; }

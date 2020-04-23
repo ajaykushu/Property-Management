@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
-using Presentation.ConstModal;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
@@ -19,7 +17,8 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, ISessionStorage sessionStorage)
+
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -27,21 +26,19 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
-           
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(WOFilterModel wOFilterModel) 
+        public async Task<IActionResult> Index(WOFilterModel wOFilterModel)
         {
             try
             {
-                
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
                 StringBuilder query = new StringBuilder();
-                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,wOFilterModel, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, wOFilterModel, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                   var WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
+                    var WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
                     ViewBag.Response = WorkOrderAssigned;
                 }
             }
@@ -84,6 +81,7 @@ namespace Presentation.Controllers
             }
             return Ok(result);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetLocation(long id)
         {
@@ -254,8 +252,8 @@ namespace Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
-                    
-                       // TempData["Success"] = "Posted Successfully";
+
+                    // TempData["Success"] = "Posted Successfully";
                 }
             }
             catch (Exception)
@@ -267,17 +265,16 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> WorkOrderStageChange(long Id, int stageId)
         {
-           
             try
             {
-                var urlpayload = string.Concat("?Id=" , Id , "&stageId=", stageId);
+                var urlpayload = string.Concat("?Id=", Id, "&stageId=", stageId);
                 _apiRoute.Value.Routes.TryGetValue("workorderstagechange", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                   var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                    var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                        TempData["Success"] ="Status Changed Sucessfully";
+                        TempData["Success"] = "Status Changed Sucessfully";
                 }
             }
             catch (Exception)
@@ -285,7 +282,5 @@ namespace Presentation.Controllers
             }
             return RedirectToAction("GetWODetail", new { id = Id });
         }
-
-      
     }
 }

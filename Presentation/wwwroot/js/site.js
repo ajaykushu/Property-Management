@@ -28,7 +28,7 @@ $('.select-mul').change(function (e) {
 $('#Role').on("change load", function (e) {
     if ($(this).val() == "User")
         $('.mainprop').show();
-   else
+    else
         $('.mainprop').hide();
 })
 
@@ -63,10 +63,8 @@ if ($('#CreationEndDate').val() == "" || $('#CreationEndDate').val() == undefine
     $('#CreationEndDate').val(datestring);
 }
 $('#CreationEndDate').change(function () {
-    $('#CreationStartDate').prop("max",$('#EndDate').val());
+    $('#CreationStartDate').prop("max", $('#EndDate').val());
 })
-
-
 
 $('#wocreate').submit(function (e) {
     e.preventDefault();

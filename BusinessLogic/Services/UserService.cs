@@ -59,9 +59,10 @@ namespace BusinessLogic.Services
                 TimeZone = model.TimeZone,
                 OfficeExt = model.OfficeExt ?? null,
                 PhotoPath = filepath,
-                DepartmentId=model.DepartmentId
+                DepartmentId = model.DepartmentId
             };
-             if (model.SelectedProperty != null && (model.Role.Equals("User"))) { 
+            if (model.SelectedProperty != null && (model.Role.Equals("User")))
+            {
                 foreach (var item in prop)
                     if (model.SelectedProperty != null && model.SelectedProperty.Contains(item.Property.PropertyName))
                         applicationUser.UserProperties.Add(item);
@@ -90,11 +91,11 @@ namespace BusinessLogic.Services
                 Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
-                Properties = _property.GetAll().Where(x=>x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
+                Properties = _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
             };
             var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower().Equals("english")).FirstOrDefault();
             var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").FirstOrDefault();
-            registerRequest.Language =(int)langId.Id;
+            registerRequest.Language = (int)langId.Id;
             registerRequest.Role = roleid?.PropertyName;
             return registerRequest;
         }
@@ -107,7 +108,7 @@ namespace BusinessLogic.Services
             var roles = await _userManager.GetRolesAsync(applicationUser);
             EditUserModel editusermodel = new EditUserModel
             {
-                Properties = _property.GetAll().Where(x=>x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList(),
+                Properties = _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList(),
                 Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
@@ -124,7 +125,7 @@ namespace BusinessLogic.Services
                 ClockType = applicationUser.ClockType,
                 OfficeExt = applicationUser.OfficeExt,
                 PhoneNumber = applicationUser.PhoneNumber,
-                DepartmentId=applicationUser.DepartmentId.GetValueOrDefault(),
+                DepartmentId = applicationUser.DepartmentId.GetValueOrDefault(),
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
                 Id = applicationUser.Id
             };
@@ -200,7 +201,7 @@ namespace BusinessLogic.Services
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
             int iteminpage = 20;
-            var query=_userManager.Users;
+            var query = _userManager.Users;
             if (matchStr != null && filter == FilterEnum.ByEmail)
                 query = query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.ByFirstName)
@@ -225,7 +226,7 @@ namespace BusinessLogic.Services
             var pagination = new Pagination<IList<UsersListModel>>
             {
                 ItemsPerPage = count > iteminpage ? iteminpage : count,
-                PageCount = count <= iteminpage ? 1 : count % iteminpage ==0? count / iteminpage: count / iteminpage+1,
+                PageCount = count <= iteminpage ? 1 : count % iteminpage == 0 ? count / iteminpage : count / iteminpage + 1,
                 Payload = users,
                 CurrentPage = pageNumber
             };
@@ -234,7 +235,7 @@ namespace BusinessLogic.Services
         }
 
         public async Task<bool> Deact_Actuser(long userId, int operation)
-        {  
+        {
             var iduser = await _userManager.FindByIdAsync(userId + "");
             iduser.IsActive = Convert.ToBoolean(operation);
             var identityresult = await _userManager.UpdateAsync(iduser);
@@ -260,7 +261,7 @@ namespace BusinessLogic.Services
                     EmailAddress = x.Email,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
-                    PhotoPath = string.Concat("https://",_httpContextAccessor.HttpContext.Request.Host.Value , "/" , x.PhotoPath),
+                    PhotoPath = string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.PhotoPath),
                     ListProperties = x.UserProperties.Select(x => new PropertiesModel
                     {
                         Id = x.Property.Id,
@@ -272,10 +273,10 @@ namespace BusinessLogic.Services
                         PropertyType = x.Property.PropertyTypes.PropertyTypeName,
                         StreetAddress2 = x.Property.StreetAddress2,
                         IsPrimary = x.IsPrimary,
-                        State=x.Property.State,
+                        State = x.Property.State,
                     }).ToList(),
                     PhoneNumber = x.PhoneNumber,
-                    Department=x.Department.DepartmentName,
+                    Department = x.Department.DepartmentName,
                     UserId = x.UserName,
                     OfficeExtension = x.OfficeExt,
                     IsActive = x.IsActive,

@@ -16,14 +16,18 @@ namespace BusinessLogic.Interfaces
 
         Task<List<PropertiesModel>> GetProperties();
 
-        Task<bool> DeleteProperty(int id);
+        Task<bool> ActDeactProperty(int id, bool operation);
 
         PropertyOperationModel GetPropertyType();
 
         Task<bool> MarkPrimary(long id, long userId);
+
         Task<bool> CheckProperty(string userName);
+
         Task<PropertyConfig> GetPropertyConfig(long id);
+
         Task<bool> SavePropertyConfig(PropertyConfig propertyConfig);
-        Task<string> GetArea(int id);
+
+        Task<List<SelectItem>> GetSubLocation(long id);
     }
 }

@@ -11,9 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using Utilities.CustomException;
 using Utilities.Interface;
 
 namespace BusinessLogic.Services
@@ -30,11 +28,10 @@ namespace BusinessLogic.Services
         private readonly IRepo<Stage> _stage;
         private readonly IRepo<Comments> _comments;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IRepo<Location> _location;
         private readonly IRepo<SubLocation> _sublocation;
         private readonly IImageUploadInFile _imageuploadinfile;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<Location> location, IRepo<SubLocation> sublocation, IRepo<Property> property)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -47,11 +44,10 @@ namespace BusinessLogic.Services
             _imageuploadinfile = imageuploadinfile;
             _appuser = appuser;
             _sublocation = sublocation;
-            _location = location;
             _property = property;
         }
 
-        public async Task<bool> CreateWO(CreateWO createWO,List<IFormFile> File)
+        public async Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File)
         {
             WorkOrder workOrder = new WorkOrder
             {
@@ -61,10 +57,10 @@ namespace BusinessLogic.Services
                 ItemId = createWO.ItemId,
                 Description = createWO.Description,
                 AssignedToId = createWO.UserId,
-                DueDate=createWO.DueDate,
-                LocationId=createWO.LocationId,
-                SubLocationId=createWO.SubLocationId,
-                Priority=createWO.Priority
+                DueDate = createWO.DueDate,
+                LocationId = createWO.LocationId,
+                SubLocationId = createWO.SubLocationId,
+                Priority = createWO.Priority
             };
 
             workOrder.StageId = _stage.Get(x => x.StageCode == "OPEN").AsNoTracking().Select(x => x.Id).FirstOrDefault();
@@ -91,47 +87,45 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x=>x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x=>x.SubLocation).Include(x=>x.Location).Select(x => new
-                WorkOrderDetail
-                {
-                    PropertyName = x.Property.PropertyName,
-                    Issue = x.Issue.IssueName,
-                    StageCode = x.Stage.StageCode,
-                    StageDescription = x.Stage.StageDescription,
-                    Item = x.Item.ItemName,
-                    CreatedTime = x.CreatedTime,
-                    DueDate=x.DueDate,
-                    UpdatedTime = x.UpdatedTime,
-                    Department = x.AssignedTo.Department.DepartmentName,
-                    AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
-                    Requestedby = x.RequestedBy,
-                    Id = x.Id,
-                    Priority=x.Priority,
-                    UpdatedBy = x.UpdatedByUserName,
-                    Description = x.Description,
-                    Location=x.Location.LocationName,
-                    SubLocation=x.SubLocation.AreaName,
-                    Attachment =x.WOAttachments.Select(x=>new KeyValuePair<string, string> (
-                    x.FileName,
-                    string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
-                    )).ToList()
-                    
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
+                      WorkOrderDetail
+            {
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StageCode = x.Stage.StageCode,
+                StageDescription = x.Stage.StageDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                DueDate = x.DueDate,
+                UpdatedTime = x.UpdatedTime,
+                Department = x.AssignedTo.Department.DepartmentName,
+                AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
+                Requestedby = x.RequestedBy,
+                Id = x.Id,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
+                 x.FileName,
+                 string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                 )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
-           
+
             workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName =string.Concat(x.StageCode,"(",x.StageDescription,")")
+                PropertyName = string.Concat(x.StageCode, "(", x.StageDescription, ")")
             }).ToList();
             return workorder;
         }
 
-
         public async Task<CreateWO> GetCreateWOModel(long userId)
         {
-            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x=>x.Locations).ThenInclude(x=>x.SubLocations).AsNoTracking().ToListAsync();
-            var primaryprop = property.Where(x => x.IsPrimary == true).Select(x=>x.Property).FirstOrDefault();
-           
+            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x => x.Locations).ThenInclude(x => x.SubLocations).AsNoTracking().ToListAsync();
+            var primaryprop = property.Where(x => x.IsPrimary == true).Select(x => x.Property).FirstOrDefault();
+
             CreateWO wo = new CreateWO()
             {
                 Properties = property.Select(x => new SelectItem
@@ -139,7 +133,7 @@ namespace BusinessLogic.Services
                     Id = x.Property.Id,
                     PropertyName = x.Property.PropertyName
                 }).ToList(),
-                PropertyId = primaryprop != null ? primaryprop.Id: 0,
+                PropertyId = primaryprop != null ? primaryprop.Id : 0,
                 Issues = await _issueRepo.GetAll().Select(x => new SelectItem
                 {
                     Id = x.Id,
@@ -152,7 +146,6 @@ namespace BusinessLogic.Services
                 }).ToListAsync(),
                 Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).ToListAsync(),
                 DueDate = DateTime.Now,
-                
             };
             if (primaryprop != null && primaryprop.Locations != null)
                 wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
@@ -162,10 +155,10 @@ namespace BusinessLogic.Services
 
         public async Task<List<SelectItem>> GetUsersByDepartment(long id)
         {
-            var res = await  _appuser.Users.Where(x => x.DepartmentId == id).OrderBy(x => x.FirstName).Select(x => new SelectItem
+            var res = await _appuser.Users.Where(x => x.DepartmentId == id).OrderBy(x => x.FirstName).Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = String.Concat(x.FirstName," ",x.LastName,"(", x.UserName, ")")
+                PropertyName = String.Concat(x.FirstName, " ", x.LastName, "(", x.UserName, ")")
             }).AsNoTracking().ToListAsync();
             return res;
         }
@@ -203,9 +196,9 @@ namespace BusinessLogic.Services
             if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
             {
                 var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
-                query = query.Where(x => x.DueDate.Date==dueDate.Date);
+                query = query.Where(x => x.DueDate.Date == dueDate.Date);
             }
-            if (wOFilterModel.Priority>=0)
+            if (wOFilterModel.Priority >= 0)
             {
                 query = query.Where(x => x.Priority == wOFilterModel.Priority);
             }
@@ -223,14 +216,14 @@ namespace BusinessLogic.Services
                 query = query.Where(x => x.CreatedByUserName.Equals(username));
             }
             var count = query.Count();
-            workOrderAssigned = await query.Include(x => x.Stage).Include(x=>x.Property).OrderByDescending(x => x.CreatedTime).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Include(x => x.Stage).Include(x => x.Property).OrderByDescending(x => x.CreatedTime).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
                 Stage = x.Stage.StageCode.ToLower(),
                 AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
-                Property = new SelectItem {Id=x.PropertyId,PropertyName=x.Property.PropertyName}
+                Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
             foreach (var item in workOrderAssigned)
                 if (item.AssignedToUser != null && item.AssignedToUser.StartsWith(username, StringComparison.InvariantCultureIgnoreCase))
@@ -250,24 +243,24 @@ namespace BusinessLogic.Services
         public async Task<EditWorkOrder> GetEditWO(long id)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            var editwo = await _workOrder.Get(x => x.Id == id).Include(x=>x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x=>x.Property).Select(x => 
-                  new EditWorkOrder
-                {
-                    Id = x.Id,
-                    PropertyName = x.Property.PropertyName,
-                    Locations=x.Property.Locations.Select(x=>new SelectItem {Id=x.Id,PropertyName=x.LocationName }).ToList(),
-                    Description = x.Description,
-                    IssueId = x.IssueId,
-                    ItemId = x.ItemId,
-                    CreatedDate = x.CreatedTime,
-                    DepartmentId = x.AssignedTo.DepartmentId.GetValueOrDefault(),
-                    UserId = x.AssignedTo.Id,
-                    Priority=x.Priority,
-                    DueDate=x.DueDate,
-                    LocationId=x.LocationId.GetValueOrDefault(),
-                    SubLocationId=x.SubLocationId.GetValueOrDefault(),
-                    FileAvailable=x.WOAttachments.Select(x=> new KeyValuePair<string, string>(x.FileName,x.FilePath)).ToList()
-                }
+            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.Property).Select(x =>
+                      new EditWorkOrder
+                      {
+                          Id = x.Id,
+                          PropertyName = x.Property.PropertyName,
+                          Locations = x.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList(),
+                          Description = x.Description,
+                          IssueId = x.IssueId,
+                          ItemId = x.ItemId,
+                          CreatedDate = x.CreatedTime,
+                          DepartmentId = x.AssignedTo.DepartmentId.GetValueOrDefault(),
+                          UserId = x.AssignedTo.Id,
+                          Priority = x.Priority,
+                          DueDate = x.DueDate,
+                          LocationId = x.LocationId.GetValueOrDefault(),
+                          SubLocationId = x.SubLocationId.GetValueOrDefault(),
+                          FileAvailable = x.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName, x.FilePath)).ToList()
+                      }
             ).AsNoTracking().FirstOrDefaultAsync();
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
@@ -284,18 +277,18 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.DepartmentName
             }).ToListAsync();
-            editwo.SubLocations = await _sublocation.GetAll().Where(x=>x.LocationId==editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).ToListAsync();
+            editwo.SubLocations = await _sublocation.GetAll().Where(x => x.LocationId == editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).ToListAsync();
             editwo.Users = await _appuser.Users.Where(x => x.DepartmentId == editwo.DepartmentId).Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = String.Concat(x.UserName+"(",x.FirstName," ",x.LastName,")")
+                PropertyName = String.Concat(x.UserName + "(", x.FirstName, " ", x.LastName, ")")
             }).AsNoTracking().ToListAsync();
             return editwo;
         }
 
         public async Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
-            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).Include(x=>x.WOAttachments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).Include(x => x.WOAttachments).FirstOrDefaultAsync();
             if (wo != null)
             {
                 if (File != null)
@@ -310,7 +303,6 @@ namespace BusinessLogic.Services
                             FileName = item.FileName,
                             FilePath = path
                         });
-
                     }
                 }
                 wo.Description = editWorkOrder.Description;
@@ -321,11 +313,10 @@ namespace BusinessLogic.Services
                 wo.LocationId = editWorkOrder.LocationId;
                 wo.Priority = editWorkOrder.Priority;
                 wo.SubLocationId = editWorkOrder.SubLocationId;
-
             }
             if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
             {
-                var remove = editWorkOrder.FilesRemoved.Contains(',')?editWorkOrder.FilesRemoved.Split(","):new String[] { editWorkOrder.FilesRemoved };
+                var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
                 foreach (var item in remove)
                 {
                     _imageuploadinfile.Delete(item);
@@ -336,7 +327,6 @@ namespace BusinessLogic.Services
             var status = await _workOrder.Update(wo);
             if (status > 0)
             {
-               
                 return true;
             }
             return false;
@@ -409,14 +399,15 @@ namespace BusinessLogic.Services
 
         public async Task<bool> WorkOrderStageChange(long Id, int stageId)
         {
-            var wo = await _workOrder.Get(x => x.Id == Id).Include(x=>x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id == Id).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
             var stage = await _stage.Get(x => x.Id == stageId).FirstOrDefaultAsync();
-            if (stage != null) {
+            if (stage != null)
+            {
                 if (wo.Comments == null)
                     wo.Comments = new List<Comments>();
                 wo.Comments.Add(new Comments
                 {
-                    Comment = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ",stage.StageCode )
+                    Comment = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode)
                 });
                 wo.StageId = stageId;
                 var status = await _workOrder.Update(wo);
@@ -424,18 +415,6 @@ namespace BusinessLogic.Services
                     return true;
             }
             return false;
-        }
-
-        
-
-        public async  Task<List<SelectItem>> GetSubLocation(long id)
-        {
-            var res =await  _sublocation.GetAll().Where(x => x.LocationId == id).Select(x => new SelectItem
-            {
-                Id=x.Id,
-                PropertyName=x.AreaName
-            }).ToListAsync();
-            return res;
         }
 
         public Task<List<SelectItem>> GetLocation(long id)
@@ -447,7 +426,6 @@ namespace BusinessLogic.Services
                         PropertyName = y.LocationName
                     }).ToList()).AsNoTracking().FirstOrDefaultAsync();
             return res;
-           
         }
     }
 }

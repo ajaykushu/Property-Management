@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,6 +7,7 @@ namespace Presentation.ViewModels
     public class PropertyOperation
     {
         public long Id { get; set; }
+
         [DisplayName("Property Name")]
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         [Required]
@@ -36,6 +36,7 @@ namespace Presentation.ViewModels
         [StringLength(50, ErrorMessage = "Must between than 50 characters")]
         [Required(ErrorMessage = "Please Enter City")]
         public string City { set; get; }
+
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         [Required(ErrorMessage = "Please Enter City")]
         public string State { set; get; }

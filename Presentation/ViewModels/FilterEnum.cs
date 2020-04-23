@@ -13,17 +13,14 @@
         ByStatus = 3
     }
 
-   
-
     public enum FilterEnumWOStage
     {
         OPEN = 1,
         BIDACCEPTED = 2,
         INPROGRESS = 3,
-        PENDINGAPPROVAL=4,
+        PENDINGAPPROVAL = 4,
         COMPLETED = 5,
     }
-
 
     public enum MenuEnum
     {
@@ -35,7 +32,7 @@
         Edit_Property = 6,
         ActDct_User = 7,
         View_User_Detail = 8,
-        Delete_Property = 9,
+        Act_Deact_Property = 9,
         Edit_Feature = 10,
         Access_Setting = 11,
         Create_WO = 12,

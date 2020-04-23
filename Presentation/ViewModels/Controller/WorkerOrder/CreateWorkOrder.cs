@@ -11,12 +11,16 @@ namespace Presentation.ViewModels
     {
         [DisplayName("Location")]
         public int LocationId { get; set; }
+
         public List<SelectItem> Locations { get; set; }
+
         [Required]
         [DisplayName("Sub Location")]
         public int SubLocationId { get; set; }
+
         public List<SelectItem> SubLocation { get; set; }
         public List<SelectItem> Items { get; set; }
+
         [DisplayName("Item")]
         [Required(ErrorMessage = "Please Select Item")]
         public int ItemId { get; set; }
@@ -28,6 +32,7 @@ namespace Presentation.ViewModels
         public long PropertyId { get; set; }
 
         public List<SelectItem> Issues { get; set; }
+
         [DisplayName("Issue")]
         [Required(ErrorMessage = "Please Select Issue")]
         public int IssueId { get; set; }
@@ -44,11 +49,14 @@ namespace Presentation.ViewModels
         [Required(ErrorMessage = "Please Select Section")]
         [DisplayName("User")]
         public int UserId { get; set; }
+
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString ="{0:MM/dd/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DueDate { get; set; }
+
         public IList<IFormFile> File { get; set; }
+
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }

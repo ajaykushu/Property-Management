@@ -22,10 +22,12 @@ namespace DataEntity
 
         [Column(TypeName = "varchar(200)")]
         public string Description { get; set; }
+
         [Column(TypeName = "varchar(50)")]
         public string RequestedBy { get; set; }
+
         public long? AssignedToId { get; set; }
-        
+
         public DateTime DueDate { get; set; }
         public int? LocationId { get; set; }
         public Location Location { get; set; }

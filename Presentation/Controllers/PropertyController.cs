@@ -97,18 +97,24 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DeleteProperty(int id)
+        public async Task<ActionResult> ActDeactProperty(int id, bool operation)
         {
             if (id == 0)
             {
-                return BadRequest("invalid property");
+                TempData["Error"] = "Unable to Activate/Deactivate property";
+                return RedirectToAction("ListProperties");
             }
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("deleteproperty", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                _apiRoute.Value.Routes.TryGetValue("actdeactproperty", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&operation=" + operation, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
-                    TempData["Success"] = StringConstants.DeleteSuccess;
+                {
+                    if (operation)
+                        TempData["Success"] = "Property Activate Successfull";
+                    else
+                        TempData["Success"] = "Property DeActivate Successfull";
+                }
             }
             catch (Exception)
             {
@@ -203,10 +209,11 @@ namespace Presentation.Controllers
             catch (Exception) { }
             return Json(true);
         }
+
         [HttpGet]
         public async Task<IActionResult> PropertyConfig(long Id)
         {
-            PropertyConfig result =null;
+            PropertyConfig result = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("propertyconfig", out var path);
@@ -217,12 +224,12 @@ namespace Presentation.Controllers
                 }
             }
             catch (Exception) { }
-            return View("PropertyConfig",result);
+            return View("PropertyConfig", result);
         }
+
         [HttpPost]
         public async Task<IActionResult> PropertyConfig(PropertyConfig propertyConfig)
         {
-
             if (ModelState.IsValid)
             {
                 try
@@ -232,37 +239,33 @@ namespace Presentation.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var status = await response.Content.ReadAsStringAsync();
-                        if(status=="true")
-                        TempData["Success"] = StringConstants.SuccessSaved;
-                        
+                        if (status == "true")
+                            TempData["Success"] = StringConstants.SuccessSaved;
                     }
-                   
                 }
                 catch (Exception)
                 {
                     TempData["Error"] = StringConstants.Error;
                 }
             }
-                return RedirectToAction("PropertyConfig",new {Id=propertyConfig.PropertyId}); 
-           
+            return RedirectToAction("PropertyConfig", new { Id = propertyConfig.PropertyId });
         }
+
         [HttpGet]
-        public async Task<JsonResult> GetArea(int id)
+        public async Task<IActionResult> GetSubLocation(long id)
         {
-            string res = String.Empty;
+            List<SelectItem> result = null;
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("getareaprop", out var path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token);
+                _apiRoute.Value.Routes.TryGetValue("getsublocation", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
-                {
-                    res = await response.Content.ReadAsStringAsync();
-                }
+                    result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
             }
-            catch (Exception) { }
-            return Json(res);
+            catch (Exception)
+            {
+            }
+            return Ok(result);
         }
-
-
     }
 }

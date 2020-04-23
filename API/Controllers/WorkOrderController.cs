@@ -36,14 +36,6 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("getsublocation")]
-        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<SelectItem>> GetSubLocation(long id)
-        {
-            List<SelectItem> prop = await _workOrderService.GetSubLocation(id);
-            return Ok(prop);
-        }
-        [HttpGet]
         [Route("getlocation")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult<SelectItem>> GetLocation(long id)
@@ -66,7 +58,7 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO, List<IFormFile> File)
         {
-            var status = await _workOrderService.CreateWO(createWO,File);
+            var status = await _workOrderService.CreateWO(createWO, File);
             return Ok(status);
         }
 
@@ -84,7 +76,7 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Get_WO)]
         public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel)
         {
-           var workorderassigned = await _workOrderService.GetWO(wOFilterModel);
+            var workorderassigned = await _workOrderService.GetWO(wOFilterModel);
             return Ok(workorderassigned);
         }
 
@@ -100,9 +92,9 @@ namespace API.Controllers
         [HttpPost]
         [Route("editWO")]
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
-        public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder,List<IFormFile> File)
+        public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
-            bool status = await _workOrderService.EditWO(editWorkOrder,File);
+            bool status = await _workOrderService.EditWO(editWorkOrder, File);
             return Ok(status);
         }
 
@@ -131,7 +123,5 @@ namespace API.Controllers
             bool res = await _workOrderService.WorkOrderStageChange(Id, stageId);
             return Ok(res);
         }
-
-        
     }
 }

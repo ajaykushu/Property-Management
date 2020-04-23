@@ -9,8 +9,10 @@ namespace Presentation.ViewModels
         public string FullName { get; set; }
         public List<string> Roles { get; set; }
         public List<Properties> ListProperties { set; get; }
+
         [DisplayName("Cell Number")]
         public string PhoneNumber { get; set; }
+
         public string Department { get; set; }
         public string EmailAddress { get; set; }
         public string UserId { get; set; }

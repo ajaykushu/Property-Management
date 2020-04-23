@@ -19,15 +19,15 @@ namespace BusinessLogic.Services
         private readonly IRepo<PropertyType> _proptype;
         private readonly IRepo<ApplicationUser> _user;
         private readonly IRepo<Location> _loc;
-        private readonly IRepo<SubLocation> _area;
+        private readonly IRepo<SubLocation> _subloaction;
 
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user, IRepo<Location> loc, IRepo<SubLocation> area)
+        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user, IRepo<Location> loc, IRepo<SubLocation> subloaction)
         {
             _property = property;
             _proptype = proptype;
             _user = user;
             _loc = loc;
-            _area = area;
+            _subloaction = subloaction;
         }
 
         public PropertyOperationModel GetPropertyType()
@@ -53,12 +53,12 @@ namespace BusinessLogic.Services
             {
                 City = modal.City,
                 Country = modal.Country,
-                State=modal.State,
+                State = modal.State,
                 StreetAddress1 = modal.StreetAddress1,
                 PropertyName = modal.PropertyName,
                 PropertyTypes = _proptype.Get(x => x.Id == modal.PropertyTypeId).FirstOrDefault(),
                 StreetAddress2 = modal.StreetAddress2,
-                ZipCode=modal.ZipCode
+                ZipCode = modal.ZipCode
             };
             var res = await _property.Add(prop);
             if (res > 0)
@@ -83,26 +83,26 @@ namespace BusinessLogic.Services
                     ZipCode = x.ZipCode,
                     PropertyName = x.PropertyName,
                     PropertyType = x.PropertyTypes.PropertyTypeName,
-                    StreetAddress1= x.StreetAddress2,
-                    State=x.State,
-                    IsActive=x.IsActive
+                    StreetAddress1 = x.StreetAddress2,
+                    State = x.State,
+                    IsActive = x.IsActive
                 }
                 ).AsNoTracking().ToListAsync();
 
             return prop;
         }
 
-        public async Task<bool> DeleteProperty(int id)
+        public async Task<bool> ActDeactProperty(int id, bool operation)
         {
             var prop = _property.Get(x => x.Id == id).Include(x => x.UserProperties).ThenInclude(x => x.ApplicationUser).FirstOrDefault();
 
             if (prop != null)
             {
-                if (prop.UserProperties != null && prop.UserProperties.Count != 0)
-                {
-                    throw new BadRequestException("Unable to deactivate as this is propery is allocated to [ " + string.Join(",", prop.UserProperties.Select(x => x.ApplicationUser.UserName).ToList()) + " ]");
-                }
-                prop.IsActive = false;
+                //if (prop.UserProperties != null && prop.UserProperties.Count != 0)
+                //{
+                //    throw new BadRequestException("Unable to deactivate as this is propery is allocated to [ " + string.Join(",", prop.UserProperties.Select(x => x.ApplicationUser.UserName).ToList()) + " ]");
+                //}
+                prop.IsActive = operation;
                 int status = await _property.Update(prop);
                 if (status > 0)
                 {
@@ -125,12 +125,12 @@ namespace BusinessLogic.Services
             {
                 City = x.City,
                 Country = x.Country,
-                 StreetAddress1= x.StreetAddress1,
+                StreetAddress1 = x.StreetAddress1,
                 ZipCode = x.ZipCode,
                 PropertyName = x.PropertyName,
                 PropertyTypeId = x.PropertyTypeId,
                 StreetAddress2 = x.StreetAddress2,
-                State=x.State,
+                State = x.State,
                 Id = x.Id
             }).AsNoTracking().FirstOrDefaultAsync();
             if (prop != null)
@@ -150,7 +150,6 @@ namespace BusinessLogic.Services
             var status = false;
             if (property != null)
             {
-                
                 property.Country = prop.Country;
                 property.City = prop.City;
                 property.StreetAddress1 = prop.StreetAddress1;
@@ -185,6 +184,7 @@ namespace BusinessLogic.Services
 
             return false;
         }
+
         public async Task<bool> CheckProperty(string propertyName)
         {
             bool status;
@@ -195,21 +195,22 @@ namespace BusinessLogic.Services
 
         public async Task<PropertyConfig> GetPropertyConfig(long id)
         {
-            var res= await _loc.Get(x => x.PropertyId == id).Select(x => new SelectItem {
-            Id=x.Id,
-            PropertyName=x.LocationName
+            var res = await _loc.Get(x => x.PropertyId == id).Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.LocationName
             }).ToListAsync();
             var proprtyconfig = new PropertyConfig
             {
                 Locations = res,
-                PropertyId=id
+                PropertyId = id
             };
             return proprtyconfig;
         }
 
         public async Task<bool> SavePropertyConfig(PropertyConfig propertyConfig)
         {
-            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x=>x.WorkOrders).FirstOrDefaultAsync();
+            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
             HashSet<string> areas = null;
             if (!string.IsNullOrWhiteSpace(propertyConfig.SubLocation))
             {
@@ -217,15 +218,16 @@ namespace BusinessLogic.Services
                     areas = propertyConfig.SubLocation.Split(',').ToHashSet();
                 else
                     areas.Append(propertyConfig.SubLocation);
-
             }
             if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
             {
                 if (prop.Locations == null) prop.Locations = new List<Location>();
-                var location = new Location();
-                location.LocationName = propertyConfig.NewLocation;
-                location.SubLocations = new List<SubLocation>();
-                foreach(var item in areas)
+                var location = new Location
+                {
+                    LocationName = propertyConfig.NewLocation,
+                    SubLocations = new List<SubLocation>()
+                };
+                foreach (var item in areas)
                 {
                     location.SubLocations.Add(new SubLocation
                     {
@@ -236,10 +238,12 @@ namespace BusinessLogic.Services
             }
             else if (propertyConfig.LocationId != 0)
             {
-                var location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault() ;
+                var location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault();
                 if (location != null)
                 {
-                    if (location.SubLocations == null) { location.SubLocations = new List<SubLocation>();
+                    if (location.SubLocations == null)
+                    {
+                        location.SubLocations = new List<SubLocation>();
                         foreach (var item in areas)
                         {
                             location.SubLocations.Add(new SubLocation
@@ -250,15 +254,14 @@ namespace BusinessLogic.Services
                     }
                     else
                     {
-                       
-                        for (int i=0;i<location.SubLocations.Count;)
+                        for (int i = 0; i < location.SubLocations.Count;)
                         {
                             if (!areas.Contains(location.SubLocations.ElementAt(i).AreaName))
                             {
-                                if (location.SubLocations.ElementAt(i).WorkOrders.Count==0)
+                                if (location.SubLocations.ElementAt(i).WorkOrders.Count == 0)
                                     location.SubLocations.Remove(location.SubLocations.ElementAt(i));
                                 else
-                                    throw new BadRequestException(location.SubLocations.ElementAt(i).AreaName +" is assigned to workorder Ids: " + string.Join(",",location.SubLocations.ElementAt(i).WorkOrders.Select(x => x.Id).ToList()));
+                                    throw new BadRequestException(location.SubLocations.ElementAt(i).AreaName + " is assigned to workorder Ids: " + string.Join(",", location.SubLocations.ElementAt(i).WorkOrders.Select(x => x.Id).ToList()));
                             }
                             else
                             {
@@ -274,7 +277,6 @@ namespace BusinessLogic.Services
                             });
                         }
                     }
-                    
                 }
             }
             propertyConfig.Locations = prop.Locations.Select(x => new SelectItem
@@ -290,8 +292,18 @@ namespace BusinessLogic.Services
 
         public async Task<string> GetArea(int id)
         {
-            var res = await _area.Get(x => x.LocationId == id).Select(x => x.AreaName).ToListAsync();
-                return string.Join(',',res);
+            var res = await _subloaction.Get(x => x.LocationId == id).Select(x => x.AreaName).ToListAsync();
+            return string.Join(',', res);
+        }
+
+        public async Task<List<SelectItem>> GetSubLocation(long id)
+        {
+            var res = await _subloaction.GetAll().Where(x => x.LocationId == id).Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.AreaName
+            }).ToListAsync();
+            return res;
         }
     }
 }

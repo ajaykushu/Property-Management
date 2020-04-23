@@ -4,7 +4,7 @@
     <div class="workordertitle">
         Edit WorkOder
     </div>
-   
+
     <form class="form" enctype="multipart/form-data" asp-action="EditWO" asp-controller="WorkOrder">
         @if (Model == null)
         {
@@ -54,8 +54,7 @@
                                         </div>
                                     </div>
                                 }
-                                </div>
-                                
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -113,21 +112,21 @@
                                         <span asp-validation-for="DueDate" class="text-danger"></span>
                                     </div>
                                 </div>
-                                 <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Priority"></label>
-                                </div>
-                                <div class="col">
-                                    <select asp-for="Priority" class="form-control form-control-sm custom-input">
-                                        <option value="0">Priority 0</option>
-                                        <option value="1">Priority 1</option>
-                                        <option value="2">Priority 2</option>
-                                        <option value="3">Priority 3</option>
-                                    </select>
-                                    <span asp-validation-for="Priority" class="text-danger"></span>
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="Priority"></label>
+                                    </div>
+                                    <div class="col">
+                                        <select asp-for="Priority" class="form-control form-control-sm custom-input">
+                                            <option value="0">Priority 0</option>
+                                            <option value="1">Priority 1</option>
+                                            <option value="2">Priority 2</option>
+                                            <option value="3">Priority 3</option>
+                                        </select>
+                                        <span asp-validation-for="Priority" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
-                           </div>
                         </td>
                     </tr>
                     <tr>
@@ -156,18 +155,18 @@
                                 </div>
                                 @if (Model.FileAvailable != null)
                                 {
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="FileAvailable"></label>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="FileAvailable"></label>
+                                        </div>
+                                        @foreach (var item in Model.FileAvailable)
+                                        {
+                                            <div class="col">
+                                                <a href="@item.Value" download>@item.Key</a>
+                                                <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
+                                            </div>
+                                        }
                                     </div>
-                                    @foreach (var item in Model.FileAvailable)
-                                    {
-                                <div class="col">
-                                    <a href="@item.Value" download>@item.Key</a>
-                                    <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
-                                </div>
-                                    }
-                                </div>
                                 }
                                 <input type="text" asp-for="FilesRemoved" hidden>
                                 <div class="row top-buffer">
@@ -198,12 +197,12 @@
     </div>
     <script>
         $('#LocationId').change(function () {
-            $.get('@Url.Action("GetArea","WorkOrder")' + "?id=" + $(this).val(),
+            $.get('@Url.Action("GetSubLocation","Property")' + "?id=" + $(this).val(),
                 function (data) {
-                    $("#AreaId").html("<option value=''>Please select Area</option>")
+                    $("#SubLocationId").html("<option value=''>Please select Area</option>")
                     if (data != null || data != undefined) {
                         for (var i = 0; i < data.length; i++) {
-                            $("#AreaId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                            $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                         }
                     }
                 });
@@ -217,12 +216,12 @@
              e.target.remove();
 
         }
-        $('#Property').change(function () {
+        $('#PropertyId').change(function () {
             console.log($(this).val());
             $.get('@Url.Action("GetLocation","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
                     $("#LocationId").html("<option value=''>Please select Location</option>")
-                     $("#AreaId").html("<option value=''>Please select Area</option>")
+                     $("#SubLocationId").html("<option value=''>Please select Area</option>")
                     if (data != null || data != undefined) {
                         for (var i = 0; i < data.length; i++) {
                             $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')

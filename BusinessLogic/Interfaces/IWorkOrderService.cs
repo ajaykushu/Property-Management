@@ -13,7 +13,7 @@ namespace BusinessLogic.Interfaces
 
         Task<List<SelectItem>> GetUsersByDepartment(long id);
 
-        Task<bool> CreateWO(CreateWO createWO,List<IFormFile> File);
+        Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File);
 
         Task<WorkOrderDetail> GetWODetail(long id);
 
@@ -29,7 +29,6 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> WorkOrderStageChange(long Id, int stageId);
 
-        Task<List<SelectItem>> GetSubLocation(long id);
         Task<List<SelectItem>> GetLocation(long id);
     }
 }

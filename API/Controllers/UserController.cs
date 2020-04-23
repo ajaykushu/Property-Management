@@ -1,6 +1,5 @@
 ﻿using BusinessLogic.Interfaces;
 using Castle.Core.Configuration;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.RequestModels;
@@ -8,7 +7,6 @@ using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities;
-using Utilities.Interface;
 
 namespace API.Controllers
 {

@@ -70,7 +70,6 @@ namespace Presentation.Utility
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
             foreach (var item in data.GetType().GetProperties())
             {
-                
                 if (item.Name.Equals("File") && item.GetValue(data) != null)
                 {
                     if (item.PropertyType.Name.Equals("IFormFile"))
@@ -82,7 +81,7 @@ namespace Presentation.Utility
                     }
                     else
                     {
-                        foreach(var items in item.GetValue(data) as List<IFormFile>)
+                        foreach (var items in item.GetValue(data) as List<IFormFile>)
                         {
                             BinaryReader reader = new BinaryReader(items.OpenReadStream());
                             var imagebytes = reader.ReadBytes((int)items.Length);
@@ -90,7 +89,7 @@ namespace Presentation.Utility
                         }
                     }
                 }
-                else if(item.PropertyType.Name.Equals("List`1") && item.GetValue(data) != null)
+                else if (item.PropertyType.Name.Equals("List`1") && item.GetValue(data) != null)
                 {
                     foreach (var val in item.GetValue(data) as List<string>)
                         multiContent.Add(new StringContent(val), item.Name);

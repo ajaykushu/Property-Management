@@ -18,15 +18,16 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Choose Role")]
         public string Role { get; set; }
+
         public List<SelectItem> Roles { get; set; }
         public List<SelectItem> Departments { get; set; }
+
         [Required(ErrorMessage = "Please Choose Department")]
         [DisplayName("Department")]
         public int DepartmentId { get; set; }
 
         public List<SelectItem> Properties { get; set; }
         public List<string> SelectedProperty { get; set; }
-       
 
         [Required(ErrorMessage = "Please Choose Language")]
         public int Language { get; set; }
@@ -43,6 +44,7 @@ namespace Presentation.ViewModels
 
         public string OfficeExt { get; set; }
         public List<SelectItem> TimeZones { set; get; }
+
         [DisplayName("Cell Number")]
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]

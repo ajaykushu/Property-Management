@@ -1,124 +1,123 @@
 ﻿@model Presentation.ViewModels.PropertyOperation
 <partial name="_ValidationScriptsPartial">
-   
-        <div class="workordertitle">
-            Edit Property
-        </div>
-        @if (Model != null)
-        {
-<form asp-action="UpdateProperty" class="addprop">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="table_container">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label for="PropertyTypeId">Property Type</label>
-                                </div>
-                                <div class="col">
-                                    @if (Model.PropertyTypes != null)
-                                    {
-                                        <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                    }
-                                    <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer ">
-                                <div class="col-md-3">
-                                    <label asp-for="PropertyName"></label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="PropertyName" class="form-control-sm custom-input">
-                                    <span asp-validation-for="PropertyName" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label asp-for="StreetAddress1"></label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="StreetAddress1" class="form-control-sm custom-input">
-                                    <span asp-validation-for="StreetAddress1" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="StreetAddress2"></label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="StreetAddress2" class="form-control-sm custom-input">
-                                    <span asp-validation-for="StreetAddress2" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
 
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="City"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="City" class="form-control-sm custom-input">
-                                    <span asp-validation-for="City" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="ZipCode"></label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="ZipCode" class="form-control-sm custom-input">
-                                    <span asp-validation-for="ZipCode" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="State"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="State" class="form-control-sm custom-input">
-                                    <span asp-validation-for="State" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Country"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="Country" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Country" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="workordertitle">
+        Edit Property
     </div>
-        <hr />
-        <button type="submit" class="btn btn-sm btn-outline-primary submit"><span>Update Property</span>&nbsp;<i class="fa fa-spinner fa-1x fa-spin" hidden></i></button>
-        <input asp-for="Id" hidden>
-</form>
-        }
-        <div>
-            <a asp-action="ListProperties" asp-controller="Property">Back</a>
-        </div>
-    
+    @if (Model != null)
+    {
+        <form asp-action="UpdateProperty" class="addprop">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="table_container">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <label for="PropertyTypeId">Property Type</label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.PropertyTypes != null)
+                                            {
+                                                <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                            }
+                                            <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer ">
+                                        <div class="col-md-3">
+                                            <label asp-for="PropertyName"></label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="PropertyName" class="form-control-sm custom-input">
+                                            <span asp-validation-for="PropertyName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label asp-for="StreetAddress1"></label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="StreetAddress1" class="form-control-sm custom-input">
+                                            <span asp-validation-for="StreetAddress1" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="StreetAddress2"></label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="StreetAddress2" class="form-control-sm custom-input">
+                                            <span asp-validation-for="StreetAddress2" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="City"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="City" class="form-control-sm custom-input">
+                                            <span asp-validation-for="City" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="ZipCode"></label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="ZipCode" class="form-control-sm custom-input">
+                                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="State"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="State" class="form-control-sm custom-input">
+                                            <span asp-validation-for="State" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Country"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="Country" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Country" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-sm btn-outline-primary submit"><span>Update Property</span>&nbsp;<i class="fa fa-spinner fa-1x fa-spin" hidden></i></button>
+            <input asp-for="Id" hidden>
+        </form>
+    }
+    <div>
+        <a asp-action="ListProperties" asp-controller="Property">Back</a>
+    </div>
 
     @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
     {

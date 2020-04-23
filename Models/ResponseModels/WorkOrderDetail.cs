@@ -20,7 +20,7 @@ namespace Models.ResponseModels
         public DateTime? UpdatedTime { get; set; }
         public int Priority { get; set; }
         public DateTime DueDate { get; set; }
-        public List<KeyValuePair<string,string>> Attachment { get; set; }
+        public List<KeyValuePair<string, string>> Attachment { get; set; }
         public string UpdatedBy { get; set; }
         public string AssignedToUser { get; set; }
         public List<SelectItem> Stages { get; set; }

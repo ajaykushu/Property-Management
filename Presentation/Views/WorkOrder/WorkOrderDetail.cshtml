@@ -144,17 +144,17 @@
                         </div>
                         @if (Model.Attachment != null)
                         {
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="Attachment"></label>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="Attachment"></label>
+                                </div>
+                                @foreach (var file in Model.Attachment)
+                                {
+                                    <div class="col">
+                                        <a href="@file.Value" download="random">@file.Key</a>
+                                    </div>
+                                }
                             </div>
-                            @foreach (var file in Model.Attachment)
-                            {
-                            <div class="col">
-                                <a href="@file.Value" download="random">@file.Key</a>
-                            </div>
-                            }
-                        </div>
                         }
                     </div>
                 </td>
@@ -217,12 +217,13 @@
                     </div>
                 </td>
             </tr>
-            <tr><td>
-                <div class="row">
-                    <div class="col">
-                 <a asp-action="GetComment" asp-route-Id=@Model.Id class="btn btn-sm btn-outline-primary comment">&nbsp;Comments</a>
+            <tr>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <a asp-action="GetComment" asp-route-Id=@Model.Id class="btn btn-sm btn-outline-primary comment">&nbsp;Comments</a>
                         </div>
-                </div>
+                    </div>
                 </td>
             </tr>
         </tbody>

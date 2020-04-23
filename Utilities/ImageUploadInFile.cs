@@ -32,7 +32,7 @@ namespace Utilities
         public async Task<string> UploadAsync(IFormFile file, string subDirectory = null)
         {
             var id = Guid.NewGuid().ToString().Replace("-", "");
-           
+
             if (file != null && file.Length > 0)
             {
                 try
@@ -45,7 +45,6 @@ namespace Utilities
                     if (!Directory.Exists("ImageFileStore"))
                         Directory.CreateDirectory("ImageFileStore");
 
-
                     path = path + id + file.FileName;
                     using (FileStream filestream = System.IO.File.Create(path))
                     {
@@ -53,7 +52,6 @@ namespace Utilities
                         filestream.Flush();
                     }
                     return path;
-                   
                 }
                 catch (Exception)
                 {
