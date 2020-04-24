@@ -164,9 +164,9 @@ $('input[name$="SelectedProperty"]').on('change', function () {
     }
     else {
         var index = arr.lastIndexOf($(this).val());
-        if ($('input[name$="PrimaryProperty"]').val() == $(this).val()) {
+        if ($('input[name$="PrimaryProperty"]:checked').val() == $(this).val()) {
             $('.primary_span').text("");
-            $('input[name$="PrimaryProperty"]').prop("checked", false);
+            $('input[name$="PrimaryProperty"]:checked').prop("checked", false);
         }
         arr.splice(index, 1);
     }
@@ -181,16 +181,17 @@ $('input[name$="PrimaryProperty"]').on('change', function () {
     }
     $('.primary_span').text($(this).val());
 });
-
-var val = $('.select-input').val().split(',');
-arr = val;
-$('input[name$="SelectedProperty"]').each(function () {
-      if (arr.indexOf($(this).val() != -1)){
+if ($('.select-input').val() != "") {
+    var val = $('.select-input').val().split(',');
+    arr = val;
+    $('input[name$="SelectedProperty"]').each(function () {
+        if (arr.indexOf($(this).val() != -1)) {
             $(this).prop("checked", true);
-      }
-});
-$('input[name$="PrimaryProperty"]').each(function () {
-    if ($(".primary_span").text().trim() == $(this).val()) {
-        $(this).prop("checked", true);
-    }
-});
+        }
+    });
+    $('input[name$="PrimaryProperty"]').each(function () {
+        if ($(".primary_span").text().trim() == $(this).val()) {
+            $(this).prop("checked", true);
+        }
+    });
+}

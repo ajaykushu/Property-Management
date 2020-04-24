@@ -461,7 +461,6 @@ label {
     width: -moz-max-content;
     height: -moz-max-content;
     min-width: 200px;
-    max-width: 300px;
     display: block;
     border-left: 2px solid grey;
     border-right: 2px solid grey;
@@ -472,6 +471,8 @@ label {
     display: none;
     padding: 5px;
     border-radius: 5px;
+    overflow-y:auto;
+    max-height:200px;
 }
 
 .option {
