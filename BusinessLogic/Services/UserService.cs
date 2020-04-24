@@ -63,8 +63,10 @@ namespace BusinessLogic.Services
             {
                 foreach (var item in prop)
                 {
-                    var userprop = new UserProperty();
-                    userprop.PropertyId = item.Id;
+                    var userprop = new UserProperty
+                    {
+                        PropertyId = item.Id
+                    };
                     if (item.PropertyName == model.PrimaryProperty)
                         userprop.IsPrimary = true;
                     if (model.SelectedProperty.Contains(item.PropertyName))
@@ -168,10 +170,12 @@ namespace BusinessLogic.Services
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)
                 {
-                    if (editUser.SelectedProperty.Contains(item.PropertyName)) { 
-                    var userprop = new UserProperty();
-                    userprop.ApplicationUser = applicationUser;
-                    userprop.Property = item;
+                    if (editUser.SelectedProperty.Contains(item.PropertyName)) {
+                        var userprop = new UserProperty
+                        {
+                            ApplicationUser = applicationUser,
+                            Property = item
+                        };
                         if (editUser.PrimaryProperty == item.PropertyName)
                             userprop.IsPrimary = true;
                     applicationUser.UserProperties.Add(userprop);

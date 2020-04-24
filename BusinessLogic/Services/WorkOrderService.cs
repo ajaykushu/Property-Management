@@ -87,8 +87,8 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
-                      WorkOrderDetail
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Comments).ThenInclude(x => x.Replies).Select(x => new { obj = new
+                          WorkOrderDetail
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
@@ -111,14 +111,39 @@ namespace BusinessLogic.Services
                  x.FileName,
                  string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
                  )).ToList()
+            },
+                Comment = x.Comments.OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
+                {
+                    CommentBy = x.CreatedByUserName,
+                    CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                    CommentString = x.Comment,
+                    Id = x.Id,
+                    Reply = x.Replies.Select(x => new ReplyDTO
+                    {
+                        Id = x.Id,
+                        RepliedTo = x.RepliedTo,
+                        ReplyString = x.ReplyString,
+                        RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                        RepliedBy = x.CreatedByUserName
+                    }).ToList()
+                }).Take(4).ToList(),
+                x.Comments.Count
             }).AsNoTracking().FirstOrDefaultAsync();
 
-            workorder.Stages = _stage.GetAll().Select(x => new SelectItem
+            workorder.obj.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = string.Concat(x.StageCode, "(", x.StageDescription, ")")
             }).ToList();
-            return workorder;
+            Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
+            {
+                Payload = workorder.Comment,
+                ItemsPerPage = workorder.Count > 1 ? 1 : workorder.Count,
+                PageCount = workorder.Count <= 1 ? 1 : workorder.Count % 1 == 0 ? workorder.Count / 1 : workorder.Count / 1 + 1,
+                CurrentPage = 0
+            };
+            workorder.obj.Comments = pagedcomments;
+            return workorder.obj;
         }
 
         public async Task<CreateWO> GetCreateWOModel(long userId)
@@ -330,11 +355,11 @@ namespace BusinessLogic.Services
             return false;
         }
 
-        public async Task<Pagination<List<CommentDTO>>> GetPaginationComment(long workorderId, int pageNumber)
+        public async Task<List<CommentDTO>> GetPaginationComment(long workorderId, int pageNumber)
         {
             var itemsinpage = 4;
             var count = _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Count();
-            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.CreatedTime).Select(x => new CommentDTO()
+            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
             {
                 CommentBy = x.CreatedByUserName,
                 CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
@@ -353,11 +378,12 @@ namespace BusinessLogic.Services
             Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
             {
                 Payload = obj,
-                PageCount = count <= itemsinpage ? 1 : count / itemsinpage + 1,
+                ItemsPerPage = count > itemsinpage ? itemsinpage : count,
+                PageCount = count <= itemsinpage ? 1 : count % itemsinpage == 0 ? count / itemsinpage : count / itemsinpage + 1,
                 CurrentPage = pageNumber
             };
 
-            return pagedcomments;
+            return obj;
         }
 
         public async Task<bool> PostComment(Post post)

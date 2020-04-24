@@ -21,16 +21,14 @@ namespace BusinessLogic.Services
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
         private readonly IRepo<UserProperty> _userProperty;
-        private readonly IRepo<ApplicationUser> _user;
         private readonly IRepo<Location> _loc;
         private readonly IRepo<SubLocation> _subloaction;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<ApplicationUser> user, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor)
+        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor)
         {
             _property = property;
             _proptype = proptype;
-            _user = user;
             _loc = loc;
             _subloaction = subloaction;
             _userProperty = userProperty;
@@ -91,7 +89,7 @@ namespace BusinessLogic.Services
                    {
                        City = x.Property.City,
                        Country = x.Property.Country,
-                       Id = x.Id,
+                       Id = x.PropertyId,
                        StreetAddress2 = x.Property.StreetAddress2,
                        ZipCode = x.Property.ZipCode,
                        PropertyName = x.Property.PropertyName,

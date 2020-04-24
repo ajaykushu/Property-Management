@@ -1,6 +1,6 @@
 ﻿@model Presentation.ViewModels.WorkOrderDetail
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "WO Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -218,12 +218,18 @@
                 </td>
             </tr>
             <tr>
+                <th>
+                    Comments
+                </th>
+            </tr>
+            <tr id="CommentSection">
                 <td>
-                    <div class="row">
-                        <div class="col">
-                            <a asp-action="GetComment" asp-route-Id=@Model.Id class="btn btn-sm btn-outline-primary comment">&nbsp;Comments</a>
-                        </div>
-                    </div>
+                    @await Html.PartialAsync("CommentOperation",
+                    Model.Comments,
+                    new ViewDataDictionary(ViewData)
+                    {
+                    { "workOrderId", Model.Id }
+                    });
                 </td>
             </tr>
         </tbody>

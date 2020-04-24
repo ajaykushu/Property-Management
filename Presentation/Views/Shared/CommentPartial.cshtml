@@ -1,0 +1,40 @@
+﻿@model  List<Comment>
+@if (Model != null && Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        
+        <div class="parent" id=@item.Id>
+            <div class="mycon">
+                <div class="card top-buffer comment">
+                    <div class="card-body">
+                        <p class="text-success">Comment By-&nbsp; @item.CommentBy</p>
+                        <h6 class="card-subtitle"> @item.CommentDate</h6>
+                        <p class="card-text"> @item.CommentString</p>
+                        <button value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
+                    </div>
+                </div>
+            </div>
+
+            @if (item.Reply != null)
+            {
+                @foreach (var reply in item.Reply)
+                {
+                    <div class="mycon">
+                        <div class="card top-buffer comment" style="margin-left:24px">
+                            <div class="card-body">
+                                <p class="text-info">RepliedBy By-&nbsp; @reply.RepliedBy</p>
+                                <h6 class="card-subtitle">@reply.RepliedDate</h6>
+                                <p class="card-text"><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</p>
+                                <button value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+    }
+    <hr />
+
+}

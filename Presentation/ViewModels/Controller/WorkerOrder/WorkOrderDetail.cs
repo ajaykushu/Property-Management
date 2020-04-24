@@ -24,5 +24,6 @@ namespace Presentation.ViewModels
         public string AssignedToUser { get; set; }
         public string UpdatedBy { get; set; }
         public List<SelectItem> Stages { get; set; }
+        public Pagination<List<Comment>> Comments { get; set; }
     }
 }

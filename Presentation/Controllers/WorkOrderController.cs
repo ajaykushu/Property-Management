@@ -223,23 +223,23 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComment(long Id, int requestedPage)
+        public async Task<IActionResult> GetComment(long workOrderId, int requestedPage)
         {
-            ViewBag.workorderId = Id;
-            Pagination<List<Comment>> comments = null;
+            ViewBag.workorderId = workOrderId;
+            List<Comment> comments = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("getcomment", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?workorderId=" + Id + "&pageNumber=" + requestedPage, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?workorderId=" + workOrderId + "&pageNumber=" + requestedPage, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    comments = JsonConvert.DeserializeObject<Pagination<List<Comment>>>(await response.Content.ReadAsStringAsync());
+                    comments = JsonConvert.DeserializeObject<List<Comment>>(await response.Content.ReadAsStringAsync());
                 }
             }
             catch (Exception)
             {
             }
-            return View("CommentOperation", comments);
+            return PartialView("CommentPartial", comments);
         }
 
         [HttpPost]
@@ -259,7 +259,7 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
-            return RedirectToAction("GetComment", new { id = post.WorkOrderId });
+            return RedirectToAction("GetWODetail", new { id = post.WorkOrderId });
         }
 
         [HttpGet]

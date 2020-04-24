@@ -24,5 +24,7 @@ namespace Models.ResponseModels
         public string UpdatedBy { get; set; }
         public string AssignedToUser { get; set; }
         public List<SelectItem> Stages { get; set; }
+
+        public Pagination<List<CommentDTO>> Comments { get; set; }
     }
 }

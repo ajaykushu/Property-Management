@@ -100,7 +100,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getcomment")]
-        public async Task<ActionResult<Pagination<List<CommentDTO>>>> GetComment(long workorderId, int pageNumber)
+        public async Task<ActionResult<List<CommentDTO>>> GetComment(long workorderId, int pageNumber)
         {
             var res = await _workOrderService.GetPaginationComment(workorderId, pageNumber);
             return Ok(res);
