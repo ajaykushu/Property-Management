@@ -87,6 +87,7 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
+            var iteminpage = 4;
             var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Comments).ThenInclude(x => x.Replies).Select(x => new { obj = new
                           WorkOrderDetail
             {
@@ -138,8 +139,8 @@ namespace BusinessLogic.Services
             Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
             {
                 Payload = workorder.Comment,
-                ItemsPerPage = workorder.Count > 1 ? 1 : workorder.Count,
-                PageCount = workorder.Count <= 1 ? 1 : workorder.Count % 1 == 0 ? workorder.Count / 1 : workorder.Count / 1 + 1,
+                ItemsPerPage = workorder.Count > iteminpage ? iteminpage : workorder.Count,
+                PageCount = workorder.Count <= iteminpage ? 1 : workorder.Count % iteminpage == 0 ? workorder.Count / iteminpage : workorder.Count / iteminpage + 1,
                 CurrentPage = 0
             };
             workorder.obj.Comments = pagedcomments;
