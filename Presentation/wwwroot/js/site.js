@@ -75,14 +75,8 @@ $('#wocreate').submit(function (e) {
         $('.fa-spinner').prop("hidden", false);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             alertify.alert('Info', '<p>' + res + '</p>', function () {
-                $('.fa-spinner').prop("hidden", true);
-                $("input[type=password]").val("");
-                $("input[type=text]").val("");
-                $("input[type=email]").val("");
-                $("#Description").val("");
                 $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
-                $('.browsebutton')[0].innerText = "Browse";
-                $('select').prop('selectedIndex', 0);
+                $("input[type=reset]").click();
             });
         }, function (res) {
             $('.fa-spinner').prop("hidden", true);
@@ -99,9 +93,15 @@ $('input[type="reset"]').click(function (e) {
             node.setAttribute("value", "");
         }
     })
+    $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
+    $("img").prop("src", "");
+    $('.photo_disp').hide();
     $('#Status').val("");
+    $('.browsebutton')[0].innerText = "Browse";
     $('#Priority').val("");
+    $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     $('input[type="submit"]').click();
+    $('.primary_span').text("");
 })
 
 $('.adduser').submit(function (e) {
@@ -113,22 +113,15 @@ $('.adduser').submit(function (e) {
         $('.fa-spinner').prop("hidden", false);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             alertify.alert('Info', '<p>' + res + '</p>', function () {
-                $('.fa-spinner').prop("hidden", true);
-                $("input[type=password]").val("");
-                $("input[type=text]").val("");
-                $("input[type=email]").val("");
-                $("input[type=tel]").val("");
-                $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
-                $('select').prop('selectedIndex', 0);
-                $('img').prop("src", "");
+                $("input[type=reset]").click();
             });
 
         }, function (res) {
             $('.fa-spinner').prop("hidden", true);
             alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
                 $("input[type=password]").val("");
-
             });
+
         }, "");
     }
 });

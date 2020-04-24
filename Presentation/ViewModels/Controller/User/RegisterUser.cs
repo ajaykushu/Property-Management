@@ -52,7 +52,7 @@ namespace Presentation.ViewModels
         public string PhoneNumber { set; get; }
 
         [Remote("CheckUserName", "User")]
-        [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length less than 256 charcters")]
+        [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length between 4 to 256 charcters")]
         [Required(ErrorMessage = "Please Enter UserName")]
         public string UserName { set; get; }
 
