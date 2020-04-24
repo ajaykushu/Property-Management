@@ -200,25 +200,25 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        public async Task<bool> MarkPrimary(long Id, long userId)
-        {
-            var user = await _user.Get(x => x.Id == userId).Include(x => x.UserProperties).FirstOrDefaultAsync();
-            if (user != null && user.UserProperties != null)
-            {
-                foreach (var property in user.UserProperties)
-                {
-                    if (property.PropertyId == Id)
-                        property.IsPrimary = true;
-                    else
-                        property.IsPrimary = false;
-                }
-                var updatestatus = await _user.Update(user);
-                if (updatestatus > 0)
-                    return true;
-            }
+        //public async Task<bool> MarkPrimary(long Id, long userId)
+        //{
+        //    var user = await _user.Get(x => x.Id == userId).Include(x => x.UserProperties).FirstOrDefaultAsync();
+        //    if (user != null && user.UserProperties != null)
+        //    {
+        //        foreach (var property in user.UserProperties)
+        //        {
+        //            if (property.PropertyId == Id)
+        //                property.IsPrimary = true;
+        //            else
+        //                property.IsPrimary = false;
+        //        }
+        //        var updatestatus = await _user.Update(user);
+        //        if (updatestatus > 0)
+        //            return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         public async Task<bool> CheckProperty(string propertyName)
         {

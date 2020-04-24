@@ -84,18 +84,36 @@
                                             }
                                         </div>
                                     </div>
-                                    <div class="row top-buffer mainprop" style="@if (Model.Role == "Admin") {<text>display:none;</text> }">
+                                    <div class="row top-buffer" style="@if (Model.Role == "Master Admin") {<text>display:none;</text> }">
                                         <div class="col-md-3">
-                                            <label for="SelectedProperty">Assigned Property</label>
+                                            <label for="Language">Primary Property</label>
                                         </div>
                                         <div class="col">
-                                            @if (Model.Properties != null && Model.Properties.Any())
+                                            <span class="primary_span">@Model.PrimaryProperty</span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer mainprop" style="@if (Model.Role == "Master Admin") {<text>display:none;</text> }">
+                                        <div class="col-md-3">
+                                            <label for="SelectedProperty">Assign Property</label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.Properties.Any())
                                             {
-                                                <input type="text" value="@if (Model.SelectedProperty.Any())
-                                            { <text>@string.Join(",", Model.SelectedProperty)</text> }" disabled class="form-control form-control-sm custom-input select-input" placeholder="select item">
-                                                <select class="custom-input select-mul" asp-for="SelectedProperty" asp-items="@(new SelectList(Model.Properties, "PropertyName", "PropertyName"))" multiple="multiple">
-                                                    <option value="">Select Option</option>
-                                                </select>
+                                                <input class="custom-input select-input" disabled value="@if (Model.SelectedProperty != null)
+                                            {<text>@string.Join(",", Model.SelectedProperty)</text>}" placeholder="Select Property">
+                                                <div class="multiple-select-box">
+                                                    @foreach (var option in Model.Properties)
+                                                    {
+                                                        <div class="option">
+                                                            <div class="d-inline-block options">
+                                                                <input name="SelectedProperty" value="@option.PropertyName" type="checkbox">
+                                                                &nbsp;<input name="PrimaryProperty"  value="@option.PropertyName" type="radio">
+                                                                &nbsp;<span>@option.PropertyName</span>
+                                                            </div>
+                                                        </div>
+
+                                                    }
+                                                </div>
                                             }
                                             <span asp-validation-for="SelectedProperty" class="text-danger"></span>
                                         </div>
@@ -255,27 +273,3 @@
 <div>
     <a asp-action="GetAllUsers">Back</a>
 </div>
-
-<script>
-    $('.edituser').submit(function (e) {
-        e.preventDefault();
-        var url = $(this).attr('action');
-        var form = $(this).serialize();
-        var formData = new FormData(this);
-        if ($(this).valid()) {
-            $('.fa-spinner').prop("hidden", false);
-            RESTCALL(url, formData, 'POST', false, false, function (res) {
-                $('.fa-spinner').prop("hidden", true);
-                alertify.alert('Info', '<p>' + res + '</p>', function () {
-                    location.reload();
-                });
-            }, function (res) {
-                $('.fa-spinner').prop("hidden", true);
-                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                    $(this).find("input[type=password]").val("");
-                });
-            }, "", "multipart/form-data");
-
-        }
-    });
-</script>

@@ -167,29 +167,29 @@ namespace Presentation.Controllers
             return View(prop);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> MarkPrimary(long id, long userId)
-        {
-            _apiRoute.Value.Routes.TryGetValue("markprimary", out string path);
-            try
-            {
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&userId=" + userId, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                {
-                    var res = Convert.ToBoolean(await response.Content.ReadAsStringAsync());
-                    if (res)
-                        TempData["Success"] = "Marked as Primary Propery";
-                    else
-                        TempData["Error"] = "Primary Marking Failed";
-                }
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = StringConstants.Error;
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> MarkPrimary(long id, long userId)
+        //{
+        //    _apiRoute.Value.Routes.TryGetValue("markprimary", out string path);
+        //    try
+        //    {
+        //        var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&userId=" + userId, this, _token).ConfigureAwait(false);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            var res = Convert.ToBoolean(await response.Content.ReadAsStringAsync());
+        //            if (res)
+        //                TempData["Success"] = "Marked as Primary Propery";
+        //            else
+        //                TempData["Error"] = "Primary Marking Failed";
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        TempData["Error"] = StringConstants.Error;
+        //    }
 
-            return RedirectToAction("UserDetailView", "User", new { id = userId });
-        }
+        //    return RedirectToAction("UserDetailView", "User", new { id = userId });
+        //}
 
         [HttpGet]
         public async Task<JsonResult> CheckProperty(string propertyName)

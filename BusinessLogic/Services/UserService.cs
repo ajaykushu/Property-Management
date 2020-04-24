@@ -62,10 +62,14 @@ namespace BusinessLogic.Services
             if (model.SelectedProperty != null && (model.Role.Equals("Admin")))
             {
                 foreach (var item in prop)
+                {
+                    var userprop = new UserProperty();
+                    userprop.PropertyId = item.Id;
+                    if (item.PropertyName == model.PrimaryProperty)
+                        userprop.IsPrimary = true;
                     if (model.SelectedProperty.Contains(item.PropertyName))
-                        applicationUser.UserProperties.Add(new UserProperty { 
-                        PropertyId=item.Id
-                        });
+                        applicationUser.UserProperties.Add(userprop);
+                }
             }
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
             if (!identityResult.Succeeded)
@@ -127,7 +131,8 @@ namespace BusinessLogic.Services
                 PhoneNumber = applicationUser.PhoneNumber,
                 DepartmentId = applicationUser.DepartmentId.GetValueOrDefault(),
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
-                Id = applicationUser.Id
+                Id = applicationUser.Id,
+                PrimaryProperty = applicationUser.UserProperties.Where(x => x.IsPrimary).Select(x=>x.Property.PropertyName).FirstOrDefault()
             };
             return editusermodel;
         }
@@ -163,12 +168,15 @@ namespace BusinessLogic.Services
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)
                 {
-                    if (editUser.SelectedProperty.Contains(item.PropertyName))
-                        applicationUser.UserProperties.Add(new UserProperty()
-                        {
-                            ApplicationUser = applicationUser,
-                            Property = item
-                        });
+                    if (editUser.SelectedProperty.Contains(item.PropertyName)) { 
+                    var userprop = new UserProperty();
+                    userprop.ApplicationUser = applicationUser;
+                    userprop.Property = item;
+                        if (editUser.PrimaryProperty == item.PropertyName)
+                            userprop.IsPrimary = true;
+                    applicationUser.UserProperties.Add(userprop);
+                    }
+                        
                 }
             }
             if (!String.IsNullOrEmpty(editUser.Password))

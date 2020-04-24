@@ -171,15 +171,12 @@ namespace BusinessLogic.Services
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
                 var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
-                if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
-                {
+                query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
+            {
                     var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
-                    query = query.Where(x => x.CreatedTime.Date >= startDate.Date && x.CreatedTime.Date <= enddate.Date);
-                }
-                else
-                {
-                    query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
-                }
+                    query = query.Where(x =>x.CreatedTime.Date <= enddate.Date);
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
@@ -198,9 +195,10 @@ namespace BusinessLogic.Services
                 var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
                 query = query.Where(x => x.DueDate.Date == dueDate.Date);
             }
-            if (wOFilterModel.Priority >= 0)
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
             {
-                query = query.Where(x => x.Priority == wOFilterModel.Priority);
+                var index =Convert.ToInt32(wOFilterModel.Priority);
+                query = query.Where(x => x.Priority == index);
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
             {

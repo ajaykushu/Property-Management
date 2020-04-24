@@ -12,8 +12,8 @@ namespace Presentation.ViewModels
         public string CreationEndDate { get; set; }
         public string DueDate { get; set; }
 
-        [Range(-1, 4)]
-        public int Priority { get; set; }
+        [StringLength(1)]
+        public string Priority { get; set; }
 
         public string Status { get; set; }
         public int PageNumber { get; set; }

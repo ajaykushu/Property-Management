@@ -453,3 +453,44 @@ label {
     cursor: pointer;
 }
 /**/
+
+/**/
+
+.multiple-select-box {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    height: -moz-max-content;
+    min-width: 200px;
+    max-width: 300px;
+    display: block;
+    border-left: 2px solid grey;
+    border-right: 2px solid grey;
+    border-bottom: 2px solid grey;
+    position: absolute;
+    background-color: white;
+    z-index: 9999;
+    display: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.option {
+    display: table-row;
+}
+
+.select-input:hover + .multiple-select-box {
+    display: block;
+}
+
+.multiple-select-box:hover {
+    display: block;
+}
+
+.select-input {
+    display: block;
+    min-width: 200px;
+    padding: 0.3em;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    height: calc(1.5em + 0.5rem + 2px)
+}

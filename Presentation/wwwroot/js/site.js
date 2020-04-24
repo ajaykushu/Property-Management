@@ -100,6 +100,97 @@ $('input[type="reset"]').click(function (e) {
         }
     })
     $('#Status').val("");
-    $('#Priority').val("-1");
+    $('#Priority').val("");
     $('input[type="submit"]').click();
 })
+
+$('.adduser').submit(function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    var form = $(this).serialize();
+    var formData = new FormData(this);
+    if ($(this).valid()) {
+        $('.fa-spinner').prop("hidden", false);
+        RESTCALL(url, formData, 'POST', false, false, function (res) {
+            alertify.alert('Info', '<p>' + res + '</p>', function () {
+                $('.fa-spinner').prop("hidden", true);
+                $("input[type=password]").val("");
+                $("input[type=text]").val("");
+                $("input[type=email]").val("");
+                $("input[type=tel]").val("");
+                $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
+                $('select').prop('selectedIndex', 0);
+                $('img').prop("src", "");
+            });
+
+        }, function (res) {
+            $('.fa-spinner').prop("hidden", true);
+            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                $("input[type=password]").val("");
+
+            });
+        }, "");
+    }
+});
+
+$('.edituser').submit(function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    var form = $(this).serialize();
+    var formData = new FormData(this);
+    if ($(this).valid()) {
+        $('.fa-spinner').prop("hidden", false);
+        RESTCALL(url, formData, 'POST', false, false, function (res) {
+            $('.fa-spinner').prop("hidden", true);
+            alertify.alert('Info', '<p>' + res + '</p>', function () {
+                location.reload();
+            });
+        }, function (res) {
+            $('.fa-spinner').prop("hidden", true);
+            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                $(this).find("input[type=password]").val("");
+            });
+        }, "", "multipart/form-data");
+
+    }
+});
+
+var arr = [];
+$('input[name$="SelectedProperty"]').on('change', function () {
+    if ($(this).prop("checked") == true) {
+        var index = arr.lastIndexOf($(this).val());
+        if (index == -1)
+            arr.push($(this).val());
+    }
+    else {
+        var index = arr.lastIndexOf($(this).val());
+        if ($('input[name$="PrimaryProperty"]').val() == $(this).val()) {
+            $('.primary_span').text("");
+            $('input[name$="PrimaryProperty"]').prop("checked", false);
+        }
+        arr.splice(index, 1);
+    }
+    $('.select-input').val(arr);
+})
+$('input[name$="PrimaryProperty"]').on('change', function () {
+    var index = arr.lastIndexOf($(this).val());
+    if (index == -1) {
+        arr.push($(this).val());
+        $(this).closest("div").find('input[type="checkbox"]').prop("checked", true);
+        $('.select-input').val(arr);
+    }
+    $('.primary_span').text($(this).val());
+});
+
+var val = $('.select-input').val().split(',');
+arr = val;
+$('input[name$="SelectedProperty"]').each(function () {
+      if (arr.indexOf($(this).val() != -1)){
+            $(this).prop("checked", true);
+      }
+});
+$('input[name$="PrimaryProperty"]').each(function () {
+    if ($(".primary_span").text().trim() == $(this).val()) {
+        $(this).prop("checked", true);
+    }
+});

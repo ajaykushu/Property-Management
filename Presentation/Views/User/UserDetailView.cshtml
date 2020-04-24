@@ -106,10 +106,6 @@
                                             {
                                                 <h6 class="card-title text-success">Primary</h6>
                                             }
-                                            else
-                                            {
-                                                <h6 class="card-title text-danger"><a asp-action="MarkPrimary" asp-controller="Property" asp-route-id="@item.Id" asp-route-userId="@Model.Id">Mark Primary</a></h6>
-                                            }
                                             <p class="card-text">
                                                 <address>
                                                     <strong>@item.PropertyType</strong><br>

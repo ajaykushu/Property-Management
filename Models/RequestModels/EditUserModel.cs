@@ -11,7 +11,7 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Enter Last Name")]
         public string LastName { get; set; }
-
+        public string PrimaryProperty { get; set; }
         public string Suffix { get; set; }
 
         [Required(ErrorMessage = "Please Choose Role")]
