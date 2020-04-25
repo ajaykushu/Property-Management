@@ -134,7 +134,7 @@ namespace BusinessLogic.Services
                 DepartmentId = applicationUser.DepartmentId.GetValueOrDefault(),
                 SelectedProperty = applicationUser.UserProperties.Select(x => x.Property.PropertyName).ToList(),
                 Id = applicationUser.Id,
-                PrimaryProperty = applicationUser.UserProperties.Where(x => x.IsPrimary).Select(x=>x.Property.PropertyName).FirstOrDefault()
+                PrimaryProperty = applicationUser.UserProperties.Where(x => x.IsPrimary).Select(x => x.Property.PropertyName).FirstOrDefault()
             };
             return editusermodel;
         }
@@ -163,14 +163,15 @@ namespace BusinessLogic.Services
             if (filepath != null)
                 applicationUser.PhotoPath = filepath;
 
-            if (editUser.Role == "Master Admin"|| editUser.Role == "User")
+            if (editUser.Role == "Master Admin" || editUser.Role == "User")
                 applicationUser.UserProperties.Clear();
             else if (editUser.SelectedProperty != null && (editUser.Role.Equals("Admin")))
             {
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)
                 {
-                    if (editUser.SelectedProperty.Contains(item.PropertyName)) {
+                    if (editUser.SelectedProperty.Contains(item.PropertyName))
+                    {
                         var userprop = new UserProperty
                         {
                             ApplicationUser = applicationUser,
@@ -178,9 +179,9 @@ namespace BusinessLogic.Services
                         };
                         if (editUser.PrimaryProperty == item.PropertyName)
                             userprop.IsPrimary = true;
-                    applicationUser.UserProperties.Add(userprop);
+                        applicationUser.UserProperties.Add(userprop);
                     }
-                        
+
                 }
             }
             if (!String.IsNullOrEmpty(editUser.Password))

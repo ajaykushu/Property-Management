@@ -23,20 +23,20 @@ namespace Models.RequestModels
         [StringLength(100, ErrorMessage = "Must less than 100 characters")]
         public string StreetAddress2 { set; get; }
 
-        
+
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         public string ZipCode { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
-        
+
         public string City { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
-      
+
         public string State { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
-       
+
         public string Country { set; get; }
     }
 }

@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using Utilities.CustomException;
 
@@ -78,13 +77,13 @@ namespace BusinessLogic.Services
 
         public async Task<List<PropertiesModel>> GetProperties()
         {
-            
+
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                var username = _httpContextAccessor.HttpContext.User.Claims.Where(x=>x.Type==ClaimTypes.NameIdentifier).FirstOrDefault();
+                var username = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
                 if (username != null)
                 {
-                    var prop = await _userProperty.GetAll().Where(x => x.ApplicationUser.UserName == username.Value).Include(x=>x.Property).Select(
+                    var prop = await _userProperty.GetAll().Where(x => x.ApplicationUser.UserName == username.Value).Include(x => x.Property).Select(
                    x => new PropertiesModel
                    {
                        City = x.Property.City,
@@ -99,17 +98,17 @@ namespace BusinessLogic.Services
                        IsActive = x.Property.IsActive
                    }
                    ).AsNoTracking().ToListAsync();
-                   return prop;
+                    return prop;
                 }
                 else
                 {
                     throw new BadRequestException("No Properties Asscociated");
                 }
-              
+
             }
             else
             {
-                var prop =  await _property.GetAll().Select(
+                var prop = await _property.GetAll().Select(
                    x => new PropertiesModel
                    {
                        City = x.City,
@@ -126,7 +125,7 @@ namespace BusinessLogic.Services
                    ).AsNoTracking().ToListAsync();
                 return prop;
             }
-           
+
         }
 
         public async Task<bool> ActDeactProperty(int id, bool operation)

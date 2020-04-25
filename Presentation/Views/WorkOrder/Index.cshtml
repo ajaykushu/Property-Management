@@ -88,7 +88,7 @@
                         </td>
                         <td><span style="word-break:normal">@item.Description</span></td>
                         <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedToUser</strong></span></td>
-                        <td><span class="text-dark">@item.Property.PropertyName</span></td>
+                        <td><span class="text-dark"> @if (item.Property != null) {@item.Property.PropertyName}</span></td>
                         <td>@item.DueDate</td>
                         <td style="min-width:200px;">
                             @{

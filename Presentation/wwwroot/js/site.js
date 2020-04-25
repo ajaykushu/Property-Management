@@ -25,12 +25,18 @@ function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_
 $('.select-mul').change(function (e) {
     $('.select-input').val($(this).val());
 });
-$('#Role').on("change load", function (e) {
-    if ($(this).val() == "Admin")
-        $('.mainprop').show();
-    else
+$('#Role').change(function (e) {
+    if ($(this).val() == "Master Admin" || $(this).val()=="User")
         $('.mainprop').hide();
+    else
+        $('.mainprop').show();
 })
+/**/
+if ($('#Role').val() == "Master Admin" || $('#Role').val() == "User")
+    $('.mainprop').hide();
+else
+    $('.mainprop').show();
+/**/
 
 $('.Photo').change(function (e) {
     const file = e.target.files[0]

@@ -88,31 +88,33 @@ namespace BusinessLogic.Services
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
             var iteminpage = 4;
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Comments).ThenInclude(x => x.Replies).Select(x => new { obj = new
-                          WorkOrderDetail
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Comments).ThenInclude(x => x.Replies).Select(x => new
             {
-                PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
-                StageCode = x.Stage.StageCode,
-                StageDescription = x.Stage.StageDescription,
-                Item = x.Item.ItemName,
-                CreatedTime = x.CreatedTime,
-                DueDate = x.DueDate,
-                UpdatedTime = x.UpdatedTime,
-                Department = x.AssignedTo.Department.DepartmentName,
-                AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
-                Requestedby = x.RequestedBy,
-                Id = x.Id,
-                Priority = x.Priority,
-                UpdatedBy = x.UpdatedByUserName,
-                Description = x.Description,
-                Location = x.Location.LocationName,
-                SubLocation = x.SubLocation.AreaName,
-                Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
-                 x.FileName,
-                 string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
-                 )).ToList()
-            },
+                obj = new
+                          WorkOrderDetail
+                {
+                    PropertyName = x.Property.PropertyName,
+                    Issue = x.Issue.IssueName,
+                    StageCode = x.Stage.StageCode,
+                    StageDescription = x.Stage.StageDescription,
+                    Item = x.Item.ItemName,
+                    CreatedTime = x.CreatedTime,
+                    DueDate = x.DueDate,
+                    UpdatedTime = x.UpdatedTime,
+                    Department = x.AssignedTo.Department.DepartmentName,
+                    AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
+                    Requestedby = x.RequestedBy,
+                    Id = x.Id,
+                    Priority = x.Priority,
+                    UpdatedBy = x.UpdatedByUserName,
+                    Description = x.Description,
+                    Location = x.Location.LocationName,
+                    SubLocation = x.SubLocation.AreaName,
+                    Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
+                     x.FileName,
+                     string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                     )).ToList()
+                },
                 Comment = x.Comments.OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
                 {
                     CommentBy = x.CreatedByUserName,
@@ -201,8 +203,8 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
             {
-                    var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
-                    query = query.Where(x =>x.CreatedTime.Date <= enddate.Date);
+                var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
+                query = query.Where(x => x.CreatedTime.Date <= enddate.Date);
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
@@ -223,7 +225,7 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
             {
-                var index =Convert.ToInt32(wOFilterModel.Priority);
+                var index = Convert.ToInt32(wOFilterModel.Priority);
                 query = query.Where(x => x.Priority == index);
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))

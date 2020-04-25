@@ -16,6 +16,9 @@
                     <tr>
                         <td>
                             <div class="col">
+                        
+                            @if (Model.Properties != null)
+                            {
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label asp-for="PropertyId"> </label>
@@ -27,18 +30,26 @@
                                         <span asp-validation-for="PropertyId" class="text-danger"></span>
                                     </div>
                                 </div>
-
+                             }
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
                                         <label asp-for="LocationId"> </label>
                                     </div>
                                     <div class="col">
-                                        <select id="LocationId" name="LocationId" class="form-control form-control-sm custom-input" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))" >
-                                            <option value="">Please select Location</option>
-                                        </select>
+                                        @if (Model.Locations != null)
+                                        {
+                                            <select id="LocationId" name="LocationId" class="form-control form-control-sm custom-input" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                                <option value="">Please select Location</option>
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select id="LocationId" name="LocationId" class="form-control form-control-sm custom-input">
+                                                <option value="">Please select Location</option>
+                                            </select>
+                                        }
                                     </div>
                                 </div>
-
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
                                         <label asp-for="SubLocationId"></label>
@@ -50,9 +61,9 @@
                                         <span asp-validation-for="SubLocationId" class="text-danger"></span>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                                </div>
+                            </td>
+                        </tr>
                     <tr>
                         <td>
                             <div class="col">
