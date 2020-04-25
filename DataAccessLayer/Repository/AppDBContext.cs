@@ -14,31 +14,30 @@ namespace DataAccessLayer.Repository
 {
     public class AppDBContext : IdentityDbContext<ApplicationUser, ApplicationRole, long>
     {
-        public DbSet<Property> Properties { set; get; }
-        public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
-        public DbSet<Location> Locations { set; get; }
-        public DbSet<SubLocation> Areas { set; get; }
-
-        public DbSet<Menu> Menu { set; get; }
-        public DbSet<Issue> Issues { set; get; }
-        public DbSet<Item> Items { set; get; }
-        public DbSet<Stage> Stages { set; get; }
-        public DbSet<WorkOrder> WorkOrders { set; get; }
-        public DbSet<Reply> Replies { set; get; }
-        public DbSet<Comments> Comments { set; get; }
-        public DbSet<Languages> Languages { set; get; }
-        public DbSet<UserProperty> UserProperties { set; get; }
-        public DbSet<Department> Departments { set; get; }
-
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         private readonly IHttpContextAccessor _httpContextAccessor;
-
         public AppDBContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public DbSet<SubLocation> Areas { set; get; }
+        public DbSet<Comments> Comments { set; get; }
+        public DbSet<Department> Departments { set; get; }
+        public DbSet<Issue> Issues { set; get; }
+        public DbSet<Item> Items { set; get; }
+        public DbSet<Languages> Languages { set; get; }
+        public DbSet<Location> Locations { set; get; }
+        public DbSet<Menu> Menu { set; get; }
+        public DbSet<Property> Properties { set; get; }
+        public DbSet<Reply> Replies { set; get; }
+        public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
+        public DbSet<Stage> Stages { set; get; }
+        public DbSet<UserProperty> UserProperties { set; get; }
+        public DbSet<WorkOrder> WorkOrders { set; get; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
@@ -62,24 +61,28 @@ namespace DataAccessLayer.Repository
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
             builder.Entity<Property>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<WorkOrder>().Property(x => x.Priority).HasDefaultValue(0);
+            DataSeeder(builder);
+        }
 
+        private static void DataSeeder(ModelBuilder builder)
+        {
             builder.Entity<Department>().HasData(
-                new Department()
-                {
-                    Id = 1,
-                    DepartmentName = "Administration",
-                },
-                new Department()
-                {
-                    Id = 2,
-                    DepartmentName = "Management",
-                },
-                new Department()
-                {
-                    Id = 3,
-                    DepartmentName = "Engineering",
-                }
-                );
+                            new Department()
+                            {
+                                Id = 1,
+                                DepartmentName = "Administration",
+                            },
+                            new Department()
+                            {
+                                Id = 2,
+                                DepartmentName = "Management",
+                            },
+                            new Department()
+                            {
+                                Id = 3,
+                                DepartmentName = "Engineering",
+                            }
+                            );
 
             builder.Entity<ApplicationRole>().HasData(
              new ApplicationRole()
@@ -222,7 +225,6 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 18, MenuId = 18, RoleId = 1 }
                 );
         }
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker
@@ -251,4 +253,5 @@ namespace DataAccessLayer.Repository
             return (await base.SaveChangesAsync(true, cancellationToken));
         }
     }
+
 }
