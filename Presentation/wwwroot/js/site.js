@@ -187,7 +187,7 @@ if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
     }
     arr = val;
     $('input[name$="SelectedProperty"]').each(function () {
-        if (arr.indexOf($(this).val() != -1)) {
+        if (arr.indexOf($(this).val()) != -1) {
             $(this).prop("checked", true);
         }
     });
