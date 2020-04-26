@@ -18,13 +18,13 @@ namespace DataAccessLayer.Repository
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AppDBContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : base(options)
+        public AppDBContext(DbContextOptions options) : base(options)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = new HttpContextAccessor();
         }
-
+        
         public DbSet<SubLocation> Areas { set; get; }
-        public DbSet<Comments> Comments { set; get; }
+        public DbSet<Comment> Comments { set; get; }
         public DbSet<Department> Departments { set; get; }
         public DbSet<Issue> Issues { set; get; }
         public DbSet<Item> Items { set; get; }
@@ -37,9 +37,11 @@ namespace DataAccessLayer.Repository
         public DbSet<Stage> Stages { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
-        
+        public DbSet<UserNotification> UserNotifications { set; get; }
+        public DbSet<Notification> Notifications { set; get; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

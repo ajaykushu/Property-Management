@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Comments : Log
+    public class Comment : Log
     {
-        public Comments()
+        public Comment()
         {
             Replies = new HashSet<Reply>();
         }
@@ -19,10 +19,10 @@ namespace DataEntity
         public WorkOrder WorkOrder { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
-        public string Comment { get; set; }
-
-        [Column(TypeName = "varchar(300)")]
-        public string AttachmentPath { get; set; }
+        public string CommentString { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public long CommentById { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         public ICollection<Reply> Replies { get; set; }
     }

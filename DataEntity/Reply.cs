@@ -8,10 +8,11 @@ namespace DataEntity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-
         public long CommentId { get; set; }
-        public Comments Comments { get; set; }
-        public string AttachmentPath { get; set; }
+        public Comment Comment { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public long ReplyById { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
         public string ReplyString { get; set; }

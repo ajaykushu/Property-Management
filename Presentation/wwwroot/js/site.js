@@ -180,8 +180,11 @@ $('input[name$="PrimaryProperty"]').on('change', function () {
     }
     $('.primary_span').text($(this).val());
 });
-if ($('.select-input').val() != "") {
-    var val = $('.select-input').val().split(',');
+if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
+    var val = $('.select-input').val();
+    if (val.indexOf(',') != -1) {
+       val=val.split(',')
+    }
     arr = val;
     $('input[name$="SelectedProperty"]').each(function () {
         if (arr.indexOf($(this).val() != -1)) {

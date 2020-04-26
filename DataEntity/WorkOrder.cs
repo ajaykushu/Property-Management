@@ -35,7 +35,7 @@ namespace DataEntity
         public SubLocation SubLocation { get; set; }
         public int Priority { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
-        public virtual ICollection<Comments> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<WOAttachments> WOAttachments { get; set; }
     }
 }

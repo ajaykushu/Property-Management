@@ -47,7 +47,7 @@ namespace API
                 };
             });
 
-            services.AddDbContext<AppDBContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContextPool<AppDBContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>(op =>
             {
                 op.User.RequireUniqueEmail = true;
@@ -67,7 +67,7 @@ namespace API
            {
                options.SaveToken = true;
                options.RequireHttpsMetadata = false;
-               options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+               options.TokenValidationParameters = new TokenValidationParameters()
                {
                    ValidateIssuer = true,
                    ValidateAudience = true,
@@ -77,14 +77,7 @@ namespace API
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("token").GetSection("key").Value))
                };
            });
-            services.AddAutoMapper(typeof(Startup));
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new Mappingprofile());
-            });
-
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            
             services.Configure<EmailConfigurationModel>(Configuration.GetSection("EmailConfig"));
             services.AddScoped(typeof(IRepo<>), typeof(Repo<>));
             services.AddScoped<IEmailSender, EmailSender>();
@@ -95,6 +88,7 @@ namespace API
             services.AddScoped<IImageUploadInFile, ImageUploadInFile>();
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IWorkOrderService, WorkOrderService>();
+            services.AddScoped<INotifier, Notifications>();
             services.AddSingleton<ICache, Cache>();
         }
 

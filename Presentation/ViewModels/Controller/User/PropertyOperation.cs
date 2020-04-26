@@ -19,7 +19,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> PropertyTypes { get; set; }
 
         [DisplayName("Street Address 1")]
-        [Required(ErrorMessage = "Please Enter Street")]
+       
         [StringLength(100, ErrorMessage = "Must less than 100 characters")]
         public string StreetAddress1 { set; get; }
 
@@ -31,8 +31,7 @@ namespace Presentation.ViewModels
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         public string ZipCode { set; get; }
 
-        [StringLength(50, ErrorMessage = "Must between than 50 characters")]
-        [Required(ErrorMessage = "Please Enter City")]
+        [StringLength(50, ErrorMessage = "Must less than 50 characters")]
         public string City { set; get; }
 
         [StringLength(50, ErrorMessage = "Must less than 50 characters")]

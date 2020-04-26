@@ -26,12 +26,14 @@ namespace BusinessLogic.Services
         private readonly IRepo<Department> _department;
         private readonly IRepo<WorkOrder> _workOrder;
         private readonly IRepo<Stage> _stage;
-        private readonly IRepo<Comments> _comments;
+        private readonly IRepo<Comment> _comments;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepo<SubLocation> _sublocation;
         private readonly IImageUploadInFile _imageuploadinfile;
+        private readonly INotifier _notifier;
+        public long userId;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comments> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property,INotifier notifier)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -45,6 +47,8 @@ namespace BusinessLogic.Services
             _appuser = appuser;
             _sublocation = sublocation;
             _property = property;
+            _notifier = notifier;
+            userId = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value);
         }
 
         public async Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File)
@@ -88,9 +92,7 @@ namespace BusinessLogic.Services
         public async Task<WorkOrderDetail> GetWODetail(long id)
         {
             var iteminpage = 4;
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Comments).ThenInclude(x => x.Replies).Select(x => new
-            {
-                obj = new
+            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
                           WorkOrderDetail
                 {
                     PropertyName = x.Property.PropertyName,
@@ -114,39 +116,24 @@ namespace BusinessLogic.Services
                      x.FileName,
                      string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
                      )).ToList()
-                },
-                Comment = x.Comments.OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
-                {
-                    CommentBy = x.CreatedByUserName,
-                    CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-                    CommentString = x.Comment,
-                    Id = x.Id,
-                    Reply = x.Replies.Select(x => new ReplyDTO
-                    {
-                        Id = x.Id,
-                        RepliedTo = x.RepliedTo,
-                        ReplyString = x.ReplyString,
-                        RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-                        RepliedBy = x.CreatedByUserName
-                    }).ToList()
-                }).Take(4).ToList(),
-                x.Comments.Count
             }).AsNoTracking().FirstOrDefaultAsync();
 
-            workorder.obj.Stages = _stage.GetAll().Select(x => new SelectItem
+            workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = string.Concat(x.StageCode, "(", x.StageDescription, ")")
             }).ToList();
+            var comment = await GetComment(workorder.Id, 0);
+            var count = _comments.Get(x => x.WorkOrderId == workorder.Id).Count();
             Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
             {
-                Payload = workorder.Comment,
-                ItemsPerPage = workorder.Count > iteminpage ? iteminpage : workorder.Count,
-                PageCount = workorder.Count <= iteminpage ? 1 : workorder.Count % iteminpage == 0 ? workorder.Count / iteminpage : workorder.Count / iteminpage + 1,
+                Payload = comment,
+                ItemsPerPage = count > iteminpage ? iteminpage : count,
+                PageCount = count <= iteminpage ? 1 : count % iteminpage == 0 ? count / iteminpage : count / iteminpage + 1,
                 CurrentPage = 0
             };
-            workorder.obj.Comments = pagedcomments;
-            return workorder.obj;
+            workorder.Comments = pagedcomments;
+            return workorder;
         }
 
         public async Task<CreateWO> GetCreateWOModel(long userId)
@@ -314,7 +301,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
-            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).Include(x => x.WOAttachments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).Include(x => x.WOAttachments).Include(x=>x.Comments).FirstOrDefaultAsync();
             if (wo != null)
             {
                 if (File != null)
@@ -350,23 +337,37 @@ namespace BusinessLogic.Services
                     wo.WOAttachments.Remove(woAttch);
                 }
             }
+            
             var status = await _workOrder.Update(wo);
             if (status > 0)
-            {
+            {   //add notifiaction
+                //List<long> TobeNotifiedId = new List<long>();
+                //if (!wo.CreatedByUserName.Equals(wo.UpdatedByUserName))
+                //{
+                //   var userId=  _appuser.FindByNameAsync(wo.UpdatedByUserName).Result.Id;
+                //   TobeNotifiedId.Add(userId);
+                //}
+                //////if there is comment then attach notification to workOrder
+                ////if (wo.Comments != null)
+                ////{
+                ////    //get user id wo commented
+                ////    var ids = _comments.Get(x => x.WorkOrderId == wo.Id).Include(x => x.Replies).SelectMany(x=>x.Replies).Select(x => new {x.ApplicationUserId,cid=x.Comments.ApplicationUserId}).ToListAsync();
+
+                ////}
+                //await _notifier.CreateNotification("WorkOrder Updated", TobeNotifiedId,editWorkOrder.Id, 'W');
                 return true;
             }
             return false;
         }
 
-        public async Task<List<CommentDTO>> GetPaginationComment(long workorderId, int pageNumber)
+        public async Task<List<CommentDTO>> GetComment(long workorderId, int pageNumber)
         {
             var itemsinpage = 4;
-            var count = _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Count();
             var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
             {
                 CommentBy = x.CreatedByUserName,
                 CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-                CommentString = x.Comment,
+                CommentString = x.CommentString,
                 Id = x.Id,
                 Reply = x.Replies.Select(x => new ReplyDTO
                 {
@@ -378,28 +379,22 @@ namespace BusinessLogic.Services
                 }).ToList()
             }).Skip(itemsinpage * pageNumber).Take(itemsinpage).ToListAsync();
 
-            Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
-            {
-                Payload = obj,
-                ItemsPerPage = count > itemsinpage ? itemsinpage : count,
-                PageCount = count <= itemsinpage ? 1 : count % itemsinpage == 0 ? count / itemsinpage : count / itemsinpage + 1,
-                CurrentPage = pageNumber
-            };
-
             return obj;
         }
 
         public async Task<bool> PostComment(Post post)
         {
+            
             var status = false;
             if (post != null)
             {
                 if (post.ParentId == 0)
                 {
-                    Comments comment = new Comments
+                    Comment comment = new Comment
                     {
                         WorkOrderId = post.WorkOrderId,
-                        Comment = post.Comment,
+                        CommentString = post.Comment,
+                        CommentById=userId
                     };
                     var res = await _comments.Add(comment);
                     status = res > 0 ? true : false;
@@ -415,6 +410,7 @@ namespace BusinessLogic.Services
                         {
                             ReplyString = post.Comment,
                             RepliedTo = post.RepliedTo,
+                            ReplyById=userId
                         });
                         var res = await _comments.Update(comm);
                         status = res > 0 ? true : false;
@@ -431,10 +427,12 @@ namespace BusinessLogic.Services
             if (stage != null)
             {
                 if (wo.Comments == null)
-                    wo.Comments = new List<Comments>();
-                wo.Comments.Add(new Comments
+                    wo.Comments = new List<Comment>();
+                wo.Comments.Add(new Comment
                 {
-                    Comment = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode)
+                    CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode),
+                    CommentById=userId
+                   
                 });
                 wo.StageId = stageId;
                 var status = await _workOrder.Update(wo);

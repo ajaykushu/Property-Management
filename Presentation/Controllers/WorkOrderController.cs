@@ -262,7 +262,7 @@ namespace Presentation.Controllers
             return RedirectToAction("GetWODetail", new { id = post.WorkOrderId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> WorkOrderStageChange(long Id, int stageId)
         {
             try

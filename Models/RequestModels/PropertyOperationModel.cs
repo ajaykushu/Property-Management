@@ -16,7 +16,7 @@ namespace Models.RequestModels
 
         public List<SelectItem> PropertyTypes { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Street")]
+       
         [StringLength(100, ErrorMessage = "Must less than 100 characters")]
         public string StreetAddress1 { set; get; }
 

@@ -51,7 +51,7 @@
                                 <label for="">Stage Change</label>
                             </div>
                             <div class="col">
-                                <form action="WorkOrderStageChange">
+                                <form asp-action="WorkOrderStageChange">
                                     <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))">
                                         <option value="">Select Stage</option>
                                     </select>

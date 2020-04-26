@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200426062343_Somefixs")]
+    partial class Somefixs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "8b4dead4-4927-4f28-a55b-f4f4addd72f7",
+                            ConcurrencyStamp = "26cb3ee8-dd96-441a-8028-6244c8a11d34",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "4abc0b6b-669d-4095-852a-2bbaea3a4ea1",
+                            ConcurrencyStamp = "868ad915-3db8-4035-8a22-9c1869eedc8b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "2fdcfbed-3db8-40ba-9fec-e5f1f76918a7",
+                            ConcurrencyStamp = "2ff788cb-1577-476a-931d-39f3b086609e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -191,17 +193,17 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("DataEntity.Comment", b =>
+            modelBuilder.Entity("DataEntity.Comments", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CommentById")
-                        .HasColumnType("bigint");
+                    b.Property<string>("AttachmentPath")
+                        .HasColumnType("varchar(300)");
 
-                    b.Property<string>("CommentString")
+                    b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedByUserName")
@@ -220,8 +222,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommentById");
 
                     b.HasIndex("WorkOrderId");
 
@@ -724,6 +724,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("CommentId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("CommentsId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -732,9 +735,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("RepliedTo")
                         .HasColumnType("varchar(50)");
-
-                    b.Property<long>("ReplyById")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("ReplyString")
                         .HasColumnType("nvarchar(max)");
@@ -747,9 +747,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("ReplyById");
+                    b.HasIndex("CommentsId");
 
                     b.ToTable("Replies");
                 });
@@ -1218,14 +1216,8 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataEntity.Comment", b =>
+            modelBuilder.Entity("DataEntity.Comments", b =>
                 {
-                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CommentById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("Comments")
                         .HasForeignKey("WorkOrderId")
@@ -1253,17 +1245,9 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.Reply", b =>
                 {
-                    b.HasOne("DataEntity.Comment", "Comment")
+                    b.HasOne("DataEntity.Comments", "Comments")
                         .WithMany("Replies")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ReplyById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CommentsId");
                 });
 
             modelBuilder.Entity("DataEntity.RoleMenuMap", b =>

@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200426071611_forcomet")]
+    partial class forcomet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "8b4dead4-4927-4f28-a55b-f4f4addd72f7",
+                            ConcurrencyStamp = "3e95ee59-eae3-43d9-b3a4-a0fd29bdae4e",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "4abc0b6b-669d-4095-852a-2bbaea3a4ea1",
+                            ConcurrencyStamp = "6e983dc5-0de6-42cc-ae31-4624e4266507",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "2fdcfbed-3db8-40ba-9fec-e5f1f76918a7",
+                            ConcurrencyStamp = "f8b4d303-ff63-41ae-bbc0-4fd9237ee389",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -191,18 +193,18 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("DataEntity.Comment", b =>
+            modelBuilder.Entity("DataEntity.Comments", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("CommentById")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("CommentString")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
@@ -724,6 +726,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("CommentId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("CommentsId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -747,7 +752,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentId");
+                    b.HasIndex("CommentsId");
 
                     b.HasIndex("ReplyById");
 
@@ -1218,7 +1223,7 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataEntity.Comment", b =>
+            modelBuilder.Entity("DataEntity.Comments", b =>
                 {
                     b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
                         .WithMany()
@@ -1253,11 +1258,9 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.Reply", b =>
                 {
-                    b.HasOne("DataEntity.Comment", "Comment")
+                    b.HasOne("DataEntity.Comments", "Comments")
                         .WithMany("Replies")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CommentsId");
 
                     b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
                         .WithMany()

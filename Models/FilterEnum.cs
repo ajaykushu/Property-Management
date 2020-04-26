@@ -6,23 +6,6 @@
         ByFirstName = 2
     }
 
-    public enum FilterEnumWO
-    {
-        ByDate = 1,
-        ByAssigned = 2,
-        ByStatus = 3
-    }
-
-    public enum FilterEnumWOStage
-    {
-        NA = 0,
-        OPEN = 1,
-        BIDACCEPTED = 2,
-        INPROGRESS = 3,
-        PENDINGAPPROVAL = 4,
-        COMPLETED = 5,
-    }
-
     public enum MenuEnum
     {
         Add_User = 1,

@@ -23,7 +23,7 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File);
 
-        Task<List<CommentDTO>> GetPaginationComment(long workorderId, int pageNumber);
+        Task<List<CommentDTO>> GetComment(long workorderId, int pageNumber);
 
         Task<bool> PostComment(Post post);
 

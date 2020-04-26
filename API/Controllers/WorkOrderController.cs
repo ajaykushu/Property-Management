@@ -102,7 +102,7 @@ namespace API.Controllers
         [Route("getcomment")]
         public async Task<ActionResult<List<CommentDTO>>> GetComment(long workorderId, int pageNumber)
         {
-            var res = await _workOrderService.GetPaginationComment(workorderId, pageNumber);
+            var res = await _workOrderService.GetComment(workorderId, pageNumber);
             return Ok(res);
         }
 
