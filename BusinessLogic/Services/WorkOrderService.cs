@@ -50,7 +50,7 @@ namespace BusinessLogic.Services
             _property = property;
             _notifier = notifier;
             userId = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value);
-            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https ://" : "http ://";
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
         }
 
         public async Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File)

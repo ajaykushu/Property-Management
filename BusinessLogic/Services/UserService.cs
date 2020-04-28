@@ -39,7 +39,7 @@ namespace BusinessLogic.Services
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
             _department = department;
-            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https ://" : "http ://";
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
         }
 
         public async Task<bool> RegisterUser(RegisterUser model)

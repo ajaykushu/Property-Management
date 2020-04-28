@@ -23,7 +23,7 @@ namespace Presentation.Utility
         {
             _httpClient = httpClient.CreateClient();
             _httpContextAccessor = httpContextAccessor;
-            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps? "https ://" : "http ://";
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps? "https://" : "http://";
         }
 
         public async Task<HttpResponseMessage> GetDataAsync(string url, Controller controller, string token = null)
