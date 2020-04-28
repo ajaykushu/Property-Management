@@ -24,6 +24,7 @@ namespace API.Authentication
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
         private readonly IUserService _user;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private string _scheme;
 
         public User(UserManager<ApplicationUser> userManager, ITokenGenerator tokenGenerator, IEmailSender emailSender,
                IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor)
@@ -34,6 +35,7 @@ namespace API.Authentication
             _roleMenuMap = roleMenuMap;
             _user = user;
             _httpContextAccessor = httpContextAccessor;
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
         }
 
         public async Task<bool> GetPasswordChangeTokenAsync(string email, string verificationPath)
@@ -120,7 +122,7 @@ namespace API.Authentication
                         Roles = roles.ToHashSet(),
                         Token = _tokenGenerator.GetToken(claims),
                         MenuItems = submenu,
-                        PhotoPath = "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath
+                        PhotoPath = _scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath
                     };
                 }
             }
