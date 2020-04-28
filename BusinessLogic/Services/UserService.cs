@@ -26,6 +26,7 @@ namespace BusinessLogic.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
+        private string _scheme;
 
         public UserService(UserManager<ApplicationUser> userManager,
               RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department)
@@ -38,6 +39,7 @@ namespace BusinessLogic.Services
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
             _department = department;
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https ://" : "http ://";
         }
 
         public async Task<bool> RegisterUser(RegisterUser model)
@@ -274,7 +276,7 @@ namespace BusinessLogic.Services
                     EmailAddress = x.Email,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
-                    PhotoPath = string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.PhotoPath),
+                    PhotoPath = string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.PhotoPath),
                     ListProperties = x.UserProperties.Select(x => new PropertiesModel
                     {
                         Id = x.Property.Id,

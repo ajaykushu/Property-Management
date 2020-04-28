@@ -17,11 +17,13 @@ namespace Presentation.Utility
     {
         private readonly HttpClient _httpClient;
         public readonly IHttpContextAccessor _httpContextAccessor;
+        private  string _scheme;
 
         public HttpHelper(IHttpClientFactory httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient.CreateClient();
             _httpContextAccessor = httpContextAccessor;
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps? "https ://" : "http ://";
         }
 
         public async Task<HttpResponseMessage> GetDataAsync(string url, Controller controller, string token = null)
@@ -110,13 +112,13 @@ namespace Presentation.Utility
             {
                 controller.TempData["Error"] = "Please Login";
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
-                _httpContextAccessor.HttpContext.Response.Redirect("https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/Login/LogOut");
+                _httpContextAccessor.HttpContext.Response.Redirect(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/Login/LogOut");
             }
             else if (message.StatusCode == HttpStatusCode.Forbidden)
             {
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
                 _httpContextAccessor.HttpContext.Response.Redirect(
-                    "https://" + _httpContextAccessor.HttpContext.Request.Host.Value + "/Home/Forbidden");
+                   _scheme + _httpContextAccessor.HttpContext.Request.Host.Value + " /Home/Forbidden");
             }
             else if (message.StatusCode == HttpStatusCode.InternalServerError)
             {
@@ -130,24 +132,5 @@ namespace Presentation.Utility
         {
             return JsonConvert.SerializeObject(toBeSerializedObj);
         }
-
-        //public  void SendByte(object data, IFormFile file)
-        //{
-        //    using (MemoryStream ms = new MemoryStream())
-        //    {
-        //        file.CopyTo(ms);
-
-        //        MultipartFormDataContent multipartFormDataContent = new MultipartFormDataContent();
-        //        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //        BinaryReader reader = new BinaryReader(file.OpenReadStream());
-        //        var imagebytes = reader.ReadBytes((int)file.Length);
-        //        multipartFormDataContent.Add(new ByteArrayContent(imagebytes), "files", file.FileName);
-        //        ByteArrayContent x = new ByteArrayContent(ms.ToArray());
-        //        multipartFormDataContent.Add(x);
-
-        //        multipartFormDataContent.Add(new StringContent(SerializeToString(data),Encoding.UTF8,"application/json"),"model");
-        //       var res= _httpClient.PostAsync("https://localhost:44302/api/workorder/test",multipartFormDataContent).Result;
-
-        //    }
     }
 }

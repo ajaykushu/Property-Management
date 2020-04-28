@@ -16,21 +16,21 @@
                     <tr>
                         <td>
                             <div class="col">
-                        
-                            @if (Model.Properties != null)
-                            {
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label asp-for="PropertyId"> </label>
+
+                                @if (Model.Properties != null)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label asp-for="PropertyId"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm custom-input" asp-for="PropertyId" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
+                                                <option value="">Please select Property</option>
+                                            </select>
+                                            <span asp-validation-for="PropertyId" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="PropertyId" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
-                                            <option value="">Please select Property</option>
-                                        </select>
-                                        <span asp-validation-for="PropertyId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                             }
+                                }
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
                                         <label asp-for="LocationId"> </label>
@@ -61,9 +61,9 @@
                                         <span asp-validation-for="SubLocationId" class="text-danger"></span>
                                     </div>
                                 </div>
-                                </div>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <div class="col">
@@ -178,8 +178,10 @@
                     </tr>
                 </tbody>
             </table>
-
             <hr />
+            <div class="progress" style="margin-bottom:10px;display:none;">
+                <div class="progress-bar" style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
             <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-primary submit">Create</button>
             <input type="reset" class="btn btn-sm btn-danger" value="Reset" name="reset">
             @*passing data to controller*@

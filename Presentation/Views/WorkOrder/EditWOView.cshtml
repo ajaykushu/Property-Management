@@ -212,7 +212,7 @@
             if (val == "" || val == undefined)
                 $('#FilesRemoved').val(e.target.name)
             else
-                $('#FilesRemoved').val(',' + e.target.name)
+                $('#FilesRemoved').val(val+',' + e.target.name)
              e.target.remove();
 
         }

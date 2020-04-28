@@ -84,7 +84,8 @@ namespace API.Authentication
                     FirstName = "Test",
                     LastName = "Last",
                     Language = 1,
-                    Role = "MASTER ADMIN",
+                    Role = "MASTER ADMIN",DepartmentId=1,
+                    
                     Password = "Testuser123@",
                     TimeZone = "India +5:30",
                     File = null,

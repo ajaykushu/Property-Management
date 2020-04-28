@@ -32,6 +32,7 @@ namespace BusinessLogic.Services
         private readonly IImageUploadInFile _imageuploadinfile;
         private readonly INotifier _notifier;
         public long userId;
+        private string _scheme;
 
         public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property,INotifier notifier)
         {
@@ -49,6 +50,7 @@ namespace BusinessLogic.Services
             _property = property;
             _notifier = notifier;
             userId = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value);
+            _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https ://" : "http ://";
         }
 
         public async Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File)
@@ -114,7 +116,7 @@ namespace BusinessLogic.Services
                     SubLocation = x.SubLocation.AreaName,
                     Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
                      x.FileName,
-                     string.Concat("https://", _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                     string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
                      )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
 
@@ -340,21 +342,7 @@ namespace BusinessLogic.Services
             
             var status = await _workOrder.Update(wo);
             if (status > 0)
-            {   //add notifiaction
-                //List<long> TobeNotifiedId = new List<long>();
-                //if (!wo.CreatedByUserName.Equals(wo.UpdatedByUserName))
-                //{
-                //   var userId=  _appuser.FindByNameAsync(wo.UpdatedByUserName).Result.Id;
-                //   TobeNotifiedId.Add(userId);
-                //}
-                //////if there is comment then attach notification to workOrder
-                ////if (wo.Comments != null)
-                ////{
-                ////    //get user id wo commented
-                ////    var ids = _comments.Get(x => x.WorkOrderId == wo.Id).Include(x => x.Replies).SelectMany(x=>x.Replies).Select(x => new {x.ApplicationUserId,cid=x.Comments.ApplicationUserId}).ToListAsync();
-
-                ////}
-                //await _notifier.CreateNotification("WorkOrder Updated", TobeNotifiedId,editWorkOrder.Id, 'W');
+            {  
                 return true;
             }
             return false;

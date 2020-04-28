@@ -50,7 +50,6 @@ namespace Presentation
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseExceptionHandler("/Home/Error");
             }
             else
             {
@@ -59,7 +58,7 @@ namespace Presentation
             }
 
             app.UseSession();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseRouting();
             app.UseStaticFiles();

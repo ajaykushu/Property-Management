@@ -4,6 +4,25 @@
 // Write your JavaScript code.
 function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_callback, token, enctype) {
     $.ajax({
+        xhr: function () {
+            var xhr = new window.XMLHttpRequest();
+
+            xhr.upload.addEventListener("progress", function (evt) {
+                $('.progress').show();
+                if (evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    percentComplete = parseInt(percentComplete * 100);
+                    $('.progress-bar').css("width", percentComplete+'%')
+                    if (percentComplete === 100) {
+                        $('.progress').hide();
+                        $('.progress-bar').css("width",'0%')
+                    }
+
+                }
+            }, false);
+
+            return xhr;
+        },
         url: url,
         type: method,
         cache: true,
@@ -45,7 +64,6 @@ $('.Photo').change(function (e) {
         var src = "";
         reader.onload = e => {
             src = e.target.result;
-            console.log(src);
             $(".photo_disp img").prop("src", src);
         };
         reader.readAsDataURL(file);
@@ -197,3 +215,8 @@ if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
         }
     });
 }
+
+$('img').on('error', function () {
+    $(this).prop("src", "../NA.jpg")
+    $(this).unbind();
+});
