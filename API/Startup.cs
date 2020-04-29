@@ -107,7 +107,7 @@ namespace API
             {
                 options.UseMiddleware<ExceptionHandlerMiddlerwarecs>();
             });
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(

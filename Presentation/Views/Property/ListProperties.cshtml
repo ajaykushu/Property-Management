@@ -7,13 +7,8 @@
 @if (Model != null)
 {
     <p>
-        <auth-link bclass="btn btn-sm btn-success addmodal" feature=@MenuEnum.Add_Property data-toggle="modal" data-target=".bd-example-modal-lg" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'></auth-link>
-        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                </div>
-            </div>
-        </div>
+        <auth-link bclass="btn btn-sm btn-success addmodal" action="AddPropertyView" controller="Property" feature=@MenuEnum.Add_Property  content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'></auth-link>
+        
     </p>
     <div class="new_address_css">
         @if (Model == null || !Model.Any())
@@ -45,7 +40,7 @@
                             }
                             else
                             {
-                                <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature=@MenuEnum.Act_Deact_Property routedata=@keyValuePairs action="ActDeactProperty" controller="Property" content="<i class='fas fa-toggle-off fa-1x'></i>"></auth-link></li>
+                                <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature=@MenuEnum.Act_Deact_Property routedata=@keyValuePairs action="ActDeactProperty" controller="Property" content="<i style='color:red' class='fas fa-toggle-off fa-1x'></i>"></auth-link></li>
 
                             }
                         </ul>
@@ -67,40 +62,9 @@
         }
     </div>
 }
-<div class="spinner">
-    <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
-</div>
 
-<script>
-    $('.addmodal').click(function () {
-        var url = '@Url.Action("action")';
-        url = url.replace("action", 'AddPropertyView');
 
-                $('.modal-content').html("");
-                $('.fa-spin').show();
-                RESTCALL(url, {}, "GET", "", true, function (res) {
-                    $('.modal-content').html(res);
-                    $('.fa-spin').hide();
-                })
-    })
-</script>
-<style>
-    .new_address_css {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin-right: 10px;
-        padding-left: 0px;
-        padding-right: 5px;
-    }
 
-        .new_address_css .propetry {
-            flex: 1 1 auto;
-            border: 1px blue solid;
-            text-align: center;
-            margin-right: 10px;
-        }
-</style>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";

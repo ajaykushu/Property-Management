@@ -17,7 +17,7 @@ namespace Presentation.Utility
     {
         private readonly HttpClient _httpClient;
         public readonly IHttpContextAccessor _httpContextAccessor;
-        private  string _scheme;
+        private readonly string _scheme;
 
         public HttpHelper(IHttpClientFactory httpClient, IHttpContextAccessor httpContextAccessor)
         {
@@ -118,7 +118,7 @@ namespace Presentation.Utility
             {
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)message.StatusCode;
                 _httpContextAccessor.HttpContext.Response.Redirect(
-                   _scheme + _httpContextAccessor.HttpContext.Request.Host.Value + " /Home/Forbidden");
+                   _scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/Home/Forbidden");
             }
             else if (message.StatusCode == HttpStatusCode.InternalServerError)
             {

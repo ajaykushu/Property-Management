@@ -15,7 +15,7 @@
     </div>
     @if (Model != null)
     {
-<form asp-action="Register" asp-controller="User" class="adduser">
+<form asp-action="Register" asp-controller="User" id="adduser">
     <div class="table_container">
         <table class="table">
             <tbody>
@@ -62,10 +62,10 @@
                                 <div class="col">
                                     @if (Model.Roles.Any())
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="Role" class="text-danger"></span>
+                                    <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="Role" class="text-danger"></span>
                                     }
                                 </div>
                             </div>
@@ -76,10 +76,10 @@
                                 <div class="col">
                                     @if (Model.Departments != null && Model.Departments.Any())
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                     }
                                 </div>
                             </div>
@@ -96,10 +96,10 @@
                                 <div class="col">
                                     @if (Model.TimeZones.Any())
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="TimeZone" class="text-danger"></span>
+                                    <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="TimeZone" class="text-danger"></span>
                                     }
                                 </div>
                             </div>
@@ -143,10 +143,10 @@
                                 <div class="col">
                                     @if (Model.Languages.Any())
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="Language" asp-items="@(new SelectList(Model.Languages, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
-                                        </select>
-                                        <span asp-validation-for="Language" class="text-danger"></span>
+                                    <select class="form-control form-control-sm custom-input" asp-for="Language" asp-items="@(new SelectList(Model.Languages, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="Language" class="text-danger"></span>
                                     }
                                 </div>
                             </div>
@@ -165,23 +165,24 @@
                                 <div class="col">
                                     @if (Model.Properties.Any())
                                     {
-                                        <input class="custom-input select-input" disabled value="@if (Model.SelectedProperty != null)
+                                    <input class="custom-input select-input" disabled value="@if (Model.SelectedProperty != null)
                                             {<text>@string.Join(",", Model.SelectedProperty)</text>}" placeholder="Select Property">
-                                        <div class="multiple-select-box">
-                                            @foreach (var option in Model.Properties)
+                                    <div class="multiple-select-box">
+                                        @foreach (var option in Model.Properties)
                                             {
-                                                <div class="option">
-                                                    <div class="d-inline-block options">
-                                                        <input name="SelectedProperty" value="@option.PropertyName" type="checkbox">
-                                                        <label class="x"></label>
-                                                        &nbsp;<input name="PrimaryProperty" value="@option.PropertyName" type="radio">
-                                                        &nbsp;<span>@option.PropertyName</span>
-                                                    </div>
-                                                </div>
+                                        <div class="option">
+                                            <div class="d-inline-block options">
+                                                <input name="SelectedProperty" value="@option.PropertyName" type="checkbox">
+                                                <label class="x"></label>
+                                                &nbsp;<input name="PrimaryProperty" value="@option.PropertyName" type="radio">
+                                                &nbsp;<span>@option.PropertyName</span>
+                                            </div>
+                                        </div>
 
                                             }
-                                        </div>
+                                    </div>
                                     }
+                                    <span  class="text-info">select radio for primary property</span>
                                     <span asp-validation-for="SelectedProperty" class="text-danger"></span>
                                 </div>
                             </div>
@@ -239,17 +240,11 @@
         </table>
     </div>
     <hr />
-    <div class="progress" style="margin-bottom:10px;display:none;">
-        <div class="progress-bar" style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-    <button type="submit" class="btn btn-sm btn-primary submit">Add User&nbsp;<i class="fa fa-spinner fa-1x fa-spin"></i></button>
+    <button type="submit" class="btn btn-sm btn-primary submit">Add User</button>
     <input type="reset" class="btn btn-sm btn-danger" value="Reset" name="reset">
 </form>
     }
 </div>
-
-
-    <div>
-        <a asp-action="GetAllUsers">Back</a>
-    </div>
-
+<div>
+    <a asp-action="GetAllUsers">Back</a>
+</div>

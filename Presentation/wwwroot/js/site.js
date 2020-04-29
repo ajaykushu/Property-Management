@@ -5,19 +5,20 @@
 function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_callback, token, enctype) {
     $.ajax({
         xhr: function () {
+            enablespiner();
             var xhr = new window.XMLHttpRequest();
-
             xhr.upload.addEventListener("progress", function (evt) {
                 $('.progress').show();
+                $("form :input").prop("disabled", true);
                 if (evt.lengthComputable) {
                     var percentComplete = evt.loaded / evt.total;
                     percentComplete = parseInt(percentComplete * 100);
-                    $('.progress-bar').css("width", percentComplete+'%')
+                    $('.progress-bar').css("width", percentComplete + '%')
+                    $('.progress-bar').text(percentComplete + '%');
                     if (percentComplete === 100) {
                         $('.progress').hide();
                         $('.progress-bar').css("width",'0%')
                     }
-
                 }
             }, false);
 
@@ -90,26 +91,7 @@ $('#CreationEndDate').change(function () {
     $('#CreationStartDate').prop("max", $('#EndDate').val());
 })
 
-$('#wocreate').submit(function (e) {
-    e.preventDefault();
-    var url = $(this).attr('action');
-    var form = $(this).serialize();
-    var formData = new FormData(this);
-    if ($(this).valid()) {
-        $('.fa-spinner').prop("hidden", false);
-        RESTCALL(url, formData, 'POST', false, false, function (res) {
-            alertify.alert('Info', '<p>' + res + '</p>', function () {
-                $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
-                $("input[type=reset]").click();
-            });
-        }, function (res) {
-            $('.fa-spinner').prop("hidden", true);
-            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                $("input[type=password]").val("");
-            });
-        }, "");
-    }
-});
+
 $('input[type="reset"]').click(function (e) {
     $('.wofilter :input').each(function (x) {
         var node = $('.wofilter :input')[x];
@@ -123,54 +105,9 @@ $('input[type="reset"]').click(function (e) {
     $('#Status').val("");
     $('.browsebutton')[0].innerText = "Browse";
     $('#Priority').val("");
-    $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     $('input[type="submit"]').click();
     $('.primary_span').text("");
 })
-
-$('.adduser').submit(function (e) {
-    e.preventDefault();
-    var url = $(this).attr('action');
-    var form = $(this).serialize();
-    var formData = new FormData(this);
-    if ($(this).valid()) {
-        $('.fa-spinner').prop("hidden", false);
-        RESTCALL(url, formData, 'POST', false, false, function (res) {
-            alertify.alert('Info', '<p>' + res + '</p>', function () {
-                $("input[type=reset]").click();
-            });
-
-        }, function (res) {
-            $('.fa-spinner').prop("hidden", true);
-            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                $("input[type=password]").val("");
-            });
-
-        }, "");
-    }
-});
-
-$('.edituser').submit(function (e) {
-    e.preventDefault();
-    var url = $(this).attr('action');
-    var form = $(this).serialize();
-    var formData = new FormData(this);
-    if ($(this).valid()) {
-        $('.fa-spinner').prop("hidden", false);
-        RESTCALL(url, formData, 'POST', false, false, function (res) {
-            $('.fa-spinner').prop("hidden", true);
-            alertify.alert('Info', '<p>' + res + '</p>', function () {
-                location.reload();
-            });
-        }, function (res) {
-            $('.fa-spinner').prop("hidden", true);
-            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                $(this).find("input[type=password]").val("");
-            });
-        }, "", "multipart/form-data");
-
-    }
-});
 
 var arr = [];
 $('input[name$="SelectedProperty"]').on('change', function () {
@@ -220,3 +157,96 @@ $('img').on('error', function () {
     $(this).prop("src", "../NA.jpg")
     $(this).unbind();
 });
+var msg=null
+function enablespiner() {
+     msg= alertify.message("<div class='progress' style='margin-bottom:10px;display:none'> <div class='progress-bar' style='width:0%' role='progressbar' aria-valuemin='0' aria-valuemax='100'></div></div>" +
+        "<div style='display:-webkit-box'>Processing &nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
+}
+function disablespinner() {
+    msg.dismiss();
+}
+
+
+//$('.addprop').submit(function (e) {
+//    e.preventDefault();
+//    var url = $(this).attr('action');
+//    var form = $(this).serialize();
+//    if ($(this).valid()) {
+//        RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', false, function (res) {
+//            alertify.alert('Info', '<p>' + res + '</p>', function () {
+//                disablespinner();
+//                $("input[type=text]").val("");
+//                $('select').prop('selectedIndex', 0);
+//            });
+          
+//        }, function (res) {
+//                disablespinner();
+//            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+//            });
+
+//        }, "");
+//    }
+//});
+
+//$('.edituser').submit(function (e) {
+//    e.preventDefault();
+//    var url = $(this).attr('action');
+//    var form = $(this).serialize();
+//    var formData = new FormData(this);
+//    if ($(this).valid()) {
+//        RESTCALL(url, formData, 'POST', false, false, function (res) {
+//            disablespinner();
+//            alertify.alert('Info', '<p>' + res + '</p>', function () {
+//            location.reload();
+//            });
+//        }, function (res) {
+//            disablespinner();
+//            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+//                $(this).find("input[type=password]").val("");
+//                $("form :input").prop("disabled", true);
+//            });
+//        }, "");
+
+//    }
+//});
+$('#adduser, #wocreate, #addprop').submit(function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    var formData = new FormData(this);
+    if ($(this).valid()) {
+        RESTCALL(url, formData, 'POST', false, false, function (res) {
+            disablespinner();
+            alertify.alert('Info', '<p>' + res + '</p>', function () {
+                $("input[type=reset]").click();
+                $("form :input").prop("disabled", false);
+            });
+
+        }, function (res) {
+            disablespinner();
+            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                $("input[type=password]").val("");
+                $("form :input").prop("disabled", false);
+            });
+
+        }, "");
+    }
+});
+//$('#wocreate').submit(function (e) {
+//    e.preventDefault();
+//    var url = $(this).attr('action');
+//    var form = $(this).serialize();
+//    var formData = new FormData(this);
+//    if ($(this).valid()) {
+//        RESTCALL(url, formData, 'POST', false, false, function (res) {
+//            alertify.alert('Info', '<p>' + res + '</p>', function () {
+//                $("input[type=reset]").click();
+//                $("form :input").prop("disabled", true);
+//            });
+//        }, function (res) {
+//            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+//                $("input[type=password]").val("");
+//                $("form :input").prop("disabled", true);
+//            });
+//        }, "");
+//    }
+//});

@@ -24,7 +24,7 @@ namespace API.Authentication
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
         private readonly IUserService _user;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private string _scheme;
+        private readonly string _scheme;
 
         public User(UserManager<ApplicationUser> userManager, ITokenGenerator tokenGenerator, IEmailSender emailSender,
                IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor)

@@ -93,7 +93,7 @@ namespace BusinessLogic.Services
                        ZipCode = x.Property.ZipCode,
                        PropertyName = x.Property.PropertyName,
                        PropertyType = x.Property.PropertyTypes.PropertyTypeName,
-                       StreetAddress1 = x.Property.StreetAddress2,
+                       StreetAddress1 = x.Property.StreetAddress1,
                        State = x.Property.State,
                        IsActive = x.Property.IsActive
                    }
@@ -118,7 +118,7 @@ namespace BusinessLogic.Services
                        ZipCode = x.ZipCode,
                        PropertyName = x.PropertyName,
                        PropertyType = x.PropertyTypes.PropertyTypeName,
-                       StreetAddress1 = x.StreetAddress2,
+                       StreetAddress1 = x.StreetAddress1,
                        State = x.State,
                        IsActive = x.IsActive
                    }

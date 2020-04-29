@@ -26,7 +26,7 @@ namespace BusinessLogic.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
-        private string _scheme;
+        private  readonly string _scheme;
 
         public UserService(UserManager<ApplicationUser> userManager,
               RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department)

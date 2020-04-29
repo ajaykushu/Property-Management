@@ -32,7 +32,7 @@ namespace BusinessLogic.Services
         private readonly IImageUploadInFile _imageuploadinfile;
         private readonly INotifier _notifier;
         public long userId;
-        private string _scheme;
+        private readonly string _scheme;
 
         public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property,INotifier notifier)
         {

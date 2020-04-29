@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,6 +36,7 @@ namespace Presentation
             {
                 opts.IdleTimeout = TimeSpan.FromMinutes(5);
             });
+            
             services.Configure<RouteConstModel>(Configuration.GetSection("ApiRoutes"));
             services.Configure<MenuMapperModel>(Configuration.GetSection("SubMenuMapper"));
             services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
