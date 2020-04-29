@@ -76,13 +76,15 @@ namespace BusinessLogic.Services
                 {
                     string path = await _imageuploadinfile.UploadAsync(item);
                     if (path != null)
+                    {
                         if (workOrder.WOAttachments == null)
                             workOrder.WOAttachments = new List<WOAttachments>();
-                    workOrder.WOAttachments.Add(new WOAttachments
-                    {
-                        FileName = item.FileName,
-                        FilePath = path
-                    });
+                        workOrder.WOAttachments.Add(new WOAttachments
+                        {
+                            FileName = item.FileName,
+                            FilePath = path
+                        });
+                    }
                 }
             }
 
@@ -274,7 +276,8 @@ namespace BusinessLogic.Services
                           DueDate = x.DueDate,
                           LocationId = x.LocationId.GetValueOrDefault(),
                           SubLocationId = x.SubLocationId.GetValueOrDefault(),
-                          FileAvailable = x.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName, x.FilePath)).ToList()
+                          FileAvailable = x.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
+                           string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList()
                       }
             ).AsNoTracking().FirstOrDefaultAsync();
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
@@ -312,12 +315,15 @@ namespace BusinessLogic.Services
                     {
                         var path = await _imageuploadinfile.UploadAsync(item);
                         if (path != null)
-                            if (wo.WOAttachments == null) wo.WOAttachments = new List<WOAttachments>();
-                        wo.WOAttachments.Add(new WOAttachments
                         {
-                            FileName = item.FileName,
-                            FilePath = path
-                        });
+                            if (wo.WOAttachments == null) wo.WOAttachments = new List<WOAttachments>();
+                            wo.WOAttachments.Add(new WOAttachments
+                            {
+                                FileName = item.FileName,
+                                FilePath = path
+                            });
+
+                        }
                     }
                 }
                 wo.Description = editWorkOrder.Description;
@@ -334,8 +340,9 @@ namespace BusinessLogic.Services
                 var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
                 foreach (var item in remove)
                 {
-                    _imageuploadinfile.Delete(item);
-                    var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(item)).FirstOrDefault();
+                    var tempurl=item.Replace(_scheme+_httpContextAccessor.HttpContext.Request.Host.Value+"/", "");
+                    _imageuploadinfile.Delete(tempurl);
+                    var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
                     wo.WOAttachments.Remove(woAttch);
                 }
             }

@@ -56,6 +56,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("createwo")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
+        [RequestSizeLimit(524288000)]
         public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO, List<IFormFile> File)
         {
             var status = await _workOrderService.CreateWO(createWO, File);
