@@ -101,6 +101,8 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     registerrequest = JsonConvert.DeserializeObject<RegisterUser>(await response.Content.ReadAsStringAsync());
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
             }
             catch (Exception)
             {

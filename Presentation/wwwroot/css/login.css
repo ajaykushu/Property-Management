@@ -172,7 +172,11 @@ th {
     padding-right: 10px;
     padding-bottom: 10px;
 }
-
+@media only screen and (max-width:250px){
+    .custom-input{
+        width:159px !important;
+    }
+}
 @media only screen and (max-width: 580px) {
     .usersview, .wordorderdetail, .usersview tbody, .wordorderdetail tbody, .usersview th, .wordorderdetail th, .usersview td, .wordorderdetail td, .usersview tr, .wordorderdetail tr {
         display: block;
@@ -241,6 +245,15 @@ th {
     .wordorderdetail td:nth-of-type(5):before {
         content: "Due Date";
     }
+    #search {
+        min-width:200px;
+        margin-top:6px;
+        margin-bottom:6px;
+    }
+    .cont{
+        margin-top:2px;
+    }
+   
 }
 /*end todo*/
 /* work order add*/
@@ -517,7 +530,8 @@ label {
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-        background: #b30000;
+        background: rgb(61, 137, 211);
+        cursor:pointer;
     }
 
     /*Property css*/

@@ -7,6 +7,7 @@ using Presentation.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -157,6 +158,7 @@ namespace Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> EditWO(EditWorkOrder editWorkOrder)
         {
+            string msg = String.Empty;
             if (ModelState.IsValid)
             {
                 try
@@ -165,29 +167,26 @@ namespace Presentation.Controllers
                     var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, editWorkOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        bool status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
-                        if (status)
-                        {
-                            TempData["Success"] = "Successfully Updated";
-                            return RedirectToAction("GetWODetail", new { id = editWorkOrder.Id });
-                        }
+                        if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                            return Ok(StringConstants.SuccessUpdate);
                         else
-                        {
-                            TempData["Error"] = "Unable to Update";
-                        }
+                            return Ok(StringConstants.UpdateFailed);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                        return BadRequest(await response.Content.ReadAsStringAsync());
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
+                    else
+                        return StatusCode(500, StringConstants.Error);
                 }
                 catch (Exception)
                 {
-                    TempData["Error"] = StringConstants.Error;
+                    msg = StringConstants.Error;
                 }
             }
             else
-            {
-                var msg = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
-                TempData["Error"] = msg;
-            }
-            return RedirectToAction("EditWOView", new { id = editWorkOrder.Id });
+                msg = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
+            return BadRequest(msg);
         }
 
         [HttpPost]
@@ -209,6 +208,8 @@ namespace Presentation.Controllers
                         else
                             return BadRequest("Unable To Create");
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
                 }
                 catch (Exception)
                 {

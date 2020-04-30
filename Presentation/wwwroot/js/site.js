@@ -9,7 +9,6 @@ function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_
             var xhr = new window.XMLHttpRequest();
             xhr.upload.addEventListener("progress", function (evt) {
                 $('.progress').show();
-                $("form :input").prop("disabled", true);
                 if (evt.lengthComputable) {
                     var percentComplete = evt.loaded / evt.total;
                     percentComplete = parseInt(percentComplete * 100);
@@ -103,7 +102,8 @@ $('input[type="reset"]').click(function (e) {
     $("img").prop("src", "");
     $('.photo_disp').hide();
     $('#Status').val("");
-    $('.browsebutton')[0].innerText = "Browse";
+    if($('.browsebutton')[0]!= undefined)
+            $('.browsebutton')[0].innerText = "Browse";
     $('#Priority').val("");
     $('input[type="submit"]').click();
     $('.primary_span').text("");
@@ -167,86 +167,53 @@ function disablespinner() {
 }
 
 
-//$('.addprop').submit(function (e) {
-//    e.preventDefault();
-//    var url = $(this).attr('action');
-//    var form = $(this).serialize();
-//    if ($(this).valid()) {
-//        RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', false, function (res) {
-//            alertify.alert('Info', '<p>' + res + '</p>', function () {
-//                disablespinner();
-//                $("input[type=text]").val("");
-//                $('select').prop('selectedIndex', 0);
-//            });
-          
-//        }, function (res) {
-//                disablespinner();
-//            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-//            });
 
-//        }, "");
-//    }
-//});
-
-//$('.edituser').submit(function (e) {
-//    e.preventDefault();
-//    var url = $(this).attr('action');
-//    var form = $(this).serialize();
-//    var formData = new FormData(this);
-//    if ($(this).valid()) {
-//        RESTCALL(url, formData, 'POST', false, false, function (res) {
-//            disablespinner();
-//            alertify.alert('Info', '<p>' + res + '</p>', function () {
-//            location.reload();
-//            });
-//        }, function (res) {
-//            disablespinner();
-//            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-//                $(this).find("input[type=password]").val("");
-//                $("form :input").prop("disabled", true);
-//            });
-//        }, "");
-
-//    }
-//});
 $('#adduser, #wocreate, #addprop').submit(function (e) {
     e.preventDefault();
     var url = $(this).attr('action');
     var formData = new FormData(this);
+   
     if ($(this).valid()) {
+        $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             disablespinner();
+            $("form :input").prop("disabled", false);
             alertify.alert('Info', '<p>' + res + '</p>', function () {
                 $("input[type=reset]").click();
+            });
+
+        }, function (res) {
+                disablespinner();
+                $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
+            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+            });
+
+        },"");
+    }
+});
+$('#edituser, #editwo').submit(function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    var formData = new FormData(this);
+
+    if ($(this).valid()) {
+        $("form :input").prop("disabled", true);
+        RESTCALL(url, formData, 'POST', false, false, function (res) {
+            disablespinner();
+            $("form :input").prop("disabled", false);
+            alertify.alert('Info', '<p>' + res + '</p>', function () {
+                location.reload();
             });
 
         }, function (res) {
             disablespinner();
-            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                $("input[type=password]").val("");
-                $("form :input").prop("disabled", false);
+            $("input[type=password]").val("");
+            $("form :input").prop("disabled", false);
+                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    location.reload();
             });
 
         }, "");
     }
 });
-//$('#wocreate').submit(function (e) {
-//    e.preventDefault();
-//    var url = $(this).attr('action');
-//    var form = $(this).serialize();
-//    var formData = new FormData(this);
-//    if ($(this).valid()) {
-//        RESTCALL(url, formData, 'POST', false, false, function (res) {
-//            alertify.alert('Info', '<p>' + res + '</p>', function () {
-//                $("input[type=reset]").click();
-//                $("form :input").prop("disabled", true);
-//            });
-//        }, function (res) {
-//            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-//                $("input[type=password]").val("");
-//                $("form :input").prop("disabled", true);
-//            });
-//        }, "");
-//    }
-//});

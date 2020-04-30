@@ -62,6 +62,8 @@ namespace Presentation.Controllers
                         return Ok(StringConstants.SuccessSaved);
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
                     else
                         return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
                 }
