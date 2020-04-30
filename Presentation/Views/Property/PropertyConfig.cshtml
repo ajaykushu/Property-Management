@@ -20,7 +20,6 @@
                                         <label for="Locations">Location Available</label>
                                     </div>
                                     <div class="col">
-
                                         <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
                                             <option value="">Please select one</option>
                                         </select>
@@ -83,6 +82,15 @@
                          $("#SubLocation").val(string)
                     }
                 });
+    })
+    $("#SubLocation").change(function (e) {
+        if ($(this).val().indexOf(',') == $(this).val().length - 1) {
+            alert("Please remove ',' from the end of the Sub-Locations");
+            $("input[type='submit']").prop("disabled", true);
+        }
+        else {
+            $("input[type='submit']").prop("disabled", false);
+        }
     })
 </script>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))

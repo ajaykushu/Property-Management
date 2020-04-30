@@ -177,6 +177,11 @@ th {
         width:159px !important;
     }
 }
+@media only screen and (max-width:200px) {
+    .custom-input {
+        width: 127px !important;
+    }
+}
 @media only screen and (max-width: 580px) {
     .usersview, .wordorderdetail, .usersview tbody, .wordorderdetail tbody, .usersview th, .wordorderdetail th, .usersview td, .wordorderdetail td, .usersview tr, .wordorderdetail tr {
         display: block;

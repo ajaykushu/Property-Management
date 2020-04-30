@@ -197,25 +197,6 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        //public async Task<bool> MarkPrimary(long Id, long userId)
-        //{
-        //    var user = await _user.Get(x => x.Id == userId).Include(x => x.UserProperties).FirstOrDefaultAsync();
-        //    if (user != null && user.UserProperties != null)
-        //    {
-        //        foreach (var property in user.UserProperties)
-        //        {
-        //            if (property.PropertyId == Id)
-        //                property.IsPrimary = true;
-        //            else
-        //                property.IsPrimary = false;
-        //        }
-        //        var updatestatus = await _user.Update(user);
-        //        if (updatestatus > 0)
-        //            return true;
-        //    }
-
-        //    return false;
-        //}
 
         public async Task<bool> CheckProperty(string propertyName)
         {
@@ -242,6 +223,11 @@ namespace BusinessLogic.Services
 
         public async Task<bool> SavePropertyConfig(PropertyConfig propertyConfig)
         {
+            if (string.IsNullOrWhiteSpace(propertyConfig.NewLocation) && !propertyConfig.LocationId.HasValue)
+            {
+                throw new BadRequestException("Choose Location or Enter New Location");
+            }
+
             var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
             HashSet<string> areas = null;
             if (!string.IsNullOrWhiteSpace(propertyConfig.SubLocation))
@@ -249,26 +235,39 @@ namespace BusinessLogic.Services
                 if (propertyConfig.SubLocation.Contains(','))
                     areas = propertyConfig.SubLocation.Split(',').ToHashSet();
                 else
-                    areas.Append(propertyConfig.SubLocation);
+                {
+                    areas = new HashSet<string>();
+                    areas.Add(propertyConfig.SubLocation);
+                }
             }
+           
             if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
             {
+               
                 if (prop.Locations == null) prop.Locations = new List<Location>();
+                else {
+                    if (prop.Locations.Where(x => x.LocationName.ToLower() == propertyConfig.NewLocation.ToLower()).FirstOrDefault() != null)
+                        throw new BadRequestException(propertyConfig.NewLocation+" location aready there");
+                     }
+                
                 var location = new Location
                 {
                     LocationName = propertyConfig.NewLocation,
                     SubLocations = new List<SubLocation>()
                 };
-                foreach (var item in areas)
+                if (areas != null)
                 {
-                    location.SubLocations.Add(new SubLocation
+                    foreach (var item in areas)
                     {
-                        AreaName = item
-                    });
+                        location.SubLocations.Add(new SubLocation
+                        {
+                            AreaName = item
+                        });
+                    }
                 }
                 prop.Locations.Add(location);
             }
-            else if (propertyConfig.LocationId != 0)
+            else if (propertyConfig.LocationId.HasValue)
             {
                 var location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault();
                 if (location != null)
@@ -276,12 +275,16 @@ namespace BusinessLogic.Services
                     if (location.SubLocations == null)
                     {
                         location.SubLocations = new List<SubLocation>();
-                        foreach (var item in areas)
+                        if (areas != null)
                         {
-                            location.SubLocations.Add(new SubLocation
+                            foreach (var item in areas)
                             {
-                                AreaName = item
-                            });
+                                
+                                location.SubLocations.Add(new SubLocation
+                                {
+                                    AreaName = item
+                                });
+                            }
                         }
                     }
                     else
@@ -301,21 +304,19 @@ namespace BusinessLogic.Services
                                 i++;
                             }
                         }
-                        foreach (var item in areas)
+                        if (areas != null)
                         {
-                            location.SubLocations.Add(new SubLocation
+                            foreach (var item in areas)
                             {
-                                AreaName = item
-                            });
+                                location.SubLocations.Add(new SubLocation
+                                {
+                                    AreaName = item
+                                });
+                            }
                         }
                     }
                 }
             }
-            propertyConfig.Locations = prop.Locations.Select(x => new SelectItem
-            {
-                Id = x.Id,
-                PropertyName = x.LocationName
-            }).ToList();
             var status = await _property.Update(prop);
             if (status > 0)
                 return true;
