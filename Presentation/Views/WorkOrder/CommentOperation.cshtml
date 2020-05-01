@@ -87,7 +87,7 @@
             "<div class='card-body'>"+
             "<textarea id='Comment' name='Comment' class='note' required></textarea>" +
             "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
-            "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + @ViewData["workOrderId"] + "'hidden required>" +
+            "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
             "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).val() + "'hidden required>" +
              "<button  class='btn btn-outline-primary btn-sm top-buffer'>Post</button>"+
              "</div>"+
@@ -96,7 +96,7 @@
     });
     var currentpage =@Model.CurrentPage;
     var pagecount =@Model.PageCount;
-    var workorderId=@ViewData["workOrderId"];
+    var workorderId='@ViewData["workOrderId"]';
     jQuery(function($) {
         $('.mycontainer').on('scroll', function () {
        

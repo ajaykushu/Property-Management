@@ -5,7 +5,7 @@ namespace Models.ResponseModels
 {
     public class WorkOrderDetail
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string PropertyName { get; set; }
         public string SubLocation { get; set; }
         public string Location { get; set; }

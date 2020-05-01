@@ -15,7 +15,7 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        public long WorkOrderId { get; set; }
+        public string WorkOrderId { get; set; }
         public WorkOrder WorkOrder { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]

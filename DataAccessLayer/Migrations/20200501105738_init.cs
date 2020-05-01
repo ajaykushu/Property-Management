@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class INIT : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -108,6 +108,25 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    NId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Message = table.Column<string>(type: "varchar(100)", nullable: true),
+                    NavigatorId = table.Column<long>(nullable: false),
+                    NotificationType = table.Column<string>(type: "varchar(1)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.NId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PropertyType",
                 columns: table => new
                 {
@@ -166,7 +185,7 @@ namespace DataAccessLayer.Migrations
                     LastName = table.Column<string>(type: "varchar(50)", nullable: true),
                     Suffix = table.Column<string>(type: "varchar(50)", nullable: true),
                     SMSAltert = table.Column<bool>(nullable: false, defaultValue: false),
-                    LanguageId = table.Column<int>(nullable: false, defaultValue: 1),
+                    LanguageId = table.Column<int>(nullable: true, defaultValue: 1),
                     TimeZone = table.Column<string>(type: "varchar(100)", nullable: true),
                     ClockType = table.Column<string>(type: "varchar(2)", nullable: true, defaultValue: "12"),
                     OfficeExt = table.Column<string>(type: "varchar(50)", nullable: true),
@@ -188,7 +207,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,10 +254,11 @@ namespace DataAccessLayer.Migrations
                     PropertyTypeId = table.Column<int>(type: "int", nullable: false),
                     StreetAddress1 = table.Column<string>(type: "varchar(100)", nullable: true),
                     StreetAddress2 = table.Column<string>(type: "varchar(100)", nullable: true),
-                    ZipCode = table.Column<string>(type: "varchar(50)", nullable: false),
-                    City = table.Column<string>(type: "varchar(50)", nullable: false),
-                    State = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Country = table.Column<string>(type: "varchar(50)", nullable: false)
+                    ZipCode = table.Column<string>(type: "varchar(50)", nullable: true),
+                    City = table.Column<string>(type: "varchar(50)", nullable: true),
+                    State = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Country = table.Column<string>(type: "varchar(50)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -272,6 +292,33 @@ namespace DataAccessLayer.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsRead = table.Column<bool>(nullable: false),
+                    NotificationId = table.Column<long>(nullable: false),
+                    ApplicationUserId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
+                        principalColumn: "NId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -350,8 +397,7 @@ namespace DataAccessLayer.Migrations
                 name: "WorkOrders",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(nullable: false, defaultValueSql: "Concat('WO', NEXT VALUE FOR workordersequence)"),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     UpdatedTime = table.Column<DateTime>(nullable: false),
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
@@ -363,10 +409,10 @@ namespace DataAccessLayer.Migrations
                     Description = table.Column<string>(type: "varchar(200)", nullable: true),
                     RequestedBy = table.Column<string>(type: "varchar(50)", nullable: true),
                     AssignedToId = table.Column<long>(nullable: true),
-                    AttachmentPath = table.Column<string>(type: "varchar(300)", nullable: true),
                     DueDate = table.Column<DateTime>(nullable: false),
                     LocationId = table.Column<int>(nullable: true),
-                    SubLocationId = table.Column<int>(nullable: true)
+                    SubLocationId = table.Column<int>(nullable: true),
+                    Priority = table.Column<int>(nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -425,19 +471,50 @@ namespace DataAccessLayer.Migrations
                     UpdatedTime = table.Column<DateTime>(nullable: false),
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    WorkOrderId = table.Column<long>(nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AttachmentPath = table.Column<string>(type: "varchar(300)", nullable: true)
+                    WorkOrderId = table.Column<string>(nullable: true),
+                    CommentString = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommentById = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_CommentById",
+                        column: x => x.CommentById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Comments_WorkOrders_WorkOrderId",
                         column: x => x.WorkOrderId,
                         principalTable: "WorkOrders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WOAttachments",
+                columns: table => new
+                {
+                    Key = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    FileName = table.Column<string>(type: "varchar(100)", nullable: true),
+                    FilePath = table.Column<string>(type: "varchar(300)", nullable: true),
+                    WorkOrderId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WOAttachments", x => x.Key);
+                    table.ForeignKey(
+                        name: "FK_WOAttachments_WorkOrders_WorkOrderId",
+                        column: x => x.WorkOrderId,
+                        principalTable: "WorkOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -451,8 +528,7 @@ namespace DataAccessLayer.Migrations
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     CommentId = table.Column<long>(nullable: false),
-                    CommentsId = table.Column<long>(nullable: true),
-                    AttachmentPath = table.Column<string>(nullable: true),
+                    ReplyById = table.Column<long>(nullable: false),
                     ReplyString = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RepliedTo = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
@@ -460,11 +536,17 @@ namespace DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_Replies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Replies_Comments_CommentsId",
-                        column: x => x.CommentsId,
+                        name: "FK_Replies_Comments_CommentId",
+                        column: x => x.CommentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Replies_AspNetUsers_ReplyById",
+                        column: x => x.ReplyById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.InsertData(
@@ -472,9 +554,9 @@ namespace DataAccessLayer.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "046980e9-30c9-40ca-b8d4-e01479e202d5", "Master Admin", "MASTER ADMIN" },
-                    { 2L, "8f346fb3-74ef-4006-931f-bfcc067631d2", "Admin", "ADMIN" },
-                    { 3L, "71bf7d0e-6769-44ae-ac37-dfcdd355a492", "User", "USER" }
+                    { 1L, "275b6b55-65b6-4500-b189-facde6f4a7b8", "Master Admin", "MASTER ADMIN" },
+                    { 2L, "34e402cb-0a95-4ae6-b6dd-fbcd132eabfe", "Admin", "ADMIN" },
+                    { 3L, "c5ac0ad1-df68-4e79-8661-55d7b0fd6250", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -524,15 +606,15 @@ namespace DataAccessLayer.Migrations
                     { 13L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Get_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 12L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Create_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 10L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Feature", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 8L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_User_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 7L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ActDct_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_User_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 5L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Add_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 4L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 3L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Users", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 1L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Add_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 9L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Delete_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 9L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Act_Deact_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -549,9 +631,10 @@ namespace DataAccessLayer.Migrations
                 columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "StageCode", "StageDescription", "UpdatedByUserName", "UpdatedTime" },
                 values: new object[,]
                 {
-                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOPROG", "Work Order in Progress", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "INITWO", "Work Order Created", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOCOMP", "Work Order Completed", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "IN PROGRESS", "Work Order in Progress", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "OPEN", "Work Order Open State", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "BID ACCEPTED", "Bid Sucessfull", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "COMPLETED", "Work Order Completed", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -633,6 +716,11 @@ namespace DataAccessLayer.Migrations
                 filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_CommentById",
+                table: "Comments",
+                column: "CommentById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_WorkOrderId",
                 table: "Comments",
                 column: "WorkOrderId");
@@ -662,9 +750,14 @@ namespace DataAccessLayer.Migrations
                 filter: "[PropertyTypeName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Replies_CommentsId",
+                name: "IX_Replies_CommentId",
                 table: "Replies",
-                column: "CommentsId");
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Replies_ReplyById",
+                table: "Replies",
+                column: "ReplyById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleMenuMaps_MenuId",
@@ -677,6 +770,16 @@ namespace DataAccessLayer.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_ApplicationUserId",
+                table: "UserNotifications",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationId",
+                table: "UserNotifications",
+                column: "NotificationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserProperties_ApplicationUserId",
                 table: "UserProperties",
                 column: "ApplicationUserId");
@@ -685,6 +788,11 @@ namespace DataAccessLayer.Migrations
                 name: "IX_UserProperties_PropertyId",
                 table: "UserProperties",
                 column: "PropertyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WOAttachments_WorkOrderId",
+                table: "WOAttachments",
+                column: "WorkOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_AssignedToId",
@@ -734,7 +842,13 @@ namespace DataAccessLayer.Migrations
                 name: "RoleMenuMaps");
 
             migrationBuilder.DropTable(
+                name: "UserNotifications");
+
+            migrationBuilder.DropTable(
                 name: "UserProperties");
+
+            migrationBuilder.DropTable(
+                name: "WOAttachments");
 
             migrationBuilder.DropTable(
                 name: "Comments");
@@ -744,6 +858,9 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "WorkOrders");

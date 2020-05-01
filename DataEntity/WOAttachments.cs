@@ -15,7 +15,7 @@ namespace DataEntity
         [Column(TypeName = "varchar(300)")]
         public string FilePath { get; set; }
 
-        public long WorkOrderId { get; set; }
+        public string WorkOrderId { get; set; }
         public WorkOrder WorkOrder { get; set; }
     }
 }

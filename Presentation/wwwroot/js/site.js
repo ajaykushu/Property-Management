@@ -164,9 +164,12 @@ $('input[name$="PrimaryProperty"]').on('change', function () {
 if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
     var val = $('.select-input').val();
     if (val.indexOf(',') != -1) {
-       val=val.split(',')
+        val = val.split(',')
+        arr = val;
     }
-    arr = val;
+    else
+        arr.push(val);
+   
     $('input[name$="SelectedProperty"]').each(function () {
         if (arr.indexOf($(this).val()) != -1) {
             $(this).prop("checked", true);

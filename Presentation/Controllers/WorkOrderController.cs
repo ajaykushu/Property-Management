@@ -118,7 +118,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(long id)
+        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(string id)
         {
             WorkOrderDetail workOrderDetail = null;
             try
@@ -137,7 +137,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditWOView(long id)
+        public async Task<IActionResult> EditWOView(string id)
         {
             EditWorkOrder editWorkOrder = null;
             try
@@ -224,7 +224,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComment(long workOrderId, int requestedPage)
+        public async Task<IActionResult> GetComment(string workOrderId, int requestedPage)
         {
             ViewBag.workorderId = workOrderId;
             List<Comment> comments = null;
@@ -264,7 +264,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> WorkOrderStageChange(long Id, int stageId)
+        public async Task<IActionResult> WorkOrderStageChange(string Id, int stageId)
         {
             try
             {

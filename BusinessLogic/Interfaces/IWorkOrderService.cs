@@ -15,19 +15,19 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File);
 
-        Task<WorkOrderDetail> GetWODetail(long id);
+        Task<WorkOrderDetail> GetWODetail(string id);
 
         Task<Pagination<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel);
 
-        Task<EditWorkOrder> GetEditWO(long id);
+        Task<EditWorkOrder> GetEditWO(string id);
 
         Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File);
 
-        Task<List<CommentDTO>> GetComment(long workorderId, int pageNumber);
+        Task<List<CommentDTO>> GetComment(string workorderId, int pageNumber);
 
         Task<bool> PostComment(Post post);
 
-        Task<bool> WorkOrderStageChange(long Id, int stageId);
+        Task<bool> WorkOrderStageChange(string Id, int stageId);
 
         Task<List<SelectItem>> GetLocation(long id);
     }

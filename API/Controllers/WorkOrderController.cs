@@ -65,7 +65,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("wodetail")]
         [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
-        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(long id)
+        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(string id)
         {
             var workOrderDetail = await _workOrderService.GetWODetail(id);
             return Ok(workOrderDetail);
@@ -83,7 +83,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("editWOModel")]
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
-        public async Task<ActionResult> GetEditWO(long id)
+        public async Task<ActionResult> GetEditWO(string id)
         {
             var editWorkOrder = await _workOrderService.GetEditWO(id);
             return Ok(editWorkOrder);
@@ -100,7 +100,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getcomment")]
-        public async Task<ActionResult<List<CommentDTO>>> GetComment(long workorderId, int pageNumber)
+        public async Task<ActionResult<List<CommentDTO>>> GetComment(string workorderId, int pageNumber)
         {
             var res = await _workOrderService.GetComment(workorderId, pageNumber);
             return Ok(res);
@@ -118,7 +118,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("workorderstagechange")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
-        public async Task<ActionResult<bool>> WorkOrderStageChange(long Id, int stageId)
+        public async Task<ActionResult<bool>> WorkOrderStageChange(string Id, int stageId)
         {
             bool res = await _workOrderService.WorkOrderStageChange(Id, stageId);
             return Ok(res);

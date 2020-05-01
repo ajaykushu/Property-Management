@@ -40,6 +40,14 @@
     <Compile Remove="Migrations\20200406050203_nemig45.Designer.cs" />
     <Compile Remove="Migrations\20200421163211_witpriority.cs" />
     <Compile Remove="Migrations\20200421163211_witpriority.Designer.cs" />
+    <Compile Remove="Migrations\20200501101059_newwithseq.cs" />
+    <Compile Remove="Migrations\20200501101059_newwithseq.Designer.cs" />
+    <Compile Remove="Migrations\20200501102322_init.cs" />
+    <Compile Remove="Migrations\20200501102322_init.Designer.cs" />
+    <Compile Remove="Migrations\20200501102618_init.cs" />
+    <Compile Remove="Migrations\20200501102618_init.Designer.cs" />
+    <Compile Remove="Migrations\20200501103349_newig.cs" />
+    <Compile Remove="Migrations\20200501103349_newig.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,9 +27,7 @@ namespace DataEntity
         public bool SMSAltert { get; set; }
 
         public Languages Language { get; set; }
-
-        [Required]
-        public int LanguageId { get; set; }
+        public int? LanguageId { get; set; }
 
         [Column(TypeName = "varchar(100)")]
         public string TimeZone { get; set; }

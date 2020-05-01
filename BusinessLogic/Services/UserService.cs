@@ -128,7 +128,7 @@ namespace BusinessLogic.Services
                 Suffix = applicationUser.Suffix,
                 SMSAlert = applicationUser.SMSAltert,
                 TimeZone = applicationUser.TimeZone,
-                Language = applicationUser.LanguageId,
+                Language = applicationUser.LanguageId.GetValueOrDefault(),
                 Role = roles.Count > 0 ? roles[0] : "",
                 ClockType = applicationUser.ClockType,
                 OfficeExt = applicationUser.OfficeExt,

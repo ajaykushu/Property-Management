@@ -1,17 +1,20 @@
 ﻿@model EditWorkOrder
-<partial name="_ValidationScriptsPartial">
+@{
+    ViewData["Title"] = "Edit WorkOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <div class="workordertitle">
-        Edit WorkOder
-    </div>
+<div class="workordertitle">
+    Edit WorkOder
+</div>
 
-    <form class="form"  asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
-        @if (Model == null)
-        {
+<form class="form" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
+    @if (Model == null)
+    {
         <p>No Record Found</p>
-        }
-        else
-        {
+    }
+    else
+    {
         <table class="table_container table">
             <tbody>
                 <tr>
@@ -27,33 +30,33 @@
                                 </div>
                             </div>
                             @if (Model.Locations != null && Model.Locations.Any())
-                                {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="LocationId"> </label>
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="LocationId"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                            <option value="">Please select Location</option>
+                                        </select>
+                                        <span asp-validation-for="LocationId" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
-                                        <option value="">Please select Location</option>
-                                    </select>
-                                    <span asp-validation-for="LocationId" class="text-danger"></span>
-                                </div>
-                            </div>
-                                }
+                            }
                             @if (Model.SubLocations != null && Model.SubLocations.Any())
-                                {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="SubLocationId"> </label>
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="SubLocationId"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="SubLocationId" asp-items="@(new SelectList(Model.SubLocations, "Id", "PropertyName"))">
+                                            <option value="">Please select Sub Location</option>
+                                        </select>
+                                        <span asp-validation-for="SubLocationId" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="SubLocationId" asp-items="@(new SelectList(Model.SubLocations, "Id", "PropertyName"))">
-                                        <option value="">Please select Sub Location</option>
-                                    </select>
-                                    <span asp-validation-for="SubLocationId" class="text-danger"></span>
-                                </div>
-                            </div>
-                                }
+                            }
                         </div>
                     </td>
                 </tr>
@@ -61,33 +64,33 @@
                     <td>
                         <div class="col">
                             @if (Model.Items != null && Model.Items.Any())
-                                {
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label asp-for="ItemId"> </label>
+                            {
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label asp-for="ItemId"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                            <option value="">Please select one</option>
+                                        </select>
+                                        <span asp-validation-for="ItemId" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="ItemId" class="text-danger"></span>
-                                </div>
-                            </div>
-                                }
+                            }
                             @if (Model.Issues != null && Model.Issues.Any())
-                                {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="IssueId"> </label>
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="IssueId"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                            <option>Please select one</option>
+                                        </select>
+                                        <span asp-validation-for="IssueId" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                        <option>Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="IssueId" class="text-danger"></span>
-                                </div>
-                            </div>
-                                }
+                            }
                         </div>
                     </td>
                 </tr>
@@ -139,12 +142,12 @@
 
                                 <div class="col">
                                     @if (Model.Departments != null && Model.Departments.Any())
-                                        {
-                                    <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
-                                        <option value="">Department</option>
-                                    </select>
-                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                                        }
+                                    {
+                                        <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                            <option value="">Department</option>
+                                        </select>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    }
                                 </div>
                                 <div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="UserId" asp-items="@(new SelectList(Model.Users, "Id", "PropertyName"));">
@@ -154,20 +157,20 @@
                                 </div>
                             </div>
                             @if (Model.FileAvailable != null)
-                                {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="FileAvailable"></label>
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="FileAvailable"></label>
+                                    </div>
+                                    @foreach (var item in Model.FileAvailable)
+                                    {
+                                        <div class="col">
+                                            <a href="@item.Value" download>@item.Key</a>
+                                            <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
+                                        </div>
+                                    }
                                 </div>
-                                 @foreach (var item in Model.FileAvailable)
-                                        {
-                                <div class="col">
-                                    <a href="@item.Value" download>@item.Key</a>
-                                    <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
-                                </div>
-                                        }
-                            </div>
-                                }
+                            }
                             <input type="text" asp-for="FilesRemoved" hidden>
                             <div class="row top-buffer">
                                 <div class="col-md-3">
@@ -193,12 +196,12 @@
         <input asp-for="Id" hidden>
         <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-outline-primary submit">Update</button>
         @*passing data to controller*@
-        }
-    </form>
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
-    <script>
+    }
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script>
         $('#LocationId').change(function () {
             $.get('@Url.Action("GetSubLocation","Property")' + "?id=" + $(this).val(),
                 function (data) {
@@ -245,4 +248,4 @@
                     }
                 });
          });
-    </script>
+</script>

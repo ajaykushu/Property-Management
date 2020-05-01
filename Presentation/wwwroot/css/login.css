@@ -232,22 +232,26 @@ th {
     }
 
     .wordorderdetail td:nth-of-type(1):before {
-        content: "Status";
+        content: "Work Order Id";
     }
 
     .wordorderdetail td:nth-of-type(2):before {
-        content: "Description";
+        content: "Status";
     }
 
     .wordorderdetail td:nth-of-type(3):before {
-        content: "Assigned To";
+        content: "Description";
     }
 
     .wordorderdetail td:nth-of-type(4):before {
-        content: "Property";
+        content: "Assigned To";
     }
 
     .wordorderdetail td:nth-of-type(5):before {
+        content: "Property";
+    }
+
+    .wordorderdetail td:nth-of-type(6):before {
         content: "Due Date";
     }
     #search {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200426062343_Somefixs")]
-    partial class Somefixs
+    [Migration("20200501105738_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "26cb3ee8-dd96-441a-8028-6244c8a11d34",
+                            ConcurrencyStamp = "275b6b55-65b6-4500-b189-facde6f4a7b8",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "868ad915-3db8-4035-8a22-9c1869eedc8b",
+                            ConcurrencyStamp = "34e402cb-0a95-4ae6-b6dd-fbcd132eabfe",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "2ff788cb-1577-476a-931d-39f3b086609e",
+                            ConcurrencyStamp = "c5ac0ad1-df68-4e79-8661-55d7b0fd6250",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -110,7 +110,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<int>("LanguageId")
+                    b.Property<int?>("LanguageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
@@ -193,17 +193,17 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("DataEntity.Comments", b =>
+            modelBuilder.Entity("DataEntity.Comment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("varchar(300)");
+                    b.Property<long>("CommentById")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Comment")
+                    b.Property<string>("CommentString")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedByUserName")
@@ -218,10 +218,12 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("WorkOrderId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("WorkOrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommentById");
 
                     b.HasIndex("WorkOrderId");
 
@@ -724,9 +726,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("CommentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CommentsId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -735,6 +734,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("RepliedTo")
                         .HasColumnType("varchar(50)");
+
+                    b.Property<long>("ReplyById")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ReplyString")
                         .HasColumnType("nvarchar(max)");
@@ -747,7 +749,9 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentsId");
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("ReplyById");
 
                     b.ToTable("Replies");
                 });
@@ -1105,8 +1109,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("WorkOrderId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("WorkOrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Key");
 
@@ -1117,10 +1121,10 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.WorkOrder", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
 
                     b.Property<long?>("AssignedToId")
                         .HasColumnType("bigint");
@@ -1211,18 +1215,20 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("DataEntity.Languages", "Language")
                         .WithMany("Users")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LanguageId");
                 });
 
-            modelBuilder.Entity("DataEntity.Comments", b =>
+            modelBuilder.Entity("DataEntity.Comment", b =>
                 {
-                    b.HasOne("DataEntity.WorkOrder", "WorkOrder")
-                        .WithMany("Comments")
-                        .HasForeignKey("WorkOrderId")
+                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("CommentById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DataEntity.WorkOrder", "WorkOrder")
+                        .WithMany("Comments")
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("DataEntity.Location", b =>
@@ -1245,9 +1251,17 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.Reply", b =>
                 {
-                    b.HasOne("DataEntity.Comments", "Comments")
+                    b.HasOne("DataEntity.Comment", "Comment")
                         .WithMany("Replies")
-                        .HasForeignKey("CommentsId");
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ReplyById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DataEntity.RoleMenuMap", b =>
@@ -1308,9 +1322,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("WOAttachments")
-                        .HasForeignKey("WorkOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("DataEntity.WorkOrder", b =>

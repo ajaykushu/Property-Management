@@ -8,8 +8,8 @@ namespace DataEntity
     public class WorkOrder : Log
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public string Id { get; set; }
 
         public long PropertyId { get; set; }
         public Property Property { get; set; }

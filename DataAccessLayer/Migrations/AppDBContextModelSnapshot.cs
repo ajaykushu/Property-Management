@@ -51,21 +51,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "8b4dead4-4927-4f28-a55b-f4f4addd72f7",
+                            ConcurrencyStamp = "275b6b55-65b6-4500-b189-facde6f4a7b8",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "4abc0b6b-669d-4095-852a-2bbaea3a4ea1",
+                            ConcurrencyStamp = "34e402cb-0a95-4ae6-b6dd-fbcd132eabfe",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "2fdcfbed-3db8-40ba-9fec-e5f1f76918a7",
+                            ConcurrencyStamp = "c5ac0ad1-df68-4e79-8661-55d7b0fd6250",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -108,7 +108,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<int>("LanguageId")
+                    b.Property<int?>("LanguageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
@@ -216,8 +216,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("WorkOrderId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("WorkOrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -1107,8 +1107,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("WorkOrderId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("WorkOrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Key");
 
@@ -1119,10 +1119,10 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.WorkOrder", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
 
                     b.Property<long?>("AssignedToId")
                         .HasColumnType("bigint");
@@ -1213,9 +1213,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("DataEntity.Languages", "Language")
                         .WithMany("Users")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LanguageId");
                 });
 
             modelBuilder.Entity("DataEntity.Comment", b =>
@@ -1228,9 +1226,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("Comments")
-                        .HasForeignKey("WorkOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("DataEntity.Location", b =>
@@ -1324,9 +1320,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("WOAttachments")
-                        .HasForeignKey("WorkOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("DataEntity.WorkOrder", b =>

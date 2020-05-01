@@ -8,7 +8,7 @@ namespace Presentation.ViewModels
 {
     public class EditWorkOrder
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
         public List<SelectItem> Locations { get; set; }
 
         [Required]

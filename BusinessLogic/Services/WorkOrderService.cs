@@ -93,10 +93,10 @@ namespace BusinessLogic.Services
             return false;
         }
 
-        public async Task<WorkOrderDetail> GetWODetail(long id)
+        public async Task<WorkOrderDetail> GetWODetail(string id)
         {
             var iteminpage = 4;
-            var workorder = await _workOrder.Get(x => x.Id == id).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
+            var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
                           WorkOrderDetail
                 {
                     PropertyName = x.Property.PropertyName,
@@ -257,10 +257,10 @@ namespace BusinessLogic.Services
             return pagination;
         }
 
-        public async Task<EditWorkOrder> GetEditWO(long id)
+        public async Task<EditWorkOrder> GetEditWO(string id)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            var editwo = await _workOrder.Get(x => x.Id == id).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.Property).Select(x =>
+            var editwo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.Property).Select(x =>
                       new EditWorkOrder
                       {
                           Id = x.Id,
@@ -306,7 +306,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
-            var wo = await _workOrder.Get(x => x.Id == editWorkOrder.Id).Include(x => x.WOAttachments).Include(x=>x.Comments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x=>x.Comments).FirstOrDefaultAsync();
             if (wo != null)
             {
                 if (File != null)
@@ -355,10 +355,10 @@ namespace BusinessLogic.Services
             return false;
         }
 
-        public async Task<List<CommentDTO>> GetComment(long workorderId, int pageNumber)
+        public async Task<List<CommentDTO>> GetComment(string workorderId, int pageNumber)
         {
             var itemsinpage = 4;
-            var obj = await _comments.GetAll().Where(x => x.WorkOrderId == workorderId).Include(x => x.Replies).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
+            var obj = await _comments.GetAll().Where(x => x.WorkOrderId.Equals(workorderId)).Include(x => x.Replies).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
             {
                 CommentBy = x.CreatedByUserName,
                 CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
@@ -415,9 +415,9 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        public async Task<bool> WorkOrderStageChange(long Id, int stageId)
+        public async Task<bool> WorkOrderStageChange(string Id, int stageId)
         {
-            var wo = await _workOrder.Get(x => x.Id == Id).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(Id)).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
             var stage = await _stage.Get(x => x.Id == stageId).FirstOrDefaultAsync();
             if (stage != null)
             {

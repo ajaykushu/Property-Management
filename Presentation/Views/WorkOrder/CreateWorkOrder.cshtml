@@ -1,10 +1,13 @@
 ﻿@model CreateWorkOrder
-<partial name="_ValidationScriptsPartial">
+@{
+    ViewData["Title"] = "Create WorkOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
     <div class="workordertitle">
         New Work Order
     </div>
-    <form class="form"  id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
+    <form class="form" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
         @if (Model == null)
         {
             <p>No Record Found</p>
