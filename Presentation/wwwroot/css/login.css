@@ -376,7 +376,7 @@ label {
 
 /**/
 /*bowse photo*/
-.cont .Photo {
+.cont .Photo, .cont .File {
     opacity: 0;
     width: 200px;
     height: 25px;

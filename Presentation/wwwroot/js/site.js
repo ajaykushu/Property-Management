@@ -71,6 +71,32 @@ $('.Photo').change(function (e) {
         $('.photo_disp').show();
     }
 })
+var file = null;
+var selectedFile=[];
+$('.File').change(function (e) {
+    file = e.target.files
+    if (file != undefined) {
+        for (var i = 0; i < file.length;i++) {
+            selectedFile.push(file[i]);
+            $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'></span>");
+        }
+        $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
+    }
+   
+})
+function removefile(e) {
+    var val = e.target.name.trim();
+    if (selectedFile != null) {
+        for (var i = 0; i < selectedFile.length; i++) {
+            if (selectedFile[i].name == val) {
+                selectedFile.splice(i, 1);
+                break;
+            }
+        }
+        e.currentTarget.parentNode.remove();
+ }    
+};
+
 $('.clear').click(function () {
     $("input[type=text]").val("");
 })
@@ -172,7 +198,9 @@ $('#adduser, #wocreate, #addprop').submit(function (e) {
     e.preventDefault();
     var url = $(this).attr('action');
     var formData = new FormData(this);
-   
+    selectedFile.forEach(function (e) {
+        formData.push('File', e);
+    });
     if ($(this).valid()) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
@@ -196,7 +224,10 @@ $('#edituser, #editwo').submit(function (e) {
     e.preventDefault();
     var url = $(this).attr('action');
     var formData = new FormData(this);
-
+    //for multiple files upload
+    for (var i = 0; i < selectedFile.length; i++) {
+        formData.append('File', selectedFile[i]);
+    };
     if ($(this).valid()) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
@@ -205,7 +236,6 @@ $('#edituser, #editwo').submit(function (e) {
             alertify.alert('Info', '<p>' + res + '</p>', function () {
                 location.reload();
             });
-
         }, function (res) {
             disablespinner();
             $("input[type=password]").val("");
@@ -213,7 +243,6 @@ $('#edituser, #editwo').submit(function (e) {
                 alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
                     location.reload();
             });
-
         }, "");
     }
 });
