@@ -236,8 +236,10 @@ namespace BusinessLogic.Services
                     areas = propertyConfig.SubLocation.Split(',').ToHashSet();
                 else
                 {
-                    areas = new HashSet<string>();
-                    areas.Add(propertyConfig.SubLocation);
+                    areas = new HashSet<string>
+                    {
+                        propertyConfig.SubLocation
+                    };
                 }
             }
            

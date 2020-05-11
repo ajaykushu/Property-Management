@@ -10,7 +10,7 @@ namespace BusinessLogic.Interfaces
     {
         Task<bool> RegisterUser(RegisterUser model);
 
-        RegisterUser GetRegisterModel();
+        Task<RegisterUser> GetRegisterModel();
 
         Task<EditUserModel> GetEditUserModelAsync(long Id);
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Presentation.Utiliity.Interface;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
@@ -18,8 +19,9 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
+        private readonly IExport _export;
 
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IExport export)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -27,6 +29,7 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
+            _export = export;
         }
 
         [HttpGet]
@@ -282,6 +285,37 @@ namespace Presentation.Controllers
             {
             }
             return RedirectToAction("GetWODetail", new { id = Id });
+        }
+
+        public async Task<IActionResult> DownloadWO(string woId)
+        {
+            WorkOrderDetail workOrderDetail = null;
+            string filename = "File.csv";
+            string contentType = "text/csv";
+            byte[] file = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("wodetail", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + woId, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    workOrderDetail = JsonConvert.DeserializeObject<WorkOrderDetail>(await response.Content.ReadAsStringAsync());
+                }
+
+                var cd = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = filename,
+                    Inline = true,
+                };
+
+                HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
+                file = await _export.CreateCSV(workOrderDetail);
+            }
+            catch (Exception)
+            {
+
+            }
+            return File(file, contentType);
         }
     }
 }

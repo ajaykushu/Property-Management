@@ -16,5 +16,7 @@ namespace Models.RequestModels
         public string Priority { get; set; }
 
         public int PageNumber { get; set; }
+        public bool Export { get; set; }
+        public string ExportUrl { get; set; }
     }
 }

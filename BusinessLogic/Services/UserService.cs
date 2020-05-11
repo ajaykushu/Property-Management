@@ -10,6 +10,7 @@ using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.CustomException;
 using Utilities.Interface;
@@ -23,23 +24,29 @@ namespace BusinessLogic.Services
         private readonly IRepo<Languages> _langrepo;
         private readonly IRepo<Property> _property;
         private readonly IRepo<Department> _department;
+        private readonly IRepo<UserProperty> _userProperty;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
         private  readonly string _scheme;
+        private readonly long userId;
 
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department, IRepo<UserProperty> userProperty)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _langrepo = langrepo;
             _property = property;
+            _userProperty = userProperty;
             _httpContextAccessor = httpContextAccessor;
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
             _department = department;
             _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
+            var sid = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid);
+            if (sid != null)
+                userId = Convert.ToInt64(sid);
         }
 
         public async Task<bool> RegisterUser(RegisterUser model)
@@ -61,14 +68,16 @@ namespace BusinessLogic.Services
                 PhotoPath = filepath,
                 DepartmentId = model.DepartmentId
             };
-            if (model.SelectedProperty != null && (model.Role.Equals("Admin")))
+            if (model.SelectedProperty != null && !model.Role.Equals("Master Admin"))
             {
                 foreach (var item in prop)
                 {
                     var userprop = new UserProperty
                     {
                         PropertyId = item.Id
+                        
                     };
+                   
                     if (item.PropertyName == model.PrimaryProperty)
                         userprop.IsPrimary = true;
                     if (model.SelectedProperty.Contains(item.PropertyName))
@@ -91,33 +100,49 @@ namespace BusinessLogic.Services
             }
         }
 
-        public RegisterUser GetRegisterModel()
+        public async Task<RegisterUser> GetRegisterModel()
         {
             RegisterUser registerRequest = new RegisterUser
             {
-                Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
-                Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
-                Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
-                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
-                Properties = _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList()
+                
+                Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToListAsync(),
+                Languages =await  _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToListAsync(),
+                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList()
+               
             };
+            // finding roles to be displayed a/c to usertype
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin")) {
+                registerRequest.Roles = new List<SelectItem> { new SelectItem { Id = 1, PropertyName = "User" } };
+                registerRequest.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
+                registerRequest.Role = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").Select(x=>x.PropertyName).FirstOrDefault();
+            }
+            else
+            {
+                registerRequest.Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList();
+                registerRequest.Properties = await _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToListAsync();
+                registerRequest.Role = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "admin").Select(x => x.PropertyName).FirstOrDefault();
+            }
+
             var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower().Equals("english")).FirstOrDefault();
-            var roleid = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "admin").FirstOrDefault();
+
+           
+
             registerRequest.Language = (int)langId.Id;
-            registerRequest.Role = roleid?.PropertyName;
             return registerRequest;
         }
 
         public async Task<EditUserModel> GetEditUserModelAsync(long Id)
         {
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == Id).Include(x => x.UserProperties).ThenInclude(x => x.Property).AsNoTracking().FirstOrDefaultAsync();
+
             if (applicationUser == null)
                 throw new BadRequestException("User not Found");
+
             var roles = await _userManager.GetRolesAsync(applicationUser);
+
             EditUserModel editusermodel = new EditUserModel
             {
-                Properties = _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToList(),
-                Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList(),
+                
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
@@ -138,14 +163,29 @@ namespace BusinessLogic.Services
                 Id = applicationUser.Id,
                 PrimaryProperty = applicationUser.UserProperties.Where(x => x.IsPrimary).Select(x => x.Property.PropertyName).FirstOrDefault()
             };
+            // finding roles to be displayed a/c to usertype
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                editusermodel.Roles = new List<SelectItem> { new SelectItem { Id = 1, PropertyName = "User" } };
+                editusermodel.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
+                
+            }
+            else
+            {
+                editusermodel.Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList();
+                editusermodel.Properties = await _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToListAsync();
+               
+            }
             return editusermodel;
         }
 
         public async Task<bool> UpdateUser(EditUserModel editUser)
         {
             IdentityResult identityResult;
+
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == editUser.Id).Include(x => x.Language).Include(x => x.UserProperties).FirstOrDefaultAsync();
             var prop = _property.GetAll().Include(x => x.UserProperties).ThenInclude(x => x.Property).ToList();
+
             applicationUser.Email = editUser.Email;
             applicationUser.TimeZone = editUser.TimeZone;
             applicationUser.Suffix = editUser.Suffix;
@@ -162,12 +202,14 @@ namespace BusinessLogic.Services
             //handling image update
             var filepath = await _imageUploadInFile.UploadAsync(editUser.File);
             var prevpath = applicationUser.PhotoPath;
+
             if (filepath != null)
                 applicationUser.PhotoPath = filepath;
 
-            if (editUser.Role == "Master Admin" || editUser.Role == "User")
+            if (editUser.Role == "Master Admin" || editUser.SelectedProperty==null)
                 applicationUser.UserProperties.Clear();
-            else if (editUser.SelectedProperty != null && (editUser.Role.Equals("Admin")))
+
+            else if (editUser.SelectedProperty != null && !editUser.Role.Equals("Master Admin"))
             {
                 applicationUser.UserProperties.Clear();
                 foreach (var item in prop)
@@ -179,6 +221,7 @@ namespace BusinessLogic.Services
                             ApplicationUser = applicationUser,
                             Property = item
                         };
+                       
                         if (editUser.PrimaryProperty == item.PropertyName)
                             userprop.IsPrimary = true;
                         applicationUser.UserProperties.Add(userprop);
@@ -190,6 +233,7 @@ namespace BusinessLogic.Services
                 applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, editUser.Password);
 
             identityResult = await _userManager.UpdateAsync(applicationUser);
+
             if (identityResult.Succeeded)
             {
                 if (filepath != null)
@@ -218,11 +262,20 @@ namespace BusinessLogic.Services
             int iteminpage = 20;
             var query = _userManager.Users;
             if (matchStr != null && filter == FilterEnum.ByEmail)
-                query = query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
+                 query= query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.ByFirstName)
                 query = query.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower()));
+
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {   
+                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x=>x.PropertyId).Distinct().ToListAsync();
+                var userIds = await _userProperty.GetAll().Where(x => propIds.Contains(x.PropertyId)).AsNoTracking().Select(x => x.ApplicationUserId).ToListAsync();
+                query = query.Where(x=>userIds.Contains(x.Id));
+            }
+
             var count = query.Count();
             var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
+            
             List<UsersListModel> users = new List<UsersListModel>();
             foreach (var item in user)
             {

@@ -93,6 +93,10 @@ namespace Presentation.Controllers
                     "menu",
                     JsonConvert.SerializeObject(menuView)
                     );
+                    HttpContext.Session.SetString(
+                   "role",
+                   tokenResponse.Roles.First()
+                   );
                     if (tokenResponse.Roles.Contains("Master Admin"))
                         return RedirectToAction("GetAllUsers", "User");
                     else

@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Presentation.ConstModal;
+using Presentation.Utiliity;
+using Presentation.Utiliity.Interface;
 using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
@@ -43,6 +45,7 @@ namespace Presentation
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IHttpClientHelper, HttpHelper>();
             services.AddHttpClient<HttpHelper>();
+            services.AddScoped<IExport, Export>();
             services.AddSingleton<ISessionStorage, SessionStorage>();
         }
 

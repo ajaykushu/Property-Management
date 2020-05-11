@@ -121,7 +121,6 @@ namespace BusinessLogic.Services
                      string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
                      )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
-
             workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -186,7 +185,7 @@ namespace BusinessLogic.Services
         {
             int iteminpage = 20;
             var query = _workOrder.GetAll();
-
+            
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
                 var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
@@ -199,7 +198,8 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
-                query = query.Include(x => x.Stage).Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
+                query = query.Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
+               
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
             {
@@ -227,24 +227,28 @@ namespace BusinessLogic.Services
             List<WorkOrderAssigned> workOrderAssigned = null;
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            query = query.Include(x => x.AssignedTo);
-            if (role.Equals("User"))
+            query = query.Include(x => x.AssignedTo).Include(x=>x.Stage).Include(x => x.Property);
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                query = query.Where(x => x.CreatedByUserName.Equals(username));
+                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+                query = query.Where(x =>propIds.Contains(x.Property.Id));
             }
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                query = query.Where(x => x.AssignedTo.Equals(username));
+            }
+
             var count = query.Count();
-            workOrderAssigned = await query.Include(x => x.Stage).Include(x => x.Property).OrderByDescending(x => x.DueDate).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.OrderByDescending(x => x.DueDate).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
                 Stage = x.Stage.StageCode.ToLower(),
-                AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
+                AssignedToUser = string.Concat(x.AssignedTo.FirstName, " ", x.AssignedTo.LastName),
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
-            foreach (var item in workOrderAssigned)
-                if (item.AssignedToUser != null && item.AssignedToUser.StartsWith(username, StringComparison.InvariantCultureIgnoreCase))
-                    item.AssignedToUser = "Me";
+            
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {

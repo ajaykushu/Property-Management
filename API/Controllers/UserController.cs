@@ -41,9 +41,9 @@ namespace API.Controllers
         [HttpGet]
         [Route("getregisterrequestmodel")]
         [FeatureBasedAuthorization(MenuEnum.Add_User)]
-        public ActionResult<RegisterUser> GetRegisterRequestModel()
+        public async Task<ActionResult<RegisterUser>> GetRegisterRequestModel()
         {
-            return _userService.GetRegisterModel();
+            return await _userService.GetRegisterModel();
         }
 
         [HttpGet]

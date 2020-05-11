@@ -219,9 +219,15 @@
             </tr>
             <tr>
                 <th>
+                   <a asp-action="DownloadWO" asp-route-woId="@Model.Id" download="File.csv">Export</a>
+                </th>
+            </tr>
+            <tr>
+                <th>
                     Comments
                 </th>
             </tr>
+
             <tr id="CommentSection">
                 <td>
                     @await Html.PartialAsync("CommentOperation",

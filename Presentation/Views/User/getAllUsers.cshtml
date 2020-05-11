@@ -77,7 +77,14 @@
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                     keyValuePairs.Add("id", item.Id + "");
                                 }
-                                <auth-link bclass="btn btn-sm btn-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                @if (HttpContextAccessor.HttpContext.Session.GetString("role").Equals("Admin") && item.Roles.Contains("Admin"))
+                                {
+
+                                }
+                                else
+                                {
+                                    <auth-link bclass="btn btn-sm btn-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                }
                                 <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.View_User_Detail routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                                 @{keyValuePairs.Add("page", Model.CurrentPage + "");}
                                 @if (item.IsActive)
