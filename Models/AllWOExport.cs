@@ -1,10 +1,10 @@
-﻿using Presentation.Utility;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Presentation.ViewModels
+namespace Models
 {
-    public class WorkOrderDetail
+    public class AllWOExport
     {
         public string Id { get; set; }
         public string PropertyName { get; set; }
@@ -21,12 +21,8 @@ namespace Presentation.ViewModels
         public string Description { get; set; }
         public int Priority { get; set; }
         public DateTime UpdatedTime { get; set; }
-        public List<KeyValuePair<string, string>> Attachment { get; set; }
+        public List<string> Attachment { get; set; }
         public string AssignedToUser { get; set; }
         public string UpdatedBy { get; set; }
-        [SkipProperty]
-        public List<SelectItem> Stages { get; set; }
-        [SkipProperty]
-        public Pagination<List<Comment>> Comments { get; set; }
     }
 }

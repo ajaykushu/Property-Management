@@ -1,2 +1,1 @@
-Id;Due Date;Created Time;Created By User Name;Updated By User Name;Updated Time;Sub Location;Assigned To;Description;Issue Name;Priority;Property Name;Location;Stage Code;Stage Description;Attachment
-WO1004;01-May-2020;01-May-2020;test;test;01-May-2020;X;priya shukla;NA;Power Problem;0;Zolo County12;Dining Hall;OPEN;Work Order Open State;Ajay_pass.jpeg
+Id;PropertyName;SubLocation;Location;Requestedby;Department;StageDescription;StageCode;Issue;DueDate;Item;CreatedTime;Description;Priority;UpdatedTime;Attachment;AssignedToUser;UpdatedBy;Stages;Comments

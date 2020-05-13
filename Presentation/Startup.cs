@@ -45,7 +45,8 @@ namespace Presentation
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IHttpClientHelper, HttpHelper>();
             services.AddHttpClient<HttpHelper>();
-            services.AddScoped<IExport, Export>();
+            services.AddScoped<IExport<WorkOrderDetail>, Export<WorkOrderDetail>>();
+            services.AddScoped<IExport<AllWOExport>, Export<AllWOExport>>();
             services.AddSingleton<ISessionStorage, SessionStorage>();
         }
 

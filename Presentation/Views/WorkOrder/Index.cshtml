@@ -114,6 +114,14 @@
 
             </table>
             <hr />
+            
+        var param = Model.GetType()
+       .GetProperties()
+           .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model)!=null?prop.GetValue(Model).ToString():"");
+
+            
+            <a asp-action="ExportWO" asp-all-route-data="@param" download="Wolist">Export</a>
+            <hr />
             <nav>
                 <ul class="pagination">
                     @{ int current = 0;}
@@ -145,6 +153,7 @@
                     </li>
                 </ul>
             </nav>
+
         }
         else
         {

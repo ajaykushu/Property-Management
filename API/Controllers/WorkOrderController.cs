@@ -123,5 +123,13 @@ namespace API.Controllers
             bool res = await _workOrderService.WorkOrderStageChange(Id, stageId);
             return Ok(res);
         }
+        [HttpPost]
+        [Route("workordersexport")]
+        [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
+        public async Task<ActionResult<List<WorkOrderDetail>>> WOExport(WOFilterModel wOFilterModel)
+        {
+            var res = await _workOrderService.WOExport(wOFilterModel);
+            return Ok(res);
+        }
     }
 }

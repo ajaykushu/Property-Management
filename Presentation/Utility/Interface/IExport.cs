@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace Presentation.Utiliity.Interface
 {
-    public interface IExport
+    public interface IExport<T>
     {
         /// <summary>
         /// accept  Object for creating csv
         /// </summary>
         /// <returns>string File</returns>
-        Task<byte[]> CreateCSV(WorkOrderDetail model);
+        Task<byte[]> CreateCSV(T model);
+        Task<byte[]> CreateListCSV(List<T> model);
     }
 }

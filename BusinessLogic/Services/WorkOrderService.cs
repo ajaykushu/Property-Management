@@ -451,5 +451,83 @@ namespace BusinessLogic.Services
                     }).ToList()).AsNoTracking().FirstOrDefaultAsync();
             return res;
         }
+
+        public async Task<List<AllWOExport>> WOExport(WOFilterModel wOFilterModel)
+        {
+            var query = _workOrder.GetAll();
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
+            {
+                var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
+                query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
+            {
+                var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
+                query = query.Where(x => x.CreatedTime.Date <= enddate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
+            {
+                query = query.Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
+
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
+            {
+                query.Where(x => x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.Email.ToLower()));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.UserName))
+            {
+                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(wOFilterModel.UserName.ToLower()));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
+            {
+                var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
+                query = query.Where(x => x.DueDate.Date == dueDate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
+            {
+                var index = Convert.ToInt32(wOFilterModel.Priority);
+                query = query.Where(x => x.Priority == index);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
+            {
+                query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName.ToLower()));
+            }
+
+            List<AllWOExport> workOrders = null;
+            var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
+            var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            query = query.Include(x => x.AssignedTo).Include(x => x.Stage).Include(x => x.Property);
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+                query = query.Where(x => propIds.Contains(x.Property.Id));
+            }
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                query = query.Where(x => x.AssignedTo.Equals(username));
+            }
+            workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExport
+            {
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StageCode = x.Stage.StageCode,
+                StageDescription = x.Stage.StageDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                DueDate = x.DueDate,
+                UpdatedTime = x.UpdatedTime,
+                Department = x.AssignedTo.Department.DepartmentName,
+                AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
+                Requestedby = x.RequestedBy,
+                Id = x.Id,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
+            }).AsNoTracking().ToListAsync();
+            return workOrders;
+        }
     }
 }

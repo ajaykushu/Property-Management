@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Presentation.ConstModal;
 using Presentation.Utiliity.Interface;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
@@ -19,9 +20,10 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
-        private readonly IExport _export;
+        private readonly IExport<WorkOrderDetail> _export;
+        private readonly IExport<AllWOExport> _allwoexport;
 
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IExport export)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -30,6 +32,7 @@ namespace Presentation.Controllers
                 _token = Encoding.UTF8.GetString(token);
             }
             _export = export;
+            _allwoexport = allwoexport;
         }
 
         [HttpGet]
@@ -286,7 +289,7 @@ namespace Presentation.Controllers
             }
             return RedirectToAction("GetWODetail", new { id = Id });
         }
-
+        [HttpGet]
         public async Task<IActionResult> DownloadWO(string woId)
         {
             WorkOrderDetail workOrderDetail = null;
@@ -311,7 +314,38 @@ namespace Presentation.Controllers
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
                 file = await _export.CreateCSV(workOrderDetail);
             }
-            catch (Exception)
+            catch (Exception ex)
+            {
+
+            }
+            return File(file, contentType);
+        }
+        
+        public async Task<IActionResult> ExportWO(WOFilterModel wo)
+        {
+            List<AllWOExport> workOrderDetail = null;
+            string filename = "File.csv";
+            string contentType = "text/csv";
+            byte[] file = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("workordersexport", out string path);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path , wo, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    workOrderDetail = JsonConvert.DeserializeObject<List<AllWOExport>>(await response.Content.ReadAsStringAsync());
+                }
+
+                var cd = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = filename,
+                    Inline = true,
+                };
+
+                HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
+                file = await _allwoexport.CreateListCSV(workOrderDetail);
+            }
+            catch (Exception ex)
             {
 
             }

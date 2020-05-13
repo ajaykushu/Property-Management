@@ -30,5 +30,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> WorkOrderStageChange(string Id, int stageId);
 
         Task<List<SelectItem>> GetLocation(long id);
+        Task<List<AllWOExport>> WOExport(WOFilterModel wOFilterModel);
     }
 }
