@@ -37,7 +37,6 @@ namespace DataAccessLayer.Repository
         public DbSet<Stage> Stages { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
-        public DbSet<UserNotification> UserNotifications { set; get; }
         public DbSet<Notification> Notifications { set; get; }
 
 
@@ -230,6 +229,7 @@ namespace DataAccessLayer.Repository
         }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            
             var entries = ChangeTracker
             .Entries()
            .Where(e => e.Entity is Log && (

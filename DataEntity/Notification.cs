@@ -12,9 +12,9 @@ namespace DataEntity
         public long NId { get; set; }
         [Column(TypeName = "varchar(100)")]
         public string Message { get; set; }
-        public long NavigatorId { get; set; }
-        [Column(TypeName = "varchar(1)")]
-        public string NotificationType { get; set; }//W,C,R,U,P
+        public string NavigatorId { get; set; }
+        [Column(TypeName = "varchar(2)")]
+        public string NotificationType { get; set; }//WC,WE,WC,CR,UA,UE,PA,PE,PC
         public virtual ICollection<UserNotification> UserNotification { get; set; }
     }
 }

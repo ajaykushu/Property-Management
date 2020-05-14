@@ -8,19 +8,21 @@ using Utilities.Interface;
 
 namespace Utilities
 {
+   
     public class Notifications : INotifier
     {
         private readonly IRepo<Notification> _notification;
+       
         public Notifications(IRepo<Notification> notification)
         {
             _notification = notification;
         }
-        public async Task<bool> CreateNotification(string message, List<long> AssignedTo, long navigator,char Type)
+        public async Task<bool> CreateNotification(string message, List<long> AssignedTo, string navigatorId,string Type)
         {
             Notification notification = new Notification
             {
                 Message = message,
-                NavigatorId = navigator,
+                NavigatorId = navigatorId,
                 NotificationType = Type.ToString(),
             };
             notification.UserNotification = new List<UserNotification>();
@@ -34,7 +36,10 @@ namespace Utilities
             }
            var status= await _notification.Add(notification);
             if (status > 0)
+            {
+               
                 return true;
+            }
             return false;
 
 

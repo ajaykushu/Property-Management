@@ -45,6 +45,7 @@ namespace DataEntity
 
         public bool IsActive { get; set; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
+        
     }
 
     public class ApplicationUserPhoneValidator : IUserValidator<ApplicationUser>

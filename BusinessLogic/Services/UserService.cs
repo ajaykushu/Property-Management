@@ -21,10 +21,12 @@ namespace BusinessLogic.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IRepo<UserNotification> _userNotification;
         private readonly IRepo<Languages> _langrepo;
         private readonly IRepo<Property> _property;
         private readonly IRepo<Department> _department;
         private readonly IRepo<UserProperty> _userProperty;
+        private readonly IRepo<Notification> _notification;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
@@ -32,7 +34,7 @@ namespace BusinessLogic.Services
         private readonly long userId;
 
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department, IRepo<UserProperty> userProperty)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -43,10 +45,12 @@ namespace BusinessLogic.Services
             _imageUploadInFile = imageUploadInFile;
             _cache = cache;
             _department = department;
+            _notification = notification;
             _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
             var sid = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid);
             if (sid != null)
                 userId = Convert.ToInt64(sid);
+            _userNotification = userNotification;
         }
 
         public async Task<bool> RegisterUser(RegisterUser model)
@@ -381,6 +385,43 @@ namespace BusinessLogic.Services
             var res = await _userManager.Users.Where(x => x.UserName.ToLower().Equals(userName.ToLower())).FirstOrDefaultAsync();
             status = res == null ? false : true;
             return status;
+        }
+
+        public async Task<List<AllNotification>> GetAllNotification()
+        {
+
+            var data = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).Select(x => new AllNotification
+            {
+                Id=x.NId,
+                CreationTime=x.CreatedTime.ToString(),
+                Message=x.Message,
+                NotificationType=x.NotificationType,
+                NavigatorId=x.NavigatorId
+            }).AsNoTracking().ToListAsync();
+
+            return data;
+        }
+
+        public async Task<int> GetNotificationCount()
+        {
+            var data = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).CountAsync();
+            return data;
+        }
+
+        public async Task<bool> MarkAsRead(int id)
+        {
+            var data = await _userNotification.Get(x => x.ApplicationUserId == userId && x.NotificationId == id).FirstOrDefaultAsync();
+            if (data != null)
+            {
+                data.IsRead = true;
+                var status=await _userNotification.Update(data);
+                if (status > 1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

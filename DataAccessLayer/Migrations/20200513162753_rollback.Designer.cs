@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200513162753_rollback")]
+    partial class rollback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2c2e3813-6e95-4f48-b714-d02ff0b71d33",
+                            ConcurrencyStamp = "a3ec4afd-fda6-4863-8d17-f9b696c587c4",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "85b55bf4-95fc-455a-af1b-c70a04e6232d",
+                            ConcurrencyStamp = "04082d3d-bf98-4891-94a0-10aa805efab0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "e4c0235d-8e5d-4898-b40d-a11a66ee8963",
+                            ConcurrencyStamp = "e5c4bd37-d6a8-4d38-b60a-11835622a225",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -591,11 +593,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("NavigatorId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NotificationType")
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("varchar(1)");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");

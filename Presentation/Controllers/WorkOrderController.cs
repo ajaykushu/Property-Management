@@ -314,7 +314,7 @@ namespace Presentation.Controllers
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
                 file = await _export.CreateCSV(workOrderDetail);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -345,7 +345,7 @@ namespace Presentation.Controllers
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
                 file = await _allwoexport.CreateListCSV(workOrderDetail);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

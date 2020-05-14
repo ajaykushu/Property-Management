@@ -27,5 +27,8 @@ namespace BusinessLogic.Interfaces
         Task<bool> CheckPhoneNumber(string phoneNumber);
 
         Task<bool> CheckUserName(string userName);
+        Task<List<AllNotification>> GetAllNotification();
+        Task<int> GetNotificationCount();
+        Task<bool> MarkAsRead(int id);
     }
 }

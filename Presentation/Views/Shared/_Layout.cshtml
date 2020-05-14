@@ -1,4 +1,5 @@
-﻿<style>
+﻿@{ string userId = "";}
+<style>
     .navbar-collapse .nav-item .fa {
         font-size: 1.5em;
         color: lightgray;
@@ -23,14 +24,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Presentation</title>
 
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
-        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-        <partial name="_ValidationScriptsPartial" />
-    
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+
 
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/login.css" />
@@ -54,6 +55,7 @@
                             var menu = HttpContextAccessor.HttpContext.Session.Keys.Contains("menu") ?
                             JsonConvert.DeserializeObject<Dictionary<string, List<MenuProperty>>>(HttpContextAccessor.HttpContext.Session.GetString("menu")) :
                             new Dictionary<string, List<MenuProperty>>();
+                            userId = HttpContextAccessor.HttpContext.Session.GetString("UId");
                             var path = HttpContextAccessor.HttpContext.Session.Keys.Contains("imagePath") ? HttpContextAccessor.HttpContext.Session.GetString("imagePath") : "";
                             <li class="nav-item dropdown ">
                                 <partial name="MenuView" for=@menu />
@@ -70,7 +72,11 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fa fa-bell fa-1x"></i></a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="GetAllNotification">
+                                    <i class="fa fa-bell fa-1x"></i>
+                                    <span id="notification_count" style="color:red;position:absolute"></span>
+                                </a>
+
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-envelope fa-1x"></i></a>
@@ -100,7 +106,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Presentation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - Property Maintenance - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -114,3 +120,13 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+        <script>
+        $(document).ready(function () {
+
+            $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
+                $("#notification_count").html('<strong>'+data+'</strong>');
+            })
+
+})
+</script>
+

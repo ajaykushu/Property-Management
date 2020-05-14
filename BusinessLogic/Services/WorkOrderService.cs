@@ -89,9 +89,21 @@ namespace BusinessLogic.Services
             }
 
             var status = await _workOrder.Add(workOrder);
-            if (status > 0) return true;
+            if (status > 0) {
+                //create notification
+                //getting all the person whom property is assigned
+                var users=await _userProperty.GetAll().Where(x => x.PropertyId == createWO.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
+                if(!users.Contains(createWO.UserId))
+                     users.Add(createWO.UserId);
+                if (!users.Contains(userId))
+                    users.Add(userId);
+                await _notifier.CreateNotification("Work Order Created with WOId "+workOrder.Id ,users,workOrder.Id, "WA");
+                return true; 
+            }
             return false;
         }
+
+       
 
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
@@ -353,7 +365,13 @@ namespace BusinessLogic.Services
             
             var status = await _workOrder.Update(wo);
             if (status > 0)
-            {  
+            {
+                var users = await _userProperty.GetAll().Include(x=>x.Property).Where(x => x.Property.PropertyName.Equals(editWorkOrder.PropertyName)).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
+                if (!users.Contains(editWorkOrder.UserId))
+                    users.Add(editWorkOrder.UserId);
+                if (!users.Contains(userId))
+                    users.Add(userId);
+                await _notifier.CreateNotification("Some Changed are done in WOId "+editWorkOrder.Id, users, editWorkOrder.Id, "WE");
                 return true;
             }
             return false;

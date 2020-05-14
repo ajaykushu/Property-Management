@@ -77,7 +77,7 @@ namespace API
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("token").GetSection("key").Value))
                };
            });
-            
+          
             services.Configure<EmailConfigurationModel>(Configuration.GetSection("EmailConfig"));
             services.AddScoped(typeof(IRepo<>), typeof(Repo<>));
             services.AddScoped<IEmailSender, EmailSender>();
@@ -114,12 +114,14 @@ namespace API
                 Path.Combine(Directory.GetCurrentDirectory(), "ImageFileStore")),
                 RequestPath = "/ImageFileStore"
             });
+            
             app.UseAuthentication();
             app.UseMiddleware<BlackListCheckMiddleware>();
             app.UseRouting();
             app.UseAuthorization();
             app.UseSerilogRequestLogging();
             app.UseMvc();
+            
         }
     }
 }

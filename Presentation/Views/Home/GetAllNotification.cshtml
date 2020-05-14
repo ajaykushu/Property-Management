@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Presentation.ViewModels.Controller.Home.AllNotification>
+
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Notifications</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NotificationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationTime)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr class='clickable-row'  onclick="forward('@item.NotificationType','@item.NavigatorId',@item.Id);">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Message)
+                    </td>
+                    <td>
+                        @if (item.NotificationType.Equals("WE"))
+                        {
+                            <text> Work Order Update</text>
+                        }
+                        else if (item.NotificationType.Equals("WC"))
+                        {
+                            <text> Work Order Create</text>
+                        }
+                        else if (item.NotificationType.Equals("UE"))
+                        {
+                            <text> User Update </text>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationTime)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">
+                    0 Notification
+                </td>
+                </tr>
+                }
+        </tbody>
+</table>
+<script>
+    function forward(key, url,id) {
+        $.get("@Url.Action("MarkAsRead","Home")"+'?id='+id);
+        if (key == 'WE'||key == 'WC')
+             window.location='@Url.Action("GetWODetail", "WorkOrder")'+'?id='+url;
+    }
+   
+    </script>
+<style>
+    .clickable-row{
+        cursor:pointer;
+
+    }
+    .clickable-row:active{
+        background-color:grey;
+
+    }
+</style>

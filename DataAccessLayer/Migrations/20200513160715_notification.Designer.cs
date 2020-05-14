@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200513160715_notification")]
+    partial class notification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2c2e3813-6e95-4f48-b714-d02ff0b71d33",
+                            ConcurrencyStamp = "d9ed9ab0-c372-44a6-9336-6e4b847d1a8e",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "85b55bf4-95fc-455a-af1b-c70a04e6232d",
+                            ConcurrencyStamp = "35877885-73f5-4c4f-bf84-c0e58bc0ff24",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "e4c0235d-8e5d-4898-b40d-a11a66ee8963",
+                            ConcurrencyStamp = "8a66a8b7-edf4-4a09-aadb-799854b58adb",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -582,20 +584,23 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("ApplicationUserId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("NavigatorId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NotificationType")
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("varchar(1)");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
@@ -604,6 +609,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("NId");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Notifications");
                 });
@@ -1018,31 +1025,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Areas");
                 });
 
-            modelBuilder.Entity("DataEntity.UserNotification", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("ApplicationUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("NotificationId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("NotificationId");
-
-                    b.ToTable("UserNotification");
-                });
-
             modelBuilder.Entity("DataEntity.UserProperty", b =>
                 {
                     b.Property<long>("Id")
@@ -1238,6 +1220,15 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DataEntity.Notification", b =>
+                {
+                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DataEntity.Property", b =>
                 {
                     b.HasOne("DataEntity.PropertyType", "PropertyTypes")
@@ -1282,21 +1273,6 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataEntity.Location", "Location")
                         .WithMany("SubLocations")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DataEntity.UserNotification", b =>
-                {
-                    b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataEntity.Notification", "Notification")
-                        .WithMany("UserNotification")
-                        .HasForeignKey("NotificationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

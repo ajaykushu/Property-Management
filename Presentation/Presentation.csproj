@@ -9,13 +9,6 @@
  
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ViewModels\Controller\Home\**" />
-    <Content Remove="ViewModels\Controller\Home\**" />
-    <EmbeddedResource Remove="ViewModels\Controller\Home\**" />
-    <None Remove="ViewModels\Controller\Home\**" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
@@ -24,7 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
   </ItemGroup>
 
 </Project>
