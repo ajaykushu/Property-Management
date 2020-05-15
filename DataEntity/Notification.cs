@@ -14,7 +14,7 @@ namespace DataEntity
         public string Message { get; set; }
         public string NavigatorId { get; set; }
         [Column(TypeName = "varchar(2)")]
-        public string NotificationType { get; set; }//WC,WE,WC,CR,UA,UE,PA,PE,PC
+        public string NotificationType { get; set; }//WA,WE,CA,RA,UA,UE,PA,PE,PC
         public virtual ICollection<UserNotification> UserNotification { get; set; }
     }
 }

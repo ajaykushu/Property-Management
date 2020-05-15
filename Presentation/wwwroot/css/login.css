@@ -183,15 +183,15 @@ th {
     }
 }
 @media only screen and (max-width: 580px) {
-    .usersview, .wordorderdetail, .usersview tbody, .wordorderdetail tbody, .usersview th, .wordorderdetail th, .usersview td, .wordorderdetail td, .usersview tr, .wordorderdetail tr {
+    .usersview, .notificationview, .wordorderdetail, .usersview tbody, .notificationview tbody, .wordorderdetail tbody, .usersview th, .notificationview th, .wordorderdetail th, .usersview td, .notificationview td, .wordorderdetail td, .usersview tr, .notificationview tr, .wordorderdetail tr {
         display: block;
     }
 
-        .usersview thead {
+        .usersview thead, .wordorderdetail thead, .notificationview thead {
             display: none;
         }
 
-        .usersview th, .wordorderdetail th {
+        .usersview th, .wordorderdetail th, .notificationview th {
             border: none !important;
             text-align: center;
         }
@@ -200,17 +200,28 @@ th {
         text-align: inherit;
     }
 
-    .usersview tbody td, .wordorderdetail tbody td {
+    .usersview tbody td, .wordorderdetail tbody td, .notificationview tbody td {
         text-wrap: normal !important;
     }
 
-    .usersview td:before, .wordorderdetail td:before {
+    .usersview td:before, .wordorderdetail td:before, .notificationview td:before {
         white-space: nowrap;
         display: table-cell;
         color: black;
         font-weight: bold;
     }
-
+    .notificationview td:nth-of-type(1):before{
+        content:"#"
+    }
+    .notificationview td:nth-of-type(2):before {
+        content: "Message"
+    }
+    .notificationview td:nth-of-type(3):before {
+        content: "NotificationType"
+    }
+    .notificationview td:nth-of-type(4):before {
+        content: "Creation Time"
+    }
     .usersview td:nth-of-type(1):before {
         content: "#";
     }

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.CustomException;
+using Utilities.Interface;
 
 namespace BusinessLogic.Services
 {
@@ -23,8 +24,8 @@ namespace BusinessLogic.Services
         private readonly IRepo<Location> _loc;
         private readonly IRepo<SubLocation> _subloaction;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor)
+        private readonly INotifier _notifier;
+        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor, INotifier notifier)
         {
             _property = property;
             _proptype = proptype;
@@ -32,6 +33,7 @@ namespace BusinessLogic.Services
             _subloaction = subloaction;
             _userProperty = userProperty;
             _httpContextAccessor = httpContextAccessor;
+            _notifier = notifier;
         }
 
         public PropertyOperationModel GetPropertyType()
@@ -67,11 +69,12 @@ namespace BusinessLogic.Services
             var res = await _property.Add(prop);
             if (res > 0)
             {
+                
                 return true;
             }
             else
             {
-                throw new BadRequestException("Add user failed");
+                throw new BadRequestException("Add Property failed");
             }
         }
 
@@ -135,9 +138,16 @@ namespace BusinessLogic.Services
             if (prop != null)
             {
                 prop.IsActive = operation;
+                string message;
+                if (prop.IsActive)
+                    message = prop.PropertyName + " is activate now";
+                else
+                    message = prop.PropertyName + " is deactive now";
                 int status = await _property.Update(prop);
                 if (status > 0)
                 {
+                    var users = prop.UserProperties.Select(x => x.ApplicationUserId).ToList();
+                    await _notifier.CreateNotification(message, users, prop.Id+"", "PE");
                     return true;
                 }
                 else
@@ -191,6 +201,11 @@ namespace BusinessLogic.Services
                 property.State = prop.State;
                 property.ZipCode = prop.ZipCode;
                 status = Convert.ToBoolean(await _property.Update(property));
+                if (status)
+                {
+                    var users = _userProperty.Get(x=>x.PropertyId==prop.Id).Select(x => x.ApplicationUserId).ToList();
+                    await _notifier.CreateNotification("Property Updated" + prop.Id, users, prop.Id + "", "PE");
+                }
             }
             else
                 throw new BadRequestException("Property Not Found");

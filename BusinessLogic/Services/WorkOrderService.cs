@@ -371,7 +371,7 @@ namespace BusinessLogic.Services
                     users.Add(editWorkOrder.UserId);
                 if (!users.Contains(userId))
                     users.Add(userId);
-                await _notifier.CreateNotification("Some Changed are done in WOId "+editWorkOrder.Id, users, editWorkOrder.Id, "WE");
+                await _notifier.CreateNotification("Some Changed are done in Workorder for WOId "+editWorkOrder.Id, users, editWorkOrder.Id, "WE");
                 return true;
             }
             return false;
@@ -403,6 +403,8 @@ namespace BusinessLogic.Services
         {
             
             var status = false;
+            string type = String.Empty;
+            string message = string.Empty;
             if (post != null)
             {
                 if (post.ParentId == 0)
@@ -415,6 +417,8 @@ namespace BusinessLogic.Services
                     };
                     var res = await _comments.Add(comment);
                     status = res > 0 ? true : false;
+                    type = "CA";
+                    message="Comment Added for WO " + post.WorkOrderId;
                 }
                 else
                 {
@@ -429,10 +433,26 @@ namespace BusinessLogic.Services
                             RepliedTo = post.RepliedTo,
                             ReplyById=userId
                         });
+                       
                         var res = await _comments.Update(comm);
                         status = res > 0 ? true : false;
+                        type = "RA";
+                        message = "Relpy to comment Which is Commented by  "+post.RepliedTo +" attached to "+ post.WorkOrderId;
                     }
                 }
+            }
+            if (status)
+            {
+                var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
+                var users = await _userProperty.GetAll().Where(x => x.PropertyId == wo.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
+                var repliedto = await _appuser.FindByNameAsync(post.RepliedTo);
+                if (!users.Contains(wo.AssignedToId.GetValueOrDefault()))
+                    users.Add(wo.AssignedToId.GetValueOrDefault());
+                if (!users.Contains(userId))
+                    users.Add(userId);
+                if (!users.Contains(repliedto.Id))
+                    users.Add(repliedto.Id);
+                await _notifier.CreateNotification(message + wo.Id, users, wo.Id, type);
             }
             return status;
         }
@@ -454,7 +474,13 @@ namespace BusinessLogic.Services
                 wo.StageId = stageId;
                 var status = await _workOrder.Update(wo);
                 if (status > 0)
+                {
+                    var users = await _userProperty.GetAll().Where(x => x.PropertyId == wo.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
+                    if (!users.Contains(userId))
+                        users.Add(userId);
+                    await _notifier.CreateNotification("Work Order Stage Changed for WOId " + wo.Id, users, wo.Id, "WE");
                     return true;
+                }
             }
             return false;
         }

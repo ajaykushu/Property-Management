@@ -5,9 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Notifications</h1>
-
-<table class="table">
+<div class="workordertitle">
+    Notifications
+</div>
+@if (Model != null && Model.Any())
+        {
+<table class="table table-striped  table_container notificationview table-responsive-lg ">
     <thead>
         <tr>
             <th>
@@ -22,66 +25,87 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreationTime)
             </th>
-            
+
         </tr>
+
     </thead>
+
     <tbody>
-        @if (Model != null && Model.Any())
-        {
-            @foreach (var item in Model)
+
+        @foreach (var item in Model)
             {
-                <tr class='clickable-row'  onclick="forward('@item.NotificationType','@item.NavigatorId',@item.Id);">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Message)
-                    </td>
-                    <td>
-                        @if (item.NotificationType.Equals("WE"))
+        <tr class='clickable-row' onclick="forward('@item.NotificationType','@item.NavigatorId',@item.Id);">
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @if (item.NotificationType.Equals("WE"))
                         {
-                            <text> Work Order Update</text>
+                <text> Work Order Update</text>
                         }
-                        else if (item.NotificationType.Equals("WC"))
+                        else if (item.NotificationType.Equals("WA"))
                         {
-                            <text> Work Order Create</text>
+                <text> Work Order Create</text>
                         }
                         else if (item.NotificationType.Equals("UE"))
                         {
-                            <text> User Update </text>
+                <text> User Update </text>
                         }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreationTime)
-                    </td>
-                </tr>
-            }
+                        else if (item.NotificationType.Equals("CA"))
+                        {
+                <text> Comment </text>
+                        }
+                        else if (item.NotificationType.Equals("RA"))
+                        {
+                <text> Reply </text>
+                        }
+                        else if (item.NotificationType.Equals("PA"))
+                        {
+                <text> Property Add </text>
+                        }
+                        else if (item.NotificationType.Equals("PE"))
+                        {
+                <text> Property Update </text>
+                        }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+        </tr>
         }
-        else
-        {
-            <tr>
-                <td colspan="4">
-                    0 Notification
-                </td>
-                </tr>
-                }
-        </tbody>
+    </tbody>
+
+
 </table>
+ }
+    else
+    {
+
+<text>0 Notification</text>
+
+
+    }
 <script>
-    function forward(key, url,id) {
-        $.get("@Url.Action("MarkAsRead","Home")"+'?id='+id);
-        if (key == 'WE'||key == 'WC')
-             window.location='@Url.Action("GetWODetail", "WorkOrder")'+'?id='+url;
+    function forward(key, url, id) {
+        $.get("@Url.Action("MarkAsRead","Home")" + '?id=' + id);
+        if (key == 'WE' || key == 'WA' || key == 'CA'||key == 'RA')
+            window.location = '@Url.Action("GetWODetail", "WorkOrder")' + '?id=' + url;
+        else if (key == 'UA' || key == 'UE')
+            window.location = '@Url.Action("UserDetailView", "User")' + '?id=' + url;
+        else if (key == 'PA' || key == 'PE')
+             window.location='@Url.Action("ListProperties", "Property")';
     }
-   
-    </script>
+
+</script>
 <style>
-    .clickable-row{
-        cursor:pointer;
-
+    .clickable-row {
+        cursor: pointer;
     }
-    .clickable-row:active{
-        background-color:grey;
 
-    }
+        .clickable-row:active {
+            background-color: grey;
+        }
 </style>
