@@ -30,7 +30,7 @@ namespace Presentation.Utiliity
             string guid = "Templates/"+Guid.NewGuid().ToString()+".csv";
             File.Copy("Templates/WODetailTemplate.csv",guid);
             table.ToCSV(guid);
-            byte[] filedata = System.IO.File.ReadAllBytes(guid);
+            byte[] filedata = await System.IO.File.ReadAllBytesAsync(guid);
             File.Delete(guid);
             return filedata;
         }
@@ -86,7 +86,7 @@ namespace Presentation.Utiliity
             string guid = "Templates/" + Guid.NewGuid().ToString() + ".csv";
             File.Copy("Templates/WODetailTemplate.csv", guid);
             table.ToCSV(guid);
-            byte[] filedata = System.IO.File.ReadAllBytes(guid);
+            byte[] filedata = await System.IO.File.ReadAllBytesAsync(guid);
             File.Delete(guid);
             return filedata;
         }

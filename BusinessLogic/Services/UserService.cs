@@ -393,7 +393,7 @@ namespace BusinessLogic.Services
             var data = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).Select(x => new AllNotification
             {
                 Id=x.NId,
-                CreationTime=x.CreatedTime.ToString(),
+                CreationTime=x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
                 Message=x.Message,
                 NotificationType=x.NotificationType,
                 NavigatorId=x.NavigatorId

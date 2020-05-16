@@ -81,7 +81,7 @@ namespace BusinessLogic.Services
         public async Task<List<PropertiesModel>> GetProperties()
         {
 
-            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin") || _httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
                 var username = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
                 if (username != null)

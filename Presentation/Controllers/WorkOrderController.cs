@@ -259,8 +259,6 @@ namespace Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
-
-                    // TempData["Success"] = "Posted Successfully";
                 }
             }
             catch (Exception)
@@ -270,13 +268,13 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> WorkOrderStageChange(string Id, int stageId)
+        public async Task<IActionResult> WorkOrderStageChange(string id, int stageId,string comment)
         {
             try
             {
-                var urlpayload = string.Concat("?Id=", Id, "&stageId=", stageId);
+                var urlpayload = string.Concat("?id=", id, "&stageId=", stageId,"&comment=",comment);
                 _apiRoute.Value.Routes.TryGetValue("workorderstagechange", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
@@ -287,7 +285,7 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
-            return RedirectToAction("GetWODetail", new { id = Id });
+            return RedirectToAction("GetWODetail", new { id });
         }
         [HttpGet]
         public async Task<IActionResult> DownloadWO(string woId)

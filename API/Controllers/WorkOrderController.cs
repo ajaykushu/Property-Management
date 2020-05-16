@@ -118,9 +118,9 @@ namespace API.Controllers
         [HttpGet]
         [Route("workorderstagechange")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
-        public async Task<ActionResult<bool>> WorkOrderStageChange(string Id, int stageId)
+        public async Task<ActionResult<bool>> WorkOrderStageChange(string id, int stageId, string comment)
         {
-            bool res = await _workOrderService.WorkOrderStageChange(Id, stageId);
+            bool res = await _workOrderService.WorkOrderStageChange(id, stageId,comment);
             return Ok(res);
         }
         [HttpPost]

@@ -4,9 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="workordertitle">
-    Work Order Detail
-</div>
+    <div class="workordertitle">
+        Work Order Detail
+        <a asp-action="DownloadWO" class="fa-pull-right" title="Export" style="padding:5px;color:white" asp-route-woId="@Model.Id" download="File.csv"><i class="fas fa-file-export"></i></a>
+    </div>
 @if (Model != null)
 {
     <table class="table">
@@ -24,7 +25,7 @@
 
                         <div class="row ">
                             <div class="col-md-3">
-                                <label for="StageCode">Stage Code</label>
+                                <label asp-for="StageCode"></label>
                             </div>
                             <div class="col">
                                 @Html.DisplayFor(x => x.StageCode)
@@ -32,7 +33,7 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label for="StageDescription">Stage Description</label>
+                                <label asp-for="StageDescription"></label>
                             </div>
                             <div class="col">
                                 @Html.DisplayFor(x => x.StageDescription)
@@ -48,15 +49,19 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label for="">Stage Change</label>
+                                <label>Status Change</label>
                             </div>
                             <div class="col">
                                 <form asp-action="WorkOrderStageChange">
-                                    <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))">
-                                        <option value="">Select Stage</option>
+                                    <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))" required>
+                                        <option value="">Select Status</option>
                                     </select>
+                                    <div class="form-group">
+                                    <label>Add Comment</label>
+                                    <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
+                                        </div>
                                     <input asp-for="Id" hidden>
-                                    <input type="submit" value="Change" class="btn btn-sm btn-primary top-buffer">
+                                    <input type="submit" value="Change" class="btn btn-sm btn-primary">
                                 </form>
                             </div>
                         </div>
@@ -112,7 +117,7 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label for="Requestedby">Requested By</label>
+                                <label asp-for="Requestedby"></label>
                             </div>
                             <div class="col">
                                 @Html.DisplayFor(x => x.Requestedby)
@@ -120,7 +125,7 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label for="CreatedTime">Created Time</label>
+                                <label asp-for="CreatedTime"></label>
                             </div>
                             <div class="col">
                                 @Html.DisplayFor(x => x.CreatedTime)
@@ -136,7 +141,7 @@
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label for="DueDate">Due Date</label>
+                                <label asp-for="DueDate"></label>
                             </div>
                             <div class="col">
                                 @Html.DisplayFor(x => x.DueDate)
@@ -217,11 +222,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
-                <th>
-                   <a asp-action="DownloadWO" asp-route-woId="@Model.Id" download="File.csv">Export</a>
-                </th>
-            </tr>
+           
             <tr>
                 <th>
                     Comments

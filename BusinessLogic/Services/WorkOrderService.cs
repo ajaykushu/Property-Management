@@ -107,7 +107,7 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
-            var iteminpage = 4;
+            var iteminpage = 12;
             var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
                           WorkOrderDetail
                 {
@@ -197,59 +197,8 @@ namespace BusinessLogic.Services
         {
             int iteminpage = 20;
             var query = _workOrder.GetAll();
-            
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
-            {
-                var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
-                query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
-            {
-                var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
-                query = query.Where(x => x.CreatedTime.Date <= enddate.Date);
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
-            {
-                query = query.Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
-               
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
-            {
-                query.Where(x => x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.Email.ToLower()));
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.UserName))
-            {
-                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(wOFilterModel.UserName.ToLower()));
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
-            {
-                var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
-                query = query.Where(x => x.DueDate.Date == dueDate.Date);
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
-            {
-                var index = Convert.ToInt32(wOFilterModel.Priority);
-                query = query.Where(x => x.Priority == index);
-            }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
-            {
-                query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName.ToLower()));
-            }
-
+            query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
-            var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
-            var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            query = query.Include(x => x.AssignedTo).Include(x=>x.Stage).Include(x => x.Property);
-            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
-            {
-                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
-                query = query.Where(x =>propIds.Contains(x.Property.Id));
-            }
-            else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
-            {
-                query = query.Where(x => x.AssignedTo.Equals(username));
-            }
-
             var count = query.Count();
             workOrderAssigned = await query.OrderByDescending(x => x.DueDate).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
@@ -257,7 +206,7 @@ namespace BusinessLogic.Services
                 Description = x.Description,
                 Id = x.Id,
                 Stage = x.Stage.StageCode.ToLower(),
-                AssignedToUser = string.Concat(x.AssignedTo.FirstName, " ", x.AssignedTo.LastName),
+                AssignedToUser = string.Concat(x.AssignedTo.UserName,"(",x.AssignedTo.FirstName, " ", x.AssignedTo.LastName,")"),
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
             
@@ -379,7 +328,7 @@ namespace BusinessLogic.Services
 
         public async Task<List<CommentDTO>> GetComment(string workorderId, int pageNumber)
         {
-            var itemsinpage = 4;
+            var itemsinpage = 12;
             var obj = await _comments.GetAll().Where(x => x.WorkOrderId.Equals(workorderId)).Include(x => x.Replies).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
             {
                 CommentBy = x.CreatedByUserName,
@@ -403,6 +352,7 @@ namespace BusinessLogic.Services
         {
             
             var status = false;
+            var name = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.GivenName).Value;
             string type = String.Empty;
             string message = string.Empty;
             if (post != null)
@@ -418,11 +368,11 @@ namespace BusinessLogic.Services
                     var res = await _comments.Add(comment);
                     status = res > 0 ? true : false;
                     type = "CA";
-                    message="Comment Added for WO " + post.WorkOrderId;
+                    message=name + "Commented on workorder " + post.WorkOrderId;
                 }
                 else
                 {
-                    var comm = _comments.Get(x => x.Id == post.ParentId).FirstOrDefault();
+                    var comm = _comments.Get(x => x.Id == post.ParentId).Include(x=>x.ApplicationUser).FirstOrDefault();
                     if (comm != null)
                     {
                         if (comm.Replies == null)
@@ -437,7 +387,7 @@ namespace BusinessLogic.Services
                         var res = await _comments.Update(comm);
                         status = res > 0 ? true : false;
                         type = "RA";
-                        message = "Relpy to comment Which is Commented by  "+post.RepliedTo +" attached to "+ post.WorkOrderId;
+                        message = String.Concat(name," replied to comment commented by ",comm.ApplicationUser.FirstName," ",comm.ApplicationUser.LastName +" attached to "+ post.WorkOrderId);
                     }
                 }
             }
@@ -450,16 +400,16 @@ namespace BusinessLogic.Services
                     users.Add(wo.AssignedToId.GetValueOrDefault());
                 if (!users.Contains(userId))
                     users.Add(userId);
-                if (!users.Contains(repliedto.Id))
+                if (repliedto!=null && !users.Contains(repliedto.Id))
                     users.Add(repliedto.Id);
-                await _notifier.CreateNotification(message + wo.Id, users, wo.Id, type);
+                await _notifier.CreateNotification(message, users, wo.Id, type);
             }
             return status;
         }
 
-        public async Task<bool> WorkOrderStageChange(string Id, int stageId)
+        public async Task<bool> WorkOrderStageChange(string id, int stageId,string comment)
         {
-            var wo = await _workOrder.Get(x => x.Id.Equals(Id)).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
             var stage = await _stage.Get(x => x.Id == stageId).FirstOrDefaultAsync();
             if (stage != null)
             {
@@ -467,7 +417,7 @@ namespace BusinessLogic.Services
                     wo.Comments = new List<Comment>();
                 wo.Comments.Add(new Comment
                 {
-                    CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode),
+                    CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode, " CHAR(13) ", comment),
                     CommentById=userId
                    
                 });
@@ -499,6 +449,34 @@ namespace BusinessLogic.Services
         public async Task<List<AllWOExport>> WOExport(WOFilterModel wOFilterModel)
         {
             var query = _workOrder.GetAll();
+            query = await FilterWO(wOFilterModel, query);
+            List<AllWOExport> workOrders = null;
+            workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExport
+            {
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StageCode = x.Stage.StageCode,
+                StageDescription = x.Stage.StageDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                DueDate = x.DueDate,
+                UpdatedTime = x.UpdatedTime,
+                Department = x.AssignedTo.Department.DepartmentName,
+                AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
+                Requestedby = x.RequestedBy,
+                Id = x.Id,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
+            }).AsNoTracking().ToListAsync();
+            return workOrders;
+        }
+
+        private async Task<IQueryable<WorkOrder>> FilterWO(WOFilterModel wOFilterModel, IQueryable<WorkOrder> query)
+        {
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
                 var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
@@ -516,11 +494,11 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
             {
-                query.Where(x => x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.Email.ToLower()));
+                query.Where(x => x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.Email));
             }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.UserName))
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.AssignedTo))
             {
-                query = query.Where(x => x.AssignedTo.UserName.ToLower().StartsWith(wOFilterModel.UserName.ToLower()));
+                query = query.Where(x => x.AssignedTo.FirstName.ToLower().StartsWith(wOFilterModel.AssignedTo));
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
             {
@@ -534,10 +512,9 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
             {
-                query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName.ToLower()));
+                query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName));
             }
 
-            List<AllWOExport> workOrders = null;
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             query = query.Include(x => x.AssignedTo).Include(x => x.Stage).Include(x => x.Property);
@@ -548,30 +525,10 @@ namespace BusinessLogic.Services
             }
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
-                query = query.Where(x => x.AssignedTo.Equals(username));
+                query = query.Where(x => x.AssignedTo.UserName.Equals(username));
             }
-            workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExport
-            {
-                PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
-                StageCode = x.Stage.StageCode,
-                StageDescription = x.Stage.StageDescription,
-                Item = x.Item.ItemName,
-                CreatedTime = x.CreatedTime,
-                DueDate = x.DueDate,
-                UpdatedTime = x.UpdatedTime,
-                Department = x.AssignedTo.Department.DepartmentName,
-                AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
-                Requestedby = x.RequestedBy,
-                Id = x.Id,
-                Priority = x.Priority,
-                UpdatedBy = x.UpdatedByUserName,
-                Description = x.Description,
-                Location = x.Location.LocationName,
-                SubLocation = x.SubLocation.AreaName,
-                Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
-            }).AsNoTracking().ToListAsync();
-            return workOrders;
+
+            return query;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model Pagination<List<Comment>>
 
-<div class="mycontainer" style="max-height:400px;overflow-y:scroll;padding:8px;">
+<div class="mycontainer" style="max-height:1600px;overflow-y:scroll;padding:8px;">
     <form asp-action='PostComment' method='post'>
         <p>
             <div class="mycon">
@@ -18,7 +18,7 @@
                                 <div class="card-body">
                                     <p class="text-success">Comment By-&nbsp; @item.CommentBy</p>
                                     <h6 class="card-subtitle"> @item.CommentDate</h6>
-                                    <p class="card-text"> @item.CommentString</p>
+                                    <p class="card-text"><pre>@item.CommentString</pre></p>
                                     <button type="button" value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                         <div class="card-body">
                                             <p class="text-info">RepliedBy By-&nbsp; @reply.RepliedBy</p>
                                             <h6 class="card-subtitle">@reply.RepliedDate</h6>
-                                            <p class="card-text"><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</p>
+                                            <p class="card-text"><strong>@@@reply.RepliedTo</strong><pre>@reply.ReplyString</pre></p>
                                             <button type="button" value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
                                         </div>
                                     </div>
@@ -53,9 +53,7 @@
         </div>
     </form>
 </div>
-@*<div>
-        @Html.ActionLink("Back", "GetWODetail", new { id = ViewBag.workorderId })
-    </div>*@
+
 <style>
     .note {
         height: 70px;
