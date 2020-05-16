@@ -169,8 +169,6 @@ namespace Presentation.Controllers
             return View(prop);
         }
 
-       
-
         [HttpGet]
         public async Task<JsonResult> CheckProperty(string propertyName)
         {

@@ -1,9 +1,4 @@
-﻿
-using Presentation.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Presentation.Utiliity.Interface
@@ -15,6 +10,7 @@ namespace Presentation.Utiliity.Interface
         /// </summary>
         /// <returns>string File</returns>
         Task<byte[]> CreateCSV(T model);
+
         Task<byte[]> CreateListCSV(List<T> model);
     }
 }

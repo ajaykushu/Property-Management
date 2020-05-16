@@ -29,19 +29,15 @@ namespace DataEntity
         [Column(TypeName = "varchar(100)")]
         public string StreetAddress2 { set; get; }
 
-        
         [Column(TypeName = "varchar(50)")]
         public string ZipCode { set; get; }
 
-        
         [Column(TypeName = "varchar(50)")]
         public string City { set; get; }
 
-       
         [Column(TypeName = "varchar(50)")]
         public string State { set; get; }
 
-        
         [Column(TypeName = "varchar(50)")]
         public string Country { set; get; }
 

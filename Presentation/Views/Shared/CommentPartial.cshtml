@@ -1,9 +1,9 @@
-﻿@model  List<Comment>
+﻿@model List<Comment>
 @if (Model != null && Model.Any())
 {
     @foreach (var item in Model)
     {
-        
+
         <div class="parent" id=@item.Id>
             <div class="mycon">
                 <div class="card top-buffer comment">

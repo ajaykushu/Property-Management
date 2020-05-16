@@ -34,7 +34,7 @@ namespace BusinessLogic.Services
         public long userId;
         private readonly string _scheme;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property,INotifier notifier)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -89,49 +89,48 @@ namespace BusinessLogic.Services
             }
 
             var status = await _workOrder.Add(workOrder);
-            if (status > 0) {
+            if (status > 0)
+            {
                 //create notification
                 //getting all the person whom property is assigned
-                var users=await _userProperty.GetAll().Where(x => x.PropertyId == createWO.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
-                if(!users.Contains(createWO.UserId))
-                     users.Add(createWO.UserId);
+                var users = await _userProperty.GetAll().Where(x => x.PropertyId == createWO.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
+                if (!users.Contains(createWO.UserId))
+                    users.Add(createWO.UserId);
                 if (!users.Contains(userId))
                     users.Add(userId);
-                await _notifier.CreateNotification("Work Order Created with WOId "+workOrder.Id ,users,workOrder.Id, "WA");
-                return true; 
+                await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
+                return true;
             }
             return false;
         }
-
-       
 
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
             var iteminpage = 12;
             var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
                           WorkOrderDetail
-                {
-                    PropertyName = x.Property.PropertyName,
-                    Issue = x.Issue.IssueName,
-                    StageCode = x.Stage.StageCode,
-                    StageDescription = x.Stage.StageDescription,
-                    Item = x.Item.ItemName,
-                    CreatedTime = x.CreatedTime,
-                    DueDate = x.DueDate,
-                    UpdatedTime = x.UpdatedTime,
-                    Department = x.AssignedTo.Department.DepartmentName,
-                    AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
-                    Requestedby = x.RequestedBy,
-                    Id = x.Id,
-                    Priority = x.Priority,
-                    UpdatedBy = x.UpdatedByUserName,
-                    Description = x.Description,
-                    Location = x.Location.LocationName,
-                    SubLocation = x.SubLocation.AreaName,
-                    Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
-                     x.FileName,
-                     string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
-                     )).ToList()
+            {
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StageCode = x.Stage.StageCode,
+                StageDescription = x.Stage.StageDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                DueDate = x.DueDate,
+                UpdatedTime = x.UpdatedTime,
+                Department = x.AssignedTo.Department.DepartmentName,
+                AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
+                Requestedby = x.RequestedBy,
+                Id = x.Id,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
+                 x.FileName,
+                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                 )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
             workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
@@ -206,10 +205,9 @@ namespace BusinessLogic.Services
                 Description = x.Description,
                 Id = x.Id,
                 Stage = x.Stage.StageCode.ToLower(),
-                AssignedToUser = string.Concat(x.AssignedTo.UserName,"(",x.AssignedTo.FirstName, " ", x.AssignedTo.LastName,")"),
+                AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
-            
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
@@ -271,7 +269,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> EditWO(EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
-            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x=>x.Comments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.Comments).FirstOrDefaultAsync();
             if (wo != null)
             {
                 if (File != null)
@@ -287,7 +285,6 @@ namespace BusinessLogic.Services
                                 FileName = item.FileName,
                                 FilePath = path
                             });
-
                         }
                     }
                 }
@@ -305,22 +302,22 @@ namespace BusinessLogic.Services
                 var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
                 foreach (var item in remove)
                 {
-                    var tempurl=item.Replace(_scheme+_httpContextAccessor.HttpContext.Request.Host.Value+"/", "");
+                    var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
                     _imageuploadinfile.Delete(tempurl);
                     var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
                     wo.WOAttachments.Remove(woAttch);
                 }
             }
-            
+
             var status = await _workOrder.Update(wo);
             if (status > 0)
             {
-                var users = await _userProperty.GetAll().Include(x=>x.Property).Where(x => x.Property.PropertyName.Equals(editWorkOrder.PropertyName)).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
+                var users = await _userProperty.GetAll().Include(x => x.Property).Where(x => x.Property.PropertyName.Equals(editWorkOrder.PropertyName)).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
                 if (!users.Contains(editWorkOrder.UserId))
                     users.Add(editWorkOrder.UserId);
                 if (!users.Contains(userId))
                     users.Add(userId);
-                await _notifier.CreateNotification("Some Changed are done in Workorder for WOId "+editWorkOrder.Id, users, editWorkOrder.Id, "WE");
+                await _notifier.CreateNotification("Some Changed are done in Workorder for WOId " + editWorkOrder.Id, users, editWorkOrder.Id, "WE");
                 return true;
             }
             return false;
@@ -339,10 +336,10 @@ namespace BusinessLogic.Services
                 {
                     Id = x.Id,
                     RepliedTo = string.Concat(x.Comment.ApplicationUser.FirstName, " ", x.Comment.ApplicationUser.LastName, "(", x.ApplicationUser.UserName, ")"),
-                ReplyString = x.ReplyString,
-                RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-                RepliedBy = string.Concat(x.ApplicationUser.FirstName, " ", x.ApplicationUser.LastName, "(", x.ApplicationUser.UserName, ")")
-            }).ToList()
+                    ReplyString = x.ReplyString,
+                    RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                    RepliedBy = string.Concat(x.ApplicationUser.FirstName, " ", x.ApplicationUser.LastName, "(", x.ApplicationUser.UserName, ")")
+                }).ToList()
             }).Skip(itemsinpage * pageNumber).Take(itemsinpage).ToListAsync();
 
             return obj;
@@ -350,7 +347,6 @@ namespace BusinessLogic.Services
 
         public async Task<bool> PostComment(Post post)
         {
-            
             var status = false;
             var name = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.GivenName).Value;
             string type = String.Empty;
@@ -363,16 +359,16 @@ namespace BusinessLogic.Services
                     {
                         WorkOrderId = post.WorkOrderId,
                         CommentString = post.Comment,
-                        CommentById=userId
+                        CommentById = userId
                     };
                     var res = await _comments.Add(comment);
                     status = res > 0 ? true : false;
                     type = "CA";
-                    message=name + "Commented on workorder " + post.WorkOrderId;
+                    message = name + "Commented on workorder " + post.WorkOrderId;
                 }
                 else
                 {
-                    var comm = _comments.Get(x => x.Id == post.ParentId).Include(x=>x.ApplicationUser).FirstOrDefault();
+                    var comm = _comments.Get(x => x.Id == post.ParentId).Include(x => x.ApplicationUser).FirstOrDefault();
                     if (comm != null)
                     {
                         if (comm.Replies == null)
@@ -381,13 +377,13 @@ namespace BusinessLogic.Services
                         {
                             ReplyString = post.Comment,
                             RepliedTo = post.RepliedTo,
-                            ReplyById=userId
+                            ReplyById = userId
                         });
-                       
+
                         var res = await _comments.Update(comm);
                         status = res > 0 ? true : false;
                         type = "RA";
-                        message = String.Concat(name," replied to comment commented by ",comm.ApplicationUser.FirstName," ",comm.ApplicationUser.LastName +" attached to "+ post.WorkOrderId);
+                        message = String.Concat(name, " replied to comment commented by ", comm.ApplicationUser.FirstName, " ", comm.ApplicationUser.LastName + " attached to " + post.WorkOrderId);
                     }
                 }
             }
@@ -400,14 +396,14 @@ namespace BusinessLogic.Services
                     users.Add(wo.AssignedToId.GetValueOrDefault());
                 if (!users.Contains(userId))
                     users.Add(userId);
-                if (repliedto!=null && !users.Contains(repliedto.Id))
+                if (repliedto != null && !users.Contains(repliedto.Id))
                     users.Add(repliedto.Id);
                 await _notifier.CreateNotification(message, users, wo.Id, type);
             }
             return status;
         }
 
-        public async Task<bool> WorkOrderStageChange(string id, int stageId,string comment)
+        public async Task<bool> WorkOrderStageChange(string id, int stageId, string comment)
         {
             var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
             var stage = await _stage.Get(x => x.Id == stageId).FirstOrDefaultAsync();
@@ -418,8 +414,7 @@ namespace BusinessLogic.Services
                 wo.Comments.Add(new Comment
                 {
                     CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode, " CHAR(13) ", comment),
-                    CommentById=userId
-                   
+                    CommentById = userId
                 });
                 wo.StageId = stageId;
                 var status = await _workOrder.Update(wo);
@@ -490,7 +485,6 @@ namespace BusinessLogic.Services
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
                 query = query.Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
-
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
             {

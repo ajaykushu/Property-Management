@@ -18,11 +18,12 @@ namespace DataAccessLayer.Repository
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public AppDBContext(DbContextOptions options) : base(options)
         {
             _httpContextAccessor = new HttpContextAccessor();
         }
-        
+
         public DbSet<SubLocation> Areas { set; get; }
         public DbSet<Comment> Comments { set; get; }
         public DbSet<Department> Departments { set; get; }
@@ -38,7 +39,6 @@ namespace DataAccessLayer.Repository
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
         public DbSet<Notification> Notifications { set; get; }
-
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
@@ -227,9 +227,9 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 18, MenuId = 18, RoleId = 1 }
                 );
         }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            
             var entries = ChangeTracker
             .Entries()
            .Where(e => e.Entity is Log && (
@@ -256,5 +256,4 @@ namespace DataAccessLayer.Repository
             return (await base.SaveChangesAsync(true, cancellationToken));
         }
     }
-
 }

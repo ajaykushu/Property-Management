@@ -20,8 +20,10 @@ namespace DataEntity
 
         [Column(TypeName = "nvarchar(max)")]
         public string CommentString { get; set; }
+
         [ForeignKey("ApplicationUser")]
         public long CommentById { get; set; }
+
         public ApplicationUser ApplicationUser { get; set; }
 
         public ICollection<Reply> Replies { get; set; }

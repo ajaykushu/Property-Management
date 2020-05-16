@@ -18,6 +18,7 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
+
         public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
         {
             _httpClientHelper = httpClientHelper;
@@ -27,6 +28,7 @@ namespace Presentation.Controllers
                 _token = Encoding.UTF8.GetString(token);
             }
         }
+
         public IActionResult Privacy()
         {
             return View();
@@ -43,11 +45,12 @@ namespace Presentation.Controllers
         {
             return View("AccessDenied");
         }
+
         [HttpGet]
         public async Task<IActionResult> GetNotificationCount()
         {
             int count = 0;
-         try
+            try
             {
                 _apiRoute.Value.Routes.TryGetValue("getnotificationcount", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
@@ -62,6 +65,7 @@ namespace Presentation.Controllers
 
             return Ok(count);
         }
+
         [HttpGet]
         public async Task<IActionResult> MarkAsRead(int id)
         {
@@ -69,7 +73,7 @@ namespace Presentation.Controllers
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("markasread", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?id="+id, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
             }
@@ -81,6 +85,7 @@ namespace Presentation.Controllers
 
             return Ok(status);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllNotificationAsync()
         {
@@ -90,14 +95,14 @@ namespace Presentation.Controllers
                 _apiRoute.Value.Routes.TryGetValue("getallnotification", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
-                    allNotification = JsonConvert.DeserializeObject <List<AllNotification>>(await response.Content.ReadAsStringAsync());
+                    allNotification = JsonConvert.DeserializeObject<List<AllNotification>>(await response.Content.ReadAsStringAsync());
             }
             catch (Exception)
             {
                 TempData["Error"] = StringConstants.Error;
             }
             //getting all notification
-           
+
             return View(allNotification);
         }
     }

@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Text;
 
 namespace Presentation.Utiliity
 {
-    static class DataTableUtility
+    internal static class DataTableUtility
     {
         public static void ToCSV(this DataTable dtDataTable, string strFilePath)
         {
-            
             StreamWriter sw = new StreamWriter(strFilePath, false);
-            //headers  
+            //headers
             for (int i = 0; i < dtDataTable.Columns.Count; i++)
             {
                 sw.Write(dtDataTable.Columns[i]);

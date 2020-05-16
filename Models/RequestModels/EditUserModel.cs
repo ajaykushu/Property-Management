@@ -11,6 +11,7 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Enter Last Name")]
         public string LastName { get; set; }
+
         public string PrimaryProperty { get; set; }
         public string Suffix { get; set; }
 
@@ -40,6 +41,7 @@ namespace Models.RequestModels
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
+
         [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length between 4 to 256 charcters")]
         public string UserName { set; get; }
 

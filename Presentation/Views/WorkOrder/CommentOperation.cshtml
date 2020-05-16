@@ -69,8 +69,6 @@
         transition-timing-function: ease, ease;
         transition-delay: 0s, 0s;
     }
-
-    
 </style>
 <script>
 
@@ -97,7 +95,7 @@
     var workorderId='@ViewData["workOrderId"]';
     jQuery(function($) {
         $('.mycontainer').on('scroll', function () {
-       
+
         if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
             if (currentpage < pagecount) {
                  currentpage++;
@@ -109,9 +107,8 @@
                     });
 
             }
-            
+
         }
     })
 });
-
 </script>

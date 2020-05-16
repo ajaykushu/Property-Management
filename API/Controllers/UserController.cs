@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Interface;
@@ -121,6 +119,7 @@ namespace API.Controllers
             var res = await _userService.CheckUserName(userName);
             return res;
         }
+
         [HttpGet]
         [Route("getallnotification")]
         public async Task<ActionResult<List<AllNotification>>> GetAllNotification()
@@ -128,23 +127,22 @@ namespace API.Controllers
             var res = await _userService.GetAllNotification();
             return res;
         }
+
         //creating server events
         [HttpGet]
         [Route("getnotificationcount")]
         public async Task<ActionResult<int>> GetNotificationCount()
         {
-            
-            int   res = await _userService.GetNotificationCount();
+            int res = await _userService.GetNotificationCount();
             return Ok(res);
         }
+
         [HttpGet]
         [Route("markasread")]
         public async Task<ActionResult<int>> MarkAsRead(int id)
         {
-
             bool res = await _userService.MarkAsRead(id);
             return Ok(res);
         }
-
     }
 }

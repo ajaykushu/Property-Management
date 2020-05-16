@@ -1,23 +1,21 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataEntity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Utilities.Interface;
 
 namespace Utilities
 {
-   
     public class Notifications : INotifier
     {
         private readonly IRepo<Notification> _notification;
-       
+
         public Notifications(IRepo<Notification> notification)
         {
             _notification = notification;
         }
-        public async Task<bool> CreateNotification(string message, List<long> AssignedTo, string navigatorId,string Type)
+
+        public async Task<bool> CreateNotification(string message, List<long> AssignedTo, string navigatorId, string Type)
         {
             Notification notification = new Notification
             {
@@ -34,15 +32,12 @@ namespace Utilities
                     IsRead = false
                 });
             }
-           var status= await _notification.Add(notification);
+            var status = await _notification.Add(notification);
             if (status > 0)
             {
-               
                 return true;
             }
             return false;
-
-
         }
     }
 }

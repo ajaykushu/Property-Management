@@ -16,258 +16,258 @@
     </div>
     @if (Model != null)
     {
-<form asp-action="EditUser" asp-controller="User" id="edituser">
-    <div class="table_container">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="FirstName">First Name</label>
-                                </div>
+        <form asp-action="EditUser" asp-controller="User" id="edituser">
+            <div class="table_container">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
                                 <div class="col">
-                                    <input asp-for="FirstName" class="form-control-sm custom-input">
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="LastName">Last Name</label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="LastName" class="form-control-sm custom-input">
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Suffix"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="Suffix" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Suffix" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label asp-for="Role"> </label>
-                                </div>
-                                <div class="col">
-                                    @if (Model.Roles != null)
-                                            {
-                                    <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="Role" class="text-danger"></span>
-                                            }
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="DepartmentId"> </label>
-                                </div>
-                                <div class="col">
-                                    @if (Model.Departments != null && Model.Departments.Any())
-                                            {
-                                    <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                                            }
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="Language">Primary Property</label>
-                                </div>
-                                <div class="col">
-                                    <span class="primary_span text-success">@Model.PrimaryProperty</span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer mainprop" style="@if (Model.Role == "Master Admin") {<text>display:none;</text> }">
-                                <div class="col-md-3">
-                                    <label for="SelectedProperty">Assign Property</label>
-                                </div>
-                                <div class="col">
-                                    @if (Model.Properties.Any())
-                                            {
-                                    <input class="custom-input select-input" disabled value="@if (Model.SelectedProperty != null)
-                                            {<text>@string.Join(",", Model.SelectedProperty)</text>}" placeholder="Select Property">
-                                    <div class="multiple-select-box">
-                                        @foreach (var option in Model.Properties)
-                                                    {
-                                        <div class="option">
-                                            <div class="d-inline-block options">
-                                                <input name="SelectedProperty" value="@option.PropertyName" type="checkbox">
-                                                &nbsp;<input name="PrimaryProperty" value="@option.PropertyName" type="radio">
-                                                &nbsp;<span>@option.PropertyName</span>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="FirstName">First Name</label>
                                         </div>
+                                        <div class="col">
+                                            <input asp-for="FirstName" class="form-control-sm custom-input">
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="LastName">Last Name</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="LastName" class="form-control-sm custom-input">
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Suffix"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="Suffix" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Suffix" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <label asp-for="Role"> </label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.Roles != null)
+                                            {
+                                                <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="Role" class="text-danger"></span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="DepartmentId"> </label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.Departments != null && Model.Departments.Any())
+                                            {
+                                                <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="Language">Primary Property</label>
+                                        </div>
+                                        <div class="col">
+                                            <span class="primary_span text-success">@Model.PrimaryProperty</span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer mainprop" style="@if (Model.Role == "Master Admin") {<text>display:none;</text> }">
+                                        <div class="col-md-3">
+                                            <label for="SelectedProperty">Assign Property</label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.Properties.Any())
+                                            {
+                                                <input class="custom-input select-input" disabled value="@if (Model.SelectedProperty != null)
+                                            {<text>@string.Join(",", Model.SelectedProperty)</text>}" placeholder="Select Property">
+                                                <div class="multiple-select-box">
+                                                    @foreach (var option in Model.Properties)
+                                                    {
+                                                        <div class="option">
+                                                            <div class="d-inline-block options">
+                                                                <input name="SelectedProperty" value="@option.PropertyName" type="checkbox">
+                                                                &nbsp;<input name="PrimaryProperty" value="@option.PropertyName" type="radio">
+                                                                &nbsp;<span>@option.PropertyName</span>
+                                                            </div>
+                                                        </div>
 
                                                     }
-                                    </div>
+                                                </div>
                                             }
-                                    <span class="text-info">select radio for primary property</span>
-                                    <span asp-validation-for="SelectedProperty" class="text-danger"></span>
+                                            <span class="text-info">select radio for primary property</span>
+                                            <span asp-validation-for="SelectedProperty" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="TimeZone">Time Zone</label>
-                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <div class="col">
-                                    @if (Model.TimeZones != null)
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="TimeZone">Time Zone</label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.TimeZones != null)
                                             {
-                                    <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="TimeZones" class="text-danger"></span>
+                                                <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="TimeZones" class="text-danger"></span>
                                             }
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="ClockType">Clock Type</label>
-                                </div>
-                                <div class="col">
-                                    <input type="radio" asp-for="ClockType" name="ClockType" id="12" value="12" />
-                                    <label for="12">12 hour</label>
-                                    <input type="radio" asp-for="ClockType" name="ClockType" id="24" value="24">
-                                    <label for="24">24 hour</label>
-                                    <span asp-validation-for="ClockType" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label asp-for="Email"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="Email" autocomplete="off" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="PhoneNumber"></label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="PhoneNumber" class="form-control-sm custom-input" placeholder="+91-1234567890">
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="SMSAlert">SMS Alert</label>
-                                </div>
-                                <div class="col">
-                                    <div class="form-check">
-                                        <input type="checkbox" asp-for="SMSAlert" class="form-check-input" id="exampleCheck1">
-                                        <label class="form-check-label" for="exampleCheck1">standard message rates may apply</label>
+                                        </div>
                                     </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="ClockType">Clock Type</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="radio" asp-for="ClockType" name="ClockType" id="12" value="12" />
+                                            <label for="12">12 hour</label>
+                                            <input type="radio" asp-for="ClockType" name="ClockType" id="24" value="24">
+                                            <label for="24">24 hour</label>
+                                            <span asp-validation-for="ClockType" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label asp-for="Email"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="Email" autocomplete="off" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="PhoneNumber"></label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="PhoneNumber" class="form-control-sm custom-input" placeholder="+91-1234567890">
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="SMSAlert">SMS Alert</label>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-check">
+                                                <input type="checkbox" asp-for="SMSAlert" class="form-check-input" id="exampleCheck1">
+                                                <label class="form-check-label" for="exampleCheck1">standard message rates may apply</label>
+                                            </div>
 
-                                    <span asp-validation-for="SMSAlert" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Language"> </label>
-                                </div>
-                                <div class="col">
-                                    @if (Model.Languages != null && Model.Languages.Any())
+                                            <span asp-validation-for="SMSAlert" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Language"> </label>
+                                        </div>
+                                        <div class="col">
+                                            @if (Model.Languages != null && Model.Languages.Any())
                                             {
-                                    <select class="form-control form-control-sm custom-input" asp-for="Language" asp-items="@(new SelectList(Model.Languages, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
-                                    </select>
-                                    <span asp-validation-for="Language" class="text-danger"></span>
+                                                <select class="form-control form-control-sm custom-input" asp-for="Language" asp-items="@(new SelectList(Model.Languages, "Id", "PropertyName"))">
+                                                    <option value="">Please select one</option>
+                                                </select>
+                                                <span asp-validation-for="Language" class="text-danger"></span>
                                             }
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="OfficeExt">Office Extension</label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for="OfficeExt" class="form-control-sm custom-input">
-                                    <span asp-validation-for="OfficeExt" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label>Photo</label>
-                                </div>
-                                <div class="col">
-                                    <div class="cont">
-                                        <label class="browsebutton">Browse Photo</label>
-                                        <input accept="image/*" data-toggle="tooltip" asp-for="File" class="form-control-sm custom-input Photo">
+                                        </div>
                                     </div>
-                                    <div class="photo_disp top-buffer">
-                                        <img src="" area-hidden="true" width="200" height="150" />
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="OfficeExt">Office Extension</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="OfficeExt" class="form-control-sm custom-input">
+                                            <span asp-validation-for="OfficeExt" class="text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="UserName ">User Name</label>
-                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <div class="col">
-                                    <input asp-for='UserName' disabled class="form-control-sm custom-input">
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Photo</label>
+                                        </div>
+                                        <div class="col">
+                                            <div class="cont">
+                                                <label class="browsebutton">Browse Photo</label>
+                                                <input accept="image/*" data-toggle="tooltip" asp-for="File" class="form-control-sm custom-input Photo">
+                                            </div>
+                                            <div class="photo_disp top-buffer">
+                                                <img src="" area-hidden="true" width="200" height="150" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="UserName ">User Name</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for='UserName' disabled class="form-control-sm custom-input">
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="Password"> </label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for='Password' autocomplete="off" value="" class="form-control-sm custom-input">
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label for="ConfirmPassword">Confirm Password</label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for='ConfirmPassword' value="" class="form-control-sm custom-input">
+                                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Password"> </label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for='Password' autocomplete="off" value="" class="form-control-sm custom-input">
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="ConfirmPassword">Confirm Password</label>
-                                </div>
-                                <div class="col">
-                                    <input asp-for='ConfirmPassword' value="" class="form-control-sm custom-input">
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <hr />
-    <button type="submit" class="btn btn-sm btn-primary submit"><span>Update User</span></button>
-    <input asp-for="Id" hidden>
-</form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-sm btn-primary submit"><span>Update User</span></button>
+            <input asp-for="Id" hidden>
+        </form>
     }
 </div>
 

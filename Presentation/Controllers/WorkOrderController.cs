@@ -268,13 +268,13 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> WorkOrderStageChange(string id, int stageId,string comment)
+        public async Task<IActionResult> WorkOrderStageChange(string id, int stageId, string comment)
         {
             try
             {
-                var urlpayload = string.Concat("?id=", id, "&stageId=", stageId,"&comment=",comment);
+                var urlpayload = string.Concat("?id=", id, "&stageId=", stageId, "&comment=", comment);
                 _apiRoute.Value.Routes.TryGetValue("workorderstagechange", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+urlpayload, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
@@ -287,6 +287,7 @@ namespace Presentation.Controllers
             }
             return RedirectToAction("GetWODetail", new { id });
         }
+
         [HttpGet]
         public async Task<IActionResult> DownloadWO(string woId)
         {
@@ -314,11 +315,10 @@ namespace Presentation.Controllers
             }
             catch (Exception)
             {
-
             }
             return File(file, contentType);
         }
-        
+
         public async Task<IActionResult> ExportWO(WOFilterModel wo)
         {
             List<AllWOExport> workOrderDetail = null;
@@ -328,7 +328,7 @@ namespace Presentation.Controllers
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("workordersexport", out string path);
-                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path , wo, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, wo, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     workOrderDetail = JsonConvert.DeserializeObject<List<AllWOExport>>(await response.Content.ReadAsStringAsync());
@@ -345,7 +345,6 @@ namespace Presentation.Controllers
             }
             catch (Exception)
             {
-
             }
             return File(file, contentType);
         }

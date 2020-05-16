@@ -7,8 +7,7 @@
 @if (Model != null)
 {
     <p>
-        <auth-link bclass="btn btn-sm btn-success addmodal" action="AddPropertyView" controller="Property" feature=@MenuEnum.Add_Property  content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'></auth-link>
-        
+        <auth-link bclass="btn btn-sm btn-success addmodal" action="AddPropertyView" controller="Property" feature=@MenuEnum.Add_Property content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'></auth-link>
     </p>
     <div class="new_address_css">
         @if (Model == null || !Model.Any())
@@ -62,8 +61,6 @@
         }
     </div>
 }
-
-
 
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {

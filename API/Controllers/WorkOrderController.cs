@@ -120,9 +120,10 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
         public async Task<ActionResult<bool>> WorkOrderStageChange(string id, int stageId, string comment)
         {
-            bool res = await _workOrderService.WorkOrderStageChange(id, stageId,comment);
+            bool res = await _workOrderService.WorkOrderStageChange(id, stageId, comment);
             return Ok(res);
         }
+
         [HttpPost]
         [Route("workordersexport")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]

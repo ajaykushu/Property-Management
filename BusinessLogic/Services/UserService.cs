@@ -30,7 +30,7 @@ namespace BusinessLogic.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
         private readonly ICache _cache;
-        private  readonly string _scheme;
+        private readonly string _scheme;
         private readonly long userId;
 
         public UserService(UserManager<ApplicationUser> userManager,
@@ -79,9 +79,8 @@ namespace BusinessLogic.Services
                     var userprop = new UserProperty
                     {
                         PropertyId = item.Id
-                        
                     };
-                   
+
                     if (item.PropertyName == model.PrimaryProperty)
                         userprop.IsPrimary = true;
                     if (model.SelectedProperty.Contains(item.PropertyName))
@@ -108,17 +107,16 @@ namespace BusinessLogic.Services
         {
             RegisterUser registerRequest = new RegisterUser
             {
-                
                 Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToListAsync(),
-                Languages =await  _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToListAsync(),
+                Languages = await _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToListAsync(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList()
-               
             };
             // finding roles to be displayed a/c to usertype
-            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin")) {
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
                 registerRequest.Roles = new List<SelectItem> { new SelectItem { Id = 1, PropertyName = "User" } };
                 registerRequest.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
-                registerRequest.Role = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").Select(x=>x.PropertyName).FirstOrDefault();
+                registerRequest.Role = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").Select(x => x.PropertyName).FirstOrDefault();
             }
             else
             {
@@ -128,8 +126,6 @@ namespace BusinessLogic.Services
             }
 
             var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower().Equals("english")).FirstOrDefault();
-
-           
 
             registerRequest.Language = (int)langId.Id;
             return registerRequest;
@@ -146,7 +142,6 @@ namespace BusinessLogic.Services
 
             EditUserModel editusermodel = new EditUserModel
             {
-                
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
                 Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
@@ -172,13 +167,11 @@ namespace BusinessLogic.Services
             {
                 editusermodel.Roles = new List<SelectItem> { new SelectItem { Id = 1, PropertyName = "User" } };
                 editusermodel.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
-                
             }
             else
             {
                 editusermodel.Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList();
                 editusermodel.Properties = await _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToListAsync();
-               
             }
             return editusermodel;
         }
@@ -210,9 +203,8 @@ namespace BusinessLogic.Services
             if (filepath != null)
                 applicationUser.PhotoPath = filepath;
 
-            if (editUser.Role == "Master Admin" || editUser.SelectedProperty==null)
+            if (editUser.Role == "Master Admin" || editUser.SelectedProperty == null)
                 applicationUser.UserProperties.Clear();
-
             else if (editUser.SelectedProperty != null && !editUser.Role.Equals("Master Admin"))
             {
                 applicationUser.UserProperties.Clear();
@@ -225,12 +217,11 @@ namespace BusinessLogic.Services
                             ApplicationUser = applicationUser,
                             Property = item
                         };
-                       
+
                         if (editUser.PrimaryProperty == item.PropertyName)
                             userprop.IsPrimary = true;
                         applicationUser.UserProperties.Add(userprop);
                     }
-
                 }
             }
             if (!String.IsNullOrEmpty(editUser.Password))
@@ -266,20 +257,20 @@ namespace BusinessLogic.Services
             int iteminpage = 20;
             var query = _userManager.Users;
             if (matchStr != null && filter == FilterEnum.ByEmail)
-                 query= query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
+                query = query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.ByFirstName)
                 query = query.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower()));
 
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
-            {   
-                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x=>x.PropertyId).Distinct().ToListAsync();
+            {
+                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
                 var userIds = await _userProperty.GetAll().Where(x => propIds.Contains(x.PropertyId)).AsNoTracking().Select(x => x.ApplicationUserId).ToListAsync();
-                query = query.Where(x=>userIds.Contains(x.Id));
+                query = query.Where(x => userIds.Contains(x.Id));
             }
 
             var count = query.Count();
             var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
-            
+
             List<UsersListModel> users = new List<UsersListModel>();
             foreach (var item in user)
             {
@@ -389,14 +380,13 @@ namespace BusinessLogic.Services
 
         public async Task<List<AllNotification>> GetAllNotification()
         {
-
             var data = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).Select(x => new AllNotification
             {
-                Id=x.NId,
-                CreationTime=x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-                Message=x.Message,
-                NotificationType=x.NotificationType,
-                NavigatorId=x.NavigatorId
+                Id = x.NId,
+                CreationTime = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                Message = x.Message,
+                NotificationType = x.NotificationType,
+                NavigatorId = x.NavigatorId
             }).AsNoTracking().ToListAsync();
 
             return data;
@@ -414,7 +404,7 @@ namespace BusinessLogic.Services
             if (data != null)
             {
                 data.IsRead = true;
-                var count=await _userNotification.Get(x => x.NotificationId == id).Where(x => !x.IsRead).CountAsync();
+                var count = await _userNotification.Get(x => x.NotificationId == id).Where(x => !x.IsRead).CountAsync();
                 if (count == 0)
                     await _userNotification.Delete(data);
                 else

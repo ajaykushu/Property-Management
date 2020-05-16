@@ -19,7 +19,6 @@ namespace Presentation.ViewModels
         public List<SelectItem> PropertyTypes { get; set; }
 
         [DisplayName("Street Address 1")]
-       
         [StringLength(100, ErrorMessage = "Must less than 100 characters")]
         public string StreetAddress1 { set; get; }
 

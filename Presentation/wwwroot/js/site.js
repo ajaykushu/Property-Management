@@ -16,7 +16,7 @@ function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_
                     $('.progress-bar').text(percentComplete + '%');
                     if (percentComplete === 100) {
                         $('.progress').hide();
-                        $('.progress-bar').css("width",'0%')
+                        $('.progress-bar').css("width", '0%')
                     }
                 }
             }, false);
@@ -45,7 +45,6 @@ $('.select-mul').change(function (e) {
     $('.select-input').val($(this).val());
 });
 
-
 $('.Photo').change(function (e) {
     const file = e.target.files[0]
     if (file != undefined) {
@@ -61,17 +60,16 @@ $('.Photo').change(function (e) {
     }
 })
 var file = null;
-var selectedFile=[];
+var selectedFile = [];
 $('.File').change(function (e) {
     file = e.target.files
     if (file != undefined) {
-        for (var i = 0; i < file.length;i++) {
+        for (var i = 0; i < file.length; i++) {
             selectedFile.push(file[i]);
             $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'></span>");
         }
         $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     }
-   
 })
 function removefile(e) {
     var val = e.target.name.trim();
@@ -83,7 +81,7 @@ function removefile(e) {
             }
         }
         e.currentTarget.parentNode.remove();
- }    
+    }
 };
 
 $('.clear').click(function () {
@@ -105,7 +103,6 @@ $('#CreationEndDate').change(function () {
     $('#CreationStartDate').prop("max", $('#EndDate').val());
 })
 
-
 $('input[type="reset"]').click(function (e) {
     $('.wofilter :input').each(function (x) {
         var node = $('.wofilter :input')[x];
@@ -117,8 +114,8 @@ $('input[type="reset"]').click(function (e) {
     $("img").prop("src", "");
     $('.photo_disp').hide();
     $('#Status').val("");
-    if($('.browsebutton')[0]!= undefined)
-            $('.browsebutton')[0].innerText = "Browse";
+    if ($('.browsebutton')[0] != undefined)
+        $('.browsebutton')[0].innerText = "Browse";
     $('#Priority').val("");
     $('input[type="submit"]').click();
     $('.primary_span').text("");
@@ -158,7 +155,7 @@ if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
     }
     else
         arr.push(val);
-   
+
     $('input[name$="SelectedProperty"]').each(function () {
         if (arr.indexOf($(this).val()) != -1) {
             $(this).prop("checked", true);
@@ -175,16 +172,14 @@ $('img').on('error', function () {
     $(this).prop("src", "../NA.jpg")
     $(this).unbind();
 });
-var msg=null
+var msg = null
 function enablespiner() {
-     msg= alertify.message("<div class='progress' style='margin-bottom:10px;display:none'> <div class='progress-bar' style='width:0%' role='progressbar' aria-valuemin='0' aria-valuemax='100'></div></div>" +
+    msg = alertify.message("<div class='progress' style='margin-bottom:10px;display:none'> <div class='progress-bar' style='width:0%' role='progressbar' aria-valuemin='0' aria-valuemax='100'></div></div>" +
         "<div style='display:-webkit-box'>Processing &nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
 }
 function disablespinner() {
     msg.dismiss();
 }
-
-
 
 $('#adduser, #wocreate, #addprop').submit(function (e) {
     e.preventDefault();
@@ -201,15 +196,13 @@ $('#adduser, #wocreate, #addprop').submit(function (e) {
             alertify.alert('Info', '<p>' + res + '</p>', function () {
                 $("input[type=reset]").click();
             });
-
         }, function (res) {
-                disablespinner();
-                $("input[type=password]").val("");
-                $("form :input").prop("disabled", false);
+            disablespinner();
+            $("input[type=password]").val("");
+            $("form :input").prop("disabled", false);
             alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
             });
-
-        },"");
+        }, "");
     }
 });
 $('#edituser, #editwo').submit(function (e) {
@@ -232,10 +225,9 @@ $('#edituser, #editwo').submit(function (e) {
             disablespinner();
             $("input[type=password]").val("");
             $("form :input").prop("disabled", false);
-                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                    location.reload();
+            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                location.reload();
             });
         }, "");
     }
 });
-

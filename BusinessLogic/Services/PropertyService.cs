@@ -25,6 +25,7 @@ namespace BusinessLogic.Services
         private readonly IRepo<SubLocation> _subloaction;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly INotifier _notifier;
+
         public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor, INotifier notifier)
         {
             _property = property;
@@ -69,7 +70,6 @@ namespace BusinessLogic.Services
             var res = await _property.Add(prop);
             if (res > 0)
             {
-                
                 return true;
             }
             else
@@ -80,7 +80,6 @@ namespace BusinessLogic.Services
 
         public async Task<List<PropertiesModel>> GetProperties()
         {
-
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin") || _httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
                 var username = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
@@ -107,7 +106,6 @@ namespace BusinessLogic.Services
                 {
                     throw new BadRequestException("No Properties Asscociated");
                 }
-
             }
             else
             {
@@ -128,7 +126,6 @@ namespace BusinessLogic.Services
                    ).AsNoTracking().ToListAsync();
                 return prop;
             }
-
         }
 
         public async Task<bool> ActDeactProperty(int id, bool operation)
@@ -147,7 +144,7 @@ namespace BusinessLogic.Services
                 if (status > 0)
                 {
                     var users = prop.UserProperties.Select(x => x.ApplicationUserId).ToList();
-                    await _notifier.CreateNotification(message, users, prop.Id+"", "PE");
+                    await _notifier.CreateNotification(message, users, prop.Id + "", "PE");
                     return true;
                 }
                 else
@@ -203,7 +200,7 @@ namespace BusinessLogic.Services
                 status = Convert.ToBoolean(await _property.Update(property));
                 if (status)
                 {
-                    var users = _userProperty.Get(x=>x.PropertyId==prop.Id).Select(x => x.ApplicationUserId).ToList();
+                    var users = _userProperty.Get(x => x.PropertyId == prop.Id).Select(x => x.ApplicationUserId).ToList();
                     await _notifier.CreateNotification("Property Updated" + prop.Id, users, prop.Id + "", "PE");
                 }
             }
@@ -211,7 +208,6 @@ namespace BusinessLogic.Services
                 throw new BadRequestException("Property Not Found");
             return status;
         }
-
 
         public async Task<bool> CheckProperty(string propertyName)
         {
@@ -257,16 +253,16 @@ namespace BusinessLogic.Services
                     };
                 }
             }
-           
+
             if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
             {
-               
                 if (prop.Locations == null) prop.Locations = new List<Location>();
-                else {
+                else
+                {
                     if (prop.Locations.Where(x => x.LocationName.ToLower() == propertyConfig.NewLocation.ToLower()).FirstOrDefault() != null)
-                        throw new BadRequestException(propertyConfig.NewLocation+" location aready there");
-                     }
-                
+                        throw new BadRequestException(propertyConfig.NewLocation + " location aready there");
+                }
+
                 var location = new Location
                 {
                     LocationName = propertyConfig.NewLocation,
@@ -296,7 +292,6 @@ namespace BusinessLogic.Services
                         {
                             foreach (var item in areas)
                             {
-                                
                                 location.SubLocations.Add(new SubLocation
                                 {
                                     AreaName = item

@@ -11,7 +11,7 @@
         <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New' bclass="btn btn-sm btn-success" feature=@MenuEnum.Add_User></auth-link>
     </p>
 
-    <form class="form wofilter" >
+    <form class="form wofilter">
         <div class="input-group">
             <div class="cont">
                 <input type="radio" @if (ViewBag.filter == FilterEnum.ByEmail) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.ByEmail' class="selector1" required>
