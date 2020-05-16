@@ -91,8 +91,12 @@
 <script>
     function forward(key, url, id) {
         $.get("@Url.Action("MarkAsRead","Home")" + '?id=' + id);
-        if (key == 'WE' || key == 'WA' || key == 'CA'||key == 'RA')
-            window.location = '@Url.Action("GetWODetail", "WorkOrder")' + '?id=' + url;
+        if (key == 'WE' || key == 'WA' || key == 'CA' || key == 'RA') {
+            if (key == 'CA' || key == 'RA')
+                window.location = '@Url.Action("GetWODetail", "WorkOrder")' + '?id=' + url+"#CommentSection";
+            else
+                window.location = '@Url.Action("GetWODetail", "WorkOrder")' + '?id=' + url;
+         }
         else if (key == 'UA' || key == 'UE')
             window.location = '@Url.Action("UserDetailView", "User")' + '?id=' + url;
         else if (key == 'PA' || key == 'PE')

@@ -329,20 +329,20 @@ namespace BusinessLogic.Services
         public async Task<List<CommentDTO>> GetComment(string workorderId, int pageNumber)
         {
             var itemsinpage = 12;
-            var obj = await _comments.GetAll().Where(x => x.WorkOrderId.Equals(workorderId)).Include(x => x.Replies).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
+            var obj = await _comments.GetAll().Where(x => x.WorkOrderId.Equals(workorderId)).Include(x => x.ApplicationUser).Include(x => x.Replies).ThenInclude(x => x.ApplicationUser).OrderByDescending(x => x.UpdatedTime).Select(x => new CommentDTO()
             {
-                CommentBy = x.CreatedByUserName,
+                CommentBy = string.Concat(x.ApplicationUser.FirstName, " ", x.ApplicationUser.LastName, "(", x.ApplicationUser.UserName, ")"),
                 CommentDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
                 CommentString = x.CommentString,
                 Id = x.Id,
                 Reply = x.Replies.Select(x => new ReplyDTO
                 {
                     Id = x.Id,
-                    RepliedTo = x.RepliedTo,
-                    ReplyString = x.ReplyString,
-                    RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
-                    RepliedBy = x.CreatedByUserName
-                }).ToList()
+                    RepliedTo = string.Concat(x.Comment.ApplicationUser.FirstName, " ", x.Comment.ApplicationUser.LastName, "(", x.ApplicationUser.UserName, ")"),
+                ReplyString = x.ReplyString,
+                RepliedDate = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
+                RepliedBy = string.Concat(x.ApplicationUser.FirstName, " ", x.ApplicationUser.LastName, "(", x.ApplicationUser.UserName, ")")
+            }).ToList()
             }).Skip(itemsinpage * pageNumber).Take(itemsinpage).ToListAsync();
 
             return obj;
