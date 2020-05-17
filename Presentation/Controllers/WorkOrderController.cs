@@ -264,7 +264,7 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
-            return RedirectToAction("GetWODetail", new { id = post.WorkOrderId });
+            return Redirect("~/WorkOrder/GetWODetail?id="+post.WorkOrderId+ "#CommentSection");
         }
 
         [HttpPost]
