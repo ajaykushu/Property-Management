@@ -1,0 +1,22 @@
+{
+  "name": "Property Maintenance",
+  "short_name": "PM",
+  "orientation": "portrait",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "NA.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "NA.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "color": "#ffffff",
+  "background_color": "#20c4f4",
+  "theme_color": "#20c4f4"
+}

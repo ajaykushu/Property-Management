@@ -413,7 +413,7 @@ namespace BusinessLogic.Services
                     wo.Comments = new List<Comment>();
                 wo.Comments.Add(new Comment
                 {
-                    CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode, " CHAR(13) ", comment),
+                    CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageCode, "--Additional Comment:", comment),
                     CommentById = userId
                 });
                 wo.StageId = stageId;

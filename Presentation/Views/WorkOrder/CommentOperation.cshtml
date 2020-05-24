@@ -18,7 +18,7 @@
                                 <div class="card-body">
                                     <p class="text-success">Comment By-&nbsp; @item.CommentBy</p>
                                     <h6 class="card-subtitle"> @item.CommentDate</h6>
-                                    <p class="card-text"><pre>@item.CommentString</pre></p>
+                                    <p class="card-text">@item.CommentString</p>
                                     <button type="button" value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                         <div class="card-body">
                                             <p class="text-info">RepliedBy By-&nbsp; @reply.RepliedBy</p>
                                             <h6 class="card-subtitle">@reply.RepliedDate</h6>
-                                            <p class="card-text"><pre><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</pre></p>
+                                            <p class="card-text"><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</p>
                                             <button type="button" value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
                                         </div>
                                     </div>
@@ -61,7 +61,9 @@
         display: block;
         resize: none;
     }
-
+    p{
+        text-wrap:normal;
+    }
     .comment:hover {
         box-shadow: 0 10px 20px 0 rgba(0,0,0,0.15);
         transition-property: box-shadow, -webkit-box-shadow;
