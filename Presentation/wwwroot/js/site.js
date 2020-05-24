@@ -205,6 +205,9 @@ $('#adduser, #wocreate, #addprop').submit(function (e) {
         }, "");
     }
 });
+
+
+
 $('#edituser, #editwo').submit(function (e) {
     e.preventDefault();
     var url = $(this).attr('action');
@@ -230,4 +233,13 @@ $('#edituser, #editwo').submit(function (e) {
             });
         }, "");
     }
+});
+
+$('#Role').change(function () {
+    if ($(this).children("option:selected").val() == "Master Admin") {
+        $('.mainprop').prop("hidden", true);
+    }
+    else
+        $('.mainprop').prop("hidden", false);
+
 });
