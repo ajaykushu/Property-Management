@@ -89,15 +89,25 @@ $('.clear').click(function () {
 })
 
 var d = new Date();
-var month = d.getMonth() + 1;
-var day = d.getDate();
-month = month < 10 ? +"0" + month.toString() : month;
-day = day < 10 ? +"0" + day.toString() : day;
-var datestring = d.getFullYear() + "-" + month + "-" + day;
+function ConvertDatetoString(d) {
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+    month = month < 10 ? +"0" + month.toString() : month;
+    day = day < 10 ? +"0" + day.toString() : day;
+    var datestring = d.getFullYear() + "-" + month + "-" + day;
+    return datestring;
+}
+
+var datestring = ConvertDatetoString(d);
 $('#CreationEndDate').prop("max", datestring);
 $('#CreationStartDate').prop("max", datestring);
+$('.DueDatelabel').text($('#DueDate').val());
 if ($('#CreationEndDate').val() == "" || $('#CreationEndDate').val() == undefined) {
     $('#CreationEndDate').val(datestring);
+}
+if ($('#DueDate').val() == "" || $('#DueDate').val() == undefined) {
+    $('#DueDate').val(datestring);
+    $('.DueDatelabel').text(datestring);
 }
 $('#CreationEndDate').change(function () {
     $('#CreationStartDate').prop("max", $('#EndDate').val());
@@ -112,6 +122,8 @@ $('input[type="reset"]').click(function (e) {
     })
     $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     $("img").prop("src", "");
+    $("#DueDate").val(datestring);
+    $("input[type=checkbox]").prop("checked", false);
     $('.photo_disp').hide();
     $('#Status').val("");
     if ($('.browsebutton')[0] != undefined)
@@ -169,7 +181,7 @@ if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
 }
 
 $('img').on('error', function () {
-    $(this).prop("src", "../NA.jpg")
+    $(this).prop("src", "/NA.jpg")
     $(this).unbind();
 });
 var msg = null
@@ -206,8 +218,6 @@ $('#adduser, #wocreate, #addprop').submit(function (e) {
     }
 });
 
-
-
 $('#edituser, #editwo').submit(function (e) {
     e.preventDefault();
     var url = $(this).attr('action');
@@ -241,5 +251,98 @@ $('#Role').change(function () {
     }
     else
         $('.mainprop').prop("hidden", false);
+});
+
+/*index*/
+/* regarding mobile view*/
+$("#DueDate").change(function () {
+    $('.DueDatelabel').text($(this).val());
+    $('.mform').submit();
+})
+$('.datedec').click(function () {
+    var val = $("#DueDate").val();
+    var date = new Date(val);
+    date.setDate(date.getDate() - 1);
+    var datestring = ConvertDatetoString(date);
+    $("#DueDate").val(datestring);
+    $('.DueDatelabel').text(datestring);
+    $('.mform').submit();
+});
+$(".DueDateMobile").datepicker();
+$('.dateinc').click(function () {
+    var val = $("#DueDate").val();
+    var date = new Date(val);
+    date.setDate(date.getDate() + 1);
+    var datestring = ConvertDatetoString(date);
+    $("#DueDate").val(datestring);
+    $('.DueDatelabel').text(datestring);
+    $('.mform').submit();
+});
+
+$('.filter_check').click(function () {
+    if ($(this).prop("checked") == true) {
+        $('.wofilter').show();
+        $('.mwofilter').show();
+    }
+});
+
+$('.closefilter').click(function () {
+    $('.filter_check').prop("checked", false);
+    $('.wofilter').hide(100);
+    $('.mwofilter').hide(100);
+});
+$('#Export').change(function () {
+    $('input[type="submit"]').click();
+})
+
+/*mobile workorder detail*/
+$('#Cancel').click(function () {
+    $('.pop-up').hide(100);
+});
+$('.edit-link').click(function () {
+    $('.pop-up').show(100);
+});
+
+$(window).on('beforeunload', function () {
+    alertify.message("<div style='display:-webkit-box'>Processing &nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
+});
+
+$('#LocationId').change(function () {
+    $.get("/Property/GetSubLocation?id=" + $(this).val(),
+        function (data) {
+            $("#SubLocationId").html("<option value=''>Please select Sublocation</option>")
+            if (data != null || data != undefined) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                }
+            }
+        });
+});
+$('#PropertyId').change(function () {
+    $.get("GetLocation?id=" + $(this).val(),
+        function (data) {
+            $("#LocationId").html("<option value=''>Please choose Location</option>")
+            $("#SubLocationId").html("<option value=''>Please choose SubLocation</option>")
+            if (data != null || data != undefined) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                }
+            }
+        });
+});
+$('#Category').change(function () {
+    $.get("GetDataByCategory?category=" + $(this).val(),
+        function (data) {
+            if (data != null || data != undefined) {
+                $("#OptionId").html("<option value=''>Please Choose Option</option>")
+                for (var i = 0; i < data.length; i++) {
+                    $("#OptionId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                }
+            }
+        });
+    if ($(this).val() == "department" || $(this).val() == "user")
+        $("#OptionId").prop("required", true).prop("disabled", false);
+    else
+        $("#OptionId").removeProp("required").prop("disabled", true);
 
 });

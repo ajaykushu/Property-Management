@@ -62,14 +62,17 @@ namespace BusinessLogic.Services
                 IssueId = createWO.IssueId,
                 ItemId = createWO.ItemId,
                 Description = createWO.Description,
-                AssignedToId = createWO.UserId,
                 DueDate = createWO.DueDate,
                 LocationId = createWO.LocationId,
                 SubLocationId = createWO.SubLocationId,
                 Priority = createWO.Priority
             };
+            if (createWO.Category.Equals("user"))
+                workOrder.AssignedToId = createWO.OptionId;
+            else if (createWO.Category.Equals("department"))
+                workOrder.AssignedToDeptId = createWO.OptionId;
 
-            workOrder.StageId = _stage.Get(x => x.StageCode == "OPEN").AsNoTracking().Select(x => x.Id).FirstOrDefault();
+            workOrder.StageId = _stage.Get(x => x.StageCode == "NEWO").AsNoTracking().Select(x => x.Id).FirstOrDefault();
             if (File != null)
             {
                 foreach (var item in File)
@@ -94,8 +97,8 @@ namespace BusinessLogic.Services
                 //create notification
                 //getting all the person whom property is assigned
                 var users = await _userProperty.GetAll().Where(x => x.PropertyId == createWO.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
-                if (!users.Contains(createWO.UserId))
-                    users.Add(createWO.UserId);
+                if (!users.Contains(createWO.OptionId.GetValueOrDefault()))
+                    users.Add(createWO.OptionId.GetValueOrDefault());
                 if (!users.Contains(userId))
                     users.Add(userId);
                 await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
@@ -118,8 +121,7 @@ namespace BusinessLogic.Services
                 CreatedTime = x.CreatedTime,
                 DueDate = x.DueDate,
                 UpdatedTime = x.UpdatedTime,
-                Department = x.AssignedTo.Department.DepartmentName,
-                AssignedToUser = x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")",
+                AssignedTo = x.AssignedTo!=null?x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")":x.AssignedToDept!=null?x.AssignedToDept.DepartmentName:"Anyone",
                 Requestedby = x.RequestedBy,
                 Id = x.Id,
                 Priority = x.Priority,
@@ -167,28 +169,53 @@ namespace BusinessLogic.Services
                 {
                     Id = x.Id,
                     PropertyName = x.IssueName
-                }).ToListAsync(),
+                }).AsNoTracking().ToListAsync(),
                 Items = await _itemRepo.GetAll().Select(x => new SelectItem
                 {
                     Id = x.Id,
                     PropertyName = x.ItemName
-                }).ToListAsync(),
-                Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).ToListAsync(),
+                }).AsNoTracking().ToListAsync(),
                 DueDate = DateTime.Now,
             };
             if (primaryprop != null && primaryprop.Locations != null)
                 wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
-
+            wo.OptionId = 0;
             return wo;
         }
 
-        public async Task<List<SelectItem>> GetUsersByDepartment(long id)
+        public async Task<List<SelectItem>> GetDataByCategory(string category)
         {
-            var res = await _appuser.Users.Where(x => x.DepartmentId == id).OrderBy(x => x.FirstName).Select(x => new SelectItem
+            List<SelectItem> res = null;
+            if (!string.IsNullOrWhiteSpace(category))
             {
-                Id = x.Id,
-                PropertyName = String.Concat(x.FirstName, " ", x.LastName, "(", x.UserName, ")")
-            }).AsNoTracking().ToListAsync();
+                if (category.Equals("department", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    res = await _department.GetAll().Select(x => new SelectItem
+                    {
+                        Id = x.Id,
+                        PropertyName = x.DepartmentName
+                    }).AsNoTracking().ToListAsync();
+                }
+                else if (category.Equals("user", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var tempres = _appuser.Users.Include(x => x.Department).OrderBy(x => x.FirstName).AsEnumerable().GroupBy(x => x.Department.DepartmentName).ToList();
+                    res = new List<SelectItem>();
+                    if (tempres != null)
+                    {
+                        foreach (var item in tempres)
+                        {
+                            foreach (var subitem in item)
+                            {
+                                res.Add(new SelectItem()
+                                {
+                                    Id = subitem.Id,
+                                    PropertyName = string.Concat("Dept: ", item.Key, " ", "User: ", subitem.FirstName + " " + subitem.LastName)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
             return res;
         }
 
@@ -204,8 +231,9 @@ namespace BusinessLogic.Services
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
+                IsRecurring = x.IsRecurring,
                 Stage = x.Stage.StageCode.ToLower(),
-                AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
+                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
 
@@ -223,26 +251,23 @@ namespace BusinessLogic.Services
         public async Task<EditWorkOrder> GetEditWO(string id)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
-            var editwo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.AssignedTo).Include(x => x.Property).Select(x =>
-                      new EditWorkOrder
-                      {
-                          Id = x.Id,
-                          PropertyName = x.Property.PropertyName,
-                          Locations = x.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList(),
-                          Description = x.Description,
-                          IssueId = x.IssueId,
-                          ItemId = x.ItemId,
-                          CreatedDate = x.CreatedTime,
-                          DepartmentId = x.AssignedTo.DepartmentId.GetValueOrDefault(),
-                          UserId = x.AssignedTo.Id,
-                          Priority = x.Priority,
-                          DueDate = x.DueDate,
-                          LocationId = x.LocationId.GetValueOrDefault(),
-                          SubLocationId = x.SubLocationId.GetValueOrDefault(),
-                          FileAvailable = x.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
-                           string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList()
-                      }
-            ).AsNoTracking().FirstOrDefaultAsync();
+            var temp = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Property).ThenInclude(x=>x.Locations).Include(x=>x.AssignedToDept).Include(x=>x.AssignedTo).AsNoTracking().FirstOrDefaultAsync();
+            var editwo = new EditWorkOrder
+            {
+                Id = temp.Id,
+                PropertyName = temp.Property.PropertyName,
+                Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList(),
+                Description = temp.Description,
+                IssueId = temp.IssueId,
+                ItemId = temp.ItemId,
+                CreatedDate = temp.CreatedTime,
+                Priority = temp.Priority,
+                DueDate = temp.DueDate,
+                LocationId = temp.LocationId.GetValueOrDefault(),
+                SubLocationId = temp.SubLocationId.GetValueOrDefault(),
+                FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
+                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList()
+            };
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -253,17 +278,24 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.IssueName
             }).AsNoTracking().ToListAsync();
-            editwo.Departments = await _department.GetAll().Select(x => new SelectItem
+
+            editwo.SubLocations = await _sublocation.GetAll().Where(x => x.LocationId == editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).AsNoTracking().ToListAsync();
+            //get selected department and user
+            if (temp.AssignedTo != null)
             {
-                Id = x.Id,
-                PropertyName = x.DepartmentName
-            }).ToListAsync();
-            editwo.SubLocations = await _sublocation.GetAll().Where(x => x.LocationId == editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).ToListAsync();
-            editwo.Users = await _appuser.Users.Where(x => x.DepartmentId == editwo.DepartmentId).Select(x => new SelectItem
+                editwo.Category = "user";
+                editwo.OptionId = (int)temp.AssignedToId;
+                editwo.Options = await GetDataByCategory("user");
+            }
+            else if (temp.AssignedToDeptId != null)
             {
-                Id = x.Id,
-                PropertyName = String.Concat(x.UserName + "(", x.FirstName, " ", x.LastName, ")")
-            }).AsNoTracking().ToListAsync();
+                editwo.Category = "department";
+                editwo.OptionId = temp.AssignedToDeptId;
+                editwo.Options = await GetDataByCategory("department");
+            }
+            else
+                editwo.Category = "anyone";
+
             return editwo;
         }
 
@@ -289,13 +321,27 @@ namespace BusinessLogic.Services
                     }
                 }
                 wo.Description = editWorkOrder.Description;
-                wo.AssignedToId = editWorkOrder.UserId;
                 wo.IssueId = editWorkOrder.IssueId;
                 wo.ItemId = editWorkOrder.ItemId;
                 wo.DueDate = editWorkOrder.DueDate;
                 wo.LocationId = editWorkOrder.LocationId;
                 wo.Priority = editWorkOrder.Priority;
                 wo.SubLocationId = editWorkOrder.SubLocationId;
+                if (editWorkOrder.Category.Equals("user"))
+                {
+                    wo.AssignedToDeptId = null;
+                    wo.AssignedToId = editWorkOrder.OptionId;
+                }
+                else if (editWorkOrder.Category.Equals("department"))
+                {
+                    wo.AssignedToId = null;
+                    wo.AssignedToDeptId = editWorkOrder.OptionId;
+                }
+                else
+                {
+                    wo.AssignedToDeptId = null;
+                    wo.AssignedToId = null;
+                }
             }
             if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
             {
@@ -313,8 +359,8 @@ namespace BusinessLogic.Services
             if (status > 0)
             {
                 var users = await _userProperty.GetAll().Include(x => x.Property).Where(x => x.Property.PropertyName.Equals(editWorkOrder.PropertyName)).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
-                if (!users.Contains(editWorkOrder.UserId))
-                    users.Add(editWorkOrder.UserId);
+                if (editWorkOrder.OptionId.HasValue && !users.Contains(editWorkOrder.OptionId.GetValueOrDefault()))
+                    users.Add(editWorkOrder.OptionId.GetValueOrDefault());
                 if (!users.Contains(userId))
                     users.Add(userId);
                 await _notifier.CreateNotification("Some Changed are done in Workorder for WOId " + editWorkOrder.Id, users, editWorkOrder.Id, "WE");
@@ -391,8 +437,9 @@ namespace BusinessLogic.Services
             {
                 var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
                 var users = await _userProperty.GetAll().Where(x => x.PropertyId == wo.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
-                var repliedto = await _appuser.FindByNameAsync(post.RepliedTo);
-                if (!users.Contains(wo.AssignedToId.GetValueOrDefault()))
+
+                var repliedto = post.RepliedTo != null ? await _appuser.FindByNameAsync(post.RepliedTo) : null;
+                if (wo.AssignedToId.HasValue && !users.Contains(wo.AssignedToId.GetValueOrDefault()))
                     users.Add(wo.AssignedToId.GetValueOrDefault());
                 if (!users.Contains(userId))
                     users.Add(userId);
@@ -456,8 +503,7 @@ namespace BusinessLogic.Services
                 CreatedTime = x.CreatedTime,
                 DueDate = x.DueDate,
                 UpdatedTime = x.UpdatedTime,
-                Department = x.AssignedTo.Department.DepartmentName,
-                AssignedToUser = string.Concat(x.AssignedTo.UserName, "(", x.AssignedTo.FirstName, " ", x.AssignedTo.LastName, ")"),
+                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Requestedby = x.RequestedBy,
                 Id = x.Id,
                 Priority = x.Priority,
@@ -486,13 +532,11 @@ namespace BusinessLogic.Services
             {
                 query = query.Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
             }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.Email))
-            {
-                query.Where(x => x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.Email));
-            }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.AssignedTo))
             {
-                query = query.Where(x => x.AssignedTo.FirstName.ToLower().StartsWith(wOFilterModel.AssignedTo));
+                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.FirstName.ToLower().StartsWith(wOFilterModel.AssignedTo))||
+                (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.ToLower().StartsWith(wOFilterModel.AssignedTo)|| (x.AssignedTo != null && x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.AssignedTo)))
+                );
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
             {
@@ -508,10 +552,14 @@ namespace BusinessLogic.Services
             {
                 query = query.Where(x => x.Property.PropertyName.ToLower().StartsWith(wOFilterModel.PropertyName));
             }
-
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Vendor))
+            {
+                query = query.Where(x => x.Vendor!=null && x.Vendor.VendorName.ToLower().Equals(wOFilterModel.PropertyName));
+            }
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            query = query.Include(x => x.AssignedTo).Include(x => x.Stage).Include(x => x.Property);
+            var userdept = await _appuser.FindByNameAsync(username);
+            query = query.Include(x => x.AssignedTo).Include(x=>x.AssignedToDept).Include(x => x.Stage).Include(x => x.Property).Include(x=>x.Vendor);
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
                 var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
@@ -519,9 +567,8 @@ namespace BusinessLogic.Services
             }
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
-                query = query.Where(x => x.AssignedTo.UserName.Equals(username));
+                query = query.Where(x => (x.AssignedTo!=null && x.AssignedTo.UserName.Equals(username))||(x.AssignedToDept!=null && x.AssignedToDeptId==userdept.DepartmentId)|| (x.AssignedTo==null && x.AssignedToDept==null));
             }
-
             return query;
         }
     }

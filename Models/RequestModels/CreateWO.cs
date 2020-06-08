@@ -33,11 +33,9 @@ namespace Models.RequestModels
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
-
-        public List<SelectItem> Departments { get; set; }
-
-        [Required(ErrorMessage = "Please give Section Id")]
-        public int UserId { get; set; }
+        public string Category { get; set; }
+        public List<SelectItem> Options { get; set; }
+        public int? OptionId { get; set; }
 
         [Required]
         public DateTime DueDate { get; set; }

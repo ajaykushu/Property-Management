@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
@@ -20,8 +21,9 @@ namespace Presentation.Controllers
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly IOptions<MenuMapperModel> _menuDetails;
         private readonly string _token;
+        private readonly IDetection _detection;
 
-        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, IHttpContextAccessor httpContextAccessor)
+        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -30,6 +32,7 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
+            _detection = detection;
         }
 
         /// <summary>
@@ -88,6 +91,8 @@ namespace Presentation.Controllers
             {
                 TempData["Error"] = StringConstants.Error;
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/User/Mobile/UserDetailView.cshtml", userDetail);
             return View(userDetail);
         }
 
@@ -110,6 +115,8 @@ namespace Presentation.Controllers
                 TempData["Error"] = StringConstants.Error;
                 return View(registerrequest);
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/User/Mobile/Create.cshtml", registerrequest);
             return View(registerrequest);
         }
 
@@ -131,6 +138,8 @@ namespace Presentation.Controllers
                 editrequestmodal = new EditUser();
                 return View(editrequestmodal);
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/User/Mobile/EditUserView.cshtml", editrequestmodal);
 
             return View(editrequestmodal);
         }
@@ -193,6 +202,8 @@ namespace Presentation.Controllers
                 };
                 TempData["Error"] = StringConstants.Error;
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/User/Mobile/GetAllUsers.cshtml", usersLists);
             return View(usersLists);
         }
 

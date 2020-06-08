@@ -15,6 +15,8 @@ namespace Presentation.ViewModels
         [DisplayName("Location Id")]
         public int LocationId { get; set; }
 
+        public int VendorId { get; set; }
+        public List<SelectItem> Vendors { get; set; }
         public List<SelectItem> SubLocations { get; set; }
 
         [Required]
@@ -48,16 +50,11 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
-
-        [Required(ErrorMessage = "Please give Department Id")]
-        [DisplayName("Department")]
-        public int DepartmentId { get; set; }
-
-        public List<SelectItem> Users { get; set; }
-
-        [Required(ErrorMessage = "Please give User")]
-        [DisplayName("User")]
-        public long UserId { get; set; }
+        [Required]
+        public string Category { get; set; }
+        public List<SelectItem> Options { get; set; }
+        [DisplayName("Option")]
+        public int? OptionId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

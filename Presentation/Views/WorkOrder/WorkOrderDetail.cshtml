@@ -6,245 +6,249 @@
 
 <div class="workordertitle">
     Work Order Detail
+    @if(Model!=null){
     <a asp-action="DownloadWO" class="fa-pull-right" title="Export" style="padding:5px;color:white" asp-route-woId="@Model.Id" download="File.csv"><i class="fas fa-file-export"></i></a>
+    }
 </div>
 @if (Model != null)
 {
-    <table class="table table-striped ">
-        <thead>
-        </thead>
-        <tbody>
-            <tr>
-                <th>
-                    Stage Details
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="col">
+<table class="table table-striped ">
+    <thead>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+                Stage Details
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="col">
 
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label asp-for="StageCode"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.StageCode)
-                            </div>
+                    <div class="row ">
+                        <div class="col-md-3">
+                            <label asp-for="StageCode"></label>
                         </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="StageDescription"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.StageDescription)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="Priority"></label>
-                            </div>
-                            <div class="col">
-                                <span>Priority P</span>@Html.DisplayFor(x => x.Priority)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label>Status Change</label>
-                            </div>
-                            <div class="col">
-                                <form asp-action="WorkOrderStageChange">
-                                    <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))" required>
-                                        <option value="">Select Status</option>
-                                    </select>
-                                    <div class="form-group">
-                                        <label>Add Comment</label>
-                                        <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
-                                    </div>
-                                    <input asp-for="Id" hidden>
-                                    <input type="submit" value="Change" class="btn btn-sm btn-primary">
-                                </form>
-                            </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.StageCode)
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Property Details
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="d-md-inline-flex myview">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">@Model.PropertyName</h5>
-
-                                <p class="card-text">
-                                    <address>
-                                        Location: <strong>@Model.Location</strong><br>
-                                        Sub Location: <strong>@Model.SubLocation</strong>
-                                    </address>
-                                </p>
-                            </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="StageDescription"></label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.StageDescription)
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    WO Information
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="col">
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label asp-for="Issue"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.Issue)
-                            </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="Priority"></label>
                         </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="Item"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.Item)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="Requestedby"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.Requestedby)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="CreatedTime"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.CreatedTime)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label for="Comments">Description</label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.Description)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="DueDate"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.DueDate)
-                            </div>
-                        </div>
-                        @if (Model.Attachment != null)
-                        {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Attachment"></label>
-                                </div>
-                                @foreach (var file in Model.Attachment)
-                                {
-                                    <div class="col">
-                                        <a href="@file.Value" download="random">@file.Key</a>
-                                    </div>
+                        <div class="col">
+                            @if(Model.Priority==0){
+                            <span>Critical</span>
                                 }
-                            </div>
-                        }
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Updated Infomation
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="col">
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label for="UpdatedBy">Last Updated By</label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.UpdatedBy)
-                            </div>
-                        </div>
-                        <div class="row top-buffer ">
-                            <div class="col-md-3">
-                                <label for="UpdatedTime">Last Update Time</label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.UpdatedTime)
-                            </div>
+                                else if(Model.Priority==1){
+                            <span>High</span>
+                                }
+                                else if(Model.Priority==2){
+                            <span>Medium</span>
+                                }
+                                else if(Model.Priority==3){
+                            <span>Low</span>
+                                }
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Assigned Info
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="col">
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label asp-for="Department"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.Department)
-                            </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label>Status Change</label>
                         </div>
+                        <div class="col">
+                            <form asp-action="WorkOrderStageChange">
+                                <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))" required>
+                                    <option value="">Select Status</option>
+                                </select>
+                                <div class="form-group">
+                                    <label>Add Comment</label>
+                                    <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
+                                </div>
+                                <input asp-for="Id" hidden>
+                                <input type="submit" value="Change" class="btn btn-sm btn-primary">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Property Details
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="d-md-inline-flex myview">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.PropertyName</h5>
 
-                        @if (Model.AssignedToUser != null)
+                            <p class="card-text">
+                                <address>
+                                    Location: <strong>@Model.Location</strong><br>
+                                    Sub Location: <strong>@Model.SubLocation</strong>
+                                </address>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                WO Information
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="col">
+                    <div class="row ">
+                        <div class="col-md-3">
+                            <label asp-for="Issue"></label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.Issue)
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="Item"></label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.Item)
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="Requestedby"></label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.Requestedby)
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="CreatedTime"></label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.CreatedTime)
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label for="Comments">Description</label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.Description)
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="DueDate"></label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.DueDate)
+                        </div>
+                    </div>
+                    @if (Model.Attachment != null)
                         {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label for="AsignedTo">Assigned To User</label>
-                                </div>
-                                <div class="col">
-                                    <span class="text-info">@Model.AssignedToUser</span>
-                                </div>
-                            </div>
-                        }
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="Attachment"></label>
+                        </div>
+                        @foreach (var file in Model.Attachment)
+                                {
+                        <div class="col">
+                            <a href="@file.Value" download="random">@file.Key</a>
+                        </div>
+                                }
                     </div>
-                </td>
-            </tr>
+                        }
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Updated Infomation
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="col">
+                    <div class="row ">
+                        <div class="col-md-3">
+                            <label for="UpdatedBy">Last Updated By</label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.UpdatedBy)
+                        </div>
+                    </div>
+                    <div class="row top-buffer ">
+                        <div class="col-md-3">
+                            <label for="UpdatedTime">Last Update Time</label>
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(x => x.UpdatedTime)
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Assigned Info
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="col">
+                    @if (Model.AssignedTo != null)
+                        {
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="AssignedTo"></label>
+                        </div>
+                        <div class="col">
+                            <span class="text-info">@Model.AssignedTo</span>
+                        </div>
+                     </div>
+                      }
+                </div>
+            </td>
+        </tr>
 
-            <tr>
-                <th>
-                    Comments
-                </th>
-            </tr>
+        <tr>
+            <th>
+                Comments
+            </th>
+        </tr>
 
-            <tr id="CommentSection">
-                <td>
-                    @await Html.PartialAsync("CommentOperation",
-                    Model.Comments,
-                    new ViewDataDictionary(ViewData)
-                    {
-                    { "workOrderId", Model.Id }
-                    })
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div>
-        @Html.ActionLink("Edit", "EditWOView", new { id = Model.Id }) |
-        <a asp-action="Index">Back to List</a>
-    </div>
+        <tr id="CommentSection">
+            <td>
+                @await Html.PartialAsync("CommentOperation",
+                Model.Comments,
+                new ViewDataDictionary(ViewData)
+                {
+                { "workOrderId", Model.Id }
+                })
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    @Html.ActionLink("Edit", "EditWOView", new { id = Model.Id }) |
+    <a asp-action="Index">Back to List</a>
+</div>
 
 }
 
@@ -265,7 +269,7 @@
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-    <script>
+<script>
      alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-    </script>
+</script>
 }

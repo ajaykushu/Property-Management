@@ -128,10 +128,10 @@
                                 </div>
                                 <div class="col">
                                     <select asp-for="Priority" class="form-control form-control-sm custom-input">
-                                        <option value="0">Priority 0</option>
-                                        <option value="1">Priority 1</option>
-                                        <option value="2">Priority 2</option>
-                                        <option value="3">Priority 3</option>
+                                        <option value="0">Critical</option>
+                                        <option value="1">High</option>
+                                        <option value="2">Medium</option>
+                                        <option value="3">Low</option>
                                     </select>
                                     <span asp-validation-for="Priority" class="text-danger"></span>
                                 </div>
@@ -147,23 +147,44 @@
                                     <label>Assign To </label>
                                 </div>
 
+                                <div class="col ">
+                                    <select class="form-control form-control-sm custom-input" asp-for="Category">
+                                        <option value="">Choose One</option>
+                                        <option value="department">Department</option>
+                                        <option value="user">User</option>
+                                        <option value="anyone">AnyOne</option>
+                                    </select>
+                                    <span asp-validation-for="Category" class="text-danger"></span>
+                                </div>
                                 <div class="col">
-                                    @if (Model.Departments != null && Model.Departments.Any())
+                                    @if (Model.Options != null && Model.Options.Any())
                                     {
-                                        <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
-                                            <option value="">Department</option>
+                                        <select class="form-control form-control-sm custom-input" asp-for="OptionId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"))">
+                                            <option value="">Select Option</option>
                                         </select>
-                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    }
+                                    else
+                                    {
+                                        <select class="form-control form-control-sm custom-input" asp-for="OptionId">
+                                            <option value="">Select Option</option>
+                                        </select>
                                     }
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="UserId">
-                                        <option value="">Select User</option>
-                                    </select>
-                                    <span asp-validation-for="UserId" class="text-danger"></span>
-                                </div>
                             </div>
-
+                            @if (Model.Vendors != null && Model.Vendors.Any())
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label for="File">Vendor</label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"));">
+                                            <option value="">Select Vendor</option>
+                                        </select>
+                                        <span asp-validation-for="VendorId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            }
                             <div class="row top-buffer">
                                 <div class="col-md-3">
                                     <label for="File">Attachment</label>
@@ -192,42 +213,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-<script>
-        $('#LocationId').change(function () {
-            $.get('@Url.Action("GetSubLocation","Property")' + "?id=" + $(this).val(),
-                function (data) {
-                    $("#SubLocationId").html("<option value=''>Please select Sublocation</option>")
-                    if (data != null || data != undefined) {
-                        for (var i = 0; i < data.length; i++) {
-                            $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                        }
-                    }
-                });
-        });
-        $('#PropertyId').change(function () {
-            console.log($(this).val());
-            $.get('@Url.Action("GetLocation","WorkOrder")' + "?id=" + $(this).val(),
-                function (data) {
-                    $("#LocationId").html("<option value=''>Please choose Location</option>")
-                     $("#SubLocationId").html("<option value=''>Please choose SubLocation</option>")
-                    if (data != null || data != undefined) {
-                        for (var i = 0; i < data.length; i++) {
-                            $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                        }
-                    }
-                });
-         });
-         $('#DepartmentId').change(function () {
-            console.log($(this).val());
-            $.get('@Url.Action("GetUserByDept","WorkOrder")' + "?id=" + $(this).val(),
-                function (data) {
-                    console.log(data);
-                    if (data != null || data != undefined) {
-                         $("#UserId").html("<option value=''>Please Choose User</option>")
-                        for (var i = 0; i < data.length; i++) {
-                            $("#UserId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                        }
-                    }
-                });
-         });
-</script>

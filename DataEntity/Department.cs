@@ -19,5 +19,6 @@ namespace DataEntity
         public string DepartmentName { get; set; }
 
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

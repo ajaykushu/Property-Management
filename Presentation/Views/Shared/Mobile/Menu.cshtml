@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .flex-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-right: 10px;
+        padding-left: 0px;
+        padding-right: 5px;
+        top: 40px;
+    }
+
+        .flex-container .menu {
+            flex: 1 1;
+            border: 0px;
+            text-align: center;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+
+    .item {
+        display: grid;
+    }
+
+    .mwrapper {
+        display: block;
+        width: 100%;
+        padding: 5%;
+    }
+</style>
+<header>
+    <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">My Property</a>
+            <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
+
+                @if (HttpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+                {
+                <li class="nav-item active">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><i class="fa fa-sign-out-alt fa-1x"></i></a>
+                </li>
+                }
+                else
+                {
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="Index"><i class="fa fa-sign-in-alt fa-1x"></i></a>
+                </li>
+                }
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="mwrapper">
+    <div class="flex-container" style="padding-top:60px;">
+        <div class="menu">
+            <a href="@Url.Action("Index","WorkOrder")">
+                <div class="item">
+                    <span><i class="fa fa-list-alt fa-3x" aria-hidden="true"></i></span>
+                    <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Todo</span>
+                </div>
+            </a>
+        </div>
+        <div class="menu">
+            <a href="@Url.Action("GetAllUsers","User")">
+                <div class="item">
+                    <span><i class="fa fa-user fa-3x" aria-hidden="true"></i></span>
+                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">User</span>
+                </div>
+            </a>
+        </div>
+        <div class="menu">
+            <a href="@Url.Action("Index","Configuration")">
+                <div class="item">
+                    <span><i class="fa fa-cogs fa-3x" aria-hidden="true"></i></span>
+                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Setting</span>
+                </div>
+            </a>
+        </div>
+        <div class="menu">
+            <a href="@Url.Action("ListProperties","Property")">
+                <div class="item">
+                    <span><i class="fa fa-home fa-3x" aria-hidden="true"></i></span>
+                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Property</span>
+                </div>
+            </a>
+        </div>
+        <div class="menu">
+            <a href="@Url.Action("GetAllNotification","Home")">
+                <div class="item">
+                    <div class="notifiaction-cont">
+                        <span><i class="fa fa-bell fa-3x" aria-hidden="true"></i></span>
+                        <span id="notification_count" style="color:red;position:absolute;font-size:1.2em;"></span>
+                    </div>
+                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Notification</span>
+                </div>
+            </a>
+        </div>
+        <div class="menu">
+            <a href="@Url.Action("Privacy","Home")">
+                <div class="item">
+                    <span><i class="fa fa-user-secret fa-3x" aria-hidden="true"></i></span>
+                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Privacy</span>
+                </div>
+            </a>
+        </div>
+        @{ var path = HttpContextAccessor.HttpContext.Session.Keys.Contains("imagePath") ? HttpContextAccessor.HttpContext.Session.GetString("imagePath") : "";}
+        <div class="menu">
+            <div class="item">
+                <img src='@path' width="60" height="60" alt="Pet Image" class="avtaar" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#notification_count').ready(function () {
+            $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
+            $("#notification_count").html('<strong>'+data+'</strong>');
+            })
+ })
+</script>

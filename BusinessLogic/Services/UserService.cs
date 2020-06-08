@@ -263,19 +263,16 @@ namespace BusinessLogic.Services
 
             if (!_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
-
                 var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
                 var userIds = await _userProperty.GetAll().Where(x => propIds.Contains(x.PropertyId)).AsNoTracking().Select(x => x.ApplicationUserId).ToListAsync();
                 if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
                 {
                     //only select users roles
-                   var usersWithRole= await _userManager.GetUsersInRoleAsync("User");
-                    userIds = usersWithRole.Where(x => userIds.Contains(x.Id)).Select(x=>x.Id).ToList();
+                    var usersWithRole = await _userManager.GetUsersInRoleAsync("User");
+                    userIds = usersWithRole.Where(x => userIds.Contains(x.Id)).Select(x => x.Id).ToList();
                 }
                 query = query.Where(x => userIds.Contains(x.Id));
-               
             }
-           
 
             var count = query.Count();
             var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();

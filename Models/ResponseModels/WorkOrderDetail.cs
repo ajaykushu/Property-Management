@@ -10,7 +10,6 @@ namespace Models.ResponseModels
         public string SubLocation { get; set; }
         public string Location { get; set; }
         public string Requestedby { get; set; }
-        public string Department { get; set; }
         public string StageDescription { get; set; }
         public string Description { get; set; }
         public string StageCode { get; set; }
@@ -22,7 +21,7 @@ namespace Models.ResponseModels
         public DateTime DueDate { get; set; }
         public List<KeyValuePair<string, string>> Attachment { get; set; }
         public string UpdatedBy { get; set; }
-        public string AssignedToUser { get; set; }
+        public string AssignedTo { get; set; }
         public List<SelectItem> Stages { get; set; }
         public Pagination<List<CommentDTO>> Comments { get; set; }
     }

@@ -1,0 +1,290 @@
+﻿@model Presentation.ViewModels.WorkOrderDetail
+@{
+    ViewData["Title"] = "WO Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header>
+    <nav class="navbar bg-white mb-3 fixed-top">
+        <div class="d-inline-flex w-100">
+            <a style="color:black" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <div class="container-block justify-content-center">
+                <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="mform">
+    @if (Model != null)
+{
+    <table class="table border-0 table-striped">
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+            </tr>
+            <tr>
+
+                <td>
+                    <div class="d-md-inline-flex myview">
+                        <div>
+                            <div class="card-body">
+                                <h2 class="card-title">@Model.Item @Model.Issue</h2>
+                                <p class="card-text" style="font-size:1.2em;">
+                                <p>@Model.PropertyName</p>
+                                <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;@Model.SubLocation in @Model.Location<br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Stage Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label asp-for="StageCode"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.StageCode)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="StageDescription"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.StageDescription)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Priority"></label>
+                            </div>
+                            <div class="col">
+                                @if(Model.Priority==0){
+                                <span>Critical</span>
+                                }
+                                else if(Model.Priority==1){
+                                <span>High</span>
+                                }
+                                else if(Model.Priority==2){
+                                <span>Medium</span>
+                                }
+                                else if(Model.Priority==3){
+                                <span>Low</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Status Change
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="flex-sm-row top-buffer">
+                        <form asp-action="WorkOrderStageChange" class="w-100">
+                            <select class="form-control form-control-lg  mobile-input " name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))" required>
+                                <option value="">Select Status</option>
+                            </select>
+                            <div class="form-group top-buffer">
+                                <textarea class="form-control form-control-lg top-buffer mobile-input border-0" name="Comment" placeholder="Add Comment"></textarea>
+                            </div>
+                            <input asp-for="Id" hidden>
+                            <input type="submit" value="update" class="btn w-100 btn btn-success">
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    WO Information
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label asp-for="Issue"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Issue)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Item"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Item)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Requestedby"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Requestedby)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="CreatedTime"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.CreatedTime)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="Comments">Description</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Description)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="DueDate"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.DueDate)
+                            </div>
+                        </div>
+                        @if (Model.Attachment != null)
+                        {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Attachment"></label>
+                            </div>
+                            @foreach (var file in Model.Attachment)
+                                {
+                            <div class="col">
+                                <a href="@file.Value" download="random">@file.Key</a>
+                            </div>
+                                }
+                        </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Updated Infomation
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="UpdatedBy">Last Updated By</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.UpdatedBy)
+                            </div>
+                        </div>
+                        <div class="row top-buffer ">
+                            <div class="col-md-3">
+                                <label for="UpdatedTime">Last Update Time</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.UpdatedTime)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Assigned Info
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                       
+                        @if (Model.AssignedTo != null)
+                        {
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="AsignedTo">Assigned To </label>
+                            </div>
+                            <div class="col">
+                                <span class="text-info">@Model.AssignedTo</span>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Comments
+                </th>
+            </tr>
+
+            <tr id="CommentSection">
+                <td>
+                    @await Html.PartialAsync("CommentOperation",
+                    Model.Comments,
+                    new ViewDataDictionary(ViewData)
+                    {
+                    { "workOrderId", Model.Id }
+                    })
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+</div>
+<div class="pop-up justify-content-center" style="display:none">
+    <div class="">
+        @{Dictionary<string, string>
+            keyValuePairs = new Dictionary<string, string>
+                ();
+                keyValuePairs.Add("id", Model.Id + "");};
+        <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
+        <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit'></auth-link>
+        <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">
+    </div>
+</div>
+<div class="comment-stick">
+    <form class="comment-grp w-100 d-inline-flex" id="commentform" asp-action='PostComment' method='post'>
+        <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
+        <input type="text" id='Comment' name='Comment' class="form-control form-control-lg" placeholder="write a note or comment">
+        &nbsp;<input type="submit" class="btn btn-primary" value="Post">
+    </form>
+</div>
+<div class="bottom-stick">
+    <div class="nav-link d-inline-flex flex-row">
+        &nbsp;<input type="button" class=" btn btn-info btn-sm" value="Complete" style="color:lightgray">
+        &nbsp;<input type="button" class="btn btn-primary btn-sm" value="Resume" style="color:lightgray">
+    </div>
+    <div class="container-block justify-content-end">
+        <a href="#" class="nav-link edit-link" style="color:lightgray"><i class="fa fa-pencil-alt fa-2x"></i></a>
+    </div>
+</div>
+
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+<script>
+     alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+</script>
+}

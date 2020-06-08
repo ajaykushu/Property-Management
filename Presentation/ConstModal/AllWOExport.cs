@@ -10,7 +10,6 @@ namespace Presentation.ConstModal
         public string SubLocation { get; set; }
         public string Location { get; set; }
         public string Requestedby { get; set; }
-        public string Department { get; set; }
         public string StageDescription { get; set; }
         public string StageCode { get; set; }
         public string Issue { get; set; }
@@ -21,7 +20,7 @@ namespace Presentation.ConstModal
         public int Priority { get; set; }
         public DateTime UpdatedTime { get; set; }
         public List<string> Attachment { get; set; }
-        public string AssignedToUser { get; set; }
+        public string AssignedTo { get; set; }
         public string UpdatedBy { get; set; }
     }
 }

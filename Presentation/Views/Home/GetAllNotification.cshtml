@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Notifications";
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,79 +11,80 @@
 </div>
 @if (Model != null && Model.Any())
 {
-    <table class="table table-striped  table_container notificationview table-responsive-lg ">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Message)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NotificationType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreationTime)
-                </th>
-            </tr>
-        </thead>
+<table class="table table-striped  table_container notificationview table-responsive-lg ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NotificationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationTime)
+            </th>
+        </tr>
+    </thead>
 
-        <tbody>
+    <tbody>
 
-            @foreach (var item in Model)
+        @foreach (var item in Model)
             {
-                <tr class='clickable-row' onclick="forward('@item.NotificationType','@item.NavigatorId',@item.Id);">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Message)
-                    </td>
-                    <td>
-                        @if (item.NotificationType.Equals("WE"))
+        <tr class='clickable-row' onclick="forward('@item.NotificationType','@item.NavigatorId',@item.Id);">
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @if (item.NotificationType.Equals("WE"))
                         {
-                            <text> Work Order Update</text>
+                <text> Work Order Update</text>
                         }
                         else if (item.NotificationType.Equals("WA"))
                         {
-                            <text> Work Order Create</text>
+                <text> Work Order Create</text>
                         }
                         else if (item.NotificationType.Equals("UE"))
                         {
-                            <text> User Update </text>
+                <text> User Update </text>
                         }
                         else if (item.NotificationType.Equals("CA"))
                         {
-                            <text> Comment </text>
+                <text> Comment </text>
                         }
                         else if (item.NotificationType.Equals("RA"))
                         {
-                            <text> Reply </text>
+                <text> Reply </text>
                         }
                         else if (item.NotificationType.Equals("PA"))
                         {
-                            <text> Property Add </text>
+                <text> Property Add </text>
                         }
                         else if (item.NotificationType.Equals("PE"))
                         {
-                            <text> Property Update </text>
+                <text> Property Update </text>
                         }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreationTime)
-                    </td>
-                </tr>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+        </tr>
             }
-        </tbody>
-    </table>
+    </tbody>
+</table>
 }
 else
 {
 
-    <text>0 Notification</text>
+<text>0 Notification</text>
 
 }
+
 <script>
     function forward(key, url, id) {
         $.get("@Url.Action("MarkAsRead","Home")" + '?id=' + id);

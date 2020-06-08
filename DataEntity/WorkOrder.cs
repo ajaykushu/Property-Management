@@ -10,7 +10,6 @@ namespace DataEntity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string Id { get; set; }
-
         public long PropertyId { get; set; }
         public Property Property { get; set; }
         public int ItemId { get; set; }
@@ -19,15 +18,18 @@ namespace DataEntity
         public Issue Issue { get; set; }
         public int StageId { get; set; }
         public Stage Stage { get; set; }
-
         [Column(TypeName = "varchar(200)")]
         public string Description { get; set; }
-
         [Column(TypeName = "varchar(50)")]
         public string RequestedBy { get; set; }
-
         public long? AssignedToId { get; set; }
-
+        public int? AssignedToDeptId { get; set; }
+        public bool IsRecurring { get; set; }
+        [Column(TypeName = "varchar(1)")]
+        public string RecurringType { get; set; }//D,W,M,Y
+        public DateTime RecurringTime { get; set; }
+        public int? VendorId { get; set; }
+        public Vendor Vendor { get; set; }
         public DateTime DueDate { get; set; }
         public int? LocationId { get; set; }
         public Location Location { get; set; }
@@ -35,6 +37,7 @@ namespace DataEntity
         public SubLocation SubLocation { get; set; }
         public int Priority { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
+        public virtual Department AssignedToDept { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<WOAttachments> WOAttachments { get; set; }
     }

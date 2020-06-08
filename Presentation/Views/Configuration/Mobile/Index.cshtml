@@ -1,0 +1,86 @@
+﻿@model List<SelectItem>
+@inject IDeviceResolver device
+@{
+    ViewData["Title"] = "Config Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header>
+    <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+        <div class="container-fluid">
+            <span class="navbar-brand justify-content-center">Configuration</span>
+            <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
+                <li class="nav-item" style="margin-right:5px;">
+                    <a class="nav-link text-white" asp-controller="Login" asp-action="Mobile"><i class="fa fa-bars fa-1x" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="mform table_container">
+    <hr>
+    <table class="table table-responsive-lg">
+        @if (Model != null)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="d-lg-table-row">
+                                <label>Assign Menu To Role</label>
+                            </div>
+                            <div class="d-lg-table-row">
+                                <label>Select Role</label>
+                                <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                                    <option value="">Please select one</option>
+                                </select>
+                            </div>
+                            <hr />
+                            <section>
+                                <div class="d-lg-table-row">
+                                    <label>Role Operation</label>
+                                </div>
+                                <div class="d-lg-table-row">
+                                    <label>Enter Role</label>
+                                    <input class="form-control form-control-sm custom-input" />
+                                </div>
+                                <hr />
+                                <div class="d-lg-table-row">
+                                    <label>Department Operation</label>
+                                </div>
+                                <div class="d-lg-table-row">
+                                    <label>Enter Department</label>
+                                    <input class="form-control form-control-sm custom-input" />
+                                </div>
+                                <hr />
+                                <div class="d-lg-table-row">
+                                    <input type="button" value="Add" class="btn btn-sm btn-primary" />
+                                    &nbsp;<input type="button" value="Remove" class="btn btn-sm btn-danger" />
+                                </div>
+                            </section>
+                        </div>
+                    </td>
+                    <td class="features">
+                        <div class="spinner">
+                            <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>
+
+<script>
+    $('.crole').change(function (e) {
+        var url = '@Url.Action("FeaturesSelector")';
+        $('.features').html("");
+        var id = $(this).val();
+        RESTCALL(url, { id: id }, "GET", "", true, function (res) {
+            $('.features').html(res);
+            disablespinner();
+        });
+
+    });
+</script>

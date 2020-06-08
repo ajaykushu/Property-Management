@@ -1,12 +1,15 @@
 ﻿@model Pagination<List<Comment>>
-
+@inject IDeviceResolver device
 <div class="mycontainer" style="max-height:1600px;overflow-y:scroll;padding:8px;">
     <form asp-action='PostComment' method='post'>
-        <p>
-            <div class="mycon">
-                <button class="btn btn-outline-primary btn-sm" value="0" id="addcomment"><i class="fa fa-comment" aria-hidden="true"></i>&nbsp;Comment</button>
-            </div>
-        </p>
+        @if (device.Device.Type != DeviceType.Mobile)
+        {
+            <p>
+                <div class="mycon">
+                    <button class="btn btn-outline-primary btn-sm" value="0" id="addcomment"><i class="fa fa-comment" aria-hidden="true"></i>&nbsp;Comment</button>
+                </div>
+            </p>
+        }
         <div class="commentsection">
             @if (Model != null && Model.Payload != null)
             {
@@ -61,9 +64,11 @@
         display: block;
         resize: none;
     }
-    p{
-        text-wrap:normal;
+
+    p {
+        text-wrap: normal;
     }
+
     .comment:hover {
         box-shadow: 0 10px 20px 0 rgba(0,0,0,0.15);
         transition-property: box-shadow, -webkit-box-shadow;

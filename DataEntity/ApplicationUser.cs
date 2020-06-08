@@ -13,7 +13,6 @@ namespace DataEntity
             this.UserProperties = new HashSet<UserProperty>();
             this.WorkOrdersAssigned = new HashSet<WorkOrder>();
         }
-
         [Column(TypeName = "varchar(50)")]
         public string FirstName { set; get; }
 
@@ -38,11 +37,12 @@ namespace DataEntity
         public string OfficeExt { set; get; }
 
         public string PhotoPath { set; get; }
-        public virtual ICollection<UserProperty> UserProperties { set; get; }
+        
         public int? DepartmentId { set; get; }
         public Department Department { set; get; }
 
         public bool IsActive { get; set; }
+        public virtual ICollection<UserProperty> UserProperties { set; get; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
     }
 

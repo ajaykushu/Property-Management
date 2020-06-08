@@ -1,0 +1,107 @@
+﻿@model PropertyConfig
+@{
+    ViewData["Title"] = "Property Config";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header>
+    <nav class="navbar bg-success mb-3 fixed-top">
+        <div class="d-inline-flex w-100">
+            <a style="color:white" asp-action="ListProperties" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <div class="container-block justify-content-center">
+                <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Property Config</span>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="mform" style="padding-left:5px; padding-right:5px;">
+    <hr />
+    <form asp-action="PropertyConfig" class="addconfig">
+        <table class="table table_container">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="col">
+                            @if (Model.Locations != null && Model.Locations.Any())
+                            {
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label for="Locations">Location Available</label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            }
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="NewLocation">New Location</label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="NewLocation" class="form-control form-control-sm custom-input">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label asp-for="SubLocation"></label>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="SubLocation" class="form-control form-control-sm custom-input"></textarea>
+                                    <span class="text-danger">Enter , speparated Sub Location</span><br />
+                                    <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+            </tbody>
+        </table>
+        <div class="bottom-stick" style="background-color:white">
+            <input asp-for="PropertyId" hidden>
+            <button type="submit" class="btn w-100  btn-success submit">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    $('#LocationId').change(function () {
+         $.get('@Url.Action("GetSubLocation","Property")' + "?id=" + $(this).val(),
+                function (data) {
+                    if (data != null || data != undefined) {
+                        var string = "";
+                        for (var i = 0; i < data.length; i++){
+                            if (i == data.length-1)
+                                string = string + data[i].propertyName;
+                            else
+                            string = string + data[i].propertyName+',';
+                        }
+                         $("#SubLocation").val(string)
+                    }
+                });
+    })
+    $("#SubLocation").change(function (e) {
+        if ($(this).val().indexOf(',') == $(this).val().length - 1) {
+            alert("Please remove ',' from the end of the Sub-Locations");
+            $("input[type='submit']").prop("disabled", true);
+        }
+        else {
+            $("input[type='submit']").prop("disabled", false);
+        }
+    })
+</script>
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+<script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+</script>
+}

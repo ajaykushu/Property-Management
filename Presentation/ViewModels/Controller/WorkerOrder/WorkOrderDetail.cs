@@ -20,7 +20,6 @@ namespace Presentation.ViewModels
         [DisplayName("Requested By")]
         public string Requestedby { get; set; }
 
-        public string Department { get; set; }
 
         [DisplayName("Status Description")]
         public string StageDescription { get; set; }
@@ -46,8 +45,8 @@ namespace Presentation.ViewModels
 
         public List<KeyValuePair<string, string>> Attachment { get; set; }
 
-        [DisplayName("Assigned To User")]
-        public string AssignedToUser { get; set; }
+        [DisplayName("Assigned To")]
+        public string AssignedTo { get; set; }
 
         [DisplayName("Updated By")]
         public string UpdatedBy { get; set; }

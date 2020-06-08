@@ -27,6 +27,7 @@ namespace Presentation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDetection();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -50,16 +51,13 @@ namespace Presentation
             services.AddSingleton<ISessionStorage, SessionStorage>();
             services.AddServiceWorker(new PwaOptions
             {
-
-                CacheId = "Worker 1.3",
+                CacheId = "Worker 1.1",
                 AllowHttp = true,
-                RoutesToPreCache = "/Login/Index,/Home/Privacy",
+                RoutesToPreCache = "/Login/Index,/Home/Privacy,/css/site.min.css,/js/site.min.js,/NA.jpg",
                 RegisterServiceWorker = true,
                 RegisterWebmanifest = true,
                 Strategy = ServiceWorkerStrategy.CacheFirstSafe,
-
-            }) ;
-            
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

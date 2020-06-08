@@ -45,11 +45,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("getusersbydepartment")]
+        [Route("getdatabycategory")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<List<SelectItem>>> GetUsersByDepartment(long id)
+        public async Task<ActionResult<List<SelectItem>>> GetDataByCategory(string category)
         {
-            List<SelectItem> prop = await _workOrderService.GetUsersByDepartment(id);
+            List<SelectItem> prop = await _workOrderService.GetDataByCategory(category);
             return Ok(prop);
         }
 

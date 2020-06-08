@@ -1,0 +1,210 @@
+﻿@model Presentation.ViewModels.UserDetail
+@{
+       ViewData["Title"] = "User Detail View";
+       Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header>
+    <nav class="navbar bg-success mb-3 fixed-top">
+        <div class="d-inline-flex w-100">
+            <a style="color:white" asp-action="GetAllUsers" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <div class="container-block justify-content-center">
+                <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">User Detail</span>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="mform" style="padding-left:5px;padding-right:5px;">
+    <hr>
+    @if (Model != null)
+    {
+    <table class="table">
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    Basic Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="FullName">Full Name</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.FullName)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="EmailAddress">Email Address</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.EmailAddress)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="PhoneNumber"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.PhoneNumber)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="UserId">User Id</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.UserId)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="OfficeExtension">Office Extension</label>
+                            </div>
+                            <div class="col">
+                                @if (Model.OfficeExtension != null)
+                                    {
+                                @Html.DisplayFor(x => x.OfficeExtension)
+                                    }
+                                    else
+                                    {
+                                <span>NA</span>
+                                    }
+                            </div>
+                        </div>
+                        @if (Model.PhotoPath != null)
+                            {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="photo">Photo</label>
+                            </div>
+                            <div class=" photo_disp" style="display:block">
+                                <img src='@Model.PhotoPath' area-hidden="true" width="200" height="150" />
+                            </div>
+                        </div>
+                            }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Properties Assigned
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="d-md-inline-flex myview">
+                        @if (Model.ListProperties != null)
+                            {
+                                foreach (var item in Model.ListProperties)
+                                {
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.PropertyName</h5>
+                                @if (@item.IsPrimary)
+                                            {
+                                <h6 class="card-title text-success">Primary</h6>
+                                            }
+                                <p class="card-text">
+                                    <address>
+                                        <strong>@item.PropertyType</strong><br>
+                                        @item.StreetAddress1<br>
+                                        @item.StreetAddress2<br>
+                                        @item.State,@item.City<br>
+                                        @item.ZipCode, @item.Country<br>
+                                    </address>
+                                </p>
+                            </div>
+                        </div>
+
+                                }
+                            }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Access Information
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label for="Roles">Role Assigned</label>
+                            </div>
+                            <div class="col">
+                                @if (Model.Roles != null)
+                                    {
+                                        foreach (var item in Model.Roles)
+                                        {
+
+                                <div class="d-inline-flex">
+                                    <span class="btn bg-primary"> @item</span>
+                                </div>
+                                        }
+                                    }
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Department"></label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.Department)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="TimeZone">Time Zone</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.TimeZone)
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label for="SMSAlert">SMS Alert</label>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(x => x.SMSAlert)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    }
+</div>
+
+<style>
+    .myview .card {
+        width: 200px;
+        margin: 5px;
+    }
+
+    .imagethumbnail {
+        border: 1px solid grey;
+        padding: 4px;
+        border-radius: 50%;
+    }
+</style>
+
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+<script>
+     alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+</script>
+}

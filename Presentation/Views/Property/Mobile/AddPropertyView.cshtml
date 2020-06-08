@@ -1,0 +1,134 @@
+﻿@model Presentation.ViewModels.PropertyOperation
+@{
+    ViewData["Title"] = "Add Property";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
+<header>
+    <nav class="navbar bg-success mb-3 fixed-top">
+        <div class="d-inline-flex w-100">
+            <a style="color:white" asp-action="ListProperties" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <div class="container-block justify-content-center">
+                <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Add Property</span>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="mform" style="padding-left:5px; padding-right:5px;">
+    <hr>
+    @if (Model != null)
+    {
+    <form asp-action="AddProperty" asp-controller="Property" id="addprop">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <table class="table table_container">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label for="PropertyTypeId">Property Type</label>
+                                </div>
+                                <div class="col">
+                                    @if (Model.PropertyTypes != null)
+                                {
+                                    <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
+                                        <option value="">Please select one</option>
+                                    </select>
+                                }
+                                    <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer ">
+                                <div class="col-md-3">
+                                    <label for="PropertyName">Property Name </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="PropertyName" class="form-control-sm custom-input">
+                                    <span asp-validation-for="PropertyName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="StreetAddress1"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="StreetAddress1" class="form-control-sm custom-input">
+                                    <span asp-validation-for="StreetAddress1" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="StreetAddress2"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="StreetAddress2" class="form-control-sm custom-input">
+                                    <span asp-validation-for="StreetAddress2" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="City"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="City" class="form-control-sm custom-input">
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="ZipCode"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ZipCode" class="form-control-sm custom-input">
+                                    <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="State"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="State" class="form-control-sm custom-input">
+                                    <span asp-validation-for="State" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="Country"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Country" class="form-control-sm custom-input">
+                                    <span asp-validation-for="Country" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <div class="bottom-stick" style="padding:5px;">
+            <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Add Property</button>
+            <input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">
+        </div>
+    </form>
+    }
+</div>

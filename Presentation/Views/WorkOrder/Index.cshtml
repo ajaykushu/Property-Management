@@ -1,15 +1,11 @@
 ﻿@model WOFilterModel
 @{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
 <form class="form">
-    <div class="card wofilter" hidden="@Model.FilterActive">
+    <div class="card wofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
             <div class="form-row">
-                <div class="col-xs-5">
-                    <label>Email</label>
-                    <input asp-for="Email" class="form-control form-control-sm custom-input">
-                    <span class="text-danger" asp-validation-for="Email"></span>
-                </div>
+                
                 <div class="col-xs-5">
                     <label asp-for="AssignedTo"></label>
                     <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
@@ -36,30 +32,42 @@
                     <label>Priority</label>
                     <select asp-for="Priority" type="date" class="form-control form-control-sm custom-input">
                         <option value="">Select One</option>
-                        <option value="0">Priority P0</option>
-                        <option value="1">Priority P1</option>
-                        <option value="2">Priority P2</option>
-                        <option value="3">Priority P3</option>
+                        <option value="0">Critical</option>
+                        <option value="1">High</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Low</option>
                     </select>
                 </div>
                 <div class="col-xs-5">
                     <label>Status</label>
-                    <select asp-for="Status" class="form-control form-control-sm custom-input">
-                        <option value="">Select One</option>
-                        <option value="OPEN">OPEN</option>
-                        <option value="BID ACCEPTED">BID ACCEPTED</option>
-                        <option value="IN PROGRESS">IN PROGRESS</option>
-                        <option value="COMPLETED">COMPLETED</option>
+                    <select asp-for="Status" class="form-control top-buffer form-control-sm custom-input">
+                        <option value="">Search One</option>
+                        <option value="ADCM">Add Comment Only</option>
+                        <option value="BINE">BID Needed</option>
+                        <option value="BIRE">BID Received</option>
+                        <option value="COMP">Complete</option>
+                        <option value="COBQ">Complete But Bad Quality</option>
+                        <option value="CONI">Complete, Need Inspection</option>
+                        <option value="DAIL">Daily</option>
+                        <option value="FISC">Finalize Scope</option>
+                        <option value="HOLD">Hold</option>
+                        <option value="NEWO">New WO</option>
+                        <option value="ORMA">Order Materials</option>
+                        <option value="PEND">Pending</option>
+                        <option value="REAS">Ready To Assign</option>
+                        <option value="WOAS">Work Assigned</option>
+                        <option value="WOPR">Work In Progress</option>
+                        <option value="WOOR">Work Ordered</option>
                     </select>
+                </div>
+                <div class="col-xs-5">
+                    <label>Vendor</label>
+                    <input asp-for="Vendor" placeholder="Vendor" class="form-control top-buffer form-control-sm custom-input">
                 </div>
             </div>
             <div class="d-lg-inline-flex">
                 <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
                 &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
-                &nbsp;<div class="cont top-buffer">
-                    <input asp-for="FilterActive" class="selector1">
-                    <label class="label1" for="FilterActive">Hide Always</label>
-                </div>
             </div>
         </div>
     </div>
@@ -70,94 +78,97 @@
     }
     <div class="workordertitle">
         Work Orders
-        <a href="#" class="filter float-right" title="Filter" style="color:white;padding:5px;"><i class="fa fa-filter"></i></a>
+        <div class="Filter_con float-right">
+            <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
+            <i class="fa fa-filter"></i>
+        </div>
 
         <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>
     </div>
     @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
     {
-        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
-            <thead>
-                <tr>
-                    <th scope="col" colspan="5" class="mytitle">
-                        To Do List
-                    </th>
-                    <th scope="col" colspan="2" class="button">
-                        <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
-                    </th>
-                </tr>
-            </thead>
+    <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+        <thead>
+            <tr>
+                <th scope="col" colspan="5" class="mytitle">
+                    To Do List
+                </th>
+                <th scope="col" colspan="2" class="button">
+                    <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
+                </th>
+            </tr>
+        </thead>
 
-            <tbody>
+        <tbody>
 
-                @foreach (var item in ResponseModel.Payload)
-                {
-                    <tr>
-                        <td>
-                            <span><strong>@item.Id</strong></span>
-                        </td>
-                        <td>
-                            <span><strong>@item.Stage.ToUpper()</strong></span>
-                        </td>
-                        <td><span style="word-break:normal">@item.Description</span></td>
-                        <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedToUser</strong></span></td>
-                        <td>
-                            <span class="text-dark">
-                                @if (item.Property != null)
+            @foreach (var item in ResponseModel.Payload)
+            {
+            <tr>
+                <td>
+                    <span><strong class="@if(item.IsRecurring){<text>green</text>}else{<text>orange</text>}">@item.Id</strong></span>
+                </td>
+                <td>
+                    <span><strong>@item.Stage.ToUpper()</strong></span>
+                </td>
+                <td><span style="word-break:normal">@item.Description</span></td>
+                <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedToUser</strong></span></td>
+                <td>
+                    <span class="text-dark">
+                        @if (item.Property != null)
                                 {@item.Property.PropertyName}
-                            </span>
-                        </td>
-                        <td>@item.DueDate</td>
-                        <td style="min-width:200px;">
-                            @{
+                    </span>
+                </td>
+                <td>@item.DueDate</td>
+                <td style="min-width:200px;">
+                    @{
                                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                 keyValuePairs.Add("id", item.Id + "");
-                                <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
-                            }
-                        </td>
-                    </tr>
+                        <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                        <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                    }
+                </td>
+            </tr>
                 }
-            </tbody>
-        </table>
-        <hr />
+        </tbody>
+    </table>
+    <hr />
 
-        <nav>
-            <ul class="pagination">
-                @{ int current = 0;}
-                <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
-                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                </li>
+    <nav>
+        <ul class="pagination">
+            @{ int current = 0;}
+            <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
+                @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
+            </li>
 
-                @for (int i = 0; i < ResponseModel.PageCount; i++)
+            @for (int i = 0; i < ResponseModel.PageCount; i++)
                 {
 
                     if (ResponseModel.CurrentPage == i)
                     {
-                        <li class="page-item active">
-                            <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-                        </li>
+            <li class="page-item active">
+                <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+            </li>
                         current = i;
                     }
                     else
                     {
-                        <li class="page-item">
-                            @{ Model.PageNumber = i;}
-                            @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                        </li>
+            <li class="page-item">
+                @{ Model.PageNumber = i;}
+                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+            </li>
                     }
                 }
-                @{ Model.PageNumber = current + 1;}
-                <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
-                    @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                </li>
-            </ul>
-        </nav>
+            @{ Model.PageNumber = current + 1;}
+            <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
+                @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+            </li>
+        </ul>
+    </nav>
 
     }
     else
     {
-        <span> No Record Found</span>
+    <span> No Record Found</span>
 
     }
 </form>
@@ -165,22 +176,21 @@
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-    <script>
+<script>
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-    </script>
+</script>
 }
 
 <script>
 
-    $('.filter').click(function () {
-        $('.wofilter').show();
-        $('.wofilter').prop("hidden", false);
+    $('.filter_check').click(function () {
+        if ($(this).prop("checked") == true) {
+            $('.wofilter').show();
+        }
     });
-    $("#FilterActive").change(function () {
-        $('input[type="submit"]').click();
-    });
+
     $('.closefilter').click(function () {
-        console.log('hii');
+        $('.filter_check').prop("checked", false);
         $('.wofilter').hide(100);
     });
     $('#Export').change(function () {

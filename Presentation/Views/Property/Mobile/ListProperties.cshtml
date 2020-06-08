@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Properties>
+@{
+    ViewData["Title"] = "ListProperties";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header>
+    <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">Properties</a>
+            <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
+                <li class="nav-item" style="margin-right:5px;">
+                    <a class="nav-link text-white" asp-controller="Login" asp-action="Mobile"><i class="fa fa-bars fa-1x" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="mform" style="padding-left:5px;padding-right:5px;">
+    <hr />
+    @if (Model != null)
+{
+    <p>
+        <auth-link bclass="btn btn-sm btn-success addmodal" action="AddPropertyView" controller="Property" feature=@MenuEnum.Add_Property content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New'></auth-link>
+    </p>
+    <div class="new_address_css">
+        @if (Model == null || !Model.Any())
+        {
+        <div>No properties Found</div>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+        <div class="card propetry">
+            <div class="card-header propery_head">
+                <ul class="opertion_menu">
+                    @{
+                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                keyValuePairs.Add("id", item.Id + "");
+                    }
+                    <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature=@MenuEnum.Edit_Property routedata=@keyValuePairs action="PropertyEditView" controller="Property" content='<i class="fa fa-pencil-alt fa-1x" aria-hidden="true"></i>'></auth-link></li>
+                    <li class="opertion_menu_item">
+                        <a asp-action="PropertyConfig" asp-controller="Property" asp-route-id="@item.Id"><i class="fa fa-cogs fa-1x" aria-hidden="true"></i></a>
+                    </li>
+                    @{keyValuePairs.Add("operation", !item.IsActive + "");
+                    }
+
+                    @if (item.IsActive)
+                            {
+
+                    <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature=@MenuEnum.Act_Deact_Property routedata=@keyValuePairs action="ActDeactProperty" controller="Property" content="<i class='fas fa-toggle-on fa-1x'></i>"></auth-link></li>
+                            }
+                            else
+                            {
+                    <li class="opertion_menu_item"><auth-link bclass="opertion_menu_item" feature=@MenuEnum.Act_Deact_Property routedata=@keyValuePairs action="ActDeactProperty" controller="Property" content="<i style='color:red' class='fas fa-toggle-off fa-1x'></i>"></auth-link></li>
+
+                            }
+                </ul>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@item.PropertyName</h5>
+                <p class="card-text">
+                    <address>
+                        <strong>@item.PropertyType</strong><br>
+                        @item.StreetAddress1<br>
+                        @item.StreetAddress2<br>
+                        @item.State,@item.City<br>
+                        @item.ZipCode, @item.Country<br>
+                    </address>
+                </p>
+            </div>
+        </div>
+            }
+        }
+    </div>
+}
+</div>
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+<script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+</script>
+}

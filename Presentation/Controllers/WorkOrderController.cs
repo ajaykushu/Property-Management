@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
@@ -22,8 +23,9 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IExport<WorkOrderDetail> _export;
         private readonly IExport<AllWOExport> _allwoexport;
+        private readonly IDetection _detection;
 
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -33,6 +35,7 @@ namespace Presentation.Controllers
             }
             _export = export;
             _allwoexport = allwoexport;
+            _detection = detection;
         }
 
         [HttpGet]
@@ -52,6 +55,8 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/Index.cshtml", wOFilterModel);
             return View(wOFilterModel);
         }
 
@@ -66,9 +71,11 @@ namespace Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                     createWorkOrder = JsonConvert.DeserializeObject<CreateWorkOrder>(await response.Content.ReadAsStringAsync());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/CreateWorkOrder.cshtml", createWorkOrder);
             return View("CreateWorkOrder", createWorkOrder);
         }
 
@@ -107,13 +114,13 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserByDept(long id)
+        public async Task<IActionResult> GetDataByCategory(string category)
         {
             List<SelectItem> result = null;
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("getusersbydepartment", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                _apiRoute.Value.Routes.TryGetValue("getdatabycategory", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?category=" + category, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
             }
@@ -139,6 +146,8 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/WorkOrderDetail.cshtml", workOrderDetail);
             return View("WorkOrderDetail", workOrderDetail);
         }
 
@@ -158,6 +167,8 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/EditWOView.cshtml", editWorkOrder);
             return View(editWorkOrder);
         }
 
@@ -264,7 +275,7 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
-            return Redirect("~/WorkOrder/GetWODetail?id="+post.WorkOrderId+ "#CommentSection");
+            return Redirect("~/WorkOrder/GetWODetail?id=" + post.WorkOrderId + "#CommentSection");
         }
 
         [HttpPost]

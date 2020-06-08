@@ -25,6 +25,8 @@ namespace Presentation.ViewModels
         [Required(ErrorMessage = "Please Select Item")]
         public int ItemId { get; set; }
 
+        public int VendorId { get; set; }
+        public List<SelectItem> Vendors { get; set; }
         public List<SelectItem> Properties { get; set; }
 
         [Required(ErrorMessage = "Please Select Property")]
@@ -39,16 +41,10 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
-
-        public List<SelectItem> Departments { get; set; }
-
-        [Required(ErrorMessage = "Please Select Department")]
-        [DisplayName("Department")]
-        public int DepartmentId { get; set; }
-
-        [Required(ErrorMessage = "Please Select Section")]
-        [DisplayName("User")]
-        public int UserId { get; set; }
+        public string Category { get; set; }
+        public List<SelectItem> Options { get; set; }
+        [DisplayName("Option")]
+        public int OptionId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

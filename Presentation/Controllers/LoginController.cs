@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Wangkanai.Detection;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,13 +24,15 @@ namespace Presentation.Controllers
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly IOptions<MenuMapperModel> _menuDetails;
         private readonly ISessionStorage _sessionStorage;
+        private readonly IDetection _detection;
 
-        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, ISessionStorage sessionStorage)
+        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, ISessionStorage sessionStorage, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             _menuDetails = menuDetails;
             _sessionStorage = sessionStorage;
+            _detection = detection;
         }
 
         /// <summary>
@@ -41,14 +44,25 @@ namespace Presentation.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            ViewBag.SubTitle = "Property Maintenance";
             HttpContext.Session.TryGetValue("token", out var token);
             if (token != null)
             {
+                if (_detection.Device.Type == DeviceType.Mobile)
+                    return RedirectToAction("Mobile");
                 return RedirectToAction("Index", "WorkOrder");
             }
             //to test if the Browser had enabled cookie.
             HttpContext.Session.SetString("cookie", "t@st");
+
             return View();
+        }
+
+        public IActionResult Mobile()
+        {
+            ViewBag.SubTitle = "My Property";
+            ViewBag.isEnabled = true;
+            return View("~/Views/Shared/Mobile/Menu.cshtml");
         }
 
         /// <summary>
@@ -97,7 +111,9 @@ namespace Presentation.Controllers
                    "role",
                    tokenResponse.Roles.First()
                    );
-                    if (tokenResponse.Roles.Contains("Master Admin"))
+                    if (_detection.Device.Type == DeviceType.Mobile)
+                        return RedirectToAction("Mobile");
+                    else if (tokenResponse.Roles.Contains("Master Admin"))
                         return RedirectToAction("GetAllUsers", "User");
                     else
                         return RedirectToAction("Index", "WorkOrder");
@@ -115,7 +131,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                TempData["Error"] = ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage);
+                TempData["Error"] = String.Join(",", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault()));
                 return RedirectToAction("Index");
             }
         }
@@ -168,6 +184,8 @@ namespace Presentation.Controllers
         public IActionResult ForgotPassword()
         {
             HttpContext.Session.Clear();
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Login/Mobile/ForgotPassword.cshtml");
             return View();
         }
 
@@ -193,13 +211,14 @@ namespace Presentation.Controllers
                 {
                     TempData["Error"] = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                return View("ForgotPassword");
             }
             else
             {
-                TempData["error"] = ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage);
-                return View();
+                TempData["error"] = String.Join(",", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault()));
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Login/Mobile/ForgotPassword.cshtml");
+            return View("ForgotPassword");
         }
 
         /// <summary>
@@ -210,6 +229,8 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult PasswordResetView(string token, string email)
         {
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Login/Mobile/PasswordResetView.cshtml", new PasswordChange() { Email = email, Token = token });
             return View(new PasswordChange() { Email = email, Token = token });
         }
 
@@ -240,7 +261,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                TempData["Error"] = ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage);
+                TempData["Error"] = String.Join(",", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault()));
                 return RedirectToAction("PasswordResetView", "Login");
             }
         }

@@ -9,10 +9,6 @@ namespace Presentation.ViewModels
         [RegularExpression(@"[a-z0-9 ]*", ErrorMessage = "only lower case allowed")]
         public string AssignedTo { get; set; }
 
-        [RegularExpression(@"[a-z0-9 \W]*", ErrorMessage = "only lower case allowed")]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
-
         [DisplayName("Property Name")]
         [RegularExpression(@"[a-z0-9 ]*", ErrorMessage = "only lower case allowed")]
         public string PropertyName { get; set; }
@@ -25,11 +21,11 @@ namespace Presentation.ViewModels
 
         [DisplayName("Due Date")]
         public string DueDate { get; set; }
-
         [StringLength(1)]
         public string Priority { get; set; }
 
         public string Status { get; set; }
+        public string Vendor { get; set; }
         public int PageNumber { get; set; }
         public bool FilterActive { get; set; }
     }

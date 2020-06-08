@@ -36,13 +36,9 @@ namespace Models.RequestModels
         public DateTime CreatedDate { get; set; }
 
         public List<KeyValuePair<string, string>> FileAvailable { get; set; }
-
-        public List<SelectItem> Departments { get; set; }
-
-        public int DepartmentId { get; set; }
-
-        [Required(ErrorMessage = "Please give Section Id")]
-        public long UserId { get; set; }
+        public string Category { get; set; }
+        public List<SelectItem> Options { get; set; }
+        public int? OptionId { get; set; }
 
         public DateTime DueDate { get; set; }
         public List<SelectItem> Users { get; set; }

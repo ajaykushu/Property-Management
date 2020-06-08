@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
@@ -18,8 +19,9 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
+        private readonly IDetection _detection;
 
-        public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
+        public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -27,6 +29,7 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
+            _detection = detection;
         }
 
         public IActionResult Privacy()
@@ -102,7 +105,8 @@ namespace Presentation.Controllers
                 TempData["Error"] = StringConstants.Error;
             }
             //getting all notification
-
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Home/Mobile/GetAllNotification.cshtml", allNotification);
             return View(allNotification);
         }
     }

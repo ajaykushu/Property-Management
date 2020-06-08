@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
@@ -18,8 +19,9 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
+        private readonly IDetection _detection;
 
-        public PropertyController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
+        public PropertyController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -27,6 +29,7 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
+            _detection = detection;
         }
 
         [HttpGet]
@@ -45,6 +48,8 @@ namespace Presentation.Controllers
             {
                 TempData["Error"] = StringConstants.Error;
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Property/Mobile/AddPropertyView.cshtml", addProperty);
             return View("AddPropertyView", addProperty);
         }
 
@@ -94,7 +99,8 @@ namespace Presentation.Controllers
             {
                 TempData["Error"] = StringConstants.Error;
             }
-
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Property/Mobile/ListProperties.cshtml", properties);
             return View(properties);
         }
 
@@ -166,6 +172,8 @@ namespace Presentation.Controllers
             {
                 TempData["Error"] = StringConstants.Error;
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Property/Mobile/PropertyEditView.cshtml", prop);
             return View(prop);
         }
 
@@ -202,6 +210,8 @@ namespace Presentation.Controllers
                 }
             }
             catch (Exception) { }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Property/Mobile/PropertyConfig.cshtml", result);
             return View("PropertyConfig", result);
         }
 

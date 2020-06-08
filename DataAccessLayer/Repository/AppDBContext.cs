@@ -50,7 +50,7 @@ namespace DataAccessLayer.Repository
             builder.Ignore<IdentityUserLogin<long>>();
             builder.Ignore<IdentityUserClaim<long>>();
             builder.Ignore<IdentityRoleClaim<long>>();
-
+            builder.Entity<WorkOrder>().Property(x => x.IsRecurring).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             builder.Entity<Property>().HasIndex(x => x.PropertyName).IsUnique();
@@ -120,8 +120,22 @@ namespace DataAccessLayer.Repository
                  .HasData(new Item() { Id = 1, ItemName = "Tv" }, new Item() { Id = 2, ItemName = "AC" });
             builder.Entity<Issue>()
                  .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
-            builder.Entity<Stage>()
-                .HasData(new Stage() { Id = 1, StageCode = "OPEN", StageDescription = "Work Order Open State" }, new Stage() { Id = 2, StageCode = "BID ACCEPTED", StageDescription = "Bid Sucessfull" }, new Stage() { Id = 3, StageCode = "IN PROGRESS", StageDescription = "Work Order in Progress" }, new Stage() { Id = 4, StageCode = "COMPLETED", StageDescription = "Work Order Completed" });
+            builder.Entity<Stage>().HasData(new Stage() { Id = 1, StageCode = "ADCM", StageDescription = "Add Comment Only" }, new Stage() { Id = 2, StageCode = "BINE", StageDescription = "BID NEEDED" }, new Stage() { Id = 3, StageCode = "BIRE", StageDescription = "BID Recieved" },
+                new Stage() { Id = 4, StageCode = "BIRE", StageDescription = "Bid Requested" },
+                new Stage() { Id = 5, StageCode = "COMP", StageDescription = "Complete" },
+                new Stage() { Id = 6, StageCode = "COBQ", StageDescription = "Complete but bad Quality" },
+                new Stage() { Id = 7, StageCode = "CONI", StageDescription = "Complete, Need Inspection" },
+                new Stage() { Id = 8, StageCode = "DAIL", StageDescription = "Daily" },
+                new Stage() { Id = 9, StageCode = "FISC", StageDescription = "Finalize Scope" },
+                new Stage() { Id = 10, StageCode = "HOLD", StageDescription = "Hold" },
+                new Stage() { Id = 11, StageCode = "NEWO", StageDescription = "New Work Order" },
+                new Stage() { Id = 12, StageCode = "ORMA", StageDescription = "Order Materials" },
+                new Stage() { Id = 13, StageCode = "PEND", StageDescription = "Pending" },
+                new Stage() { Id = 14, StageCode = "REAS", StageDescription = "Ready To Assign" },
+                new Stage() { Id = 15, StageCode = "WOAS", StageDescription = "Work Assigned" },
+                new Stage() { Id = 17, StageCode = "WOPR", StageDescription = "Work In Progress" },
+                new Stage() { Id = 18, StageCode = "WOOR", StageDescription = "Work Ordered" }
+                );
 
             builder.Entity<Menu>().HasData(
                 new Menu()
