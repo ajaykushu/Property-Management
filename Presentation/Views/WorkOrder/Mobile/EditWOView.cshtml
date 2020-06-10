@@ -31,14 +31,14 @@
             <tr>
                 <td>
                     <div class="row padding">
-                        <input asp-for="PropertyName" class=" form-control form-control " disabled>
+                        <input asp-for="PropertyName" class=" form-control " disabled>
                         <span asp-validation-for="PropertyName" class="text-danger"></span>
                     </div>
 
                     @if (Model.Locations != null && Model.Locations.Any())
                 {
                     <div class="row top-buffer padding">
-                        <select class="form-control form-control " asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                        <select class="form-control " asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
                             <option value="">Location</option>
                         </select>
                         <span asp-validation-for="LocationId" class="text-danger"></span>
@@ -69,7 +69,7 @@
                     @if (Model.Items != null && Model.Items.Any())
                 {
                     <div class="row padding">
-                        <select class="form-control form-control" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                        <select class="form-control " asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
                             <option value="">Item</option>
                         </select>
                         <span asp-validation-for="ItemId" class="text-danger"></span>
@@ -80,7 +80,7 @@
                 {
                     <div class="row top-buffer padding">
 
-                        <select class="form-control form-control" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                        <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
                             <option>Issue</option>
                         </select>
                         <span asp-validation-for="IssueId" class="text-danger"></span>
@@ -100,7 +100,7 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="row top-buffer padding">
-                        <select asp-for="Priority" class="form-control form-control">
+                        <select asp-for="Priority" class="form-control ">
                             <option value="0">Critical</option>
                             <option value="1">High</option>
                             <option value="2">Medium</option>
@@ -119,7 +119,7 @@
             <tr>
                 <td>
                     <div class="row top-buffer padding">
-                        <select class="form-control form-control" asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"));">
+                        <select class="form-control " asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"));">
                             <option value="">Select Vendor</option>
                         </select>
                         <span asp-validation-for="VendorId" class="text-danger"></span>
@@ -135,7 +135,7 @@
             <tr>
                 <td>
                     <div class="row padding">
-                        <select class="form-control form-control" asp-for="Category">
+                        <select class="form-control " asp-for="Category">
                             <option value="">Choose One</option>
                             <option value="department">Department</option>
                             <option value="user">User</option>
@@ -146,13 +146,33 @@
                     <div class="row padding top-buffer">
                         @if (Model.Options != null && Model.Options.Any())
                         {
-                            <select class="form-control form-control-sm custom-input" asp-for="OptionId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"))">
-                                <option value="">Select Option</option>
+                        <select class="form-control form-control" asp-for="OptionId">
+                            <option value="">Select Option</option>
+                            @foreach (var item in Model.Options)
+                            {
+                                if (item.Key == "")
+                                {
+                                    foreach (var subitem in item.Value)
+                                    {
+                                        <option value="">Select Option</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <optgroup label="@item.Key">
+                                        @foreach (var subitem in item.Value)
+                                        {
+                                            <option value="">Select Option</option>
+                                        }
+                                    </optgroup>
+
+                                }
+                            }
                             </select>
                         }
                         else
                         {
-                            <select class="form-control form-control-sm custom-input" asp-for="OptionId">
+                            <select class="form-control" asp-for="OptionId">
                                 <option value="">Select Option</option>
                             </select>
                         }

@@ -11,7 +11,7 @@ namespace BusinessLogic.Interfaces
     {
         Task<CreateWO> GetCreateWOModel(long userId);
 
-        Task<List<SelectItem>> GetDataByCategory(string category);
+        Task<Dictionary<string, List<SelectItem>>> GetDataByCategory(string category);
 
         Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File);
 

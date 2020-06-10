@@ -28,12 +28,11 @@
                 <td>
                     <div class="d-md-inline-flex myview">
                         <div>
-                            <div class="card-body">
-                                <h2 class="card-title">@Model.Item @Model.Issue</h2>
-                                <p class="card-text" style="font-size:1.2em;">
-                                <p>@Model.PropertyName</p>
-                                <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;@Model.SubLocation in @Model.Location<br>
-                                </p>
+                            <div>
+                                <h2>@Model.PropertyName</h2>
+                                <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp; <strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
+                                <strong style="color:grey">@Model.Item @Model.Issue</strong><br><br>
+                                <p>Assigned to: <strong class="text-success">@Model.AssignedTo</strong></p>
                             </div>
                         </div>
                     </div>
@@ -41,22 +40,13 @@
             </tr>
             <tr>
                 <th>
-                    Stage Details
+                    Status Details
                 </th>
             </tr>
             <tr>
                 <td>
                     <div class="col">
-
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label asp-for="StageCode"></label>
-                            </div>
-                            <div class="col">
-                                @Html.DisplayFor(x => x.StageCode)
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
+                        <div class="row">
                             <div class="col-md-3">
                                 <label asp-for="StageDescription"></label>
                             </div>
@@ -88,7 +78,7 @@
             </tr>
             <tr>
                 <th>
-                    Status Change
+                    Update Status
                 </th>
             </tr>
             <tr>
@@ -99,10 +89,10 @@
                                 <option value="">Select Status</option>
                             </select>
                             <div class="form-group top-buffer">
-                                <textarea class="form-control form-control-lg top-buffer mobile-input border-0" name="Comment" placeholder="Add Comment"></textarea>
+                                <textarea class="form-control form-control-lg top-buffer mobile-input border-0" name="Comment" placeholder="Add Status Description"></textarea>
                             </div>
                             <input asp-for="Id" hidden>
-                            <input type="submit" value="update" class="btn w-100 btn btn-success">
+                            <input type="submit" value="Update Status" class="btn w-100 btn btn-success">
                         </form>
                     </div>
                 </td>
@@ -215,18 +205,15 @@
             <tr>
                 <td>
                     <div class="col">
-                       
-                        @if (Model.AssignedTo != null)
-                        {
+
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="AsignedTo">Assigned To </label>
+                                <label for="AsignedTo">Vendor</label>
                             </div>
                             <div class="col">
-                                <span class="text-info">@Model.AssignedTo</span>
+                                <span class="text-info">@Model.Vendor</span>
                             </div>
                         </div>
-                        }
                     </div>
                 </td>
             </tr>

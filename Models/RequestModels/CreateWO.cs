@@ -41,6 +41,9 @@ namespace Models.RequestModels
         public DateTime DueDate { get; set; }
 
         public int Priority { get; set; }
+
+        public int? VendorId { get; set; }
+        public List<SelectItem>  Vendors { get; set; }
         // public IFormFileCollection File { get; set; }
     }
 }

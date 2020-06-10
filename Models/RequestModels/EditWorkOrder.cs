@@ -37,13 +37,15 @@ namespace Models.RequestModels
 
         public List<KeyValuePair<string, string>> FileAvailable { get; set; }
         public string Category { get; set; }
-        public List<SelectItem> Options { get; set; }
+        public Dictionary<string, List<SelectItem>> Options { get; set; }
         public int? OptionId { get; set; }
 
         public DateTime DueDate { get; set; }
         public List<SelectItem> Users { get; set; }
         public string FilesRemoved { get; set; }
         public int Priority { get; set; }
+        public int? VendorId { get; set; }
+        public List<SelectItem> Vendors { get; set; }
         // public IFormFileCollection File { get; set; }
     }
 }

@@ -16,24 +16,31 @@
     <thead>
     </thead>
     <tbody>
+       
+        <tr>
+            <td>
+                <div class="d-md-inline-flex myview">
+                    <div>
+                        <h2>@Model.PropertyName</h2>
+                        <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp; <strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
+                        <strong style="color:grey">@Model.Item @Model.Issue</strong><br />
+                        <br/>
+                        <p>Assigned To <strong class="text-success">@Model.AssignedTo</strong></p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            </tr>
         <tr>
             <th>
-                Stage Details
+                Status Details
             </th>
         </tr>
         <tr>
             <td>
                 <div class="col">
-
                     <div class="row ">
-                        <div class="col-md-3">
-                            <label asp-for="StageCode"></label>
-                        </div>
-                        <div class="col">
-                            @Html.DisplayFor(x => x.StageCode)
-                        </div>
-                    </div>
-                    <div class="row top-buffer">
                         <div class="col-md-3">
                             <label asp-for="StageDescription"></label>
                         </div>
@@ -46,23 +53,27 @@
                             <label asp-for="Priority"></label>
                         </div>
                         <div class="col">
-                            @if(Model.Priority==0){
-                            <span>Critical</span>
-                                }
-                                else if(Model.Priority==1){
-                            <span>High</span>
-                                }
-                                else if(Model.Priority==2){
-                            <span>Medium</span>
-                                }
-                                else if(Model.Priority==3){
-                            <span>Low</span>
-                                }
+                            @if (Model.Priority == 0)
+                            {
+                                <span>Critical</span>
+                            }
+                            else if (Model.Priority == 1)
+                            {
+                                <span>High</span>
+                            }
+                            else if (Model.Priority == 2)
+                            {
+                                <span>Medium</span>
+                            }
+                            else if (Model.Priority == 3)
+                            {
+                                <span>Low</span>
+                            }
                         </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
-                            <label>Status Change</label>
+                            <label>Update Status</label>
                         </div>
                         <div class="col">
                             <form asp-action="WorkOrderStageChange">
@@ -70,40 +81,18 @@
                                     <option value="">Select Status</option>
                                 </select>
                                 <div class="form-group">
-                                    <label>Add Comment</label>
+                                    <label>Add Status Description</label>
                                     <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
                                 </div>
                                 <input asp-for="Id" hidden>
-                                <input type="submit" value="Change" class="btn btn-sm btn-primary">
+                                <input type="submit" value="Update Status" class="btn btn-sm btn-primary">
                             </form>
                         </div>
                     </div>
                 </div>
             </td>
         </tr>
-        <tr>
-            <th>
-                Property Details
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <div class="d-md-inline-flex myview">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@Model.PropertyName</h5>
-
-                            <p class="card-text">
-                                <address>
-                                    Location: <strong>@Model.Location</strong><br>
-                                    Sub Location: <strong>@Model.SubLocation</strong>
-                                </address>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </td>
-        </tr>
+       
         <tr>
             <th>
                 WO Information
@@ -161,19 +150,19 @@
                         </div>
                     </div>
                     @if (Model.Attachment != null)
-                        {
-                    <div class="row top-buffer">
-                        <div class="col-md-3">
-                            <label asp-for="Attachment"></label>
+                    {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Attachment"></label>
+                            </div>
+                            @foreach (var file in Model.Attachment)
+                            {
+                                <div class="col">
+                                    <a href="@file.Value" download="random">@file.Key</a>
+                                </div>
+                            }
                         </div>
-                        @foreach (var file in Model.Attachment)
-                                {
-                        <div class="col">
-                            <a href="@file.Value" download="random">@file.Key</a>
-                        </div>
-                                }
-                    </div>
-                        }
+                    }
                 </div>
             </td>
         </tr>
@@ -206,27 +195,23 @@
         </tr>
         <tr>
             <th>
-                Assigned Info
+                Vendor
             </th>
         </tr>
         <tr>
             <td>
                 <div class="col">
-                    @if (Model.AssignedTo != null)
-                        {
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="AssignedTo"></label>
+                            <label asp-for="Vendor"></label>
                         </div>
                         <div class="col">
-                            <span class="text-info">@Model.AssignedTo</span>
+                            <span class="text-info">@Model.Vendor</span>
                         </div>
-                     </div>
-                      }
+                    </div>
                 </div>
             </td>
         </tr>
-
         <tr>
             <th>
                 Comments

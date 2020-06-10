@@ -152,8 +152,29 @@
                             <div class="col">
                                 @if (Model.Options != null && Model.Options.Any())
                                 {
-                                    <select class="form-control form-control-sm custom-input" asp-for="OptionId" asp-items="@(new SelectList(Model.Options, "Id", "PropertyName"))">
-                                        <option value="">Select Option</option>
+                                <select class="form-control form-control-sm custom-input" asp-for="OptionId">
+                                    <option value="">Select Option</option>
+                                    @foreach (var item in Model.Options)
+                                    {
+                                        if (item.Key == "")
+                                        {
+                                            foreach (var subitem in item.Value)
+                                            {
+                                                <option value="">Select Option</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <optgroup label="@item.Key">
+                                                @foreach (var subitem in item.Value)
+                                                {
+                                                    <option value="">Select Option</option>
+                                                }
+                                            </optgroup>
+
+                                        }
+                                    }
+
                                     </select>
                                 }
                                 else

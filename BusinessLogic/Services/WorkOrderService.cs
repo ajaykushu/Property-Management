@@ -31,10 +31,11 @@ namespace BusinessLogic.Services
         private readonly IRepo<SubLocation> _sublocation;
         private readonly IImageUploadInFile _imageuploadinfile;
         private readonly INotifier _notifier;
+        private readonly IRepo<Vendor> _vendors;
         public long userId;
         private readonly string _scheme;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -51,6 +52,7 @@ namespace BusinessLogic.Services
             _notifier = notifier;
             userId = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value);
             _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
+            _vendors = vendors;
         }
 
         public async Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File)
@@ -64,6 +66,7 @@ namespace BusinessLogic.Services
                 Description = createWO.Description,
                 DueDate = createWO.DueDate,
                 LocationId = createWO.LocationId,
+                VendorId = createWO.VendorId,
                 SubLocationId = createWO.SubLocationId,
                 Priority = createWO.Priority
             };
@@ -110,8 +113,8 @@ namespace BusinessLogic.Services
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
             var iteminpage = 12;
-            var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Select(x => new
-                          WorkOrderDetail
+            var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Vendor).Select(x => new
+                            WorkOrderDetail
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
@@ -119,9 +122,10 @@ namespace BusinessLogic.Services
                 StageDescription = x.Stage.StageDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
-                DueDate = x.DueDate,
+                Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
+                  DueDate = x.DueDate,
                 UpdatedTime = x.UpdatedTime,
-                AssignedTo = x.AssignedTo!=null?x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")":x.AssignedToDept!=null?x.AssignedToDept.DepartmentName:"Anyone",
+                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Requestedby = x.RequestedBy,
                 Id = x.Id,
                 Priority = x.Priority,
@@ -137,8 +141,9 @@ namespace BusinessLogic.Services
             workorder.Stages = _stage.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = string.Concat(x.StageCode, "(", x.StageDescription, ")")
-            }).ToList();
+                PropertyName = x.StageDescription
+            }).AsNoTracking().ToList();
+            
             var comment = await GetComment(workorder.Id, 0);
             var count = _comments.Get(x => x.WorkOrderId == workorder.Id).Count();
             Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
@@ -175,7 +180,12 @@ namespace BusinessLogic.Services
                     Id = x.Id,
                     PropertyName = x.ItemName
                 }).AsNoTracking().ToListAsync(),
-                DueDate = DateTime.Now,
+                Vendors = await _vendors.GetAll().Select(x => new SelectItem
+                {
+                    Id = x.Id,
+                    PropertyName = x.VendorName
+                }).AsNoTracking().ToListAsync(),
+            DueDate = DateTime.Now,
             };
             if (primaryprop != null && primaryprop.Locations != null)
                 wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
@@ -183,35 +193,40 @@ namespace BusinessLogic.Services
             return wo;
         }
 
-        public async Task<List<SelectItem>> GetDataByCategory(string category)
+        public async Task<Dictionary<string, List<SelectItem>>> GetDataByCategory(string category)
         {
-            List<SelectItem> res = null;
+            Dictionary<string,List<SelectItem>> res = new Dictionary<string, List<SelectItem>>();
             if (!string.IsNullOrWhiteSpace(category))
             {
                 if (category.Equals("department", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    res = await _department.GetAll().Select(x => new SelectItem
+                    var tempres = await _department.GetAll().Select(item=> new SelectItem
                     {
-                        Id = x.Id,
-                        PropertyName = x.DepartmentName
+                        Id = item.Id,
+                        PropertyName = item.DepartmentName
                     }).AsNoTracking().ToListAsync();
+                    //mapping to dict
+                    res.Add("", tempres);
+
                 }
                 else if (category.Equals("user", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var tempres = _appuser.Users.Include(x => x.Department).OrderBy(x => x.FirstName).AsEnumerable().GroupBy(x => x.Department.DepartmentName).ToList();
-                    res = new List<SelectItem>();
+                    
                     if (tempres != null)
                     {
                         foreach (var item in tempres)
                         {
+                            var list = new List<SelectItem>();
                             foreach (var subitem in item)
                             {
-                                res.Add(new SelectItem()
+                                list.Add(new SelectItem()
                                 {
                                     Id = subitem.Id,
-                                    PropertyName = string.Concat("Dept: ", item.Key, " ", "User: ", subitem.FirstName + " " + subitem.LastName)
+                                    PropertyName = string.Concat(subitem.FirstName + " " + subitem.LastName)
                                 });
                             }
+                            res.Add(item.Key, list);
                         }
                     }
                 }
@@ -261,6 +276,7 @@ namespace BusinessLogic.Services
                 IssueId = temp.IssueId,
                 ItemId = temp.ItemId,
                 CreatedDate = temp.CreatedTime,
+                VendorId = temp.VendorId,
                 Priority = temp.Priority,
                 DueDate = temp.DueDate,
                 LocationId = temp.LocationId.GetValueOrDefault(),
@@ -272,6 +288,11 @@ namespace BusinessLogic.Services
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
+            }).AsNoTracking().ToListAsync();
+            editwo.Vendors = await _vendors.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.VendorName
             }).AsNoTracking().ToListAsync();
             editwo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
             {
@@ -325,6 +346,7 @@ namespace BusinessLogic.Services
                 wo.ItemId = editWorkOrder.ItemId;
                 wo.DueDate = editWorkOrder.DueDate;
                 wo.LocationId = editWorkOrder.LocationId;
+                wo.VendorId = editWorkOrder.VendorId;
                 wo.Priority = editWorkOrder.Priority;
                 wo.SubLocationId = editWorkOrder.SubLocationId;
                 if (editWorkOrder.Category.Equals("user"))
@@ -554,20 +576,20 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Vendor))
             {
-                query = query.Where(x => x.Vendor!=null && x.Vendor.VendorName.ToLower().Equals(wOFilterModel.PropertyName));
+                query = query.Where(x => x.Vendor!=null && x.Vendor.VendorName.ToLower().Equals(wOFilterModel.Vendor));
             }
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var userdept = await _appuser.FindByNameAsync(username);
             query = query.Include(x => x.AssignedTo).Include(x=>x.AssignedToDept).Include(x => x.Stage).Include(x => x.Property).Include(x=>x.Vendor);
+            var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
                 query = query.Where(x => propIds.Contains(x.Property.Id));
             }
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
-                query = query.Where(x => (x.AssignedTo!=null && x.AssignedTo.UserName.Equals(username))||(x.AssignedToDept!=null && x.AssignedToDeptId==userdept.DepartmentId)|| (x.AssignedTo==null && x.AssignedToDept==null));
+                query = query.Where(x => (x.AssignedTo!=null && x.AssignedTo.UserName.Equals(username))||(x.AssignedToDept!=null && x.AssignedToDeptId==userdept.DepartmentId)|| (x.AssignedTo==null && x.AssignedToDept==null && propIds.Contains(x.Property.Id)));
             }
             return query;
         }

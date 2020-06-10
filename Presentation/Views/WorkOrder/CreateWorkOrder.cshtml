@@ -157,18 +157,11 @@
                                     <span asp-validation-for="Category" class="text-danger"></span>
                                 </div>
                                 <div class="col">
-                                    @if (Model.Options != null && Model.Options.Any())
-                                    {
-                                        <select class="form-control form-control-sm custom-input" asp-for="OptionId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"))">
-                                            <option value="">Select Option</option>
-                                        </select>
-                                    }
-                                    else
-                                    {
+                                   
                                         <select class="form-control form-control-sm custom-input" asp-for="OptionId">
                                             <option value="">Select Option</option>
                                         </select>
-                                    }
+                                  
                                 </div>
                             </div>
                             @if (Model.Vendors != null && Model.Vendors.Any())

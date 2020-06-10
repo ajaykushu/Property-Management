@@ -25,6 +25,7 @@ namespace Presentation.ViewModels
         public string Priority { get; set; }
 
         public string Status { get; set; }
+        [RegularExpression(@"[a-z0-9 ]*", ErrorMessage = "only lower case allowed")]
         public string Vendor { get; set; }
         public int PageNumber { get; set; }
         public bool FilterActive { get; set; }

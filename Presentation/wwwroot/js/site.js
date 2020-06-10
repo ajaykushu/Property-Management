@@ -101,14 +101,12 @@ function ConvertDatetoString(d) {
 var datestring = ConvertDatetoString(d);
 $('#CreationEndDate').prop("max", datestring);
 $('#CreationStartDate').prop("max", datestring);
-$('.DueDatelabel').text($('#DueDate').val());
 if ($('#CreationEndDate').val() == "" || $('#CreationEndDate').val() == undefined) {
-    $('#CreationEndDate').val(datestring);
+    $('#CreationEndDate').val(datestring);   
 }
-if ($('#DueDate').val() == "" || $('#DueDate').val() == undefined) {
-    $('#DueDate').val(datestring);
-    $('.DueDatelabel').text(datestring);
-}
+if ($('#DueDate').val() != undefined || $('#DueDate').val() != '')
+    $('.DueDatelabel').text($('#DueDate').val());
+
 $('#CreationEndDate').change(function () {
     $('#CreationStartDate').prop("max", $('#EndDate').val());
 })
@@ -120,17 +118,25 @@ $('input[type="reset"]').click(function (e) {
             node.setAttribute("value", "");
         }
     })
+    $('.mwofilter :input').each(function (x) {
+        var node = $('.mwofilter :input')[x];
+        if (node.type == "text" || node.type == "date") {
+            node.setAttribute("value", "");
+        }
+    })
+    
     $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     $("img").prop("src", "");
-    $("#DueDate").val(datestring);
+    $("#DueDate").prop("value", "");
     $("input[type=checkbox]").prop("checked", false);
     $('.photo_disp').hide();
     $('#Status').val("");
     if ($('.browsebutton')[0] != undefined)
         $('.browsebutton')[0].innerText = "Browse";
     $('#Priority').val("");
-    $('input[type="submit"]').click();
     $('.primary_span').text("");
+    $('input[type="submit"]').click();
+   
 })
 
 var arr = [];
@@ -261,9 +267,12 @@ $("#DueDate").change(function () {
 })
 $('.datedec').click(function () {
     var val = $("#DueDate").val();
-    var date = new Date(val);
-    date.setDate(date.getDate() - 1);
-    var datestring = ConvertDatetoString(date);
+    if (val == "NaN-NaN-NaN" || val == undefined || val == '')
+        val = new Date();
+    else
+        val = new Date(val);
+    val.setDate(val.getDate() - 1);
+    var datestring = ConvertDatetoString(val);
     $("#DueDate").val(datestring);
     $('.DueDatelabel').text(datestring);
     $('.mform').submit();
@@ -271,9 +280,12 @@ $('.datedec').click(function () {
 $(".DueDateMobile").datepicker();
 $('.dateinc').click(function () {
     var val = $("#DueDate").val();
-    var date = new Date(val);
-    date.setDate(date.getDate() + 1);
-    var datestring = ConvertDatetoString(date);
+    if (val == "NaN-NaN-NaN" || val == undefined|| val=='')
+        val = new Date();
+    else
+        val = new Date(val);
+    val.setDate(val.getDate() + 1);
+    var datestring = ConvertDatetoString(val);
     $("#DueDate").val(datestring);
     $('.DueDatelabel').text(datestring);
     $('.mform').submit();
@@ -333,11 +345,24 @@ $('#PropertyId').change(function () {
 $('#Category').change(function () {
     $.get("GetDataByCategory?category=" + $(this).val(),
         function (data) {
+            console.log(data);
             if (data != null || data != undefined) {
                 $("#OptionId").html("<option value=''>Please Choose Option</option>")
-                for (var i = 0; i < data.length; i++) {
-                    $("#OptionId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+               
+                for (var prop in data) {
+                    var result = ""
+                    if (prop != "")
+                        result += "<optgroup label='" + prop + "'>";
+                    
+                    for (var i = 0; i < data[prop].length; i++) {
+                        result += '<option value=' + data[prop][i].id + '>' + data[prop][i].propertyName + '</option>';
+                        
+                    }
+                    if (prop != "")
+                        result += "</optgroup>";
+                    $("#OptionId").append(result);
                 }
+               
             }
         });
     if ($(this).val() == "department" || $(this).val() == "user")

@@ -23,6 +23,7 @@ namespace Models.ResponseModels
         public string UpdatedBy { get; set; }
         public string AssignedTo { get; set; }
         public List<SelectItem> Stages { get; set; }
+        public string Vendor { get; set; }
         public Pagination<List<CommentDTO>> Comments { get; set; }
     }
 }

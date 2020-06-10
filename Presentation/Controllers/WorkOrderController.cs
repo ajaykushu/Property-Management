@@ -116,13 +116,13 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDataByCategory(string category)
         {
-            List<SelectItem> result = null;
+            Dictionary<string, List<SelectItem>> result = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("getdatabycategory", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?category=" + category, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
-                    result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
+                    result = JsonConvert.DeserializeObject<Dictionary<string, List<SelectItem>>>(await response.Content.ReadAsStringAsync());
             }
             catch (Exception)
             {

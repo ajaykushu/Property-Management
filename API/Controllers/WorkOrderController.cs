@@ -47,9 +47,9 @@ namespace API.Controllers
         [HttpGet]
         [Route("getdatabycategory")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<List<SelectItem>>> GetDataByCategory(string category)
+        public async Task<ActionResult<Dictionary<string,List<SelectItem>>>> GetDataByCategory(string category)
         {
-            List<SelectItem> prop = await _workOrderService.GetDataByCategory(category);
+            Dictionary<string, List<SelectItem>>  prop = await _workOrderService.GetDataByCategory(category);
             return Ok(prop);
         }
 
