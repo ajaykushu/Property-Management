@@ -26,91 +26,93 @@
 <body>
     @if (device.Device.Type != DeviceType.Mobile)
     {
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  navbar-dark bg-dark border-bottom  box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="WorkOrder" asp-action="Index">Property Maintenance</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm  navbar-dark bg-dark border-bottom  box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="WorkOrder" asp-action="Index">Property Maintenance</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1 justify-content-end">
 
-                        @if (HttpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+                            @if (HttpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
                             {
                                 var menu = HttpContextAccessor.HttpContext.Session.Keys.Contains("menu") ?
                                 JsonConvert.DeserializeObject<Dictionary<string, List<MenuProperty>>>(HttpContextAccessor.HttpContext.Session.GetString("menu")) :
                                 new Dictionary<string, List<MenuProperty>>();
                                 userId = HttpContextAccessor.HttpContext.Session.GetString("UId");
                                 var path = HttpContextAccessor.HttpContext.Session.Keys.Contains("imagePath") ? HttpContextAccessor.HttpContext.Session.GetString("imagePath") : "";
-                        <li class="nav-item dropdown ">
-                            <partial name="MenuView" for=@menu />
-                        </li>
-                        <li>
-                            <img src='@path' width="40" height="40" alt="Pet Image" class="avtaar" />
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link text-white"> @HttpContextAccessor.HttpContext.Session.GetString("name") </a>
-                        </li>
+                                <li class="nav-item dropdown ">
+                                    <partial name="MenuView" for=@menu />
+                                </li>
+                                <li>
+                                    <img src='@path' width="40" height="40" alt="Pet Image" class="avtaar" />
+                                </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link text-white"> @HttpContextAccessor.HttpContext.Session.GetString("name") </a>
+                                </li>
 
-                        <li class="nav-item ">
-                            <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-home fa-1x"></i></a>
-                        </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-home fa-1x"></i></a>
+                                </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="GetAllNotification">
-                                <i class="fa fa-bell fa-1x"></i>
-                                <span id="notification_count" style="color:red;position:absolute"></span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-envelope fa-1x"></i></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><i class="fa fa-sign-out-alt fa-1x"></i></a>
-                        </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="GetAllNotification">
+                                        <i class="fa fa-bell fa-1x"></i>
+                                        <span id="notification_count" style="color:red;position:absolute"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-envelope fa-1x"></i></a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><i class="fa fa-sign-out-alt fa-1x"></i></a>
+                                </li>
                             }
                             else
                             {
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="Index"><i class="fa fa-sign-in-alt fa-1x"></i></a>
-                        </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="Index"><i class="fa fa-sign-in-alt fa-1x"></i></a>
+                                </li>
                             }
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+        </header>
+        <div class="container">
+            <partial name="_CookieConsentPartial" />
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - Property Maintenance - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
+        </footer>
+    }
+    else if (device.Device.Type == DeviceType.Mobile)
+    {
+        <script>
+            alertify.set('notifier', 'position', 'top-right');
+        </script>
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
-    </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Property Maintenance - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    }
-    else if(device.Device.Type == DeviceType.Mobile)
-    {
-    <script>
-        alertify.set('notifier', 'position', 'top-right');
-    </script>
-    <partial name="_CookieConsentPartial" />
-    <main role="main">
-        @RenderBody()
-    </main>
     }
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/sw.js" >
+      
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

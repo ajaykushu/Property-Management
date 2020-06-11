@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
@@ -17,8 +18,9 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly string _token;
+        private readonly IDetection _detection;
 
-        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor)
+        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor,IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -26,6 +28,7 @@ namespace Presentation.Controllers
             {
                 _token = Encoding.UTF8.GetString(token);
             }
+            _detection = detection;
         }
 
         /// <s
@@ -37,6 +40,8 @@ namespace Presentation.Controllers
             if (res.IsSuccessStatusCode)
                 roles = JsonConvert.DeserializeObject<List<SelectItem>>(await res.Content.ReadAsStringAsync());
 
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Configuration/Mobile/Index.cshtml", roles);
             return View(roles);
         }
 

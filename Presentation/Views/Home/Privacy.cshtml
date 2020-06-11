@@ -3,7 +3,23 @@
     ViewData["Title"] = "Privacy Policy";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>@ViewData["Title"]</h1>
+@if (device.Device.Type == DeviceType.Mobile)
+{
+    <header>
+        <nav class="navbar bg-success mb-3 fixed-top">
+            <div class="d-inline-flex w-100">
+                <a style="color:white" asp-action="Mobile" asp-controller="Login" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <div class="container-block justify-content-center">
+                    <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Privacy</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <hr class="mform"/>
+}
+else
+{
+    <h2>Privacy</h2>
+}
 
 <p>Use this page to detail your site's privacy policy.</p>

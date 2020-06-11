@@ -11,7 +11,6 @@ using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
-using WebEssentials.AspNetCore.Pwa;
 
 namespace Presentation
 {
@@ -49,15 +48,7 @@ namespace Presentation
             services.AddScoped<IExport<WorkOrderDetail>, Export<WorkOrderDetail>>();
             services.AddScoped<IExport<AllWOExport>, Export<AllWOExport>>();
             services.AddSingleton<ISessionStorage, SessionStorage>();
-            services.AddServiceWorker(new PwaOptions
-            {
-                CacheId = "Worker 1.1",
-                AllowHttp = true,
-                RoutesToPreCache = "/Login/Index,/Home/Privacy,/css/site.min.css,/js/site.min.js,/NA.jpg",
-                RegisterServiceWorker = true,
-                RegisterWebmanifest = true,
-                Strategy = ServiceWorkerStrategy.CacheFirstSafe,
-            });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

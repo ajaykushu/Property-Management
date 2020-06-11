@@ -366,8 +366,8 @@ $('#Category').change(function () {
             }
         });
     if ($(this).val() == "department" || $(this).val() == "user")
-        $("#OptionId").prop("required", true).prop("disabled", false);
+        $("#OptionId").prop("required", true).prop("hidden", false);
     else
-        $("#OptionId").removeProp("required").prop("disabled", true);
+        $("#OptionId").removeProp("required").prop("hidden", true);
 
 });
