@@ -44,12 +44,9 @@ namespace Presentation.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewBag.SubTitle = "Property Maintenance";
             HttpContext.Session.TryGetValue("token", out var token);
             if (token != null)
             {
-                if (_detection.Device.Type == DeviceType.Mobile)
-                    return RedirectToAction("Mobile");
                 return RedirectToAction("Index", "WorkOrder");
             }
             //to test if the Browser had enabled cookie.
@@ -111,9 +108,8 @@ namespace Presentation.Controllers
                    "role",
                    tokenResponse.Roles.First()
                    );
-                    if (_detection.Device.Type == DeviceType.Mobile)
-                        return RedirectToAction("Mobile");
-                    else if (tokenResponse.Roles.Contains("Master Admin"))
+                   
+                    if (tokenResponse.Roles.Contains("Master Admin") && _detection.Device.Type!=DeviceType.Mobile)
                         return RedirectToAction("GetAllUsers", "User");
                     else
                         return RedirectToAction("Index", "WorkOrder");

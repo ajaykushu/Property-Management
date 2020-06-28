@@ -180,7 +180,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers(string matchString, int requestedPage, FilterEnum filter = FilterEnum.ByEmail)
+        public async Task<IActionResult> GetAllUsers(string matchString, int requestedPage, FilterEnum filter = FilterEnum.Email)
         {
             ViewBag.searchString = matchString ?? "";
             ViewBag.filter = filter;

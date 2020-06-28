@@ -26,16 +26,20 @@
     <form class="wofilter">
         <div class="input-group">
             <div class="cont">
-                <input type="radio" @if (ViewBag.filter == FilterEnum.ByEmail) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.ByEmail' class="selector1" required>
-                <label class="label1" for="email">@FilterEnum.ByEmail</label>
+                <input type="radio" @if (ViewBag.filter == FilterEnum.Email) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.Email' class="selector1" required>
+                <label class="label1" for="email">@FilterEnum.Email</label>
             </div>
             <div class="cont">
-                <input type="radio" @if (ViewBag.filter == FilterEnum.ByFirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.ByFirstName class="selector2" required>
-                <label class="label2" for="firstname">@FilterEnum.ByFirstName</label>
+                <input type="radio" @if (ViewBag.filter == FilterEnum.FirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.FirstName class="selector2" required>
+                <label class="label2" for="firstname">@FilterEnum.FirstName</label>
             </div>
-            <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
-            &nbsp; &nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Filter">
-            &nbsp; &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger">
+            <div class="cont" style="margin-right:30px;">
+                <input type="radio" @if (ViewBag.filter == FilterEnum.Property) { <text> checked</text>} id="property" name="Filter" value=@FilterEnum.Property class="selector3" required>
+                <label class="label3" for="property">Primary Property</label>
+            </div>
+            <input style="margin-right:10px;" class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
+            <input style="margin-right:10px;" class="btn btn-sm btn-primary" type="submit" value="Filter">
+           <input style="margin-right:10px;" type="reset" value="Reset" class="btn btn-sm btn-danger">
         </div>
         <hr />
         <div class="workordertitle">
@@ -59,6 +63,9 @@
                         Roles
                     </th>
                     <th>
+                        Primary Property
+                    </th>
+                    <th>
                         User Id
                     </th>
                     <th>Operation</th>
@@ -73,42 +80,45 @@
                         @i @{ i++;}
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
+                        <span class="value"> @Html.DisplayFor(modelItem => item.FullName)</span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+                        <span class="value">@Html.DisplayFor(modelItem => item.Email)</span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Roles)
+                        <span class="value">@Html.DisplayFor(modelItem => item.Roles)</span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserName)
+                        <span class="value">@Html.DisplayFor(modelItem => item.PrimaryProperty)</span>
+                    </td>
+                    <td>
+                        <span class="value">@Html.DisplayFor(modelItem => item.UserName)</span>
                     </td>
                     <td>
                         @{
-                                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                                    keyValuePairs.Add("id", item.Id + "");
+                            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                            keyValuePairs.Add("id", item.Id + "");
                         }
                         @if (HttpContextAccessor.HttpContext.Session.GetString("role").Equals("Admin") && item.Roles.Contains("Admin"))
-                                {
+                        {
 
-                                }
-                                else
-                                {
-                        <auth-link bclass="btn btn-sm btn-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                }
+                        }
+                        else
+                        {
+                            <auth-link bclass="btn btn-sm btn-success" feature=@MenuEnum.Edit_User routedata=@keyValuePairs action="EditUserView" controller="User" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                        }
                         <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.View_User_Detail routedata=@keyValuePairs action="UserDetailView" controller="User" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                         @{keyValuePairs.Add("page", Model.CurrentPage + "");}
                         @if (item.IsActive)
-                                {
-                                    keyValuePairs.Add("operation", "0");
-                        <auth-link bclass="btn btn-sm btn-danger" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
-                                }
-                                else
-                                {
-                                    keyValuePairs.Add("operation", "1");
-                        <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link>  @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
-                                }
+                        {
+                            keyValuePairs.Add("operation", "0");
+                            <auth-link bclass="btn btn-sm btn-danger" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Deactivate'></auth-link>
+                        }
+                        else
+                        {
+                            keyValuePairs.Add("operation", "1");
+                            <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.ActDct_User routedata=@keyValuePairs action="DeAct_ActUser" controller="User" content='Activate'></auth-link> @*@Html.ActionLink("Activate", "DeAct_ActUser", new { userId = item.Id, operation = 1, page = Model.CurrentPage }, new { @class = "btn btn-sm btn-outline-success" })*@
+                        }
                     </td>
                 </tr>
 

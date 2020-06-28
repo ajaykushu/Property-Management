@@ -36,7 +36,8 @@
     <div class="card mwofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
-
+            <input asp-for="WOId"  class="form-control top-buffer form-control mobile-input">
+            <span class="text-danger" asp-validation-for="WOId"></span>
             <input asp-for="AssignedTo" placeholder="Assigned To" class="form-control top-buffer form-control mobile-input">
             <span class="text-danger" asp-validation-for="AssignedTo"></span>
 
@@ -70,7 +71,7 @@
                 <option value="WOOR">Work Ordered</option>
             </select>
             <input asp-for="Vendor" placeholder="Vendor" class="form-control top-buffer form-control mobile-input">
-               
+
         </div>
         <div class="d-lg-inline-flex" style="padding:0 0 10px 10px;">
             <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">

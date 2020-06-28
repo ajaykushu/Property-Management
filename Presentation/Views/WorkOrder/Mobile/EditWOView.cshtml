@@ -154,17 +154,17 @@
                                 {
                                     foreach (var subitem in item.Value)
                                     {
-                                        <option value="">Select Option</option>
+                                        <option value="@subitem.Id">@subitem.PropertyName</option>
                                     }
                                 }
                                 else
                                 {
-                                    <optgroup label="@item.Key">
-                                        @foreach (var subitem in item.Value)
-                                        {
-                                            <option value="">Select Option</option>
-                                        }
-                                    </optgroup>
+                        <optgroup label="@item.Key">
+                            @foreach (var subitem in item.Value)
+                            {
+                                <option value="@subitem.Id">@subitem.PropertyName</option>
+                            }
+                        </optgroup>
 
                                 }
                             }
@@ -243,7 +243,7 @@
     }
 </form>
 <script>
-
+   
     function AddItem(e) {
         var val = $('#FilesRemoved').val();
         if (val == "" || val == undefined)

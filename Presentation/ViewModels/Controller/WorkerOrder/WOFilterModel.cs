@@ -28,6 +28,8 @@ namespace Presentation.ViewModels
         [RegularExpression(@"[a-z0-9 ]*", ErrorMessage = "only lower case allowed")]
         public string Vendor { get; set; }
         public int PageNumber { get; set; }
+        [DisplayName("Work Order Number")]
+        public string WOId { get; set; }
         public bool FilterActive { get; set; }
     }
 }

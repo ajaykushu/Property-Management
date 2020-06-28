@@ -256,10 +256,12 @@ namespace BusinessLogic.Services
         {
             int iteminpage = 20;
             var query = _userManager.Users;
-            if (matchStr != null && filter == FilterEnum.ByEmail)
-                query = query.Where(x => x.NormalizedEmail.Contains(matchStr.ToUpper()));
-            else if (matchStr != null && filter == FilterEnum.ByFirstName)
+            if (matchStr != null && filter == FilterEnum.Email)
+                query = query.Where(x => x.NormalizedEmail.StartsWith(matchStr.ToUpper()));
+            else if (matchStr != null && filter == FilterEnum.FirstName)
                 query = query.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower()));
+            else if (matchStr != null && filter == FilterEnum.Property)
+                query = query.Where(x => x.UserProperties.Where(x=>x.IsPrimary && x.Property.PropertyName.ToLower().Contains(matchStr.ToLower())).Any());
 
             if (!_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
@@ -275,7 +277,7 @@ namespace BusinessLogic.Services
             }
 
             var count = query.Count();
-            var user = await query.Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
+            var user = await query.Include(x=>x.UserProperties).ThenInclude(x=>x.Property).Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
 
             List<UsersListModel> users = new List<UsersListModel>();
             foreach (var item in user)
@@ -289,6 +291,7 @@ namespace BusinessLogic.Services
                         Id = item.Id,
                         UserName = item.UserName,
                         IsActive = item.IsActive,
+                        PrimaryProperty=item.UserProperties.Where(x=>x.IsPrimary).Select(x=>x.Property.PropertyName).FirstOrDefault(),
                         Roles = string.Join(", ", roles)
                     });
             }

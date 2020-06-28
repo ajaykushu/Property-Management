@@ -21,11 +21,8 @@ namespace Presentation.ViewModels
         public string Requestedby { get; set; }
 
 
-        [DisplayName("Status Description")]
+        [DisplayName("Status")]
         public string StageDescription { get; set; }
-
-        [DisplayName("Status Code")]
-        public string StageCode { get; set; }
 
         public string Issue { get; set; }
 

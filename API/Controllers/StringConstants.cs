@@ -2,7 +2,7 @@
 {
     internal static class StringConstants
     {
-        public static string PwdChanged = "Password Successfully Changed.";
+        public static string PwdChanged = "Successfully Updated.";
         public static string EmailNotFound = "Email Not Found.";
         public static string Error = "Some Error Occured";
         public static string EmailSent = "Email sent.";

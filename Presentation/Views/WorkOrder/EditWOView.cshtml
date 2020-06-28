@@ -160,7 +160,7 @@
                                         {
                                             foreach (var subitem in item.Value)
                                             {
-                                                <option value="">Select Option</option>
+                                                <option value=@subitem.Id>@subitem.PropertyName</option>
                                             }
                                         }
                                         else
@@ -175,7 +175,7 @@
                                         }
                                     }
 
-                                    </select>
+                                </select>
                                 }
                                 else
                                 {

@@ -2,8 +2,9 @@
 {
     public enum FilterEnum
     {
-        ByEmail = 1,
-        ByFirstName = 2
+        Email = 1,
+        FirstName = 2,
+        Property=3
     }
 
     public enum MenuEnum

@@ -11,7 +11,6 @@ namespace Presentation.ConstModal
         public string Location { get; set; }
         public string Requestedby { get; set; }
         public string StageDescription { get; set; }
-        public string StageCode { get; set; }
         public string Issue { get; set; }
         public DateTime DueDate { get; set; }
         public string Item { get; set; }

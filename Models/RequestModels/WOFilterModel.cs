@@ -13,6 +13,7 @@ namespace Models.RequestModels
         public string DueDate { get; set; }
         [StringLength(1)]
         public string Priority { get; set; }
+        public string WOId { get; set; }
         public int PageNumber { get; set; }
         }
 }

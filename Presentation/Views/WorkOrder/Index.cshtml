@@ -5,7 +5,11 @@
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
             <div class="form-row">
-                
+                <div class="col-xs-5">
+                    <label asp-for="WOId"></label>
+                    <input asp-for="WOId"  class="form-control form-control-sm custom-input">
+                    <span class="text-danger" asp-validation-for="WOId"></span>
+                </div>
                 <div class="col-xs-5">
                     <label asp-for="AssignedTo"></label>
                     <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
@@ -107,9 +111,7 @@
                 <td>
                     <span><strong class="@if(item.IsRecurring){<text>green</text>}else{<text>orange</text>}">@item.Id</strong></span>
                 </td>
-                <td>
-                    <span><strong>@item.Stage.ToUpper()</strong></span>
-                </td>
+               
                 <td><span style="word-break:normal">@item.Description</span></td>
                 <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
                 <td>

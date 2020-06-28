@@ -35,7 +35,7 @@ namespace API.Authentication
             };
             foreach (var feature in features)
                 authClaims.Add(new Claim("Feature", feature));
-            _cache.AddItem(applicationuser.Id + "", jti, TimeSpan.FromMinutes(720).Ticks);
+            _cache.AddItem(applicationuser.Id + "", jti, TimeSpan.FromHours(120).Ticks);
             foreach (var role in roles)
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             return authClaims.ToArray();
@@ -50,7 +50,7 @@ namespace API.Authentication
             token = new JwtSecurityToken(
             issuer: _configuration.GetSection("token").GetSection("issuer").Value,
             audience: _configuration.GetSection("token").GetSection("audience").Value,
-            expires: DateTime.UtcNow.AddMinutes(720),
+            expires: DateTime.UtcNow.AddDays(5),
             claims: claims,
             signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );

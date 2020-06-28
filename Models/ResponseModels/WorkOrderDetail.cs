@@ -12,7 +12,6 @@ namespace Models.ResponseModels
         public string Requestedby { get; set; }
         public string StageDescription { get; set; }
         public string Description { get; set; }
-        public string StageCode { get; set; }
         public string Issue { get; set; }
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }

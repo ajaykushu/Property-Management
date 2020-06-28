@@ -343,12 +343,11 @@ $('#PropertyId').change(function () {
         });
 });
 $('#Category').change(function () {
-    $.get("GetDataByCategory?category=" + $(this).val(),
+    $.get("/WorkOrder/GetDataByCategory?category=" + $(this).val(),
         function (data) {
             console.log(data);
             if (data != null || data != undefined) {
                 $("#OptionId").html("<option value=''>Please Choose Option</option>")
-               
                 for (var prop in data) {
                     var result = ""
                     if (prop != "")

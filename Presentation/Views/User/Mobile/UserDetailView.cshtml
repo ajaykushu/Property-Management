@@ -36,32 +36,32 @@
                                 <label for="FullName">Full Name</label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.FullName)
-                            </div>
+                                <span class="value">  @Html.DisplayFor(x => x.FullName)</span>
+</div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="EmailAddress">Email Address</label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.EmailAddress)
-                            </div>
+                                <span class="value"> @Html.DisplayFor(x => x.EmailAddress)</span>
+</div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label asp-for="PhoneNumber"></label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.PhoneNumber)
-                            </div>
+                                <span class="value">  @Html.DisplayFor(x => x.PhoneNumber)</span>
+</div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="UserId">User Id</label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.UserId)
-                            </div>
+                                <span class="value">@Html.DisplayFor(x => x.UserId)</span>
+</div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -70,13 +70,14 @@
                             <div class="col">
                                 @if (Model.OfficeExtension != null)
                                     {
-                                @Html.DisplayFor(x => x.OfficeExtension)
-                                    }
-                                    else
-                                    {
-                                <span>NA</span>
-                                    }
-                            </div>
+                                <span class="value">
+                                    @Html.DisplayFor(x => x.OfficeExtension)</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                <span>NA</span>
+                                                                }
+</div>
                         </div>
                         @if (Model.PhotoPath != null)
                             {
@@ -159,24 +160,24 @@
                                 <label asp-for="Department"></label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.Department)
-                            </div>
+                                <span class="value">@Html.DisplayFor(x => x.Department)</span>
+</div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="TimeZone">Time Zone</label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.TimeZone)
-                            </div>
+                                <span class="value">@Html.DisplayFor(x => x.TimeZone)</span>
+</div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="SMSAlert">SMS Alert</label>
                             </div>
                             <div class="col">
-                                @Html.DisplayFor(x => x.SMSAlert)
-                            </div>
+                                <span class="value">@Html.DisplayFor(x => x.SMSAlert)</span>
+</div>
                         </div>
                     </div>
                 </td>

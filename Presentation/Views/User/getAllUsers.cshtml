@@ -14,16 +14,20 @@
 <form class="form wofilter">
     <div class="input-group">
         <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnum.ByEmail) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.ByEmail' class="selector1" required>
-            <label class="label1" for="email">@FilterEnum.ByEmail</label>
+            <input type="radio" @if (ViewBag.filter == FilterEnum.Email) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.Email' class="selector1" required>
+            <label class="label1" for="email">@FilterEnum.Email</label>
         </div>
         <div class="cont">
-            <input type="radio" @if (ViewBag.filter == FilterEnum.ByFirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.ByFirstName class="selector2" required>
-            <label class="label2" for="firstname">@FilterEnum.ByFirstName</label>
+            <input type="radio" @if (ViewBag.filter == FilterEnum.FirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.FirstName class="selector2" required>
+            <label class="label2" for="firstname">@FilterEnum.FirstName</label>
         </div>
-        <input class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
-        &nbsp; &nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Filter">
-        &nbsp; &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger">
+        <div class="cont" style="margin-right:30px;">
+            <input type="radio" @if (ViewBag.filter == FilterEnum.Property) { <text> checked</text>} id="property" name="Filter" value=@FilterEnum.Property class="selector3" required>
+            <label class="label3" for="property">Primary Property</label>
+        </div>
+        <input style="margin-right:10px;" class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
+        <input style="margin-right:10px;" class="btn btn-sm btn-primary" type="submit" value="Filter">
+        <input style="margin-right:10px;" type="reset" value="Reset" class="btn btn-sm btn-danger">
     </div>
     <hr />
     <div class="workordertitle">
@@ -47,6 +51,9 @@
                     Roles
                 </th>
                 <th>
+                    Primary Property 
+                </th>
+                <th>
                     User Id
                 </th>
                 <th>Operation</th>
@@ -61,17 +68,26 @@
                     @i @{ i++;}
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
+                     <span class="value">@Html.DisplayFor(modelItem => item.FullName)</span>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
+                    <span class="value"> @Html.DisplayFor(modelItem => item.Email)</span>
+</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Roles)
-                </td>
+                    <span class="value">  @Html.DisplayFor(modelItem => item.Roles)</span>
+</td><td>
+    @if (item.PrimaryProperty != null)
+    {
+        <span class="value">  @Html.DisplayFor(modelItem => item.PrimaryProperty)</span>
+    }
+    else
+    {
+        <span class="value">Not Assigned</span>
+    }
+</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
+                    <span class="value">   @Html.DisplayFor(modelItem => item.UserName)</span>
+</td>
                 <td>
                     @{
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();

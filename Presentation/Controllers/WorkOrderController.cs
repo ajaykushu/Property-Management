@@ -220,7 +220,7 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            return Ok(StringConstants.SuccessSaved);
+                            return Ok(StringConstants.CreatedSuccess);
                         }
                         else
                             return BadRequest("Unable To Create");

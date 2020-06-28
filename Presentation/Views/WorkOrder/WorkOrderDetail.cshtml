@@ -45,8 +45,8 @@
                             <label asp-for="StageDescription"></label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.StageDescription)
-                        </div>
+                            <span class="value">  @Html.DisplayFor(x => x.StageDescription)</span>
+</div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -106,48 +106,48 @@
                             <label asp-for="Issue"></label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.Issue)
-                        </div>
+                            <span class="value"> @Html.DisplayFor(x => x.Issue)</span>
+</div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
                             <label asp-for="Item"></label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.Item)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.Item)</span>
+</div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
                             <label asp-for="Requestedby"></label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.Requestedby)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.Requestedby)</span>
+</div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
                             <label asp-for="CreatedTime"></label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.CreatedTime)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.CreatedTime)</span>
+</div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
                             <label for="Comments">Description</label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.Description)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.Description)</span>
+</div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
                             <label asp-for="DueDate"></label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.DueDate)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.DueDate)</span>
+</div>
                     </div>
                     @if (Model.Attachment != null)
                     {
@@ -179,16 +179,16 @@
                             <label for="UpdatedBy">Last Updated By</label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.UpdatedBy)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.UpdatedBy)</span>
+</div>
                     </div>
                     <div class="row top-buffer ">
                         <div class="col-md-3">
                             <label for="UpdatedTime">Last Update Time</label>
                         </div>
                         <div class="col">
-                            @Html.DisplayFor(x => x.UpdatedTime)
-                        </div>
+                            <span class="value">@Html.DisplayFor(x => x.UpdatedTime)</span>
+</div>
                     </div>
                 </div>
             </td>

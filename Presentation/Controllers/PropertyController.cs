@@ -64,7 +64,7 @@ namespace Presentation.Controllers
                 {
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, model, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync() == "true")
-                        return Ok(StringConstants.SuccessSaved);
+                        return Ok(StringConstants.CreatedSuccess);
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                         return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -119,9 +119,9 @@ namespace Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     if (operation)
-                        TempData["Success"] = "Property Activate Successfull";
+                        TempData["Success"] = StringConstants.ActivateSuccessfull;
                     else
-                        TempData["Success"] = "Property DeActivate Successfull";
+                        TempData["Success"] = StringConstants.DeactivateSuccessfull;
                 }
             }
             catch (Exception)
@@ -228,7 +228,7 @@ namespace Presentation.Controllers
                     {
                         var status = await response.Content.ReadAsStringAsync();
                         if (status == "true")
-                            TempData["Success"] = StringConstants.SuccessSaved;
+                            TempData["Success"] = StringConstants.CreatedSuccess;
                     }
                 }
                 catch (Exception)
