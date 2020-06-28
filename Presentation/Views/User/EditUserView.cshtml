@@ -271,10 +271,7 @@
         </form>
     }
 </div>
-@{string referer = Context.Request.Headers["Referer"].ToString();
-    Uri baseUri = new Uri(referer);
 
-}
 <div>
-    <a href="@baseUri.AbsoluteUri">Back</a>
+    <a asp-action="GetAllUsers">Back</a>
 </div>

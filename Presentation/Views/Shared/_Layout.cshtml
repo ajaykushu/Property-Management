@@ -48,7 +48,14 @@
                                     <partial name="MenuView" for=@menu />
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("EditUserView","User",new {Id=userId})"><img src='@path' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+                                    @if(!HttpContextAccessor.HttpContext.Session.GetString("role").Equals("User")){
+                                    <a href="@Url.Action("EditUserView", "User", new { Id =userId })"><img src='@path' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+                                      }
+                                      else
+                                      {
+                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@path' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+                                     }
+                                    
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link text-white"> @HttpContextAccessor.HttpContext.Session.GetString("name") </a>

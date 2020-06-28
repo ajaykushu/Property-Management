@@ -29,6 +29,7 @@ namespace BusinessLogic.Services
         private readonly IRepo<Notification> _notification;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
+        private readonly IRepo<ApplicationUserRole> _appuserole;
         private readonly ICache _cache;
         private readonly string _scheme;
         private readonly long userId;

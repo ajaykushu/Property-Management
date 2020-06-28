@@ -6,19 +6,24 @@
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
             <div class="form-row">
                 <div class="col-xs-5">
+                    <label asp-for="TermSearch"></label>
+                    <input asp-for="TermSearch" placeholder="Enter Search String" class="form-control form-control-sm custom-input">
+                  
+                </div>
+                <div class="col-xs-5">
                     <label asp-for="WOId"></label>
-                    <input asp-for="WOId"  class="form-control form-control-sm custom-input">
-                    <span class="text-danger" asp-validation-for="WOId"></span>
+                    <input asp-for="WOId" placeholder="Work Order Number" class="form-control form-control-sm custom-input">
+                    
                 </div>
                 <div class="col-xs-5">
                     <label asp-for="AssignedTo"></label>
                     <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
-                    <span class="text-danger" asp-validation-for="AssignedTo"></span>
+                   
                 </div>
                 <div class="col-xs-5">
                     <label asp-for="PropertyName"></label>
                     <input asp-for="PropertyName" class="form-control form-control-sm custom-input">
-                    <span class="text-danger" asp-validation-for="PropertyName"></span>
+                  
                 </div>
                 <div class="col-xs-5">
                     <label asp-for="CreationStartDate"></label>

@@ -10,14 +10,11 @@
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@{string referer = Context.Request.Headers["Referer"].ToString();
-    Uri baseUri = new Uri(referer);
 
-}
 <header>
     <nav class="navbar bg-success mb-3 fixed-top">
         <div class="d-inline-flex w-100">
-            <a style="color:white" href="@baseUri.AbsoluteUri" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <a style="color:white" asp-action="GetAllUsers" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
             <div class="container-block justify-content-center">
                 <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Edit User</span>
             </div>

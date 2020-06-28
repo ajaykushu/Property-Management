@@ -540,16 +540,16 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
-                query = query.Where(x => x.Stage.StageCode.ToLower().Equals(wOFilterModel.Status));
+                query = query.Where(x => x.Stage.StageCode.Equals(wOFilterModel.Status));
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.WOId))
             {
-                query = query.Where(x => x.Id.ToLower().Contains(wOFilterModel.WOId));
+                query = query.Where(x => x.Id.Contains(wOFilterModel.WOId));
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.AssignedTo))
             {
-                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.FirstName.ToLower().StartsWith(wOFilterModel.AssignedTo))||
-                (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.ToLower().StartsWith(wOFilterModel.AssignedTo)|| (x.AssignedTo != null && x.AssignedTo.Email.ToLower().StartsWith(wOFilterModel.AssignedTo)))
+                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.FirstName.StartsWith(wOFilterModel.AssignedTo)) ||
+                (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.StartsWith(wOFilterModel.AssignedTo) || (x.AssignedTo != null && x.AssignedTo.Email.StartsWith(wOFilterModel.AssignedTo)))
                 );
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
@@ -564,11 +564,20 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
             {
-                query = query.Where(x => x.Property.PropertyName.ToLower().Contains(wOFilterModel.PropertyName));
+                query = query.Where(x => x.Property.PropertyName.Contains(wOFilterModel.PropertyName));
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Vendor))
             {
-                query = query.Where(x => x.Vendor!=null && x.Vendor.VendorName.ToLower().Contains(wOFilterModel.Vendor));
+                query = query.Where(x => x.Vendor != null && x.Vendor.VendorName.Contains(wOFilterModel.Vendor));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.TermSearch))
+            {
+                query = query.Where(x => (x.Issue.IssueName+
+                x.Item.ItemName+x.Description+x.Location.LocationName+ x.SubLocation.AreaName+ x.RequestedBy+
+                  x.Vendor.VendorName+
+                  x.Id+
+                  x.Property.PropertyName).Contains(wOFilterModel.TermSearch)||(x.AssignedTo!=null && x.AssignedTo.FirstName.Contains(wOFilterModel.TermSearch))||(x.AssignedTo != null && x.AssignedTo.LastName.Contains(wOFilterModel.TermSearch)) ||(x.AssignedTo != null && x.AssignedTo.UserName.Contains(wOFilterModel.TermSearch)) || (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.Contains(wOFilterModel.TermSearch))
+                );
             }
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;

@@ -50,8 +50,7 @@ namespace Presentation.Controllers
                 return RedirectToAction("Index", "WorkOrder");
             }
             //to test if the Browser had enabled cookie.
-            HttpContext.Session.SetString("cookie", "t@st");
-
+            
             return View();
         }
 
@@ -71,13 +70,13 @@ namespace Presentation.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginExist(LoginReq login)
         {
-            var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
-            if (!consentFeature.HasConsent)
-            {
-                TempData["Info"] = "accept cookie";
-                return RedirectToAction("Privacy", "Home");
-            }
-            else if (ModelState.IsValid)
+            //var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
+            //if (!consentFeature.HasConsent)
+            //{
+            //    TempData["Info"] = "accept cookie";
+            //    return RedirectToAction("Privacy", "Home");
+            //}
+             if (ModelState.IsValid)
             {
                 _apiRoute.Value.Routes.TryGetValue("userlogin", out string path);
                 var response = await _httpClientHelper.PostDataAsync(

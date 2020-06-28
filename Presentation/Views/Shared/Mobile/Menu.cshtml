@@ -104,7 +104,13 @@
         @if (id != "") {
         <div class="menu">
             <div class="item">
+                @if(!HttpContextAccessor.HttpContext.Session.GetString("role").Equals("User")){
                 <a href="@Url.Action("EditUserView", "User", new { Id =id })"><img src='@path' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
+                }
+                else
+                {
+                <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@path' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
+                }
             </div>
         </div>
         }

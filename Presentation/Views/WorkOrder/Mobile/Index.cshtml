@@ -36,13 +36,13 @@
     <div class="card mwofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
-            <input asp-for="WOId"  class="form-control top-buffer form-control mobile-input">
-            <span class="text-danger" asp-validation-for="WOId"></span>
+            <input asp-for="TermSearch" placeholder="Enter Terms" class="form-control top-buffer form-control mobile-input">
+            <input asp-for="WOId" placeholder="Work Order Number" class="form-control top-buffer form-control mobile-input">
+           
             <input asp-for="AssignedTo" placeholder="Assigned To" class="form-control top-buffer form-control mobile-input">
-            <span class="text-danger" asp-validation-for="AssignedTo"></span>
-
+           
             <input asp-for="PropertyName" placeholder="Property Name" class="form-control top-buffer form-control mobile-input">
-            <span class="text-danger" asp-validation-for="PropertyName"></span>
+           
 
             <select asp-for="Priority" type="date" class="form-control top-buffer form-control mobile-input">
                 <option value="">Search Priority</option>
