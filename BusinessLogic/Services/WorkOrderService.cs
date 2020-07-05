@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using DataAccessLayer.Interfaces;
 using DataEntity;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,7 @@ namespace BusinessLogic.Services
         private readonly IRepo<Property> _property;
         private readonly IRepo<Department> _department;
         private readonly IRepo<WorkOrder> _workOrder;
-        private readonly IRepo<Stage> _stage;
+        private readonly IRepo<Status> _status;
         private readonly IRepo<Comment> _comments;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepo<SubLocation> _sublocation;
@@ -35,14 +36,14 @@ namespace BusinessLogic.Services
         public long userId;
         private readonly string _scheme;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Stage> stage, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Status> status, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
             _userProperty = userProperty;
             _department = department;
             _workOrder = workOrder;
-            _stage = stage;
+            _status = status;
             _httpContextAccessor = httpContextAccessor;
             _comments = comments;
             _imageuploadinfile = imageuploadinfile;
@@ -75,7 +76,7 @@ namespace BusinessLogic.Services
             else if (createWO.Category.Equals("department"))
                 workOrder.AssignedToDeptId = createWO.OptionId;
 
-            workOrder.StageId = _stage.Get(x => x.StageCode == "NEWO").AsNoTracking().Select(x => x.Id).FirstOrDefault();
+            workOrder.StatusId = _status.Get(x => x.StatusCode == "NEWO").AsNoTracking().Select(x => x.Id).FirstOrDefault();
             if (File != null)
             {
                 foreach (var item in File)
@@ -113,12 +114,12 @@ namespace BusinessLogic.Services
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
             var iteminpage = 12;
-            var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Stage).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Vendor).Select(x => new
+            var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Status).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Vendor).Select(x => new
                             WorkOrderDetail
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
-                StageDescription = x.Stage.StageDescription,
+                StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
                 Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
@@ -137,10 +138,10 @@ namespace BusinessLogic.Services
                  string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
                  )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
-            workorder.Stages = _stage.GetAll().Select(x => new SelectItem
+            workorder.Statuses = _status.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
-                PropertyName = x.StageDescription
+                PropertyName = x.StatusDescription
             }).AsNoTracking().ToList();
             
             var comment = await GetComment(workorder.Id, 0);
@@ -246,7 +247,7 @@ namespace BusinessLogic.Services
                 Description = x.Description,
                 Id = x.Id,
                 IsRecurring = x.IsRecurring,
-                Stage = x.Stage.StageDescription,
+                Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
@@ -266,6 +267,7 @@ namespace BusinessLogic.Services
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
             var temp = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Property).ThenInclude(x=>x.Locations).Include(x=>x.AssignedToDept).Include(x=>x.AssignedTo).AsNoTracking().FirstOrDefaultAsync();
+           
             var editwo = new EditWorkOrder
             {
                 Id = temp.Id,
@@ -325,6 +327,7 @@ namespace BusinessLogic.Services
             var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.Comments).FirstOrDefaultAsync();
             if (wo != null)
             {
+               
                 if (File != null)
                 {
                     foreach (var item in File)
@@ -463,25 +466,25 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        public async Task<bool> WorkOrderStageChange(string id, int stageId, string comment)
+        public async Task<bool> WorkOrderStatusChange(string id, int statusId, string comment)
         {
-            var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Stage).Include(x => x.Comments).FirstOrDefaultAsync();
-            var stage = await _stage.Get(x => x.Id == stageId).FirstOrDefaultAsync();
-            if (stage != null)
+            var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Status).Include(x => x.Comments).FirstOrDefaultAsync();
+            var status = await _status.Get(x => x.Id == statusId).FirstOrDefaultAsync();
+            if (status != null)
             {
                 if (wo.Comments == null)
                     wo.Comments = new List<Comment>();
                 wo.Comments.Add(new Comment
                 {
-                    CommentString = string.Concat("Work Order Stage Changed From ", wo.Stage.StageCode, " To ", stage.StageDescription, " --Additional Comment: ", comment),
+                    CommentString = string.Concat("Work Order Status Changed From ", wo.Status.StatusDescription, " To ", status.StatusDescription, " --Additional Comment: ", comment),
                     CommentById = userId
                 });
-                wo.StageId = stageId;
-                var status = await _workOrder.Update(wo);
-                if (status > 0)
+                wo.StatusId = statusId;
+                var updatestatus = await _workOrder.Update(wo);
+                if (updatestatus > 0)
                 {
                     var users = await GetUsersToSendNotification(wo);
-                     await _notifier.CreateNotification("Work Order Stage Changed for WOId " + wo.Id, users, wo.Id, "WE");
+                     await _notifier.CreateNotification("Work Order Status Changed for WOId " + wo.Id, users, wo.Id, "WE");
                     return true;
                 }
             }
@@ -508,7 +511,7 @@ namespace BusinessLogic.Services
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
-                StageDescription = x.Stage.StageDescription,
+                StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
                 DueDate = x.DueDate,
@@ -540,7 +543,7 @@ namespace BusinessLogic.Services
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
             {
-                query = query.Where(x => x.Stage.StageCode.Equals(wOFilterModel.Status));
+                query = query.Where(x => x.Status.StatusCode.Equals(wOFilterModel.Status));
             }
             if (!string.IsNullOrWhiteSpace(wOFilterModel.WOId))
             {
@@ -582,7 +585,7 @@ namespace BusinessLogic.Services
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var userdept = await _appuser.FindByNameAsync(username);
-            query = query.Include(x => x.AssignedTo).Include(x=>x.AssignedToDept).Include(x => x.Stage).Include(x => x.Property).Include(x=>x.Vendor);
+            query = query.Include(x => x.AssignedTo).Include(x=>x.AssignedToDept).Include(x => x.Status).Include(x => x.Property).Include(x=>x.Vendor);
             var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {

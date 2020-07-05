@@ -51,21 +51,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "24fb3a8e-bc02-4045-ac3a-53f76cff30c7",
+                            ConcurrencyStamp = "382b2a67-c617-4353-9d10-d492350aacea",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "0c16ae40-7436-40d8-9721-e6a730b1b03e",
+                            ConcurrencyStamp = "e9245260-941a-4dc8-b44b-39b302663c7c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "9fdfa6fd-4eee-4e76-9596-47aac7b6dbd3",
+                            ConcurrencyStamp = "ab50d5df-6215-4865-ae49-9d42d0c7d6fe",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -934,7 +934,7 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataEntity.Stage", b =>
+            modelBuilder.Entity("DataEntity.Status", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -947,10 +947,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StageCode")
+                    b.Property<string>("StatusCode")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("StageDescription")
+                    b.Property<string>("StatusDescription")
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("UpdatedByUserName")
@@ -961,143 +961,143 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stages");
+                    b.ToTable("Statuses");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "ADCM",
-                            StageDescription = "Add Comment Only",
+                            StatusCode = "ADCM",
+                            StatusDescription = "Add Comment Only",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "BINE",
-                            StageDescription = "BID NEEDED",
+                            StatusCode = "BINE",
+                            StatusDescription = "BID NEEDED",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "BIRE",
-                            StageDescription = "BID Recieved",
+                            StatusCode = "BIRE",
+                            StatusDescription = "BID Recieved",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "BIRE",
-                            StageDescription = "Bid Requested",
+                            StatusCode = "BIRE",
+                            StatusDescription = "Bid Requested",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "COMP",
-                            StageDescription = "Complete",
+                            StatusCode = "COMP",
+                            StatusDescription = "Complete",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 6,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "COBQ",
-                            StageDescription = "Complete but bad Quality",
+                            StatusCode = "COBQ",
+                            StatusDescription = "Complete but bad Quality",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 7,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "CONI",
-                            StageDescription = "Complete, Need Inspection",
+                            StatusCode = "CONI",
+                            StatusDescription = "Complete, Need Inspection",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 8,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "DAIL",
-                            StageDescription = "Daily",
+                            StatusCode = "DAIL",
+                            StatusDescription = "Daily",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 9,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "FISC",
-                            StageDescription = "Finalize Scope",
+                            StatusCode = "FISC",
+                            StatusDescription = "Finalize Scope",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 10,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "HOLD",
-                            StageDescription = "Hold",
+                            StatusCode = "HOLD",
+                            StatusDescription = "Hold",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 11,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "NEWO",
-                            StageDescription = "New Work Order",
+                            StatusCode = "NEWO",
+                            StatusDescription = "New Work Order",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 12,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "ORMA",
-                            StageDescription = "Order Materials",
+                            StatusCode = "ORMA",
+                            StatusDescription = "Order Materials",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 13,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "PEND",
-                            StageDescription = "Pending",
+                            StatusCode = "PEND",
+                            StatusDescription = "Pending",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 14,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "REAS",
-                            StageDescription = "Ready To Assign",
+                            StatusCode = "REAS",
+                            StatusDescription = "Ready To Assign",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 15,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "WOAS",
-                            StageDescription = "Work Assigned",
+                            StatusCode = "WOAS",
+                            StatusDescription = "Work Assigned",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 17,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "WOPR",
-                            StageDescription = "Work In Progress",
+                            StatusCode = "WOPR",
+                            StatusDescription = "Work In Progress",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 18,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "WOOR",
-                            StageDescription = "Work Ordered",
+                            StatusCode = "WOOR",
+                            StatusDescription = "Work Ordered",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1304,7 +1304,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("RequestedBy")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("StageId")
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SubLocationId")
@@ -1333,7 +1333,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.HasIndex("StageId");
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("SubLocationId");
 
@@ -1507,9 +1507,9 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataEntity.Stage", "Stage")
+                    b.HasOne("DataEntity.Status", "Status")
                         .WithMany("WorkOrders")
-                        .HasForeignKey("StageId")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -10,7 +10,7 @@ namespace Presentation.ConstModal
         public string SubLocation { get; set; }
         public string Location { get; set; }
         public string Requestedby { get; set; }
-        public string StageDescription { get; set; }
+        public string StatusDescription { get; set; }
         public string Issue { get; set; }
         public DateTime DueDate { get; set; }
         public string Item { get; set; }

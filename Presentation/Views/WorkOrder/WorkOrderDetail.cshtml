@@ -42,10 +42,10 @@
                 <div class="col">
                     <div class="row ">
                         <div class="col-md-3">
-                            <label asp-for="StageDescription"></label>
+                            <label asp-for="StatusDescription"></label>
                         </div>
                         <div class="col">
-                            <span class="value">  @Html.DisplayFor(x => x.StageDescription)</span>
+                            <span class="value">  @Html.DisplayFor(x => x.StatusDescription)</span>
 </div>
                     </div>
                     <div class="row top-buffer">
@@ -76,8 +76,8 @@
                             <label>Update Status</label>
                         </div>
                         <div class="col">
-                            <form asp-action="WorkOrderStageChange">
-                                <select class="form-control form-control-sm custom-input" name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))" required>
+                            <form asp-action="WorkOrderStatusChange">
+                                <select class="form-control form-control-sm custom-input" name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
                                     <option value="">Select Status</option>
                                 </select>
                                 <div class="form-group">

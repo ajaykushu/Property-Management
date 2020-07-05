@@ -1,5 +1,6 @@
 ﻿using API.Authentication;
 using API.Authentication.Interfaces;
+using AutoMapper;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
 using DataAccessLayer.Interfaces;
@@ -45,7 +46,7 @@ namespace API
                     return new BadRequestObjectResult(action.ModelState.Where(model => model.Value.Errors.Count > 0).Select(modelError => modelError.Value.Errors.FirstOrDefault().ErrorMessage));
                 };
             });
-
+            services.AddAutoMapper(typeof(Startup));
             services.AddDbContextPool<AppDBContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>(op =>
             {

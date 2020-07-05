@@ -7,7 +7,7 @@
         public string Description { get; set; }
         public bool IsRecurring { get; set; }
         public string DueDate { get; set; }
-        public string Stage { get; set; }
+        public string Status { get; set; }
         public SelectItem Property { get; set; }
     }
 }

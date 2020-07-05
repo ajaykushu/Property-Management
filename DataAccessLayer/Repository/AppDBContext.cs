@@ -35,7 +35,7 @@ namespace DataAccessLayer.Repository
         public DbSet<Property> Properties { set; get; }
         public DbSet<Reply> Replies { set; get; }
         public DbSet<RoleMenuMap> RoleMenuMaps { set; get; }
-        public DbSet<Stage> Stages { set; get; }
+        public DbSet<Status> Statuses { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
         public DbSet<Notification> Notifications { set; get; }
@@ -120,21 +120,21 @@ namespace DataAccessLayer.Repository
                  .HasData(new Item() { Id = 1, ItemName = "Tv" }, new Item() { Id = 2, ItemName = "AC" });
             builder.Entity<Issue>()
                  .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
-            builder.Entity<Stage>().HasData(new Stage() { Id = 1, StageCode = "ADCM", StageDescription = "Add Comment Only" }, new Stage() { Id = 2, StageCode = "BINE", StageDescription = "BID NEEDED" }, new Stage() { Id = 3, StageCode = "BIRE", StageDescription = "BID Recieved" },
-                new Stage() { Id = 4, StageCode = "BIRE", StageDescription = "Bid Requested" },
-                new Stage() { Id = 5, StageCode = "COMP", StageDescription = "Complete" },
-                new Stage() { Id = 6, StageCode = "COBQ", StageDescription = "Complete but bad Quality" },
-                new Stage() { Id = 7, StageCode = "CONI", StageDescription = "Complete, Need Inspection" },
-                new Stage() { Id = 8, StageCode = "DAIL", StageDescription = "Daily" },
-                new Stage() { Id = 9, StageCode = "FISC", StageDescription = "Finalize Scope" },
-                new Stage() { Id = 10, StageCode = "HOLD", StageDescription = "Hold" },
-                new Stage() { Id = 11, StageCode = "NEWO", StageDescription = "New Work Order" },
-                new Stage() { Id = 12, StageCode = "ORMA", StageDescription = "Order Materials" },
-                new Stage() { Id = 13, StageCode = "PEND", StageDescription = "Pending" },
-                new Stage() { Id = 14, StageCode = "REAS", StageDescription = "Ready To Assign" },
-                new Stage() { Id = 15, StageCode = "WOAS", StageDescription = "Work Assigned" },
-                new Stage() { Id = 17, StageCode = "WOPR", StageDescription = "Work In Progress" },
-                new Stage() { Id = 18, StageCode = "WOOR", StageDescription = "Work Ordered" }
+            builder.Entity<Status>().HasData(new Status() { Id = 1, StatusCode = "ADCM", StatusDescription = "Add Comment Only" }, new Status() { Id = 2, StatusCode = "BINE", StatusDescription = "BID NEEDED" }, new Status() { Id = 3, StatusCode = "BIRE", StatusDescription = "BID Recieved" },
+                new Status() { Id = 4, StatusCode = "BIRE", StatusDescription = "Bid Requested" },
+                new Status() { Id = 5, StatusCode = "COMP", StatusDescription = "Complete" },
+                new Status() { Id = 6, StatusCode = "COBQ", StatusDescription = "Complete but bad Quality" },
+                new Status() { Id = 7, StatusCode = "CONI", StatusDescription = "Complete, Need Inspection" },
+                new Status() { Id = 8, StatusCode = "DAIL", StatusDescription = "Daily" },
+                new Status() { Id = 9, StatusCode = "FISC", StatusDescription = "Finalize Scope" },
+                new Status() { Id = 10, StatusCode = "HOLD", StatusDescription = "Hold" },
+                new Status() { Id = 11, StatusCode = "NEWO", StatusDescription = "New Work Order" },
+                new Status() { Id = 12, StatusCode = "ORMA", StatusDescription = "Order Materials" },
+                new Status() { Id = 13, StatusCode = "PEND", StatusDescription = "Pending" },
+                new Status() { Id = 14, StatusCode = "REAS", StatusDescription = "Ready To Assign" },
+                new Status() { Id = 15, StatusCode = "WOAS", StatusDescription = "Work Assigned" },
+                new Status() { Id = 17, StatusCode = "WOPR", StatusDescription = "Work In Progress" },
+                new Status() { Id = 18, StatusCode = "WOOR", StatusDescription = "Work Ordered" }
                 );
 
             builder.Entity<Menu>().HasData(
@@ -264,6 +264,7 @@ namespace DataAccessLayer.Repository
                     ((Log)entityEntry.Entity).UpdatedTime = DateTime.Now;
                     if (user != null)
                         ((Log)entityEntry.Entity).UpdatedByUserName = user != null ? user.Value : "System Admin";
+                    
                 }
             }
 

@@ -48,8 +48,8 @@
                    
                         <div class="row">
                             <div class="col d-inline">
-                                <label asp-for="StageDescription"></label>
-                               <span class="value"> @Html.DisplayFor(x => x.StageDescription)</span>
+                                <label asp-for="StatusDescription"></label>
+                               <span class="value"> @Html.DisplayFor(x => x.StatusDescription)</span>
                             </div>
                         </div>
                         <div class="row">
@@ -84,8 +84,8 @@
             <tr>
                 <td>
                     <div class="flex-sm-row top-buffer">
-                        <form asp-action="WorkOrderStageChange" class="w-100">
-                            <select class="form-control form-control-lg  mobile-input " name="StageId" asp-items="@(new SelectList(Model.Stages, "Id", "PropertyName"))" required>
+                        <form asp-action="WorkOrderStatusChange" class="w-100">
+                            <select class="form-control form-control-lg  mobile-input " name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
                                 <option value="">Select Status</option>
                             </select>
                             <div class="form-group top-buffer">

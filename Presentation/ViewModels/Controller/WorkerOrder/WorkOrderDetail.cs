@@ -22,7 +22,7 @@ namespace Presentation.ViewModels
 
 
         [DisplayName("Status")]
-        public string StageDescription { get; set; }
+        public string StatusDescription { get; set; }
 
         public string Issue { get; set; }
 
@@ -50,7 +50,7 @@ namespace Presentation.ViewModels
         public string UpdatedBy { get; set; }
 
         [SkipProperty]
-        public List<SelectItem> Stages { get; set; }
+        public List<SelectItem> Statuses { get; set; }
 
         [SkipProperty]
         public Pagination<List<Comment>> Comments { get; set; }

@@ -7,12 +7,12 @@
             <div class="form-row">
                 <div class="col-xs-5">
                     <label asp-for="TermSearch"></label>
-                    <input asp-for="TermSearch" placeholder="Enter Search String" class="form-control form-control-sm custom-input">
+                    <input asp-for="TermSearch"  class="form-control form-control-sm custom-input">
                   
                 </div>
                 <div class="col-xs-5">
                     <label asp-for="WOId"></label>
-                    <input asp-for="WOId" placeholder="Work Order Number" class="form-control form-control-sm custom-input">
+                    <input asp-for="WOId"  class="form-control form-control-sm custom-input">
                     
                 </div>
                 <div class="col-xs-5">
@@ -40,7 +40,7 @@
                 <div class="col-xs-5">
                     <label>Priority</label>
                     <select asp-for="Priority" type="date" class="form-control form-control-sm custom-input">
-                        <option value="">Select One</option>
+                        <option value="">--Select--</option>
                         <option value="0">Critical</option>
                         <option value="1">High</option>
                         <option value="2">Medium</option>
@@ -50,7 +50,7 @@
                 <div class="col-xs-5">
                     <label>Status</label>
                     <select asp-for="Status" class="form-control top-buffer form-control-sm custom-input">
-                        <option value="">Search One</option>
+                        <option value="">--Select--</option>
                         <option value="ADCM">Add Comment Only</option>
                         <option value="BINE">BID Needed</option>
                         <option value="BIRE">BID Received</option>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-xs-5">
                     <label>Vendor</label>
-                    <input asp-for="Vendor" placeholder="Vendor" class="form-control top-buffer form-control-sm custom-input">
+                    <input asp-for="Vendor"  class="form-control top-buffer form-control-sm custom-input">
                 </div>
             </div>
             <div class="d-lg-inline-flex">
@@ -144,7 +144,7 @@
         <ul class="pagination">
             @{ int current = 0;}
             <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
-                @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
             </li>
 
             @for (int i = 0; i < ResponseModel.PageCount; i++)

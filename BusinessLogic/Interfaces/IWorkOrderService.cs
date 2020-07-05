@@ -27,7 +27,7 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> PostComment(Post post);
 
-        Task<bool> WorkOrderStageChange(string Id, int stageId, string comment);
+        Task<bool> WorkOrderStatusChange(string Id, int statusId, string comment);
 
         Task<List<SelectItem>> GetLocation(long id);
 

@@ -29,7 +29,6 @@ namespace BusinessLogic.Services
         private readonly IRepo<Notification> _notification;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
-        private readonly IRepo<ApplicationUserRole> _appuserole;
         private readonly ICache _cache;
         private readonly string _scheme;
         private readonly long userId;
@@ -256,7 +255,8 @@ namespace BusinessLogic.Services
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
             int iteminpage = 20;
-            var query = _userManager.Users;
+            var query= _userManager.Users;
+            var quey2 = _roleManager.Roles;
             if (matchStr != null && filter == FilterEnum.Email)
                 query = query.Where(x => x.NormalizedEmail.StartsWith(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.FirstName)
@@ -276,23 +276,24 @@ namespace BusinessLogic.Services
                 }
                 query = query.Where(x => userIds.Contains(x.Id));
             }
+             var count = query.Count();
 
-            var count = query.Count();
-            var user = await query.Include(x=>x.UserProperties).ThenInclude(x=>x.Property).Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
+
+            var tempquery = await query.Include(x => x.UserProperties).ThenInclude(x => x.Property).Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
 
             List<UsersListModel> users = new List<UsersListModel>();
-            foreach (var item in user)
+            foreach (var item in tempquery)
             {
                 var roles = await _userManager.GetRolesAsync(item);
                 if (roles != null)
                     users.Add(new UsersListModel
-                    {
-                        Email = item.Email,
+                {
+                    Email = item.Email,
                         FullName = item.FirstName + " " + item.LastName,
                         Id = item.Id,
                         UserName = item.UserName,
                         IsActive = item.IsActive,
-                        PrimaryProperty=item.UserProperties.Where(x=>x.IsPrimary).Select(x=>x.Property.PropertyName).FirstOrDefault(),
+                        PrimaryProperty = item.UserProperties.Where(x => x.IsPrimary).Select(x => x.Property.PropertyName).FirstOrDefault(),
                         Roles = string.Join(", ", roles)
                     });
             }

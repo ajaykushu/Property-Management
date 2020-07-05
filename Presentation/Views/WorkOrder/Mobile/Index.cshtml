@@ -108,7 +108,7 @@
             <ul class="pagination">
                 @{ int current = 0;}
                 <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
-                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, stage = ViewBag.stage, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
                 </li>
 
                 @for (int i = 0; i < ResponseModel.PageCount; i++)

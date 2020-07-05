@@ -16,8 +16,8 @@ namespace DataEntity
         public Item Item { get; set; }
         public int IssueId { get; set; }
         public Issue Issue { get; set; }
-        public int StageId { get; set; }
-        public Stage Stage { get; set; }
+        public int StatusId { get; set; }
+        public Status Status { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Description { get; set; }
         [Column(TypeName = "varchar(50)")]

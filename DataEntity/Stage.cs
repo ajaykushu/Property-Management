@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public class Stage : Log
+    public class Status : Log
     {
-        public Stage()
+        public Status()
         {
             WorkOrders = new HashSet<WorkOrder>();
         }
@@ -16,10 +16,10 @@ namespace DataEntity
         public int Id { get; set; }
 
         [Column(TypeName = "varchar(100)")]
-        public string StageDescription { get; set; }
+        public string StatusDescription { get; set; }
 
         [Column(TypeName = "varchar(50)")]
-        public string StageCode { get; set; }
+        public string StatusCode { get; set; }
 
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }

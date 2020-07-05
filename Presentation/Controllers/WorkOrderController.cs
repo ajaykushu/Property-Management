@@ -64,16 +64,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> CreateWorkOrder()
         {
             CreateWorkOrder createWorkOrder = new CreateWorkOrder();
-            try
-            {
+           
                 _apiRoute.Value.Routes.TryGetValue("getworkordermodel", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                     createWorkOrder = JsonConvert.DeserializeObject<CreateWorkOrder>(await response.Content.ReadAsStringAsync());
-            }
-            catch (Exception ex)
-            {
-            }
+            
+            
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/WorkOrder/Mobile/CreateWorkOrder.cshtml", createWorkOrder);
             return View("CreateWorkOrder", createWorkOrder);
@@ -279,12 +276,12 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> WorkOrderStageChange(string id, int stageId, string comment)
+        public async Task<IActionResult> WorkOrderStatusChange(string id, int statusId, string comment)
         {
             try
             {
-                var urlpayload = string.Concat("?id=", id, "&stageId=", stageId, "&comment=", comment);
-                _apiRoute.Value.Routes.TryGetValue("workorderstagechange", out string path);
+                var urlpayload = string.Concat("?id=", id, "&statusId=", statusId, "&comment=", comment);
+                _apiRoute.Value.Routes.TryGetValue("workorderstatuschange", out string path);
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {

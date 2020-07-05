@@ -28,15 +28,10 @@ namespace Presentation
         {
             services.AddDetection();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+           
             services.AddSession(opts =>
             {
-                opts.IdleTimeout = TimeSpan.FromMinutes(5);
+                opts.IdleTimeout = TimeSpan.FromDays(30);
             });
 
             services.Configure<RouteConstModel>(Configuration.GetSection("ApiRoutes"));

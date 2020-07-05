@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200514043105_navigator")]
-    partial class navigator
+    [Migration("20200705173409_History")]
+    partial class History
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2c2e3813-6e95-4f48-b714-d02ff0b71d33",
+                            ConcurrencyStamp = "382b2a67-c617-4353-9d10-d492350aacea",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "85b55bf4-95fc-455a-af1b-c70a04e6232d",
+                            ConcurrencyStamp = "e9245260-941a-4dc8-b44b-39b302663c7c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "e4c0235d-8e5d-4898-b40d-a11a66ee8963",
+                            ConcurrencyStamp = "ab50d5df-6215-4865-ae49-9d42d0c7d6fe",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -936,7 +936,7 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataEntity.Stage", b =>
+            modelBuilder.Entity("DataEntity.Status", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -949,10 +949,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StageCode")
+                    b.Property<string>("StatusCode")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("StageDescription")
+                    b.Property<string>("StatusDescription")
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("UpdatedByUserName")
@@ -963,39 +963,143 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stages");
+                    b.ToTable("Statuses");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "OPEN",
-                            StageDescription = "Work Order Open State",
+                            StatusCode = "ADCM",
+                            StatusDescription = "Add Comment Only",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "BID ACCEPTED",
-                            StageDescription = "Bid Sucessfull",
+                            StatusCode = "BINE",
+                            StatusDescription = "BID NEEDED",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "IN PROGRESS",
-                            StageDescription = "Work Order in Progress",
+                            StatusCode = "BIRE",
+                            StatusDescription = "BID Recieved",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StageCode = "COMPLETED",
-                            StageDescription = "Work Order Completed",
+                            StatusCode = "BIRE",
+                            StatusDescription = "Bid Requested",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "COMP",
+                            StatusDescription = "Complete",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "COBQ",
+                            StatusDescription = "Complete but bad Quality",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "CONI",
+                            StatusDescription = "Complete, Need Inspection",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "DAIL",
+                            StatusDescription = "Daily",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "FISC",
+                            StatusDescription = "Finalize Scope",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "HOLD",
+                            StatusDescription = "Hold",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "NEWO",
+                            StatusDescription = "New Work Order",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "ORMA",
+                            StatusDescription = "Order Materials",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "PEND",
+                            StatusDescription = "Pending",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "REAS",
+                            StatusDescription = "Ready To Assign",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "WOAS",
+                            StatusDescription = "Work Assigned",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "WOPR",
+                            StatusDescription = "Work In Progress",
+                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusCode = "WOOR",
+                            StatusDescription = "Work Ordered",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1084,6 +1188,33 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("UserProperties");
                 });
 
+            modelBuilder.Entity("DataEntity.Vendor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedByUserName")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedByUserName")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VendorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Vendor");
+                });
+
             modelBuilder.Entity("DataEntity.WOAttachments", b =>
                 {
                     b.Property<long>("Key")
@@ -1126,6 +1257,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
 
+                    b.Property<int?>("AssignedToDeptId")
+                        .HasColumnType("int");
+
                     b.Property<long?>("AssignedToId")
                         .HasColumnType("bigint");
 
@@ -1140,6 +1274,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRecurring")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("IssueId")
                         .HasColumnType("int");
@@ -1158,10 +1297,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("RecurringTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RecurringType")
+                        .HasColumnType("varchar(1)");
+
                     b.Property<string>("RequestedBy")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("StageId")
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SubLocationId")
@@ -1173,7 +1318,12 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("VendorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedToDeptId");
 
                     b.HasIndex("AssignedToId");
 
@@ -1185,9 +1335,11 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.HasIndex("StageId");
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("SubLocationId");
+
+                    b.HasIndex("VendorId");
 
                     b.ToTable("WorkOrders");
                 });
@@ -1327,6 +1479,10 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.WorkOrder", b =>
                 {
+                    b.HasOne("DataEntity.Department", "AssignedToDept")
+                        .WithMany("WorkOrders")
+                        .HasForeignKey("AssignedToDeptId");
+
                     b.HasOne("DataEntity.ApplicationUser", "AssignedTo")
                         .WithMany("WorkOrdersAssigned")
                         .HasForeignKey("AssignedToId");
@@ -1353,15 +1509,19 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataEntity.Stage", "Stage")
+                    b.HasOne("DataEntity.Status", "Status")
                         .WithMany("WorkOrders")
-                        .HasForeignKey("StageId")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DataEntity.SubLocation", "SubLocation")
                         .WithMany("WorkOrders")
                         .HasForeignKey("SubLocationId");
+
+                    b.HasOne("DataEntity.Vendor", "Vendor")
+                        .WithMany("WorkOrders")
+                        .HasForeignKey("VendorId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>

@@ -116,11 +116,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("workorderstagechange")]
+        [Route("workorderstatuschange")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
-        public async Task<ActionResult<bool>> WorkOrderStageChange(string id, int stageId, string comment)
+        public async Task<ActionResult<bool>> WorkOrderStatusChange(string id, int statusId, string comment)
         {
-            bool res = await _workOrderService.WorkOrderStageChange(id, stageId, comment);
+            bool res = await _workOrderService.WorkOrderStatusChange(id, statusId, comment);
             return Ok(res);
         }
 
