@@ -132,6 +132,7 @@ namespace Presentation.Controllers
         public async Task<ActionResult<WorkOrderDetail>> GetWODetail(string id)
         {
             WorkOrderDetail workOrderDetail = null;
+            
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("wodetail", out string path);
@@ -359,10 +360,11 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetHistory(string entity)
+        public async Task<IActionResult> GetHistory(string entity,string id=null)
         {
             List<HistoryDetail> historyDetails = null;
-              _apiRoute.Value.Routes.TryGetValue("gethistory", out string path);
+            ViewBag.Id = id;
+            _apiRoute.Value.Routes.TryGetValue("gethistory", out string path);
             var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?entity="+entity , this, _token).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {

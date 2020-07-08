@@ -373,7 +373,11 @@ $('#Category').change(function () {
 
 $('#history_button').click(function (e) {
     e.preventDefault();
+    enablespiner();
     $.get('/WorkOrder/GetHistory?entity=' + "workorder", function (res) {
         $('#history').html(res);
+        disablespinner();
     })
+    //disablespinner();
+    
 })
