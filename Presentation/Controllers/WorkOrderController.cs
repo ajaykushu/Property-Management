@@ -6,6 +6,7 @@ using Presentation.ConstModal;
 using Presentation.Utiliity.Interface;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
+using Presentation.ViewModels.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,13 +65,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> CreateWorkOrder()
         {
             CreateWorkOrder createWorkOrder = new CreateWorkOrder();
-           
-                _apiRoute.Value.Routes.TryGetValue("getworkordermodel", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                    createWorkOrder = JsonConvert.DeserializeObject<CreateWorkOrder>(await response.Content.ReadAsStringAsync());
-            
-            
+
+            _apiRoute.Value.Routes.TryGetValue("getworkordermodel", out string path);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+                createWorkOrder = JsonConvert.DeserializeObject<CreateWorkOrder>(await response.Content.ReadAsStringAsync());
+
+
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/WorkOrder/Mobile/CreateWorkOrder.cshtml", createWorkOrder);
             return View("CreateWorkOrder", createWorkOrder);
@@ -355,6 +356,22 @@ namespace Presentation.Controllers
             {
             }
             return File(file, contentType);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetHistory(string entity)
+        {
+            List<HistoryDetail> historyDetails = null;
+              _apiRoute.Value.Routes.TryGetValue("gethistory", out string path);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?entity="+entity , this, _token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                historyDetails = JsonConvert.DeserializeObject<List<HistoryDetail>>(await response.Content.ReadAsStringAsync());
+            }
+            if (_detection.Device.Type == DeviceType.Mobile) {
+                return View("~/Views/WorkOrder/Mobile/GetHistory.cshtml", historyDetails);
+            }
+            return PartialView(historyDetails);
         }
     }
 }

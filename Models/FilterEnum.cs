@@ -4,7 +4,7 @@
     {
         Email = 1,
         FirstName = 2,
-        Property=3
+        Property = 3
     }
 
     public enum MenuEnum

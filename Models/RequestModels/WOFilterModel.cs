@@ -4,24 +4,27 @@ namespace Models.RequestModels
 {
     public class WOFilterModel
     {
-        public string AssignedTo {
-            get;
-            set ;
-        }
-        public string Vendor {
+        public string AssignedTo
+        {
             get;
             set;
         }
-        public string PropertyName {
+        public string Vendor
+        {
             get;
             set;
         }
-        public string CreationStartDate { get;  set; }
+        public string PropertyName
+        {
+            get;
+            set;
+        }
+        public string CreationStartDate { get; set; }
         public string CreationEndDate { get; set; }
         public string Status
         {
-            get ;
-            set ;
+            get;
+            set;
         }
         public string DueDate { get; set; }
         [StringLength(1)]
@@ -37,5 +40,5 @@ namespace Models.RequestModels
             set;
         }
         public int PageNumber { get; set; }
-        }
+    }
 }

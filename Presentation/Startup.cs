@@ -28,7 +28,7 @@ namespace Presentation
         {
             services.AddDetection();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-           
+
             services.AddSession(opts =>
             {
                 opts.IdleTimeout = TimeSpan.FromDays(30);
@@ -43,7 +43,7 @@ namespace Presentation
             services.AddScoped<IExport<WorkOrderDetail>, Export<WorkOrderDetail>>();
             services.AddScoped<IExport<AllWOExport>, Export<AllWOExport>>();
             services.AddSingleton<ISessionStorage, SessionStorage>();
-           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

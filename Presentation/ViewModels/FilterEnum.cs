@@ -8,7 +8,7 @@ namespace Presentation.ViewModels
         [Display(Name = "First Property")]
         FirstName = 2,
         [Display(Name = "Primary Property")]
-        Property =3,
+        Property = 3,
     }
 
     public enum MenuEnum

@@ -16,7 +16,7 @@
     <thead>
     </thead>
     <tbody>
-       
+
         <tr>
             <td>
                 <div class="d-md-inline-flex myview">
@@ -24,14 +24,14 @@
                         <h2>@Model.PropertyName</h2>
                         <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp; <strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
                         <strong style="color:grey">@Model.Item @Model.Issue</strong><br />
-                        <br/>
+                        <br />
                         <p>Assigned To <strong class="text-success">@Model.AssignedTo</strong></p>
                     </div>
                 </div>
             </td>
         </tr>
         <tr>
-            </tr>
+        </tr>
         <tr>
             <th>
                 Status Details
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col">
                             <span class="value">  @Html.DisplayFor(x => x.StatusDescription)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -92,7 +92,7 @@
                 </div>
             </td>
         </tr>
-       
+
         <tr>
             <th>
                 WO Information
@@ -107,7 +107,7 @@
                         </div>
                         <div class="col">
                             <span class="value"> @Html.DisplayFor(x => x.Issue)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -115,7 +115,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.Item)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -123,7 +123,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.Requestedby)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -131,7 +131,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.CreatedTime)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -139,7 +139,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.Description)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer">
                         <div class="col-md-3">
@@ -147,7 +147,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.DueDate)</span>
-</div>
+                        </div>
                     </div>
                     @if (Model.Attachment != null)
                     {
@@ -180,7 +180,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.UpdatedBy)</span>
-</div>
+                        </div>
                     </div>
                     <div class="row top-buffer ">
                         <div class="col-md-3">
@@ -188,7 +188,7 @@
                         </div>
                         <div class="col">
                             <span class="value">@Html.DisplayFor(x => x.UpdatedTime)</span>
-</div>
+                        </div>
                     </div>
                 </div>
             </td>
@@ -211,6 +211,17 @@
                     </div>
                 </div>
             </td>
+        </tr>
+        <tr>
+            <td>
+                <a   id="history_button"><i class="fa fa-history fa-2x"></i></a>
+            </td>
+            </tr>
+        <tr>
+          <td >
+            <div id="history">
+            </div>
+          </td>
         </tr>
         <tr>
             <th>

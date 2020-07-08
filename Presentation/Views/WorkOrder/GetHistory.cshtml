@@ -1,0 +1,54 @@
+﻿@model List<HistoryDetail>
+
+<table class="table-borderless table-info" style="width:-webkit-fill-available">
+   <thead>
+       <tr>
+    <th>
+        Property Name
+    </th>
+    <th>
+        Old Value
+    </th>
+    <th>
+        New Value
+    </th>
+    <th>
+        Comment
+    </th>
+    
+    <th>
+        Updated By
+    </th>
+       <th>
+       Updated Time
+    </th>
+</tr>
+       </thead>
+@foreach (var item in Model)
+{
+<tr>
+    <td>
+        @item.PropertyName
+    </td>
+    <td>
+        @item.OldValue
+    </td>
+    <td>
+        @item.NewValue
+    </td>
+    <td>
+        @item.Comment
+    </td>
+    <td>
+        @item.UpdatedBy
+    </td>
+    <td>
+        @item.UpdateTime
+    </td>
+
+
+
+</tr>
+}
+
+    </table>

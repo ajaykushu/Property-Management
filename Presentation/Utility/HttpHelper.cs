@@ -54,8 +54,8 @@ namespace Presentation.Utility
             var jsonstring = SerializeToString(paramObj);
             using (StringContent content = new StringContent(jsonstring, Encoding.UTF8, "application/json"))
             {
-                 res = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
-               
+                res = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
+
             };
             await SetTempData(res, controller);
             return res;

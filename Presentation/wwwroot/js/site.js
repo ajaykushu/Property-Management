@@ -370,3 +370,10 @@ $('#Category').change(function () {
         $("#OptionId").removeProp("required").prop("hidden", true);
 
 });
+
+$('#history_button').click(function (e) {
+    e.preventDefault();
+    $.get('/WorkOrder/GetHistory?entity=' + "workorder", function (res) {
+        $('#history').html(res);
+    })
+})

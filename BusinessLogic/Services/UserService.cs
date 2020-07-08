@@ -255,14 +255,14 @@ namespace BusinessLogic.Services
         public async Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchStr)
         {
             int iteminpage = 20;
-            var query= _userManager.Users;
+            var query = _userManager.Users;
             var quey2 = _roleManager.Roles;
             if (matchStr != null && filter == FilterEnum.Email)
                 query = query.Where(x => x.NormalizedEmail.StartsWith(matchStr.ToUpper()));
             else if (matchStr != null && filter == FilterEnum.FirstName)
                 query = query.Where(x => x.FirstName.ToLower().StartsWith(matchStr.ToLower()));
             else if (matchStr != null && filter == FilterEnum.Property)
-                query = query.Where(x => x.UserProperties.Where(x=>x.IsPrimary && x.Property.PropertyName.ToLower().Contains(matchStr.ToLower())).Any());
+                query = query.Where(x => x.UserProperties.Where(x => x.IsPrimary && x.Property.PropertyName.ToLower().Contains(matchStr.ToLower())).Any());
 
             if (!_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
@@ -276,7 +276,7 @@ namespace BusinessLogic.Services
                 }
                 query = query.Where(x => userIds.Contains(x.Id));
             }
-             var count = query.Count();
+            var count = query.Count();
 
 
             var tempquery = await query.Include(x => x.UserProperties).ThenInclude(x => x.Property).Skip(pageNumber * iteminpage).Take(iteminpage).AsNoTracking().ToListAsync();
@@ -287,8 +287,8 @@ namespace BusinessLogic.Services
                 var roles = await _userManager.GetRolesAsync(item);
                 if (roles != null)
                     users.Add(new UsersListModel
-                {
-                    Email = item.Email,
+                    {
+                        Email = item.Email,
                         FullName = item.FirstName + " " + item.LastName,
                         Id = item.Id,
                         UserName = item.UserName,

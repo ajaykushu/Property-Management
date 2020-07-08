@@ -20,7 +20,7 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor,IDetection detection)
+        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;

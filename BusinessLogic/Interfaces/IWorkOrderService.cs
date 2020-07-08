@@ -32,5 +32,6 @@ namespace BusinessLogic.Interfaces
         Task<List<SelectItem>> GetLocation(long id);
 
         Task<List<AllWOExport>> WOExport(WOFilterModel wOFilterModel);
+        Task<List<HistoryDetail>> GetHistory(string entity);
     }
 }

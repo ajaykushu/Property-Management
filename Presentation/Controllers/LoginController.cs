@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -50,7 +49,7 @@ namespace Presentation.Controllers
                 return RedirectToAction("Index", "WorkOrder");
             }
             //to test if the Browser had enabled cookie.
-            
+
             return View();
         }
 
@@ -76,7 +75,7 @@ namespace Presentation.Controllers
             //    TempData["Info"] = "accept cookie";
             //    return RedirectToAction("Privacy", "Home");
             //}
-             if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _apiRoute.Value.Routes.TryGetValue("userlogin", out string path);
                 var response = await _httpClientHelper.PostDataAsync(
@@ -107,8 +106,8 @@ namespace Presentation.Controllers
                    "role",
                    tokenResponse.Roles.First()
                    );
-                   
-                    if (tokenResponse.Roles.Contains("Master Admin") && _detection.Device.Type!=DeviceType.Mobile)
+
+                    if (tokenResponse.Roles.Contains("Master Admin") && _detection.Device.Type != DeviceType.Mobile)
                         return RedirectToAction("GetAllUsers", "User");
                     else
                         return RedirectToAction("Index", "WorkOrder");

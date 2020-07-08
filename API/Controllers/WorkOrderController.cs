@@ -47,9 +47,9 @@ namespace API.Controllers
         [HttpGet]
         [Route("getdatabycategory")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<Dictionary<string,List<SelectItem>>>> GetDataByCategory(string category)
+        public async Task<ActionResult<Dictionary<string, List<SelectItem>>>> GetDataByCategory(string category)
         {
-            Dictionary<string, List<SelectItem>>  prop = await _workOrderService.GetDataByCategory(category);
+            Dictionary<string, List<SelectItem>> prop = await _workOrderService.GetDataByCategory(category);
             return Ok(prop);
         }
 
@@ -130,6 +130,14 @@ namespace API.Controllers
         public async Task<ActionResult<List<WorkOrderDetail>>> WOExport(WOFilterModel wOFilterModel)
         {
             var res = await _workOrderService.WOExport(wOFilterModel);
+            return Ok(res);
+        }
+        [HttpGet]
+        [Route("gethistory")]
+        [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
+        public async Task<ActionResult<List<HistoryDetail>>> GetHistory(string entity)
+        {
+            List<HistoryDetail> res = await _workOrderService.GetHistory(entity);
             return Ok(res);
         }
     }

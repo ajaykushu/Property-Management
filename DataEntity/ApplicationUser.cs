@@ -37,7 +37,7 @@ namespace DataEntity
         public string OfficeExt { set; get; }
 
         public string PhotoPath { set; get; }
-        
+
         public int? DepartmentId { set; get; }
         public Department Department { set; get; }
 

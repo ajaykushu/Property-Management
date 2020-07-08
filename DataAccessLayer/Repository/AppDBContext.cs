@@ -22,7 +22,9 @@ namespace DataAccessLayer.Repository
         public AppDBContext(DbContextOptions options) : base(options)
         {
             _httpContextAccessor = new HttpContextAccessor();
+
         }
+
 
         public DbSet<SubLocation> Areas { set; get; }
         public DbSet<Comment> Comments { set; get; }
@@ -39,6 +41,7 @@ namespace DataAccessLayer.Repository
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
         public DbSet<Notification> Notifications { set; get; }
+        public DbSet<History> Histories { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
@@ -264,7 +267,7 @@ namespace DataAccessLayer.Repository
                     ((Log)entityEntry.Entity).UpdatedTime = DateTime.Now;
                     if (user != null)
                         ((Log)entityEntry.Entity).UpdatedByUserName = user != null ? user.Value : "System Admin";
-                    
+
                 }
             }
 

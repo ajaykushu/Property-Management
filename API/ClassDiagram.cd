@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="API.Authentication.TokenGenerator">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAIAAAAAAAAAIAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Authentication\TokenGenerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="API.Authentication.User">
+    <Position X="2.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAJAAEABIAAAAAAAAAAACAAACAAICAAAAAAAAAAEA=</HashCode>
+      <FileName>Authentication\User.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.602" />
+  </Class>
+  <Class Name="API.Controllers.ConfigurationController">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAgAAAAAAAAAAAJAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ConfigurationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Controllers.LoginController">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAgAAAAAAAAAAAAAAAAIAAgAAAAgAAAAA=</HashCode>
+      <FileName>Controllers\LoginController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Controllers.PropertyController">
+    <Position X="8.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAQSAAAAEAAAAAAAAAAAIAgABAAAgAAA=</HashCode>
+      <FileName>Controllers\PropertyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Controllers.StringConstants">
+    <Position X="6.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACIBAAQAAEAAACAAACAAAIACAAAAIAAEEEEQ=</HashCode>
+      <FileName>Controllers\StringConstants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Controllers.UserController">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAQAAQAACAAAgAAAEAwAhCQACgAAEAAEAAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Controllers.WorkOrderController">
+    <Position X="4.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACRAAAAAAACEAQAAIAQEAAAAAAAAAQQAEAIAA=</HashCode>
+      <FileName>Controllers\WorkOrderController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.BlackListCheckMiddleware">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAIAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>BlackListCheckMiddleware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.ExceptionHandlerMiddlerwarecs">
+    <Position X="2.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAgAAAAIAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>ExceptionHandlerMiddlerwarecs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BusinessLogic.Services.ConfigService">
+    <Position X="0.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BusinessLogic.Services.PropertyService">
+    <Position X="2.5" Y="14" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BusinessLogic.Services.UserService">
+    <Position X="4.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BusinessLogic.Services.WorkOrderService">
+    <Position X="7.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DataAccessLayer.Repository.AppDBContext">
+    <Position X="2.75" Y="20" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DataAccessLayer.Repository.Repo&lt;TEntity&gt;">
+    <Position X="0.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Utilities.CustomException.BadRequestException">
+    <Position X="0.5" Y="26.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Utilities.CustomException.UnAuthorizedException">
+    <Position X="2.25" Y="26.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Utilities.Cache">
+    <Position X="4" Y="27.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Utilities.EmailSender">
+    <Position X="6" Y="27.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Utilities.ImageUploadInFile">
+    <Position X="8" Y="27.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Utilities.Notifications">
+    <Position X="9.75" Y="27.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Utilities.FeatureBasedAuthorization">
+    <Position X="2.25" Y="27.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="API.Authentication.Interfaces.ITokenGenerator">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Authentication\Interfaces\ITokenGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="API.Authentication.Interfaces.IUserManager">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAACAAAAAAAAAAEA=</HashCode>
+      <FileName>Authentication\Interfaces\IUserManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BusinessLogic.Interfaces.IConfigService">
+    <Position X="0.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BusinessLogic.Interfaces.IPropertyService">
+    <Position X="2.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BusinessLogic.Interfaces.IUserService">
+    <Position X="4.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="BusinessLogic.Interfaces.IWorkOrderService">
+    <Position X="7" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DataAccessLayer.Interfaces.IRepo&lt;TEntity&gt;">
+    <Position X="0.75" Y="18.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Utilities.Interface.ICache">
+    <Position X="4" Y="26" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Utilities.IEmailSender">
+    <Position X="6" Y="26" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Utilities.Interface.IImageUploadInFile">
+    <Position X="7.75" Y="26" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Utilities.Interface.INotifier">
+    <Position X="9.5" Y="26" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
