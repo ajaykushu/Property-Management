@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200708112528_Newmih56")]
-    partial class Newmih56
+    [Migration("20200710041655_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "c75401ad-4e63-40a1-a2d5-3603b30b7e2c",
+                            ConcurrencyStamp = "e1b3ce90-6c47-4054-b9f9-91098aca9f20",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "63367645-1d77-4832-b2c7-91a42979deb4",
+                            ConcurrencyStamp = "2371bf95-7c7d-4680-96fd-e6f1fe5bccef",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "6eab9771-6103-48f1-be57-79e90453f153",
+                            ConcurrencyStamp = "48490adf-e814-454e-985d-bff2b474bf91",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -79,7 +79,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                var msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
+               string msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
                 return StatusCode(500, msg);
             }
         }
@@ -151,7 +151,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                TempData["Error"] = string.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault().ErrorMessage));
+                TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
             }
 
             return RedirectToAction("PropertyEditView", new { id = prop.Id });
@@ -235,6 +235,10 @@ namespace Presentation.Controllers
                 {
                     TempData["Error"] = StringConstants.Error;
                 }
+            }
+            else
+            {
+                TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
             }
             return RedirectToAction("PropertyConfig", new { Id = propertyConfig.PropertyId });
         }

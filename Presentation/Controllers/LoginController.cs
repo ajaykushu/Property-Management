@@ -125,7 +125,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                TempData["Error"] = String.Join(",", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault()));
+                TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
                 return RedirectToAction("Index");
             }
         }
@@ -208,7 +208,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                TempData["error"] = String.Join(",", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault()));
+                TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
             }
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/Login/Mobile/ForgotPassword.cshtml");
@@ -255,7 +255,7 @@ namespace Presentation.Controllers
             }
             else
             {
-                TempData["Error"] = String.Join(",", ModelState.Where(x => x.Value.Errors.Count > 0).Select(y => y.Value.Errors.FirstOrDefault()));
+                TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
                 return RedirectToAction("PasswordResetView", "Login");
             }
         }

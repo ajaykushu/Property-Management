@@ -101,11 +101,7 @@ namespace BusinessLogic.Services
             {
                 //create notification
                 //getting all the person whom property is assigned
-                var users = await _userProperty.GetAll().Where(x => x.PropertyId == createWO.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToListAsync();
-                if (!users.Contains(createWO.OptionId.GetValueOrDefault()))
-                    users.Add(createWO.OptionId.GetValueOrDefault());
-                if (!users.Contains(userId))
-                    users.Add(userId);
+                var users = await GetUsersToSendNotification(workOrder);
                 await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
                 return true;
             }
@@ -252,6 +248,15 @@ namespace BusinessLogic.Services
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.TermSearch))
+            {
+                workOrderAssigned = workOrderAssigned.Where(x => (x.DueDate +
+                x.Description  +
+                  x.Id +
+                  x.AssignedTo+x.Property.PropertyName).Contains(wOFilterModel.TermSearch,StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
@@ -598,15 +603,7 @@ namespace BusinessLogic.Services
             {
                 query = query.Where(x => x.Vendor != null && x.Vendor.VendorName.Contains(wOFilterModel.Vendor));
             }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.TermSearch))
-            {
-                query = query.Where(x => (x.Issue.IssueName +
-                x.Item.ItemName + x.Description + x.Location.LocationName + x.SubLocation.AreaName + x.RequestedBy +
-                  x.Vendor.VendorName +
-                  x.Id +
-                  x.Property.PropertyName).Contains(wOFilterModel.TermSearch) || (x.AssignedTo != null && x.AssignedTo.FirstName.Contains(wOFilterModel.TermSearch)) || (x.AssignedTo != null && x.AssignedTo.LastName.Contains(wOFilterModel.TermSearch)) || (x.AssignedTo != null && x.AssignedTo.UserName.Contains(wOFilterModel.TermSearch)) || (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.Contains(wOFilterModel.TermSearch))
-                );
-            }
+            
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var userdept = await _appuser.FindByNameAsync(username);

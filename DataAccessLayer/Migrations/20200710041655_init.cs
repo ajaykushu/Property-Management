@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
@@ -37,6 +37,27 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Histories",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Entity = table.Column<string>(nullable: true),
+                    PropertyName = table.Column<string>(nullable: true),
+                    OldValue = table.Column<string>(nullable: true),
+                    NewValue = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Histories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,8 +139,8 @@ namespace DataAccessLayer.Migrations
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     Message = table.Column<string>(type: "varchar(100)", nullable: true),
-                    NavigatorId = table.Column<long>(nullable: false),
-                    NotificationType = table.Column<string>(type: "varchar(1)", nullable: true)
+                    NavigatorId = table.Column<string>(nullable: true),
+                    NotificationType = table.Column<string>(type: "varchar(2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -144,7 +165,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Stages",
+                name: "Statuses",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -153,12 +174,29 @@ namespace DataAccessLayer.Migrations
                     UpdatedTime = table.Column<DateTime>(nullable: false),
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    StageDescription = table.Column<string>(type: "varchar(100)", nullable: true),
-                    StageCode = table.Column<string>(type: "varchar(50)", nullable: true)
+                    StatusDescription = table.Column<string>(type: "varchar(100)", nullable: true),
+                    StatusCode = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stages", x => x.Id);
+                    table.PrimaryKey("PK_Statuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vendor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    VendorName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vendor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -296,7 +334,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserNotifications",
+                name: "UserNotification",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -307,15 +345,15 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserNotifications", x => x.Id);
+                    table.PrimaryKey("PK_UserNotification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserNotifications_AspNetUsers_ApplicationUserId",
+                        name: "FK_UserNotification_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserNotifications_Notifications_NotificationId",
+                        name: "FK_UserNotification_Notifications_NotificationId",
                         column: x => x.NotificationId,
                         principalTable: "Notifications",
                         principalColumn: "NId",
@@ -405,10 +443,15 @@ namespace DataAccessLayer.Migrations
                     PropertyId = table.Column<long>(nullable: false),
                     ItemId = table.Column<int>(nullable: false),
                     IssueId = table.Column<int>(nullable: false),
-                    StageId = table.Column<int>(nullable: false),
+                    StatusId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(type: "varchar(200)", nullable: true),
                     RequestedBy = table.Column<string>(type: "varchar(50)", nullable: true),
                     AssignedToId = table.Column<long>(nullable: true),
+                    AssignedToDeptId = table.Column<int>(nullable: true),
+                    IsRecurring = table.Column<bool>(nullable: false, defaultValue: false),
+                    RecurringType = table.Column<string>(type: "varchar(1)", nullable: true),
+                    RecurringTime = table.Column<DateTime>(nullable: false),
+                    VendorId = table.Column<int>(nullable: true),
                     DueDate = table.Column<DateTime>(nullable: false),
                     LocationId = table.Column<int>(nullable: true),
                     SubLocationId = table.Column<int>(nullable: true),
@@ -417,6 +460,12 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkOrders_Departments_AssignedToDeptId",
+                        column: x => x.AssignedToDeptId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WorkOrders_AspNetUsers_AssignedToId",
                         column: x => x.AssignedToId,
@@ -448,15 +497,21 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WorkOrders_Stages_StageId",
-                        column: x => x.StageId,
-                        principalTable: "Stages",
+                        name: "FK_WorkOrders_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WorkOrders_Areas_SubLocationId",
                         column: x => x.SubLocationId,
                         principalTable: "Areas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WorkOrders_Vendor_VendorId",
+                        column: x => x.VendorId,
+                        principalTable: "Vendor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -549,14 +604,15 @@ namespace DataAccessLayer.Migrations
                         onDelete: ReferentialAction.NoAction);
                 });
 
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "275b6b55-65b6-4500-b189-facde6f4a7b8", "Master Admin", "MASTER ADMIN" },
-                    { 2L, "34e402cb-0a95-4ae6-b6dd-fbcd132eabfe", "Admin", "ADMIN" },
-                    { 3L, "c5ac0ad1-df68-4e79-8661-55d7b0fd6250", "User", "USER" }
+                    { 1L, "e1b3ce90-6c47-4054-b9f9-91098aca9f20", "Master Admin", "MASTER ADMIN" },
+                    { 2L, "2371bf95-7c7d-4680-96fd-e6f1fe5bccef", "Admin", "ADMIN" },
+                    { 3L, "48490adf-e814-454e-985d-bff2b474bf91", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -603,18 +659,18 @@ namespace DataAccessLayer.Migrations
                     { 16L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Post_Comment", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 15L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 14L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "GetWO_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 13L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Get_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 12L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Create_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 10L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Feature", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 7L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ActDct_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 13L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Get_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 8L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_User_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Add_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 9L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Act_Deact_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Users", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 1L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Add_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 9L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Act_Deact_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 6L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ActDct_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Add_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -627,14 +683,27 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Stages",
-                columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "StageCode", "StageDescription", "UpdatedByUserName", "UpdatedTime" },
+                table: "Statuses",
+                columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "StatusCode", "StatusDescription", "UpdatedByUserName", "UpdatedTime" },
                 values: new object[,]
                 {
-                    { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "IN PROGRESS", "Work Order in Progress", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "OPEN", "Work Order Open State", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "BID ACCEPTED", "Bid Sucessfull", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "COMPLETED", "Work Order Completed", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 15, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOAS", "Work Assigned", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 10, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "HOLD", "Hold", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 14, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "REAS", "Ready To Assign", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 13, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "PEND", "Pending", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 12, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ORMA", "Order Materials", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 11, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "NEWO", "New Work Order", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 9, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "FISC", "Finalize Scope", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "BIRE", "BID Recieved", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CONI", "Complete, Need Inspection", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "COBQ", "Complete but bad Quality", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "COMP", "Complete", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "BIRE", "Bid Requested", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "BINE", "BID NEEDED", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ADCM", "Add Comment Only", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 17, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOPR", "Work In Progress", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "DAIL", "Daily", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 18, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WOOR", "Work Ordered", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -770,13 +839,13 @@ namespace DataAccessLayer.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserNotifications_ApplicationUserId",
-                table: "UserNotifications",
+                name: "IX_UserNotification_ApplicationUserId",
+                table: "UserNotification",
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserNotifications_NotificationId",
-                table: "UserNotifications",
+                name: "IX_UserNotification_NotificationId",
+                table: "UserNotification",
                 column: "NotificationId");
 
             migrationBuilder.CreateIndex(
@@ -793,6 +862,11 @@ namespace DataAccessLayer.Migrations
                 name: "IX_WOAttachments_WorkOrderId",
                 table: "WOAttachments",
                 column: "WorkOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkOrders_AssignedToDeptId",
+                table: "WorkOrders",
+                column: "AssignedToDeptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_AssignedToId",
@@ -820,14 +894,19 @@ namespace DataAccessLayer.Migrations
                 column: "PropertyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkOrders_StageId",
+                name: "IX_WorkOrders_StatusId",
                 table: "WorkOrders",
-                column: "StageId");
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_SubLocationId",
                 table: "WorkOrders",
                 column: "SubLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkOrders_VendorId",
+                table: "WorkOrders",
+                column: "VendorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -836,13 +915,16 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(
+                name: "Histories");
+
+            migrationBuilder.DropTable(
                 name: "Replies");
 
             migrationBuilder.DropTable(
                 name: "RoleMenuMaps");
 
             migrationBuilder.DropTable(
-                name: "UserNotifications");
+                name: "UserNotification");
 
             migrationBuilder.DropTable(
                 name: "UserProperties");
@@ -875,10 +957,13 @@ namespace DataAccessLayer.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Stages");
+                name: "Statuses");
 
             migrationBuilder.DropTable(
                 name: "Areas");
+
+            migrationBuilder.DropTable(
+                name: "Vendor");
 
             migrationBuilder.DropTable(
                 name: "Departments");
