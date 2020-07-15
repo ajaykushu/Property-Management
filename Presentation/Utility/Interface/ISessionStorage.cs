@@ -7,5 +7,7 @@
         object GetItem(long key);
 
         void RemoveItem(long key);
+
+        int Count();
     }
 }

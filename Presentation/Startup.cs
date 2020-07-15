@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -28,10 +29,12 @@ namespace Presentation
         {
             services.AddDetection();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
-            services.AddSession(opts =>
-            {
-                opts.IdleTimeout = TimeSpan.FromDays(30);
+            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(op=> {
+                op.LoginPath = "/";
+                op.LogoutPath = "/Logout";
+                op.ExpireTimeSpan = TimeSpan.FromDays(30);
+                
             });
 
             services.Configure<RouteConstModel>(Configuration.GetSection("ApiRoutes"));
@@ -61,8 +64,15 @@ namespace Presentation
 
             app.UseSession();
             //app.UseHttpsRedirection();
-            app.UseCookiePolicy();
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                CheckConsentNeeded = context => false,
+            };
+            app.UseCookiePolicy(cookiePolicyOptions);
+            app.UseAuthentication();
             app.UseRouting();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,6 @@
 ﻿@model Dictionary<string, List<MenuProperty>>
+@if (Model != null)
+{
 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars fa-1x"></i></a>
 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
     @foreach (var menu in Model)
@@ -15,7 +17,7 @@
 
     }
 </ul>
-
+}
 <style>
     ul.dropdown-menu {
         color: black;

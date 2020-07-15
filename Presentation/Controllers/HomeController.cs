@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using Presentation.ViewModels.Controller.Home;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
@@ -21,13 +23,17 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection)
+        public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection,ISessionStorage _session)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
-            if (httpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+            if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                _token = Encoding.UTF8.GetString(token);
+                var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+                var returnval = _session.GetItem(Convert.ToInt64(id));
+                if (returnval != null)
+                    _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+
             }
             _detection = detection;
         }
@@ -50,6 +56,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetNotificationCount()
         {
             int count = 0;
@@ -90,6 +97,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllNotificationAsync()
         {
             List<AllNotification> allNotification = null;

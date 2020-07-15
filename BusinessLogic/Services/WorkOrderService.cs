@@ -234,7 +234,7 @@ namespace BusinessLogic.Services
         public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel)
         {
             int iteminpage = 20;
-            var query = _workOrder.GetAll();
+          var query = _workOrder.GetAll();
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();

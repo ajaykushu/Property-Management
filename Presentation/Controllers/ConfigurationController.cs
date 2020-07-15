@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
@@ -20,18 +23,22 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection)
+        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection,ISessionStorage _session)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
-            if (httpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+            if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                _token = Encoding.UTF8.GetString(token);
+                var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+                var returnval = _session.GetItem(Convert.ToInt64(id));
+                if(returnval!=null)
+                _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+
             }
             _detection = detection;
         }
 
-        /// <s
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             List<SelectItem> roles = null;
@@ -45,6 +52,7 @@ namespace Presentation.Controllers
             return View(roles);
         }
 
+        [Authorize]
         public async Task<IActionResult> FeaturesSelector(long id)
         {
             FeatureView features = new FeatureView();
@@ -62,6 +70,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> UpdateFeature()
         {
             int val = 0;

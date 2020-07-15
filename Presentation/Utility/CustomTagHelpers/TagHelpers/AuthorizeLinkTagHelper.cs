@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Presentation.Utility.Interface;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace Presentation.Utility.CustomTagHelpers.TagHelpers
@@ -50,8 +51,9 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
         public bool CheckAuthorizarion()
         {
             HashSet<string> menus;
-            long Id = Convert.ToInt64(_httpContextAccessor.HttpContext.Session.GetString("UId"));
-            menus = (HashSet<string>)_sessionStorage.GetItem(Id);
+            long Id = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value);
+            var obj=_sessionStorage.GetItem(Id);
+            menus = obj.GetType().GetProperty("MenuItems").GetValue(obj,null) as HashSet<string>;
             if (menus != null && menus.Contains(Feature))
                 return true;
             return false;

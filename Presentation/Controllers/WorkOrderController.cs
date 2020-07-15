@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
@@ -26,13 +28,19 @@ namespace Presentation.Controllers
         private readonly IExport<AllWOExport> _allwoexport;
         private readonly IDetection _detection;
 
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, ISessionStorage _session, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
-            if (httpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+            if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                _token = Encoding.UTF8.GetString(token);
+                var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+                var returnval= _session.GetItem(Convert.ToInt64(id));
+                if (returnval != null)
+                    _token =returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+               
+                    
+               
             }
             _export = export;
             _allwoexport = allwoexport;
@@ -40,6 +48,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index(WOFilterModel wOFilterModel)
         {
             try
@@ -62,6 +71,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> CreateWorkOrder()
         {
             CreateWorkOrder createWorkOrder = new CreateWorkOrder();
@@ -78,6 +88,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetSubLocation(long id)
         {
             List<SelectItem> result = null;
@@ -95,6 +106,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetLocation(long id)
         {
             List<SelectItem> result = null;
@@ -112,6 +124,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetDataByCategory(string category)
         {
             Dictionary<string, List<SelectItem>> result = null;
@@ -129,6 +142,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<WorkOrderDetail>> GetWODetail(string id)
         {
             WorkOrderDetail workOrderDetail = null;
@@ -151,6 +165,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> EditWOView(string id)
         {
             EditWorkOrder editWorkOrder = null;
@@ -172,6 +187,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> EditWO(EditWorkOrder editWorkOrder)
         {
             string msg = String.Empty;
@@ -206,6 +222,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder)
         {
             if (ModelState.IsValid)
@@ -240,6 +257,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetComment(string workOrderId, int requestedPage)
         {
             ViewBag.workorderId = workOrderId;
@@ -260,6 +278,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostComment(Post post)
         {
             try
@@ -278,6 +297,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> WorkOrderStatusChange(string id, int statusId, string comment)
         {
             try
@@ -299,6 +319,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> DownloadWO(string woId)
         {
             WorkOrderDetail workOrderDetail = null;
@@ -329,6 +350,7 @@ namespace Presentation.Controllers
             return File(file, contentType);
         }
 
+        [Authorize]
         public async Task<IActionResult> ExportWO(WOFilterModel wo)
         {
             List<AllWOExport> workOrderDetail = null;
@@ -360,6 +382,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetHistory(string entity,string id=null)
         {
             List<HistoryDetail> historyDetails = null;

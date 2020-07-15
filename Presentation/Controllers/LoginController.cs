@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
 
@@ -43,20 +46,18 @@ namespace Presentation.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            HttpContext.Session.TryGetValue("token", out var token);
-            if (token != null)
+            if (HttpContext.User.Identity.IsAuthenticated && _sessionStorage.Count() > 0)
             {
                 return RedirectToAction("Index", "WorkOrder");
             }
-            //to test if the Browser had enabled cookie.
-
+            else
+                HttpContext.Response.Cookies.Delete("Cookies");
             return View();
         }
 
         public IActionResult Mobile()
         {
-            ViewBag.SubTitle = "My Property";
-            ViewBag.isEnabled = true;
+           
             return View("~/Views/Shared/Mobile/Menu.cshtml");
         }
 
@@ -66,15 +67,10 @@ namespace Presentation.Controllers
         /// <param name="login">Login</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginExist(LoginReq login)
         {
-            //var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
-            //if (!consentFeature.HasConsent)
-            //{
-            //    TempData["Info"] = "accept cookie";
-            //    return RedirectToAction("Privacy", "Home");
-            //}
+           
             if (ModelState.IsValid)
             {
                 _apiRoute.Value.Routes.TryGetValue("userlogin", out string path);
@@ -86,27 +82,32 @@ namespace Presentation.Controllers
                 {
                     var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(
                         await response.Content.ReadAsStringAsync().ConfigureAwait(false));
-                    HttpContext.Session.SetString("token",
-                                                  tokenResponse.Token);
-                    HttpContext.Session.SetString("name",
-                                                  tokenResponse.FullName);
-                    HttpContext.Session.SetString("imagePath",
-                                                  tokenResponse.PhotoPath);
-                    HttpContext.Session.SetString("UId",
-                                                  tokenResponse.UId + "");
-
+                    
+                    var identity = new ClaimsIdentity("Cookies");
+                    //add the login as the name of the user
+                    identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod,"Cookies"));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, tokenResponse.Roles.FirstOrDefault()));
+                    identity.AddClaim(new Claim(ClaimTypes.Sid, tokenResponse.UId+""));
+                    identity.AddClaim(new Claim(ClaimTypes.IsPersistent, "true"));
+                    identity.AddClaim(new Claim("ImageUrl", tokenResponse.PhotoPath));
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, tokenResponse.FullName));
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTime.Now.AddDays(30),
+                        AllowRefresh=true,
+                        IssuedUtc=DateTime.Now,
+                        
+                    });
                     Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
                     MakeDictionaryFormenuView(tokenResponse, menuView);
-                    _sessionStorage.AddItem(tokenResponse.UId, tokenResponse.MenuItems);
-                    HttpContext.Session.SetString(
-                    "menu",
-                    JsonConvert.SerializeObject(menuView)
-                    );
-                    HttpContext.Session.SetString(
-                   "role",
-                   tokenResponse.Roles.First()
-                   );
-
+                    //required things should be added in the server side session
+                    _sessionStorage.AddItem(tokenResponse.UId,new { 
+                     menuView,
+                     tokenResponse.MenuItems,
+                     token=tokenResponse.Token
+                    });
                     if (tokenResponse.Roles.Contains("Master Admin") && _detection.Device.Type != DeviceType.Mobile)
                         return RedirectToAction("GetAllUsers", "User");
                     else
@@ -160,11 +161,11 @@ namespace Presentation.Controllers
         /// <param name=""></param>
         /// <returns>IActionResult</returns>
         [HttpGet]
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            var Id = Convert.ToInt64(HttpContext.Session.GetString("UId"));
+            var Id = Convert.ToInt64(HttpContext.User.FindFirstValue(ClaimTypes.Sid));
             _sessionStorage.RemoveItem(Id);
-            HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync("Cookies");
             _httpClientHelper.RemoveHeader();
             return RedirectToAction("Index", "Login", null);
         }

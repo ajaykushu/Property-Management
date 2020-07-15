@@ -93,7 +93,7 @@
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                     keyValuePairs.Add("id", item.Id + "");
                     }
-                    @if (HttpContextAccessor.HttpContext.Session.GetString("role").Equals("Admin") && item.Roles.Contains("Admin"))
+                             @if (HttpContextAccessor.HttpContext.User.IsInRole("Admin") && item.Roles.Contains("Admin"))
                                 {
 
                                 }

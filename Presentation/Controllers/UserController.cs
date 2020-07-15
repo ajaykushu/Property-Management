@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
@@ -23,14 +25,18 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, IHttpContextAccessor httpContextAccessor, IDetection detection)
+        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails,ISessionStorage _session, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             _menuDetails = menuDetails;
-            if (httpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+            if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                _token = Encoding.UTF8.GetString(token);
+                var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+                var returnval = _session.GetItem(Convert.ToInt64(id));
+                if (returnval != null)
+                    _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+
             }
             _detection = detection;
         }
@@ -42,6 +48,7 @@ namespace Presentation.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<ActionResult> Register(RegisterUser register)
         {
             if (ModelState.IsValid)
@@ -77,6 +84,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> UserDetailView(long id)
         {
             UserDetail userDetail = new UserDetail();
@@ -97,6 +105,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Create()
         {
             RegisterUser registerrequest = null;
@@ -121,6 +130,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> EditUserView(long Id)
         {
             EditUser editrequestmodal = null;
@@ -145,6 +155,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(EditUser user)
         {
@@ -180,6 +191,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllUsers(string matchString, int requestedPage, FilterEnum filter = FilterEnum.Email)
         {
             ViewBag.searchString = matchString ?? "";
@@ -208,6 +220,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> DeAct_ActUser(long id, int operation, int page)
         {
             _apiRoute.Value.Routes.TryGetValue("deAct_actUser", out string path);
@@ -231,6 +244,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<JsonResult> CheckEmail(string email)
         {
             Boolean result;
@@ -250,6 +264,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<JsonResult> CheckPhoneNumber(string phoneNumber)
         {
             Boolean result;
@@ -269,6 +284,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<JsonResult> CheckUserName(string userName)
         {
             Boolean result;

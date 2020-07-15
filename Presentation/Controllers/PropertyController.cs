@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
@@ -21,18 +23,23 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public PropertyController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection)
+        public PropertyController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection,ISessionStorage _session)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
-            if (httpContextAccessor.HttpContext.Session.TryGetValue("token", out var token))
+            if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                _token = Encoding.UTF8.GetString(token);
+                var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+                var returnval = _session.GetItem(Convert.ToInt64(id));
+                if (returnval != null)
+                    _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+
             }
             _detection = detection;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> AddPropertyView()
         {
             PropertyOperation addProperty = new PropertyOperation();
@@ -85,6 +92,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> ListProperties()
         {
             _apiRoute.Value.Routes.TryGetValue("listproperties", out string path);
@@ -105,6 +113,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> ActDeactProperty(int id, bool operation)
         {
             if (id == 0)
@@ -133,6 +142,7 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> UpdateProperty(PropertyOperation prop)
         {
             _apiRoute.Value.Routes.TryGetValue("updateproperty", out string path);
@@ -158,6 +168,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> PropertyEditView(long id)
         {
             _apiRoute.Value.Routes.TryGetValue("getproperty", out string path);
@@ -178,6 +189,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<JsonResult> CheckProperty(string propertyName)
         {
             Boolean result;
@@ -197,6 +209,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> PropertyConfig(long Id)
         {
             PropertyConfig result = null;
@@ -216,6 +229,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PropertyConfig(PropertyConfig propertyConfig)
         {
             if (ModelState.IsValid)
@@ -244,6 +258,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetSubLocation(long id)
         {
             List<SelectItem> result = null;

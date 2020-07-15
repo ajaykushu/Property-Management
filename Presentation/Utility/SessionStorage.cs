@@ -41,5 +41,9 @@ namespace Presentation.Utility
                     _dict.Remove(key);
             }
         }
+        public int Count()
+        {
+            return _dict.Count;
+        }
     }
 }
