@@ -37,23 +37,25 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1 justify-content-end">
 
-                            @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated && sessionStorage.Count()>0)
+                            @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated && sessionStorage.Count() > 0)
                             {
-                                userId = HttpContextAccessor.HttpContext.User.Claims.Where(x=>x.Type==ClaimTypes.Sid).Select(x=>x.Value).FirstOrDefault();
-                               
-                                var obj=  sessionStorage.GetItem(Convert.ToInt64(userId));
-                                Dictionary<string, List<MenuProperty>> menu=null;
-                                if(obj!=null)
-                                menu= obj.GetType().GetProperty("menuView").GetValue(obj, null) as Dictionary<string, List<MenuProperty>>;
-                                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x=>x.Type=="imageurl").Select(x=>x.Value).FirstOrDefault();
+                                userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+
+                                var obj = sessionStorage.GetItem(Convert.ToInt64(userId));
+                                Dictionary<string, List<MenuProperty>> menu = null;
+                                if (obj != null)
+                                {
+                                    menu = obj.GetType().GetProperty("menuView").GetValue(obj, null) as Dictionary<string, List<MenuProperty>>;
+                                }
+                                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
                                 <li class="nav-item dropdown ">
                                     <partial name="MenuView" for=@menu />
                                 </li>
                                 <li>
-                                   
-                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@path' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
-                                    
-                                    
+
+                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+
+
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link text-white"> @HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) </a>
@@ -114,9 +116,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script src="~/sw.js" >
-      
+    <script src="~/js/all.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/sw.js">
+
     </script>
     @RenderSection("Scripts", required: false)
 </body>
@@ -127,6 +130,7 @@
             $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
                 $("#notification_count").html('<strong>'+data+'</strong>');
             })
-})
+        })
+   
 </script>
 }

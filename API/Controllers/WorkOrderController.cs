@@ -135,9 +135,9 @@ namespace API.Controllers
         [HttpGet]
         [Route("gethistory")]
         [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
-        public async Task<ActionResult<List<HistoryDetail>>> GetHistory(string entity)
+        public async Task<ActionResult<List<HistoryDetail>>> GetHistory(string entity,string rowId)
         {
-            List<HistoryDetail> res = await _workOrderService.GetHistory(entity);
+            List<HistoryDetail> res = await _workOrderService.GetHistory(entity,rowId);
             return Ok(res);
         }
     }

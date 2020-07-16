@@ -82,31 +82,16 @@ namespace Presentation.Controllers
                 {
                     var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(
                         await response.Content.ReadAsStringAsync().ConfigureAwait(false));
-                    
-                    var identity = new ClaimsIdentity("Cookies");
-                    //add the login as the name of the user
-                    identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod,"Cookies"));
-                    identity.AddClaim(new Claim(ClaimTypes.Role, tokenResponse.Roles.FirstOrDefault()));
-                    identity.AddClaim(new Claim(ClaimTypes.Sid, tokenResponse.UId+""));
-                    identity.AddClaim(new Claim(ClaimTypes.IsPersistent, "true"));
-                    identity.AddClaim(new Claim("ImageUrl", tokenResponse.PhotoPath));
-                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, tokenResponse.FullName));
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTime.Now.AddDays(30),
-                        AllowRefresh=true,
-                        IssuedUtc=DateTime.Now,
-                        
-                    });
+
+                    await SetCookieAuth(tokenResponse);
                     Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
                     MakeDictionaryFormenuView(tokenResponse, menuView);
                     //required things should be added in the server side session
-                    _sessionStorage.AddItem(tokenResponse.UId,new { 
-                     menuView,
-                     tokenResponse.MenuItems,
-                     token=tokenResponse.Token
+                    _sessionStorage.AddItem(tokenResponse.UId, new
+                    {
+                        menuView,
+                        tokenResponse.MenuItems,
+                        token = tokenResponse.Token
                     });
                     if (tokenResponse.Roles.Contains("Master Admin") && _detection.Device.Type != DeviceType.Mobile)
                         return RedirectToAction("GetAllUsers", "User");
@@ -129,6 +114,26 @@ namespace Presentation.Controllers
                 TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
                 return RedirectToAction("Index");
             }
+        }
+
+        private async Task SetCookieAuth(TokenResponse tokenResponse)
+        {
+            var identity = new ClaimsIdentity("Cookies");
+            //add the login as the name of the user
+            identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "Cookies"));
+            identity.AddClaim(new Claim(ClaimTypes.Role, tokenResponse.Roles.FirstOrDefault()));
+            identity.AddClaim(new Claim(ClaimTypes.Sid, tokenResponse.UId + ""));
+            identity.AddClaim(new Claim(ClaimTypes.IsPersistent, "true"));
+            identity.AddClaim(new Claim("ImageUrl", tokenResponse.PhotoPath));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, tokenResponse.FullName));
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTime.Now.AddDays(30),
+                AllowRefresh = true,
+                IssuedUtc = DateTime.Now,
+            });
         }
 
         private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, List<MenuProperty>> menuView)

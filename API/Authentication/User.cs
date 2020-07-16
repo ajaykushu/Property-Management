@@ -123,7 +123,7 @@ namespace API.Authentication
                         Roles = roles.ToHashSet(),
                         Token = _tokenGenerator.GetToken(claims),
                         MenuItems = submenu,
-                        PhotoPath = _scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath
+                        PhotoPath = !string.IsNullOrWhiteSpace(identityUser.PhotoPath) ? _scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/" + identityUser.PhotoPath : ""
                     };
                 }
             }

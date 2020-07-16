@@ -106,7 +106,7 @@
         <div class="menu">
             <div class="item">
                
-                <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@path' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
+                <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
                 
             </div>
         </div>
@@ -118,5 +118,6 @@
             $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
             $("#notification_count").html('<strong>'+data+'</strong>');
             })
- })
+    })
+   
 </script>

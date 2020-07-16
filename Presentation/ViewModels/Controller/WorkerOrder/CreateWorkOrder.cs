@@ -44,7 +44,7 @@ namespace Presentation.ViewModels
         public string Category { get; set; }
         public List<SelectItem> Options { get; set; }
         [DisplayName("Option")]
-        public int OptionId { get; set; }
+        public int? OptionId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

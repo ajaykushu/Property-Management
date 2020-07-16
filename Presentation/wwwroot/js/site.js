@@ -126,8 +126,10 @@ $('input[type="reset"]').click(function (e) {
     })
     
     $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
-    $("img").prop("src", "");
+    $("photo-display").prop("src", "");
     $("#DueDate").prop("value", "");
+    selectedFile = [];
+    $("#file_selected").load(location.href + " #file_selected>*", "");
     $("input[type=checkbox]").prop("checked", false);
     $('.photo_disp').hide();
     $('#Status').val("");
@@ -186,10 +188,7 @@ if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
     });
 }
 
-$('img').on('error', function () {
-    $(this).prop("src", "/NA.jpg")
-    $(this).unbind();
-});
+
 var msg = null
 function enablespiner() {
     msg = alertify.message("<div class='progress' style='margin-bottom:10px;display:none'> <div class='progress-bar' style='width:0%' role='progressbar' aria-valuemin='0' aria-valuemax='100'></div></div>" +
@@ -203,16 +202,17 @@ $('#adduser, #wocreate, #addprop').submit(function (e) {
     e.preventDefault();
     var url = $(this).attr('action');
     var formData = new FormData(this);
-    selectedFile.forEach(function (e) {
-        formData.push('File', e);
-    });
+    for (var i = 0; i < selectedFile.length; i++) {
+        formData.append('File', selectedFile[i]);
+    };
+   
     if ($(this).valid()) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             disablespinner();
             $("form :input").prop("disabled", false);
             alertify.alert('Info', '<p>' + res + '</p>', function () {
-                $("input[type=reset]").click();
+            $("input[type=reset]").click();
             });
         }, function (res) {
             disablespinner();
@@ -374,7 +374,8 @@ $('#Category').change(function () {
 $('#history_button').click(function (e) {
     e.preventDefault();
     enablespiner();
-    $.get('/WorkOrder/GetHistory?entity=' + "workorder", function (res) {
+    var value = $(this).data("custom-value");
+    $.get('/WorkOrder/GetHistory?entity=workorder&rowId='+value , function (res) {
         $('#history').html(res);
         disablespinner();
     })

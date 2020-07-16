@@ -335,7 +335,7 @@ namespace BusinessLogic.Services
                     EmailAddress = x.Email,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
-                    PhotoPath = string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.PhotoPath),
+                    PhotoPath = !string.IsNullOrWhiteSpace(x.PhotoPath)?string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.PhotoPath):"",
                     ListProperties = x.UserProperties.Select(x => new PropertiesModel
                     {
                         Id = x.Property.Id,

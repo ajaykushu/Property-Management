@@ -383,12 +383,12 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetHistory(string entity,string id=null)
+        public async Task<IActionResult> GetHistory(string entity,string rowId)
         {
             List<HistoryDetail> historyDetails = null;
-            ViewBag.Id = id;
+            ViewBag.Id = rowId;
             _apiRoute.Value.Routes.TryGetValue("gethistory", out string path);
-            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?entity="+entity , this, _token).ConfigureAwait(false);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?entity="+entity+"&rowId="+rowId , this, _token).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
                 historyDetails = JsonConvert.DeserializeObject<List<HistoryDetail>>(await response.Content.ReadAsStringAsync());

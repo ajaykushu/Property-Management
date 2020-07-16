@@ -363,6 +363,7 @@ namespace BusinessLogic.Services
                 //adding history
                 history.Entity = "WorkOrder";
                 history.PropertyName = "Assigned To";
+                history.RowId = wo.Id;
                 history.OldValue = wo.AssignedTo != null ? string.Concat(wo.AssignedTo.FirstName, " ", wo.AssignedTo.LastName) : wo.AssignedToDept != null ? wo.AssignedToDept.DepartmentName : "NA"; 
                 if (editWorkOrder.Category.Equals("user"))
                 {
@@ -505,6 +506,7 @@ namespace BusinessLogic.Services
                 history.Comment = comment;
                 history.OldValue = wo.Status.StatusDescription;
                 history.NewValue = status.StatusDescription;
+                history.RowId = wo.Id;
                 #endregion
 
                 wo.StatusId = statusId;
@@ -635,9 +637,9 @@ namespace BusinessLogic.Services
             return users.ToList();
         }
 
-        public  async Task<List<HistoryDetail>> GetHistory(string entity)
+        public  async Task<List<HistoryDetail>> GetHistory(string entity,string rowId)
         {
-            return await _history.Get(x => x.Entity.ToLower() == entity.ToLower()).Select(x => new HistoryDetail
+            return await _history.Get(x => x.Entity.ToLower() == entity.ToLower() && x.RowId.Equals(rowId)).Select(x => new HistoryDetail
             {
                 Comment = x.Comment,
                 NewValue = x.NewValue,

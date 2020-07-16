@@ -34,7 +34,7 @@ namespace Presentation
                 op.LoginPath = "/";
                 op.LogoutPath = "/Logout";
                 op.ExpireTimeSpan = TimeSpan.FromDays(30);
-                
+              
             });
 
             services.Configure<RouteConstModel>(Configuration.GetSection("ApiRoutes"));
