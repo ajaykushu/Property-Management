@@ -609,6 +609,7 @@ namespace BusinessLogic.Services
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var userdept = await _appuser.FindByNameAsync(username);
+           
             query = query.Include(x => x.AssignedTo).Include(x => x.AssignedToDept).Include(x => x.Status).Include(x => x.Property).Include(x => x.Vendor);
             var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
@@ -617,7 +618,7 @@ namespace BusinessLogic.Services
             }
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
-                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)));
+                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) ||x.CreatedByUserName.Equals(username));
             }
             return query;
         }
