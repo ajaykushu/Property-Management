@@ -644,7 +644,7 @@ namespace BusinessLogic.Services
 
         public  async Task<List<HistoryDetail>> GetHistory(string entity,string rowId)
         {
-            return await _history.Get(x => x.Entity.ToLower() == entity.ToLower() && x.RowId.Equals(rowId)).Select(x => new HistoryDetail
+            var data= await _history.Get(x => x.Entity.ToLower() == entity.ToLower() && x.RowId.Equals(rowId)).Select(x => new HistoryDetail
             {
                 Comment = x.Comment,
                 NewValue = x.NewValue,
@@ -653,6 +653,9 @@ namespace BusinessLogic.Services
                 UpdatedBy = x.CreatedByUserName,
                 UpdateTime = x.CreatedTime.ToString("dd-MMM-yyyy")
             }).AsNoTracking().ToListAsync();
+            if (data != null)
+                return data;
+            return null;
         }
     }
 }

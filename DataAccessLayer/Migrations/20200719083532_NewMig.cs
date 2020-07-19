@@ -2,54 +2,63 @@
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class RowI : Migration
+    public partial class NewMig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "RowId",
+                table: "Histories",
+                nullable: true);
+
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 1L,
                 column: "ConcurrencyStamp",
-                value: "427fcea2-fc86-4074-979e-cc0a916fc75a");
+                value: "6a02f57c-43a3-4b99-a326-9b1f948fc6b6");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 column: "ConcurrencyStamp",
-                value: "badfaa6d-5f8e-4a1b-b683-6976bed868c9");
+                value: "791790d6-69d7-4c27-88d3-c516b88b409d");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 3L,
                 column: "ConcurrencyStamp",
-                value: "688990a7-bd3d-45f2-a0b9-53377ae5e9e8");
+                value: "88fe1913-5575-43db-ab9f-7ec1c6b34b8e");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "RowId",
+                table: "Histories");
+
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 1L,
                 column: "ConcurrencyStamp",
-                value: "a124ffec-db4a-47ee-8af6-7e56f9a72629");
+                value: "91f2b901-7a06-4a07-9257-216871989d0c");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 column: "ConcurrencyStamp",
-                value: "c94b8ca8-3c01-42e0-8d51-bc4c620f8fd2");
+                value: "387f9dfe-73b2-471e-a9ef-79fc5bf6d24c");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 3L,
                 column: "ConcurrencyStamp",
-                value: "950901aa-5052-46a9-94a1-34c3aeba0196");
+                value: "5fb19ca5-4c44-400b-9ee9-0c9a21e34df6");
         }
     }
 }
