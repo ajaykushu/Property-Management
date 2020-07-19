@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200710041655_init")]
-    partial class init
+    [Migration("20200719074409_RowI")]
+    partial class RowI
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "e1b3ce90-6c47-4054-b9f9-91098aca9f20",
+                            ConcurrencyStamp = "427fcea2-fc86-4074-979e-cc0a916fc75a",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "2371bf95-7c7d-4680-96fd-e6f1fe5bccef",
+                            ConcurrencyStamp = "badfaa6d-5f8e-4a1b-b683-6976bed868c9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "48490adf-e814-454e-985d-bff2b474bf91",
+                            ConcurrencyStamp = "688990a7-bd3d-45f2-a0b9-53377ae5e9e8",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -306,6 +306,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PropertyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RowId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedByUserName")

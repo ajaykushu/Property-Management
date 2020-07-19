@@ -604,15 +604,14 @@ namespace DataAccessLayer.Migrations
                         onDelete: ReferentialAction.NoAction);
                 });
 
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "e1b3ce90-6c47-4054-b9f9-91098aca9f20", "Master Admin", "MASTER ADMIN" },
-                    { 2L, "2371bf95-7c7d-4680-96fd-e6f1fe5bccef", "Admin", "ADMIN" },
-                    { 3L, "48490adf-e814-454e-985d-bff2b474bf91", "User", "USER" }
+                    { 1L, "5186a513-ea03-41b6-b6de-715c638f7147", "Master Admin", "MASTER ADMIN" },
+                    { 2L, "56d774ab-fc17-4983-9548-563f2dd67df2", "Admin", "ADMIN" },
+                    { 3L, "bcf02d3d-42b3-4d53-9371-9dce2f0c2868", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(

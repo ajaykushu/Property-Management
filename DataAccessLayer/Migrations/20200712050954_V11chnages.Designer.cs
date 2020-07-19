@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200712050954_V11chnages")]
+    partial class V11chnages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "427fcea2-fc86-4074-979e-cc0a916fc75a",
+                            ConcurrencyStamp = "91f2b901-7a06-4a07-9257-216871989d0c",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "badfaa6d-5f8e-4a1b-b683-6976bed868c9",
+                            ConcurrencyStamp = "387f9dfe-73b2-471e-a9ef-79fc5bf6d24c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "688990a7-bd3d-45f2-a0b9-53377ae5e9e8",
+                            ConcurrencyStamp = "5fb19ca5-4c44-400b-9ee9-0c9a21e34df6",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -304,9 +306,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PropertyName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RowId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedByUserName")
