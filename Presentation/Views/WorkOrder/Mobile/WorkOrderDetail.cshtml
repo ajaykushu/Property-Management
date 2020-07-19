@@ -207,7 +207,8 @@
             </tr>
             <tr>
                 <td>
-                   <a title="history" data-custom-value="@Model.Id" href="@Url.Action("GetHistory",new { entity="workorder",id=Model.Id})" ><i class="fa fa-history fa-2x"></i></a>
+                    
+                    <a title="history"  href="@Url.Action("GetHistory",new { entity="workorder",rowId=Model.Id})"><i class="fa fa-history fa-2x"></i></a>
                 </td>
             </tr>
             <tr>
