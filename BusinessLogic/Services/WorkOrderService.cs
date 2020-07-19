@@ -563,6 +563,13 @@ namespace BusinessLogic.Services
 
         private async Task<IQueryable<WorkOrder>> FilterWO(WOFilterModel wOFilterModel, IQueryable<WorkOrder> query)
         {
+            #region init
+            var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
+            var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var userdept = await _appuser.FindByNameAsync(username);
+            var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+            #endregion
+            #region filter based on filtermodel
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
                 var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
@@ -605,13 +612,10 @@ namespace BusinessLogic.Services
             {
                 query = query.Where(x => x.Vendor != null && x.Vendor.VendorName.Contains(wOFilterModel.Vendor));
             }
-            
-            var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
-            var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            var userdept = await _appuser.FindByNameAsync(username);
-           
+            #endregion
+            //joins we need
             query = query.Include(x => x.AssignedTo).Include(x => x.AssignedToDept).Include(x => x.Status).Include(x => x.Property).Include(x => x.Vendor);
-            var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
                 query = query.Where(x => propIds.Contains(x.Property.Id));
