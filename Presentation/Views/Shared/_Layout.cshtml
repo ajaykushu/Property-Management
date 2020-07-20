@@ -124,7 +124,7 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
-@if(device.Device.Type != DeviceType.Mobile){
+@if(device.Device.Type != DeviceType.Mobile && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated){
 <script>
         $(document).ready(function () {
             $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
