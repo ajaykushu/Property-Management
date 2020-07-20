@@ -85,8 +85,8 @@
                             <div class="col-md-3">
                                 <label for="photo">Photo</label>
                             </div>
-                            <div class=" photo_disp" style="display:block">
-                                <img src='@Model.PhotoPath' area-hidden="true" width="200" height="150" />
+                            <div class="photo_disp" style="display:block">
+                                <img src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Model.PhotoPath</text> }' width="200" height="150" alt="Pet Image" />
                             </div>
                         </div>
                             }
