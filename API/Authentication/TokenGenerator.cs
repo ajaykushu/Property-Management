@@ -1,5 +1,6 @@
 ﻿using API.Authentication.Interfaces;
 using DataEntity;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,9 +15,9 @@ namespace API.Authentication
     public class TokenGenerator : ITokenGenerator
     {
         private readonly IConfiguration _configuration;
-        private readonly ICache _cache;
+        private readonly IDistributedCache _cache;
 
-        public TokenGenerator(IConfiguration configuration, ICache cache)
+        public TokenGenerator(IConfiguration configuration, IDistributedCache cache)
         {
             _configuration = configuration;
             _cache = cache;
@@ -35,7 +36,9 @@ namespace API.Authentication
             };
             foreach (var feature in features)
                 authClaims.Add(new Claim("Feature", feature));
-            _cache.AddItem(applicationuser.Id + "", jti, TimeSpan.FromDays(30).Ticks);
+            _cache.SetAsync(applicationuser.Id + "", Encoding.UTF8.GetBytes(jti), new DistributedCacheEntryOptions() {
+                SlidingExpiration = TimeSpan.FromDays(30)
+            }).Wait();
             foreach (var role in roles)
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             return authClaims.ToArray();

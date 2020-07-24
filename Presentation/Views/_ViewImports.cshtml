@@ -8,5 +8,6 @@
 @using Presentation.ConstModal
 @using Wangkanai.Detection
 @using System.Security.Claims
-@using Presentation.Utility.Interface
-@inject ISessionStorage sessionStorage
+@using Microsoft.Extensions.Caching.Distributed
+@inject IDistributedCache sessionStorage
+@using Presentation.Utility

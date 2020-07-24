@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Presentation.ConstModal;
+using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,16 +29,16 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection,ISessionStorage _session)
+        public ConfigurationController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection, IDistributedCache _session)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
-                var returnval = _session.GetItem(Convert.ToInt64(id));
-                if(returnval!=null)
-                _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+                var returnval = ObjectByteConverter.Deserialize<SessionStore>(_session.Get(id));
+                if (returnval != null)
+                    _token = returnval.Token;
 
             }
             _detection = detection;
@@ -92,5 +98,7 @@ namespace Presentation.Controllers
                 return PartialView("FeaturesSelector", result.Model);
             }
         }
+       
     }
+   
 }

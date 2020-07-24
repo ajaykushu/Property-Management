@@ -9,6 +9,7 @@ using Models.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Utilities;
@@ -131,6 +132,15 @@ namespace API.Authentication
                 throw new UnAuthorizedException("Email Id not Registered. Please Contact Admin");
 
             return returnToken;
+        }
+
+        public async Task<HashSet<string>> GetMenuData()
+        {
+           var userId= _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user) ?? new List<string>();
+            var submenu = _roleMenuMap.GetAll().Include(x => x.Role).Where(x => roles.Contains(x.Role.Name)).Include(x => x.Menu).Select(x => x.Menu.MenuName).ToHashSet();
+            return submenu;
         }
     }
 }

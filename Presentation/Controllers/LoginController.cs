@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.ConstModal;
+using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
@@ -13,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Wangkanai.Detection;
 
@@ -25,16 +28,18 @@ namespace Presentation.Controllers
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly IOptions<RouteConstModel> _apiRoute;
         private readonly IOptions<MenuMapperModel> _menuDetails;
-        private readonly ISessionStorage _sessionStorage;
+        private readonly IDistributedCache _sessionStorage;
         private readonly IDetection _detection;
+        
 
-        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, ISessionStorage sessionStorage, IDetection detection)
+        public LoginController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, IDistributedCache sessionStorage, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             _menuDetails = menuDetails;
             _sessionStorage = sessionStorage;
             _detection = detection;
+           
         }
 
         /// <summary>
@@ -44,14 +49,21 @@ namespace Presentation.Controllers
         /// <returns>IActionResult</returns>
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated && _sessionStorage.Count() > 0)
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "WorkOrder");
+                var userId = HttpContext.User.FindFirstValue(ClaimTypes.Sid);
+                var obj= ObjectByteConverter.Deserialize<SessionStore>(await _sessionStorage.GetAsync(userId));
+                if (obj != null)
+                    return RedirectToAction("Index", "WorkOrder");
+                else
+                    return RedirectToAction("Logout");
+                   
             }
-            else
-                HttpContext.Response.Cookies.Delete("Cookies");
+
+           
+               
             return View();
         }
 
@@ -85,14 +97,18 @@ namespace Presentation.Controllers
 
                     await SetCookieAuth(tokenResponse);
                     Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
-                    MakeDictionaryFormenuView(tokenResponse, menuView);
+                    MakeDictionaryFormenuView(tokenResponse.MenuItems, menuView);
+
                     //required things should be added in the server side session
-                    _sessionStorage.AddItem(tokenResponse.UId, new
+                    SessionStore sessionStore = new SessionStore
                     {
-                        menuView,
-                        tokenResponse.MenuItems,
-                        token = tokenResponse.Token
-                    });
+                        MenuView = menuView,
+                        MenuList = tokenResponse.MenuItems,
+                        Token = tokenResponse.Token
+                    };
+                    _sessionStorage.Set(tokenResponse.UId+"",ObjectByteConverter.ObjectToByteArray(sessionStore),new DistributedCacheEntryOptions { 
+                   SlidingExpiration=TimeSpan.FromDays(30)
+                   });
                     if (tokenResponse.Roles.Contains("Master Admin") && _detection.Device.Type != DeviceType.Mobile)
                         return RedirectToAction("GetAllUsers", "User");
                     else
@@ -136,11 +152,11 @@ namespace Presentation.Controllers
             });
         }
 
-        private void MakeDictionaryFormenuView(TokenResponse tokenResponse, Dictionary<string, List<MenuProperty>> menuView)
+        private void MakeDictionaryFormenuView(HashSet<string> menuItems, Dictionary<string, List<MenuProperty>> menuView)
         {
             foreach (var menu in _menuDetails.Value.Menus)
             {
-                if (tokenResponse.MenuItems.Contains(menu.Key))
+                if (menuItems.Contains(menu.Key))
                 {
                     menu.Value.Enabled = true;
                     if (!menuView.ContainsKey(menu.Value.MainMenuName))
@@ -168,8 +184,8 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> LogOut()
         {
-            var Id = Convert.ToInt64(HttpContext.User.FindFirstValue(ClaimTypes.Sid));
-            _sessionStorage.RemoveItem(Id);
+            var Id = HttpContext.User.FindFirstValue(ClaimTypes.Sid);
+            await _sessionStorage.RemoveAsync(Id);
             await HttpContext.SignOutAsync("Cookies");
             _httpClientHelper.RemoveHeader();
             return RedirectToAction("Index", "Login", null);

@@ -6,6 +6,7 @@ using BusinessLogic.Services;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repository;
 using DataEntity;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Models;
+using NeoSmart.Caching.Sqlite;
 using Serilog;
 using System.IO;
 using System.Linq;
@@ -36,6 +38,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSqliteCache(options => {
+                options.CachePath = @"Cache\cache.db";
+            });
             services.AddMvc(op =>
             {
                 op.EnableEndpointRouting = false;
@@ -77,7 +82,8 @@ namespace API
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("token").GetSection("key").Value))
                };
            });
-
+           
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<EmailConfigurationModel>(Configuration.GetSection("EmailConfig"));
             services.AddScoped(typeof(IRepo<>), typeof(Repo<>));
             services.AddScoped<IEmailSender, EmailSender>();
@@ -89,7 +95,6 @@ namespace API
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IWorkOrderService, WorkOrderService>();
             services.AddScoped<INotifier, Notifications>();
-            services.AddSingleton<ICache, Cache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,7 +124,10 @@ namespace API
             app.UseMiddleware<BlackListCheckMiddleware>();
             app.UseRouting();
             app.UseAuthorization();
+      
             app.UseSerilogRequestLogging();
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
             app.UseMvc();
         }
     }

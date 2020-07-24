@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.ConstModal;
+using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
@@ -25,7 +27,7 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails,ISessionStorage _session, IHttpContextAccessor httpContextAccessor, IDetection detection)
+        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails,IDistributedCache _session, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -33,9 +35,9 @@ namespace Presentation.Controllers
             if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
-                var returnval = _session.GetItem(Convert.ToInt64(id));
+                var returnval = ObjectByteConverter.Deserialize<SessionStore>(_session.Get(id));
                 if (returnval != null)
-                    _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+                    _token = returnval.Token;
 
             }
             _detection = detection;

@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model WOFilterModel
-@{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
+@{ var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
 @{ var param = Model.GetType()
            .GetProperties()
            .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
@@ -19,7 +19,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export fa-1x"></i></a>
+                     <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export fa-1x"></i></a>
                 </li>
             </ul>
             <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">To Do</a>

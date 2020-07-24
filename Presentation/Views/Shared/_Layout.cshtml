@@ -37,19 +37,13 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1 justify-content-end">
 
-                            @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated && sessionStorage.Count() > 0)
+                            @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                             {
                                 userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-
-                                var obj = sessionStorage.GetItem(Convert.ToInt64(userId));
-                                Dictionary<string, List<MenuProperty>> menu = null;
-                                if (obj != null)
-                                {
-                                    menu = obj.GetType().GetProperty("menuView").GetValue(obj, null) as Dictionary<string, List<MenuProperty>>;
-                                }
-                                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
+                     var obj =ObjectByteConverter.Deserialize<SessionStore>( await sessionStorage.GetAsync(userId));
+                    var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
                                 <li class="nav-item dropdown ">
-                                    <partial name="MenuView" for=@menu />
+                                    <partial name="MenuView" for=@obj.MenuView />
                                 </li>
                                 <li>
 
