@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
 {
-    public class EditWorkOrder
+    public class EditRecurringWorkOrder
     {
         public string Id { get; set; }
         public List<SelectItem> Locations { get; set; }
@@ -50,7 +50,7 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
-        [Required(ErrorMessage = "Please Select Assign to")]
+        [Required]
         public string Category { get; set; }
         public Dictionary<string, List<SelectItem>> Options { get; set; }
         [DisplayName("Option")]
@@ -63,5 +63,10 @@ namespace Presentation.ViewModels
 
         public List<SelectItem> Sections { get; set; }
         public IList<IFormFile> File { get; set; }
+        [Required(ErrorMessage = "Please Enter Schedule Details")]
+        public string CronExpression { get; set; }
+        public DateTime? RecurringEndDate { get; set; }
+        public int? EndAfterCount { get; set; }
+        public DateTime? RecurringStartDate { get; set; }
     }
 }

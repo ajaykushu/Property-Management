@@ -54,5 +54,7 @@ namespace Presentation.ViewModels
 
         [SkipProperty]
         public Pagination<List<Comment>> Comments { get; set; }
+        public bool Recurring { get; set; }
+        public string ScheduledAt { get; set; }
     }
 }

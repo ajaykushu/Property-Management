@@ -120,5 +120,9 @@ namespace Presentation.Controllers
                 return View("~/Views/Home/Mobile/GetAllNotification.cshtml", allNotification);
             return View(allNotification);
         }
+        public  IActionResult SchedularView()
+        {
+            return PartialView("~/Views/Shared/SchedulerView.cshtml");
+        }
     }
 }

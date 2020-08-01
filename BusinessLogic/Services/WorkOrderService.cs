@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.Interfaces;
+using CronExpressionDescriptor;
 using DataAccessLayer.Interfaces;
 using DataEntity;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Interface;
 
 namespace BusinessLogic.Services
@@ -35,8 +38,9 @@ namespace BusinessLogic.Services
         private readonly IRepo<History> _history;
         public long userId;
         private readonly string _scheme;
+        private readonly IRecurringWorkOrderJob _recurringWorkOrderJob;
 
-        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Status> status, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors, IRepo<History> history)
+        public WorkOrderService(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Status> status, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors, IRepo<History> history,IRecurringWorkOrderJob recurringWorkOrderJob)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -55,10 +59,34 @@ namespace BusinessLogic.Services
             userId = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value);
             _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
             _vendors = vendors;
+            _recurringWorkOrderJob = recurringWorkOrderJob;
         }
 
         public async Task<bool> CreateWO(CreateWO createWO, List<IFormFile> File)
         {
+            WorkOrder workOrder = await CreateWOObject(createWO, File);
+
+            var status = await _workOrder.Add(workOrder);
+            if (status > 0)
+            {
+                //create notification
+                //getting all the person whom property is assigned
+                var users = await GetUsersToSendNotification(workOrder);
+                await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
+                return true;
+            }
+
+            return false;
+        }
+
+        private async Task<WorkOrder> CreateWOObject(Object inputObject, List<IFormFile> File)
+        {
+            dynamic createWO = null;
+            if (inputObject is CreateWO)
+                createWO= inputObject as CreateWO;
+            else
+                createWO= inputObject as CreateRecurringWO;
+
             WorkOrder workOrder = new WorkOrder
             {
                 RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value,
@@ -96,20 +124,12 @@ namespace BusinessLogic.Services
                 }
             }
 
-            var status = await _workOrder.Add(workOrder);
-            if (status > 0)
-            {
-                //create notification
-                //getting all the person whom property is assigned
-                var users = await GetUsersToSendNotification(workOrder);
-                await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
-                return true;
-            }
-            return false;
+            return workOrder;
         }
 
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
+          
             var iteminpage = 12;
             var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Status).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Vendor).Select(x => new
                             WorkOrderDetail
@@ -119,7 +139,13 @@ namespace BusinessLogic.Services
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
-                Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
+                Recurring=x.Recurring,
+                ScheduledAt =!string.IsNullOrEmpty(x.CronExpression)? new ExpressionDescriptor(x.CronExpression, new Options
+                {
+                    DayOfWeekStartIndexZero = false,
+                    Use24HourTimeFormat = true
+                }).GetDescription(DescriptionTypeEnum.FULL):null,
+            Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
                 DueDate = x.DueDate,
                 UpdatedTime = x.UpdatedTime,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
@@ -243,7 +269,7 @@ namespace BusinessLogic.Services
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
-                IsRecurring = x.IsRecurring,
+                Recurring = x.Recurring,
                 Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
@@ -274,23 +300,23 @@ namespace BusinessLogic.Services
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
             var temp = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Property).ThenInclude(x => x.Locations).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).AsNoTracking().FirstOrDefaultAsync();
 
-            var editwo = new EditWorkOrder
-            {
-                Id = temp.Id,
-                PropertyName = temp.Property.PropertyName,
-                Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList(),
-                Description = temp.Description,
-                IssueId = temp.IssueId,
-                ItemId = temp.ItemId,
-                CreatedDate = temp.CreatedTime,
-                VendorId = temp.VendorId,
-                Priority = temp.Priority,
-                DueDate = temp.DueDate,
-                LocationId = temp.LocationId.GetValueOrDefault(),
-                SubLocationId = temp.SubLocationId.GetValueOrDefault(),
-                FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
-                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList()
-            };
+            var editwo = new EditWorkOrder();
+
+            editwo.Id = temp.Id;
+            editwo.PropertyName = temp.Property.PropertyName;
+            editwo.Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
+            editwo.Description = temp.Description;
+                editwo.IssueId = temp.IssueId;
+            editwo.ItemId = temp.ItemId;
+            editwo.CreatedDate = temp.CreatedTime;
+            editwo.VendorId = temp.VendorId;
+            editwo.Priority = temp.Priority;
+            editwo.DueDate = temp.DueDate;
+            editwo.LocationId = temp.LocationId.GetValueOrDefault();
+            editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
+            editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
+             string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList();
+           
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -331,7 +357,7 @@ namespace BusinessLogic.Services
         {
             History history = new History();
             var userObj = await _appuser.FindByIdAsync(userId.ToString());
-            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.Comments).Include(x=>x.AssignedToDept).Include(x=>x.AssignedTo).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.Comments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
             if (wo != null)
             {
 
@@ -364,19 +390,19 @@ namespace BusinessLogic.Services
                 history.Entity = "WorkOrder";
                 history.PropertyName = "Assigned To";
                 history.RowId = wo.Id;
-                history.OldValue = wo.AssignedTo != null ? string.Concat(wo.AssignedTo.FirstName, " ", wo.AssignedTo.LastName) : wo.AssignedToDept != null ? wo.AssignedToDept.DepartmentName : "NA"; 
+                history.OldValue = wo.AssignedTo != null ? string.Concat(wo.AssignedTo.FirstName, " ", wo.AssignedTo.LastName) : wo.AssignedToDept != null ? wo.AssignedToDept.DepartmentName : "NA";
                 if (editWorkOrder.Category.Equals("user"))
                 {
-                    
+
                     wo.AssignedToDeptId = null;
                     wo.AssignedToId = editWorkOrder.OptionId;
-                    history.NewValue = _appuser.Users.Where(x => x.Id == editWorkOrder.OptionId).Select(x => string.Concat(x.FirstName," ",x.LastName)).FirstOrDefault();
+                    history.NewValue = _appuser.Users.Where(x => x.Id == editWorkOrder.OptionId).Select(x => string.Concat(x.FirstName, " ", x.LastName)).FirstOrDefault();
                 }
                 else if (editWorkOrder.Category.Equals("department"))
                 {
                     wo.AssignedToId = null;
                     wo.AssignedToDeptId = editWorkOrder.OptionId;
-                    history.NewValue = _department.Get(x => x.Id == editWorkOrder.OptionId).Select(x=>x.DepartmentName).FirstOrDefault();
+                    history.NewValue = _department.Get(x => x.Id == editWorkOrder.OptionId).Select(x => x.DepartmentName).FirstOrDefault();
                 }
                 else
                 {
@@ -384,7 +410,7 @@ namespace BusinessLogic.Services
                     wo.AssignedToId = null;
                     history.NewValue = "";
                 }
-                 
+
             }
             if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
             {
@@ -398,8 +424,10 @@ namespace BusinessLogic.Services
                 }
             }
 
-            var status = await _workOrder.Update(wo);
            
+
+            var status = await _workOrder.Update(wo);
+
             await _history.Add(history);
             if (status > 0)
             {
@@ -409,6 +437,8 @@ namespace BusinessLogic.Services
             }
             return false;
         }
+
+       
 
         public async Task<List<CommentDTO>> GetComment(string workorderId, int pageNumber)
         {
@@ -656,6 +686,209 @@ namespace BusinessLogic.Services
             if (data != null)
                 return data;
             return null;
+        }
+
+        public async Task<bool> CreateRecurringWO(CreateRecurringWO createWO, List<IFormFile> file)
+        {
+            WorkOrder workOrder = await CreateWOObject(createWO, file);
+            workOrder.Recurring = true;
+            workOrder.EndAfterCount = createWO.EndAfterCount;
+            workOrder.RecurringEndDate = createWO.RecurringEndDate;
+            workOrder.CronExpression = createWO.CronExpression;
+            var status = await _workOrder.Add(workOrder);
+            if (status > 0)
+            {
+                if(createWO.RecurringStartDate.HasValue)
+                {
+                    _recurringWorkOrderJob.RunAddScheduleJob(workOrder.CronExpression, workOrder.Id, createWO.RecurringStartDate.Value);
+                }
+                else
+                    _recurringWorkOrderJob.RunCreateWoJob(workOrder.CronExpression, workOrder.Id);
+
+                if (createWO.RecurringEndDate.HasValue)
+                {
+                  
+
+                    _recurringWorkOrderJob.RunRemoveScheduleJob(createWO.RecurringEndDate.Value, workOrder.Id);
+                }
+                
+                //create notification
+                //getting all the person whom property is assigned
+                var users = await GetUsersToSendNotification(workOrder);
+                await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<EditRecurringWorkOrder> GetEditRecurringWO(string id)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
+            var temp = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.WOAttachments).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Property).ThenInclude(x => x.Locations).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).AsNoTracking().FirstOrDefaultAsync();
+
+            var editwo = new EditRecurringWorkOrder();
+            editwo.Id = temp.Id;
+            editwo.PropertyName = temp.Property.PropertyName;
+            editwo.Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
+            editwo.Description = temp.Description;
+            editwo.IssueId = temp.IssueId;
+            editwo.RecurringEndDate = temp.RecurringEndDate;
+            editwo.RecurringStartDate = temp.RecurringStartDate;
+            editwo.ItemId = temp.ItemId;
+            editwo.CreatedDate = temp.CreatedTime;
+            editwo.VendorId = temp.VendorId;
+            editwo.Priority = temp.Priority;
+            editwo.CronExpression =!string.IsNullOrEmpty(temp.CronExpression)? new ExpressionDescriptor(temp.CronExpression, new Options {
+                DayOfWeekStartIndexZero = false,
+                Use24HourTimeFormat=true
+            }).GetDescription(DescriptionTypeEnum.FULL):"";
+            editwo.DueDate = temp.DueDate;
+            editwo.LocationId = temp.LocationId.GetValueOrDefault();
+            editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
+            editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
+             string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList();
+
+            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.ItemName
+            }).AsNoTracking().ToListAsync();
+            editwo.Vendors = await _vendors.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.VendorName
+            }).AsNoTracking().ToListAsync();
+            editwo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.IssueName
+            }).AsNoTracking().ToListAsync();
+
+            editwo.SubLocations = await _sublocation.GetAll().Where(x => x.LocationId == editwo.LocationId).Select(x => new SelectItem { Id = x.Id, PropertyName = x.AreaName }).AsNoTracking().ToListAsync();
+            //get selected department and user
+            if (temp.AssignedTo != null)
+            {
+                editwo.Category = "user";
+                editwo.OptionId = (int)temp.AssignedToId;
+                editwo.Options = await GetDataByCategory("user");
+            }
+            else if (temp.AssignedToDeptId != null)
+            {
+                editwo.Category = "department";
+                editwo.OptionId = temp.AssignedToDeptId;
+                editwo.Options = await GetDataByCategory("department");
+            }
+            else
+                editwo.Category = "anyone";
+
+            return editwo;
+        }
+
+        public async Task<bool> EditRecurringWO(EditRecurringWorkOrder editWorkOrder, List<IFormFile> File)
+        {
+            History history = new History();
+            var userObj = await _appuser.FindByIdAsync(userId.ToString());
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.Comments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
+            if (wo != null)
+            {
+
+                if (File != null)
+                {
+                    foreach (var item in File)
+                    {
+                        var path = await _imageuploadinfile.UploadAsync(item);
+                        if (path != null)
+                        {
+                            if (wo.WOAttachments == null) wo.WOAttachments = new List<WOAttachments>();
+                            wo.WOAttachments.Add(new WOAttachments
+                            {
+                                FileName = item.FileName,
+                                FilePath = path
+                            });
+                        }
+                    }
+                }
+                wo.Description = editWorkOrder.Description;
+                wo.IssueId = editWorkOrder.IssueId;
+                wo.ItemId = editWorkOrder.ItemId;
+                wo.DueDate = editWorkOrder.DueDate;
+                wo.LocationId = editWorkOrder.LocationId;
+                wo.VendorId = editWorkOrder.VendorId;
+                wo.Priority = editWorkOrder.Priority;
+                wo.CronExpression = editWorkOrder.CronExpression;
+                wo.EndAfterCount = editWorkOrder.EndAfterCount;
+                wo.RecurringEndDate= editWorkOrder.RecurringEndDate;
+                wo.RecurringStartDate= editWorkOrder.RecurringStartDate;
+                wo.SubLocationId = editWorkOrder.SubLocationId;
+
+                //adding history
+                history.Entity = "WorkOrder";
+                history.PropertyName = "Assigned To";
+                history.RowId = wo.Id;
+                history.OldValue = wo.AssignedTo != null ? string.Concat(wo.AssignedTo.FirstName, " ", wo.AssignedTo.LastName) : wo.AssignedToDept != null ? wo.AssignedToDept.DepartmentName : "NA";
+                if (editWorkOrder.Category.Equals("user"))
+                {
+
+                    wo.AssignedToDeptId = null;
+                    wo.AssignedToId = editWorkOrder.OptionId;
+                    history.NewValue = _appuser.Users.Where(x => x.Id == editWorkOrder.OptionId).Select(x => string.Concat(x.FirstName, " ", x.LastName)).FirstOrDefault();
+                }
+                else if (editWorkOrder.Category.Equals("department"))
+                {
+                    wo.AssignedToId = null;
+                    wo.AssignedToDeptId = editWorkOrder.OptionId;
+                    history.NewValue = _department.Get(x => x.Id == editWorkOrder.OptionId).Select(x => x.DepartmentName).FirstOrDefault();
+                }
+                else
+                {
+                    wo.AssignedToDeptId = null;
+                    wo.AssignedToId = null;
+                    history.NewValue = "";
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
+            {
+                var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
+                foreach (var item in remove)
+                {
+                    var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
+                    _imageuploadinfile.Delete(tempurl);
+                    var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
+                    wo.WOAttachments.Remove(woAttch);
+                }
+            }
+
+
+
+            var status = await _workOrder.Update(wo);
+
+            await _history.Add(history);
+            if (status > 0)
+            {
+
+                //cancel all jobs
+                _recurringWorkOrderJob.RunRemoveScheduleJob(wo.Id);
+                //create new jobs
+                if (wo.RecurringStartDate.HasValue)
+                {
+                    _recurringWorkOrderJob.RunAddScheduleJob(wo.CronExpression, wo.Id, wo.RecurringStartDate.Value);
+                }
+                else
+                    _recurringWorkOrderJob.RunCreateWoJob(wo.CronExpression, wo.Id);
+
+                if (wo.RecurringEndDate.HasValue)
+                {
+
+
+                    _recurringWorkOrderJob.RunRemoveScheduleJob(wo.RecurringEndDate.Value, wo.Id);
+                }
+                var users = await GetUsersToSendNotification(wo);
+                await _notifier.CreateNotification(editWorkOrder.Id + " has been updated by " + userObj.FirstName + " " + userObj.LastName, users, editWorkOrder.Id, "WE");
+                return true;
+            }
+            return false;
         }
     }
 }

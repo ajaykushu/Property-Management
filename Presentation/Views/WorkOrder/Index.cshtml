@@ -1,184 +1,196 @@
 ﻿@model WOFilterModel
 @{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
-<form class="form">
-    <div class="card wofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
-        <div class="card-body">
-            <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
-            <div class="form-row">
-                <div class="col-xs-5">
-                    <label asp-for="TermSearch"></label>
-                    <input asp-for="TermSearch"  class="form-control form-control-sm custom-input">
-                  
-                </div>
-                <div class="col-xs-5">
-                    <label asp-for="WOId"></label>
-                    <input asp-for="WOId"  class="form-control form-control-sm custom-input">
-                    
-                </div>
-                <div class="col-xs-5">
-                    <label asp-for="AssignedTo"></label>
-                    <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
-                   
-                </div>
-                <div class="col-xs-5">
-                    <label asp-for="PropertyName"></label>
-                    <input asp-for="PropertyName" class="form-control form-control-sm custom-input">
-                  
-                </div>
-                <div class="col-xs-5">
-                    <label asp-for="CreationStartDate"></label>
-                    <input asp-for="CreationStartDate" type="date" class="form-control form-control-sm custom-input">
-                </div>
-                <div class="col-xs-5">
-                    <label asp-for="CreationEndDate"></label>
-                    <input asp-for="CreationEndDate" type="date" class="form-control form-control-sm custom-input">
-                </div>
-                <div class="col-xs-5">
-                    <label asp-for="DueDate"></label>
-                    <input asp-for="DueDate" type="date" class="form-control form-control-sm custom-input">
-                </div>
-                <div class="col-xs-5">
-                    <label>Priority</label>
-                    <select asp-for="Priority" type="date" class="form-control form-control-sm custom-input">
-                        <option value="">--Select--</option>
-                        <option value="0">Critical</option>
-                        <option value="1">High</option>
-                        <option value="2">Medium</option>
-                        <option value="3">Low</option>
-                    </select>
-                </div>
-                <div class="col-xs-5">
-                    <label>Status</label>
-                    <select asp-for="Status" class="form-control top-buffer form-control-sm custom-input">
-                        <option value="">--Select--</option>
-                        <option value="ADCM">Add Comment Only</option>
-                        <option value="BINE">BID Needed</option>
-                        <option value="BIRE">BID Received</option>
-                        <option value="COMP">Complete</option>
-                        <option value="COBQ">Complete But Bad Quality</option>
-                        <option value="CONI">Complete, Need Inspection</option>
-                        <option value="DAIL">Daily</option>
-                        <option value="FISC">Finalize Scope</option>
-                        <option value="HOLD">Hold</option>
-                        <option value="NEWO">New WO</option>
-                        <option value="ORMA">Order Materials</option>
-                        <option value="PEND">Pending</option>
-                        <option value="REAS">Ready To Assign</option>
-                        <option value="WOAS">Work Assigned</option>
-                        <option value="WOPR">Work In Progress</option>
-                        <option value="WOOR">Work Ordered</option>
-                    </select>
-                </div>
-                <div class="col-xs-5">
-                    <label>Vendor</label>
-                    <input asp-for="Vendor"  class="form-control top-buffer form-control-sm custom-input">
-                </div>
-            </div>
-            <div class="d-lg-inline-flex">
-                <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
-                &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
-            </div>
-        </div>
-    </div>
-    <hr />
-    @{ var param = Model.GetType()
-         .GetProperties()
-         .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
-    }
-    <div class="workordertitle">
-        Work Orders
-        <div class="Filter_con float-right">
-            <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
-            <i class="fa fa-filter"></i>
-        </div>
+    <form class="form">
+        <div class="card wofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
+            <div class="card-body">
+                <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
+                <div class="form-row">
+                    <div class="col-xs-5">
+                        <label asp-for="TermSearch"></label>
+                        <input asp-for="TermSearch" class="form-control form-control-sm custom-input">
 
-        <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>
-    </div>
-    @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
-    {
-    <table class="table table-striped wordorderdetail table_container table-responsive-lg">
-        <thead>
-            <tr>
-                <th scope="col" colspan="5" class="mytitle">
+                    </div>
+                    <div class="col-xs-5">
+                        <label asp-for="WOId"></label>
+                        <input asp-for="WOId" class="form-control form-control-sm custom-input">
+
+                    </div>
+                    <div class="col-xs-5">
+                        <label asp-for="AssignedTo"></label>
+                        <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
+
+                    </div>
+                    <div class="col-xs-5">
+                        <label asp-for="PropertyName"></label>
+                        <input asp-for="PropertyName" class="form-control form-control-sm custom-input">
+
+                    </div>
+                    <div class="col-xs-5">
+                        <label asp-for="CreationStartDate"></label>
+                        <input asp-for="CreationStartDate" type="date" class="form-control form-control-sm custom-input">
+                    </div>
+                    <div class="col-xs-5">
+                        <label asp-for="CreationEndDate"></label>
+                        <input asp-for="CreationEndDate" type="date" class="form-control form-control-sm custom-input">
+                    </div>
+                    <div class="col-xs-5">
+                        <label asp-for="DueDate"></label>
+                        <input asp-for="DueDate" type="date" class="form-control form-control-sm custom-input">
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Priority</label>
+                        <select asp-for="Priority" type="date" class="form-control form-control-sm custom-input">
+                            <option value="">--Select--</option>
+                            <option value="0">Critical</option>
+                            <option value="1">High</option>
+                            <option value="2">Medium</option>
+                            <option value="3">Low</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Status</label>
+                        <select asp-for="Status" class="form-control top-buffer form-control-sm custom-input">
+                            <option value="">--Select--</option>
+                            <option value="ADCM">Add Comment Only</option>
+                            <option value="BINE">BID Needed</option>
+                            <option value="BIRE">BID Received</option>
+                            <option value="COMP">Complete</option>
+                            <option value="COBQ">Complete But Bad Quality</option>
+                            <option value="CONI">Complete, Need Inspection</option>
+                            <option value="DAIL">Daily</option>
+                            <option value="FISC">Finalize Scope</option>
+                            <option value="HOLD">Hold</option>
+                            <option value="NEWO">New WO</option>
+                            <option value="ORMA">Order Materials</option>
+                            <option value="PEND">Pending</option>
+                            <option value="REAS">Ready To Assign</option>
+                            <option value="WOAS">Work Assigned</option>
+                            <option value="WOPR">Work In Progress</option>
+                            <option value="WOOR">Work Ordered</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Vendor</label>
+                        <input asp-for="Vendor" class="form-control top-buffer form-control-sm custom-input">
+                    </div>
+                </div>
+                <div class="d-lg-inline-flex">
+                    <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
+                    &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
+                </div>
+            </div>
+        </div>
+        <hr />
+        @{ var param = Model.GetType()
+               .GetProperties()
+               .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
+        }
+        <div class="workordertitle">
+            Work Orders
+            <div class="Filter_con float-right">
+                <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
+                <i class="fa fa-filter"></i>
+            </div>
+
+            <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>
+        </div>
+       
+                <div class="d-inline-flex w-100 pt-1 pb-1" style="border:inset;" >
+                    <div class="justify-content-lg-start col-md-6">
                     To Do List
-                </th>
-                <th scope="col" colspan="2" class="button">
-                    <a class="addnewbutton btn" value="CreateWorkOrder" asp-action="CreateWorkOrder"><i class="fa fa-plus"></i>&nbsp;New</a>
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @foreach (var item in ResponseModel.Payload)
-            {
-            <tr>
-                <td>
-                    <span><strong class="@if(item.IsRecurring){<text>green</text>}else{<text>orange</text>}">@item.Id</strong></span>
-                </td>
+                 </div>
+                <div class="justify-content-end col-md-3" >
+                    <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderView" ><i class="fa fa-plus"></i>&nbsp;New Wo</a>
+                </div>
+                <div  class="justify-content-end col-md-3">
+                    <a class="btn btn-success fa-pull-right" value="CreateWorkOrderRecurring" asp-action="CreateWorkOrderRecurringView"><i class="fa fa-plus"></i>&nbsp;Recurring WO</a>
+                </div>
+                    </div>
+      
+       
+        @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
+        {
+            <table class="table table-striped wordorderdetail table_container table-responsive-lg">
                
-                <td><span style="word-break:normal">@item.Description</span></td>
-                <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
-                <td>
-                    <span class="text-dark">
-                        @if (item.Property != null)
-                                {@item.Property.PropertyName}
-                    </span>
-                </td>
-                <td>@item.DueDate</td>
-                <td style="min-width:200px;">
-                    @{
-                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                                keyValuePairs.Add("id", item.Id + "");
-                        <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                        <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
-                    }
-                </td>
-            </tr>
-                }
-        </tbody>
-    </table>
-    <hr />
+                <tbody>
 
-    <nav>
-        <ul class="pagination">
-            @{ int current = 0;}
-            <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
-                @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
-            </li>
-
-            @for (int i = 0; i < ResponseModel.PageCount; i++)
-                {
-
-                    if (ResponseModel.CurrentPage == i)
+                    @foreach (var item in ResponseModel.Payload)
                     {
-            <li class="page-item active">
-                <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-            </li>
-                        current = i;
-                    }
-                    else
-                    {
-            <li class="page-item">
-                @{ Model.PageNumber = i;}
-                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-            </li>
-                    }
-                }
-            @{ Model.PageNumber = current + 1;}
-            <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
-                @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-            </li>
-        </ul>
-    </nav>
+                        <tr>
+                            <td>
+                                <span><strong class="@if (item.Recurring) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
+                            </td>
 
-    }
-    else
-    {
-    <span> No Record Found</span>
+                            <td><span style="word-break:normal">@item.Description</span></td>
+                            <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                            <td>
+                                <span class="text-dark">
+                                    @if (item.Property != null)
+                                    {@item.Property.PropertyName}
+                                </span>
+                            </td>
+                            <td>@item.DueDate</td>
+                            <td style="min-width:200px;">
+                                @{
+                                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                    keyValuePairs.Add("id", item.Id + "");
+                                    if (!item.Recurring)
+                                    {
+                                        <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                    }
+                                    else
+                                    {
+                                        <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                        
+                                                    }
+                                    <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+               
+            </table>
+            <hr />
+                <nav>
+                    <ul class="pagination">
+                        @{ int current = 0;}
+                        <li class="page-item @if (ResponseModel.CurrentPage == 0)
+                    {<text>disabled</text> }">
+                            @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                        </li>
 
-    }
-</form>
+                        @for (int i = 0; i < ResponseModel.PageCount; i++)
+                        {
+
+                            if (ResponseModel.CurrentPage == i)
+                            {
+                                <li class="page-item active">
+                                    <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                                </li>
+                                current = i;
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    @{ Model.PageNumber = i;}
+                                    @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                                </li>
+                            }
+                        }
+                        @{ Model.PageNumber = current + 1;}
+                        <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
+                    {<text>disabled</text> }">
+                            @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                        </li>
+                    </ul>
+                </nav>
+                            }
+                            else
+                            {
+                                <span>No Record found</span>
+                            }
+        </form>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";

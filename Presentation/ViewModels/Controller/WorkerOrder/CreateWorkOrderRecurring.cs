@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Presentation.ViewModels
 {
     [Serializable]
-    public class CreateWorkOrder
+    public class CreateWorkOrderRecurring
     {
         [DisplayName("Location")]
         public int LocationId { get; set; }
@@ -41,7 +43,7 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
-        [Required(ErrorMessage ="Please Select Assign to")]
+        [Required(ErrorMessage = "Please Select Assign to")]
         public string Category { get; set; }
         public List<SelectItem> Options { get; set; }
         [DisplayName("Option")]
@@ -57,6 +59,10 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
-       
+        [Required(ErrorMessage ="Please Enter Schedule Details")]
+        public string CronExpression { get; set; }
+        public DateTime? RecurringEndDate { get; set; }
+        public int? EndAfterCount { get; set; }
+        public DateTime? RecurringStartDate { get; set; }
     }
 }

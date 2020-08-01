@@ -18,6 +18,6 @@ namespace DataAccessLayer.Interfaces
 
         Task<int> Add(TEntity entity);
 
-        AppDBContext GetObj();
+       // Task<TEntity> ExecuteSql(string sql);
     }
 }

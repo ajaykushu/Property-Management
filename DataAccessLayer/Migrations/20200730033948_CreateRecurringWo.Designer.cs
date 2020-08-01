@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200730033948_CreateRecurringWo")]
+    partial class CreateRecurringWo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "a81c8f7a-5cec-4827-a746-b23371a6fcc1",
+                            ConcurrencyStamp = "1dcecae8-f201-4f8b-ac04-774d2932b794",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "c2df9448-938f-4719-b220-334c2922674b",
+                            ConcurrencyStamp = "94091e48-5fb1-4360-b967-eb53f91df6da",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "eff581ad-97b5-4df2-a404-14e9662f5c11",
+                            ConcurrencyStamp = "07df77c3-c42d-47cb-9d43-aa5a0e60dad4",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -1344,9 +1346,6 @@ namespace DataAccessLayer.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("RecurringEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RecurringStartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RequestedBy")

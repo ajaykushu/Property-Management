@@ -45,9 +45,9 @@ namespace DataAccessLayer.Repository
             return context.SaveChangesAsync();
         }
 
-        public AppDBContext GetObj()
-        {
-            return this.context;
-        }
+        //public Task<TEntity> ExecuteSql()
+        //{
+        //    context.ExecuteQuery<TEntity>(sql, "ALFKI");
+        //}
     }
 }

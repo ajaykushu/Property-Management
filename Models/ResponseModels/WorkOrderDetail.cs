@@ -24,5 +24,7 @@ namespace Models.ResponseModels
         public List<SelectItem> Statuses { get; set; }
         public string Vendor { get; set; }
         public Pagination<List<CommentDTO>> Comments { get; set; }
+        public bool Recurring { get; set; }
+        public string ScheduledAt { get; set; }
     }
 }

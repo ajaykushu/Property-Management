@@ -24,6 +24,7 @@ namespace API
             var contextFeature = httpContext.Features.Get<IExceptionHandlerFeature>();
             if (contextFeature != null)
             {
+                
                 httpContext.Response.ContentType = "application/json";
                 _logger.LogInformation(contextFeature.Error.Message + "\nStack Trace: " + contextFeature.Error.StackTrace);
                 switch (contextFeature.Error.GetType().Name)

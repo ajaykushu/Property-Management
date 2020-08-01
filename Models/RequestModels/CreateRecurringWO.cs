@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models.RequestModels
 {
-    public class CreateWO
+    public class CreateRecurringWO
     {
         public List<SelectItem> Locations { get; set; }
 
@@ -44,7 +44,10 @@ namespace Models.RequestModels
 
         public int? VendorId { get; set; }
         public List<SelectItem> Vendors { get; set; }
-
-        
+        [Required]
+        public string CronExpression { get; set; }
+        public DateTime? RecurringEndDate { get; set; }
+        public DateTime? RecurringStartDate { get; set; }
+        public int? EndAfterCount { get; set; }
     }
 }

@@ -95,6 +95,7 @@ namespace API
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IWorkOrderService, WorkOrderService>();
             services.AddScoped<INotifier, Notifications>();
+            services.AddScoped<IRecurringWorkOrderJob,RecurringWorkOrderJob>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

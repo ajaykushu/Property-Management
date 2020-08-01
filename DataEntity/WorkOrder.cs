@@ -24,10 +24,13 @@ namespace DataEntity
         public string RequestedBy { get; set; }
         public long? AssignedToId { get; set; }
         public int? AssignedToDeptId { get; set; }
-        public bool IsRecurring { get; set; }
-        [Column(TypeName = "varchar(1)")]
-        public string RecurringType { get; set; }//D,W,M,Y
-        public DateTime RecurringTime { get; set; }
+        #region Recurring
+        public bool Recurring { get; set; }
+        public string CronExpression { get; set; }
+        public DateTime? RecurringEndDate { get; set; }
+        public DateTime? RecurringStartDate { get; set; } 
+        public int? EndAfterCount { get; set; } 
+        #endregion
         public int? VendorId { get; set; }
         public Vendor Vendor { get; set; }
         public DateTime DueDate { get; set; }

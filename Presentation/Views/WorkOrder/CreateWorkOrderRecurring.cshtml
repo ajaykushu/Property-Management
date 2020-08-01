@@ -1,13 +1,13 @@
-﻿@model CreateWorkOrder
+﻿@model CreateWorkOrderRecurring
 @{
-    ViewData["Title"] = "Create WorkOrder";
+    ViewData["Title"] = "Create Recurring WorkOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="workordertitle">
-    New Work Order
+    New Recurring Work Order
 </div>
-<form class="form" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
+<form class="form" id="wocreaterecurring" asp-action="CreateWORecurring" asp-controller="WorkOrder">
     @if (Model == null)
     {
         <p>No Record Found</p>
@@ -16,6 +16,14 @@
     {
         <table class="table table_container">
             <tbody>
+                <tr>
+                    <td>
+                        <section id="sch">
+                            <partial name="SchedulerView.cshtml"> 
+                        </section>
+                        <span asp-validation-for="CronExpression"></span>
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <div class="col">
@@ -157,11 +165,11 @@
                                     <span asp-validation-for="Category" class="text-danger"></span>
                                 </div>
                                 <div class="col">
-                                   
-                                        <select class="form-control form-control-sm custom-input" asp-for="OptionId">
-                                            <option value="">Select Option</option>
-                                        </select>
-                                  
+
+                                    <select class="form-control form-control-sm custom-input" asp-for="OptionId">
+                                        <option value="">Select Option</option>
+                                    </select>
+
                                 </div>
                             </div>
                             @if (Model.Vendors != null && Model.Vendors.Any())
@@ -200,10 +208,10 @@
         <hr />
         <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-primary submit">Create</button>
         <input type="reset" class="btn btn-sm btn-danger" value="Reset" name="reset">
+        <input asp-for="CronExpression" hidden>
         @*passing data to controller*@
     }
 </form>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-

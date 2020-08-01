@@ -94,9 +94,9 @@
             <tbody>
                 @foreach (var item in ResponseModel.Payload)
                     {
-                <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id})'">
-                    <td style="padding-top:20px;padding-bottom:20px;">
-                        <span style="word-wrap:break-word;font-size:15px"><span class="d-inline-flex status @if(item.IsRecurring){<text>green</text>}else{ <text>orange</text>}"></span>@item.Description</span>
+                     <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id})'">
+                     <td style="padding-top:20px;padding-bottom:20px;">
+                        <span style="word-wrap:break-word;font-size:15px"><span class="d-inline-flex status @if(item.Recurring){<text>green</text>}else{ <text>orange</text>}"></span>@item.Description</span>
                     </td>
                     <td style="padding-right:0px;text-align:end;font-size:14px;color:grey;padding-top:20px;padding-bottom:20px;">@item.DueDate.Substring(0, 6)&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></td>
                 </tr>
@@ -146,9 +146,9 @@
 </form>
 
 <div class="bottom-stick">
-    <a href="#" onclick="location.reload();" class="nav-link" style="color:lightgray"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
+    <a  asp-action="CreateWorkOrderRecurringView" class="nav-link" style="color:lightgray"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
     <div class="container-block justify-content-end">
-        <a asp-action="CreateWorkOrder" class="nav-link" style="color:lightgray"><i class="fa fa-plus fa-2x"></i></a>
+        <a asp-action="CreateWorkOrderView" class="nav-link" style="color:lightgray"><i class="fa fa-plus fa-2x"></i></a>
     </div>
 </div>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))

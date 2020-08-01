@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200728150949_ForRecurring")]
+    partial class ForRecurring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "a81c8f7a-5cec-4827-a746-b23371a6fcc1",
+                            ConcurrencyStamp = "87eb7a46-07bf-42d8-926c-50a2de00fb8e",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "c2df9448-938f-4719-b220-334c2922674b",
+                            ConcurrencyStamp = "a1a93ca8-e063-45db-846e-bd4f1ef78a2b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "eff581ad-97b5-4df2-a404-14e9662f5c11",
+                            ConcurrencyStamp = "605a8015-2848-4b04-a182-b4be864aa20f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -1318,9 +1320,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EndAfterCount")
-                        .HasColumnType("int");
-
                     b.Property<int>("IssueId")
                         .HasColumnType("int");
 
@@ -1342,12 +1341,6 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("RecurringEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RecurringStartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("RequestedBy")
                         .HasColumnType("varchar(50)");
