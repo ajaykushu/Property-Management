@@ -139,8 +139,11 @@ namespace BusinessLogic.Services
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
+                EndAfterCount=x.EndAfterCount,
+                RecurringEndDate=x.RecurringEndDate,
+                RecurringStartDate=x.RecurringStartDate,
                 Recurring=x.Recurring,
-                ScheduledAt =!string.IsNullOrEmpty(x.CronExpression)? new ExpressionDescriptor(x.CronExpression, new Options
+                CronExpression =!string.IsNullOrEmpty(x.CronExpression)? new ExpressionDescriptor(x.CronExpression, new Options
                 {
                     DayOfWeekStartIndexZero = false,
                     Use24HourTimeFormat = true
@@ -735,6 +738,7 @@ namespace BusinessLogic.Services
             editwo.IssueId = temp.IssueId;
             editwo.RecurringEndDate = temp.RecurringEndDate;
             editwo.RecurringStartDate = temp.RecurringStartDate;
+            editwo.EndAfterCount = temp.EndAfterCount;
             editwo.ItemId = temp.ItemId;
             editwo.CreatedDate = temp.CreatedTime;
             editwo.VendorId = temp.VendorId;

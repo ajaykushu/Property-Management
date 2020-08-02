@@ -27,8 +27,8 @@ namespace Utilities
         {
             
             var obj =  _workOrder.Get(x => x.Id == woId).Include(x=>x.WOAttachments).FirstOrDefault();
-            string status = await _history.Get(x => x.Entity == "WorkOrder" && x.RowId == woId).OrderBy(x => x.CreatedTime).Take(1).Select(x=>x.OldValue).FirstOrDefaultAsync();
-            if (obj.EndAfterCount.HasValue && obj.EndAfterCount == 0)
+            string status = await _history.Get(x => x.Entity == "WorkOrder" && x.RowId == woId && x.PropertyName=="Status").OrderBy(x => x.CreatedTime).Take(1).Select(x=>x.OldValue).AsNoTracking().FirstOrDefaultAsync();
+            if (obj.EndAfterCount.HasValue && obj.EndAfterCount.HasValue && obj.EndAfterCount.Value == 0)
             {
                 RecurringJob.RemoveIfExists(woId);
             }
@@ -60,7 +60,7 @@ namespace Utilities
             var wo = _workOrder.Get(x => x.Id.Equals(woId)).FirstOrDefault();
             if (wo != null)
                 if (wo.RecurringStartDate.HasValue)
-                    if (wo.RecurringStartDate.Value != DateTime.Now)
+                    if (wo.RecurringStartDate.Value.Date != DateTime.Now.Date)
                         return;
             RecurringJob.AddOrUpdate(woId,() => CreateRecurringWO(woId),cron);
         }
@@ -76,7 +76,7 @@ namespace Utilities
             
         }
 
-        private void RemoveRecurringWo(string woId)
+        public void RemoveRecurringWo(string woId)
         {
             RecurringJob.RemoveIfExists(woId);
         }

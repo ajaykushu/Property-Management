@@ -25,6 +25,9 @@ namespace Models.ResponseModels
         public string Vendor { get; set; }
         public Pagination<List<CommentDTO>> Comments { get; set; }
         public bool Recurring { get; set; }
-        public string ScheduledAt { get; set; }
+        public DateTime? RecurringEndDate { get; set; }
+        public int? EndAfterCount { get; set; }
+        public string CronExpression { get; set; }
+        public DateTime? RecurringStartDate { get; set; }
     }
 }

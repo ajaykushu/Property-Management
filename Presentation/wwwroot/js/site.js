@@ -389,16 +389,81 @@ $('#history_button').click(function (e) {
     
 })
 $('#type-select').change(function () {
+    EnableReqInput();
+})
+$('input[name="sub-radio"]').click(function () {
+    EnableReqInput();
+})
+EnableReqInput();
+function EnableReqInput () {
     var value = '#' + $('#type-select').val();
     var nodes = $('#type-select > option').each(function (key) {
-        var valuetemp = '#' + $(this).val();
+        var valuetemp = '#' + $('#type-select > option')[key].value;
         if (value != valuetemp) {
             $(valuetemp).hide();
-           
+            $(valuetemp + ' :input[type="number"]').each(function (e) {
+                $(valuetemp + ' :input[type="number"]')[e].disabled = true;
+            })
+            $(valuetemp + ' select').each(function (e) {
+                $(valuetemp + ' select')[e].disabled = true;
+            })
         }
     });
+    if (value == '#Yearly') {
+        $(value + ' :input').each(function (e) {
+            $(value + ' :input')[e].disabled = false;
+        });
+    }
     $(value).show();
+    
+    $('input[name="sub-radio"]').each(function (e) {
+        
+        if ($('input[name="sub-radio"]')[e].checked) {
+            var id = '.' + $('input[name="sub-radio"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = false;
+            });
+            $(id + ' select').each(function (key) {
+                $(id + ' select')[key].disabled = false;
+            });
+        }
+        else {
+            var id = '.' + $('input[name="sub-radio"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = true;
+            });
+            $(id + ' select').each(function (key) {
+                $(id + ' select')[key].disabled = true;
+            });
+        }
+        
+    })
+    
+   
+}
+$('input[name="end-select"]').change(function () {
+    EndInputEnabler();
 });
+EndInputEnabler();
+function EndInputEnabler() {
+    $('input[name="end-select"]').each(function (e) {
+
+        if ($('input[name="end-select"]')[e].checked) {
+            var id = '.' + $('input[name="end-select"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = false;
+            });
+        }
+        else {
+            var id = '.' + $('input[name="end-select"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = true;
+            });
+        }
+
+    })
+}
+
 
 function GenarateCron() {
     var cron = '*1 *2 *3 *4 *5';
@@ -415,13 +480,13 @@ function GenarateCron() {
     //if the value is daily
     if ($('input[name="type-select"]:checked').val() == "Daily" || $('#type-select').val() == "Daily") {
 
-        if ($('input[name="daily-type-select"]:checked').val() == "Every") {
+        if ($('input[name="sub-radio"]:checked').val() == "Every") {
             var value = $('#daily-occurence').val() != '' ? '*/'+$('#daily-occurence').val() : '*';
             cron = cron.replace('*3', value);
 
         }
-        else if ($('input[name="daily-type-select"]:checked').val() == "Weekdays") {
-            cron = cron.replace('*5', '1-5');
+        else if ($('input[name="sub-radio"]:checked').val() == "Weekdays") {
+            cron = cron.replace('*5', '2-6');
         }
     }
     else if ($('input[name="type-select"]:checked').val() == "Weekly" || $('#type-select').val() == "Weekly") {
@@ -438,12 +503,12 @@ function GenarateCron() {
 
     }
     else if ($('input[name="type-select"]:checked').val() == "Monthly" || $('#type-select').val()== "Monthly") {
-        if ($('input[name="select-day-month"]:checked').val() == "Day") {
+        if ($('input[name="sub-radio"]:checked').val() == "Day") {
             var value = $('#month').val() != '' ? '*/' + $('#month').val() : '*';
             var value1 = $('#day').val() != '' ? $('#day').val() : "*";
             cron = cron.replace('*3', value1).replace('*4', value);
         }
-        else if ($('input[name="select-day-month"]:checked').val() == "Month") {
+        else if ($('input[name="sub-radio"]:checked').val() == "Month") {
             var capturedday = $('#select-day-option').val();
             if ($('#select-day-option').val() == "L") {
                 var months = [1, 3, 5, 7, 8, 10, 12]

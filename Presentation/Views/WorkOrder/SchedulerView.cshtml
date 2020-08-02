@@ -1,4 +1,7 @@
-﻿<table class="table schedular table-responsive-sm border-0"  >
+﻿@model dynamic
+
+
+<table class="table schedular table-responsive-sm border-0"  >
     <tr>
         <td colspan="4">
             <strong>Recurrence Pattern</strong>
@@ -11,128 +14,143 @@
                 <input class="form-check-input" checked name="type-select" type="radio" id="Radio1" value="Daily" >
                 <label class="form-check-label" for="Radio1">Daily</label>
             </div>
+
             <div class="form-check pt-1">
                 <input class="form-check-input" name="type-select" type="radio" id="Radio2" value="Weekly">
                 <label class="form-check-label" for="Radio2">Weekly</label>
             </div>
+
             <div class="form-check pt-1">
                 <input class="form-check-input" name="type-select" type="radio" id="Radio3" value="Monthly">
                 <label class="form-check-label" for="Radio3">Monthly</label>
             </div>
+
             <div class="form-check pt-1">
                 <input class="form-check-input" name="type-select" type="radio" id="Radio4" value="Yearly">
                 <label class="form-check-label" for="Radio4">Yearly</label>
             </div>
-                </section>
+
+             </section>
+        
         </td>
       
         <td colspan="3">
             <section id="Monthly" style="display:none">
-                
+
                 <div class="form-check" id="type-month">
-                    <input class="form-check-input" type="radio" id="select-day" name="select-day-month" value="Day" checked>
+                    <input class="form-check-input" type="radio" id="monthly-sub-section-1" name="sub-radio" value="Day" checked>
                     <label class="form-check-label" for="day">Day</label>
-                 </div>
-                <div class="form-group pt-1">
-                    <input class="form-control form-control-sm custom-input " min="1" max="31" type="number" id="day">
-                    <label for="day">Of Every</label>
-                    <input class="form-control form-control-sm custom-input" min="1" max="12" type="number" id="month">
-                    <label for="month">Month</label>
                 </div>
-               
-                <div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" id="select-month" name="select-day-month" value="Month">
-                        <label class="form-check-label" for="select-month">The</label>
-                    </div>
-                     
+                <section class="monthly-sub-section-1">
                     <div class="form-group pt-1">
-                        <select class="form-control form-control-sm custom-input" type="text" id="select-day-option">
-                            <option value="1">First</option>
-                            <option value="2">Second</option>
-                            <option value="3">Third</option>
-                            <option value="4">Fourth</option>
-                            <option value="L">Last</option>
-                        </select>
-                        <select class="form-control form-control-sm custom-input mt-1" type="text" id="select-week-option">
-                            <option value="Mon">Monday</option>
-                            <option value="Tue">Tuesday</option>
-                            <option value="Wed">Wenesday</option>
-                            <option value="Thu">Thursday</option>
-                            <option value="Fri">Friday</option>
-                            <option value="Sat">Saturday</option>
-                            <option value="Sun">Sunday</option>
-                        </select>
-                        <label>Of Every</label>
-                        <input class="form-control form-control-sm custom-input" min="1" max="12" type="number" id="input-month">
+                        <input class="form-control form-control-sm custom-input " min="1" max="31" type="number" id="day">
+                        <label for="day">Of Every</label>
+                        <input class="form-control form-control-sm custom-input" min="1" max="12" type="number" id="month">
                         <label for="month">Month</label>
                     </div>
-                    </div>
-</section>
-            <section id="Daily" >
-                <div class="form-check ">
-                    <input class="form-check-input" name="daily-type-select" type="radio" id="daily-type-select1" value="Every" checked>
-                    <label class="form-check-label" for="daily-type-select2">Every</label>
-                </div>
-                <div class="form-group pt-1">
-                    <input class="form-control form-control-sm custom-input w-50" id="daily-occurence" type="number" min="1" max="90">
-                    <label>Day(s)</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" name="daily-type-select" type="radio" id="daily-type-select2" value="Weekdays">
-                    <label class="form-check-label" for="daily-type-select2">Every weekday</label>
-                </div>
-            </section>
-            <section id="Yearly" style="display:none">
-                <label class="col-form-label">Recur year(s) on:</label>
-                <br />
-                <div class="form-group">
-                    <label class="year-month-day">Day</label>
-                    <input type="number" id="year-day" max="1" min="31" class="form-control form-control-sm custom-input">
-                </div>
-                <div class="form-group">
-                    <label for="year-month">Month</label>
-                    <input type="number" id="year-month" class="form-control form-control-sm custom-input" min="1" max="12">
-                </div>
-
-
-            </section>
-            <section id="Weekly" style="display:none">
-                <label class="col-form-label" for="select-week">Recur every week(s) on:</label>
-                <div class="pt-2 pl-4">
+                    </section>
+                <div>
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="1">
-                        <label class="form-check-label" for="exampleCheck1">Monday</label>
+                        <input class="form-check-input" type="radio" id="monthly-sub-section-2" name="sub-radio" value="Month">
+                        <label class="form-check-label" for="select-month">The</label>
                     </div>
+                    <section class="monthly-sub-section-2">
+                        <div class="form-group pt-1">
+                            <select class="form-control form-control-sm custom-input" type="text" id="select-day-option">
+                                <option value="1">First</option>
+                                <option value="2">Second</option>
+                                <option value="3">Third</option>
+                                <option value="4">Fourth</option>
+                                <option value="L">Last</option>
+                            </select>
+
+                            <select class="form-control form-control-sm custom-input mt-1" type="text" id="select-week-option">
+                                <option value="Mon">Monday</option>
+                                <option value="Tue">Tuesday</option>
+                                <option value="Wed">Wenesday</option>
+                                <option value="Thu">Thursday</option>
+                                <option value="Fri">Friday</option>
+                                <option value="Sat">Saturday</option>
+                                <option value="Sun">Sunday</option>
+                            </select>
+
+                            <label>Of Every</label>
+                            <input class="form-control form-control-sm custom-input" min="1" max="12" type="number" id="input-month">
+                            <label for="month">Month</label>
+                        </div>
+                        </section>
+                </div>
+                </section>
+                <section id="Daily">
                     <div class="form-check ">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="2">
-                        <label class="form-check-label" for="exampleCheck1">Tuesday</label>
+                        <input class="form-check-input" name="sub-radio" type="radio" id="daily-sub-section-1" value="Every" checked>
+                        <label class="form-check-label" for="daily-type-select2">Every</label>
                     </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="3">
-                        <label class="form-check-label" for="exampleCheck1">Wednesday</label>
+                    <section class="daily-sub-section-1">
+                    <div class="form-group pt-1">
+                        <input class="form-control form-control-sm custom-input w-50" id="daily-occurence" type="number" min="1" max="90">
+                        <label>Day(s)</label>
                     </div>
+                        </section>
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="4">
-                        <label class="form-check-label" for="exampleCheck1">Thursday</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="5">
-                        <label class="form-check-label" for="exampleCheck1">Friday</label>
-
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="6">
-                        <label class="form-check-label" for="exampleCheck1">Saturday</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="exampleCheck1" value="7">
-                        <label class="form-check-label" for="exampleCheck1">Sunday</label>
+                        <input class="form-check-input" name="sub-radio" type="radio" id="daily-type-select2" value="Weekdays">
+                        <label class="form-check-label" for="daily-type-select2">Every weekday</label>
                     </div>
 
-                </div>
-            </section>
-        </td>
+                </section>
+                <section id="Yearly" style="display:none">
+                    <label class="col-form-label">Recur year(s) on:</label>
+                    <br />
+                    <div class="form-group">
+                        <label class="year-month-day">Day</label>
+                        <input type="number" id="year-day" max="1" min="31" class="form-control form-control-sm custom-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="year-month">Month</label>
+                        <input type="number" id="year-month" class="form-control form-control-sm custom-input" min="1" max="12">
+                    </div>
+                </section>
+
+                <section id="Weekly" style="display:none">
+                    <label class="col-form-label" for="select-week">Recur every week(s) on:</label>
+                    <div class="pt-2 pl-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="1">
+                            <label class="form-check-label" for="exampleCheck1">Monday</label>
+                        </div>
+
+                        <div class="form-check ">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="2">
+                            <label class="form-check-label" for="exampleCheck1">Tuesday</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="3">
+                            <label class="form-check-label" for="exampleCheck1">Wednesday</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="4">
+                            <label class="form-check-label" for="exampleCheck1">Thursday</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="5">
+                            <label class="form-check-label" for="exampleCheck1">Friday</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="6">
+                            <label class="form-check-label" for="exampleCheck1">Saturday</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="exampleCheck1" value="7">
+                            <label class="form-check-label" for="exampleCheck1">Sunday</label>
+                        </div>
+                    </div>
+                </section>
+</td>
     </tr>
     
     <tr>
@@ -143,37 +161,64 @@
     <tr>
         <td colspan="1">
             <div class="form-group">
-                <label  for="select-start-date">Start:</label>
+                <label for="select-start-date">Start:</label>
+                @if (Model.RecurringStartDate != null)
+                {
+                    @Html.TextBox("RecurringStartDate", (DateTime?)Model.RecurringStartDate, null, new { @class = "form-control form-control-sm custom-input", @min = DateTime.Now })
+                }
+                else
+                {
                 <input class="form-control form-control-sm custom-input" type="date" id='RecurringStartDate' name="RecurringStartDate">
+                }
             </div>
+
             <div class="form-group"  >
                 <label  for="select-at-time">Runs At:</label>
                 <input class="form-control form-control-sm custom-input" type="time" id="select-at-time">
             </div>
+
         </td>
         <td colspan="3">
             <div class="form-check">
                 <input class="form-check-input" checked name="end-select" type="radio" id="end-select" value="Always">
                 <label class="form-check-label" for="end-select">No End Date</label>
             </div>
+
             <div class="form-check pt-1 d-inline-flex">
                 <input class="form-check-input" name="end-select" type="radio" id="end-select2" value="weekly">
                 <label class="form-check-label" for="end-select2">End After</label>
             </div>
+            <section class="end-select2">
                 <div class="form-group pt-1">
-                    <input class="form-control form-control-sm custom-input" min="1" type="number" id="EndAfterCount" name="EndAfterCount">
+                    @if (Model.EndAfterCount != null)
+                    {
+                        @Html.TextBox("EndAfterCount", (int)Model.EndAfterCount, null, new { @class = "form-control form-control-sm custom-input", @min = 1 })
+                    }
+                    else
+                    {
+                        <input class="form-control form-control-sm custom-input" min="1" type="number" id="EndAfterCount" name="EndAfterCount">
+                    }
                     <label for="select-occur">Occurrences</label>
                 </div>
-             
+            </section>
             <div class="form-check pt-1 form-check-inline">
                 <input class="form-check-input" name="end-select" type="radio" id="end-select3" value="Monthly">
                 <label class="form-check-label" for="end-select3">End By</label>
             </div>
+            <section class="end-select3">
                 <div class="form-group">
-                    <input class="form-control form-control-sm custom-input " type="date" id="RecurringEndDate" name="RecurringEndDate">
+                    @if (Model.RecurringEndDate != null)
+                    {
+                        @Html.TextBox("RecurringEndDate", (DateTime?)Model.RecurringEndDate, null, new { @class = "form-control form-control-sm custom-input", @min = DateTime.Now, @disabled = true })
+
+                    }
+                    else
+                    {
+                        <input class="form-control form-control-sm custom-input " type="date" id="RecurringEndDate" name="RecurringEndDate">
+                    }
                 </div>
-                
-           
+                </section>
+
         </td>
     </tr>
 </table>
