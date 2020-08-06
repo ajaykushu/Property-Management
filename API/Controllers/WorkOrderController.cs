@@ -57,8 +57,17 @@ namespace API.Controllers
         [Route("createwo")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
         public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO, List<IFormFile> File)
-        {
+         {
             var status = await _workOrderService.CreateWO(createWO, File);
+            return Ok(status);
+        }
+
+        [HttpPost]
+        [Route("createrecurringwo")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
+        public async Task<ActionResult> CreateRecurringWO([FromForm] CreateRecurringWO createWO, List<IFormFile> File)
+        {
+            var status = await _workOrderService.CreateRecurringWO(createWO, File);
             return Ok(status);
         }
 
@@ -88,6 +97,14 @@ namespace API.Controllers
             var editWorkOrder = await _workOrderService.GetEditWO(id);
             return Ok(editWorkOrder);
         }
+        [HttpGet]
+        [Route("editRecurringwomodel")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
+        public async Task<ActionResult> GetEditRecurringWO(string id)
+        {
+            EditRecurringWorkOrder editWorkOrder = await _workOrderService.GetEditRecurringWO(id);
+            return Ok(editWorkOrder);
+        }
 
         [HttpPost]
         [Route("editWO")]
@@ -95,6 +112,15 @@ namespace API.Controllers
         public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder, List<IFormFile> File)
         {
             bool status = await _workOrderService.EditWO(editWorkOrder, File);
+            return Ok(status);
+        }
+        
+            [HttpPost]
+        [Route("editrecurringwo")]
+        [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
+        public async Task<ActionResult<bool>> EditRecurringWO([FromForm] EditRecurringWorkOrder editWorkOrder, List<IFormFile> File)
+        {
+            bool status = await _workOrderService.EditRecurringWO(editWorkOrder, File);
             return Ok(status);
         }
 

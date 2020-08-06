@@ -41,6 +41,7 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Give Some Detail")]
         public string Description { set; get; }
+        [Required(ErrorMessage ="Please Select Assign to")]
         public string Category { get; set; }
         public List<SelectItem> Options { get; set; }
         [DisplayName("Option")]
@@ -56,5 +57,6 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
+       
     }
 }

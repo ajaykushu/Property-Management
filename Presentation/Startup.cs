@@ -12,6 +12,7 @@ using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using System;
+using NeoSmart.Caching.Sqlite;
 
 namespace Presentation
 {
@@ -27,6 +28,9 @@ namespace Presentation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSqliteCache(options => {
+                options.CachePath = @"Utility\CacheSession\session.db";
+            });
             services.AddDetection();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             
@@ -44,7 +48,7 @@ namespace Presentation
             services.AddHttpClient<HttpHelper>();
             services.AddScoped<IExport<WorkOrderDetail>, Export<WorkOrderDetail>>();
             services.AddScoped<IExport<AllWOExport>, Export<AllWOExport>>();
-            services.AddSingleton<ISessionStorage, SessionStorage>();
+           
 
         }
 

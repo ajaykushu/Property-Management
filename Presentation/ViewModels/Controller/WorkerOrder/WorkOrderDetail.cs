@@ -54,5 +54,10 @@ namespace Presentation.ViewModels
 
         [SkipProperty]
         public Pagination<List<Comment>> Comments { get; set; }
+        public bool Recurring { get; set; }
+        public DateTime? RecurringEndDate { get; set; }
+        public int? EndAfterCount { get; set; }
+        public string CronExpression { get; set; }
+        public DateTime? RecurringStartDate { get; set; }
     }
 }

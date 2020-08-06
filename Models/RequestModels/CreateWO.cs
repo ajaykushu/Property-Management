@@ -44,6 +44,7 @@ namespace Models.RequestModels
 
         public int? VendorId { get; set; }
         public List<SelectItem> Vendors { get; set; }
-        // public IFormFileCollection File { get; set; }
+
+        
     }
 }

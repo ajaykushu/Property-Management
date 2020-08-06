@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -10,9 +11,9 @@ namespace API
     internal class BlackListCheckMiddleware
     {
         private readonly RequestDelegate _requestDelegate;
-        private readonly ICache _cache;
+        private readonly IDistributedCache _cache;
 
-        public BlackListCheckMiddleware(RequestDelegate requestDelegate, ICache cache)
+        public BlackListCheckMiddleware(RequestDelegate requestDelegate, IDistributedCache cache)
         {
             _requestDelegate = requestDelegate;
             _cache = cache;
@@ -24,7 +25,7 @@ namespace API
             {
                 var id = httpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
                 var jti = httpContext.User.FindFirst(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-                var retval = _cache.GetItem(id);
+                var retval =await _cache.GetAsync(id);
                 if (retval != null)
                 {
                     await _requestDelegate(httpContext);

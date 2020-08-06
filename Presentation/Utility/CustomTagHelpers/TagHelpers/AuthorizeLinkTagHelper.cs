@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Caching.Distributed;
+using Presentation.ConstModal;
 using Presentation.Utility.Interface;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
     public class AuthorizeLinkTagHelper : TagHelper
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ISessionStorage _sessionStorage;
+        private readonly IDistributedCache _sessionStorage;
         public string Feature { get; set; }
         public string Action { get; set; }
         public string Controller { get; set; }
@@ -20,7 +22,7 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
         public string Content { get; set; }
         public Dictionary<string, string> Routedata { get; set; }
 
-        public AuthorizeLinkTagHelper(IHttpContextAccessor httpContextAccessor, ISessionStorage sessionStorage)
+        public AuthorizeLinkTagHelper(IHttpContextAccessor httpContextAccessor, IDistributedCache sessionStorage)
         {
             _httpContextAccessor = httpContextAccessor;
             _sessionStorage = sessionStorage;
@@ -50,13 +52,14 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
         //check authorization
         public bool CheckAuthorizarion()
         {
-            HashSet<string> menus;
-            long Id = Convert.ToInt64(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value);
-            var obj=_sessionStorage.GetItem(Id);
-            menus = obj.GetType().GetProperty("MenuItems").GetValue(obj,null) as HashSet<string>;
-            if (menus != null && menus.Contains(Feature))
+            var id=_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+            var obj=ObjectByteConverter.Deserialize<SessionStore>(_sessionStorage.Get(id));
+           
+            if (obj != null && obj.MenuList.Contains(Feature))
                 return true;
             return false;
         }
+
+      
     }
 }

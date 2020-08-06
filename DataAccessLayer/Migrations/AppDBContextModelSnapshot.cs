@@ -51,21 +51,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "6a02f57c-43a3-4b99-a326-9b1f948fc6b6",
+                            ConcurrencyStamp = "a81c8f7a-5cec-4827-a746-b23371a6fcc1",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "791790d6-69d7-4c27-88d3-c516b88b409d",
+                            ConcurrencyStamp = "c2df9448-938f-4719-b220-334c2922674b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "88fe1913-5575-43db-ab9f-7ec1c6b34b8e",
+                            ConcurrencyStamp = "eff581ad-97b5-4df2-a404-14e9662f5c11",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -1309,16 +1309,17 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CronExpression")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("varchar(200)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsRecurring")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                    b.Property<int?>("EndAfterCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("IssueId")
                         .HasColumnType("int");
@@ -1337,11 +1338,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("RecurringTime")
+                    b.Property<bool>("Recurring")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("RecurringEndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RecurringType")
-                        .HasColumnType("varchar(1)");
+                    b.Property<DateTime?>("RecurringStartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RequestedBy")
                         .HasColumnType("varchar(50)");

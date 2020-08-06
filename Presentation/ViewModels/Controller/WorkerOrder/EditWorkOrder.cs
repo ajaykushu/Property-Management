@@ -50,7 +50,7 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please Select Assign to")]
         public string Category { get; set; }
         public Dictionary<string, List<SelectItem>> Options { get; set; }
         [DisplayName("Option")]

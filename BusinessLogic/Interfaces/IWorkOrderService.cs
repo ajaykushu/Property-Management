@@ -33,5 +33,8 @@ namespace BusinessLogic.Interfaces
 
         Task<List<AllWOExport>> WOExport(WOFilterModel wOFilterModel);
         Task<List<HistoryDetail>> GetHistory(string entity,string rowId);
+        Task<bool> CreateRecurringWO(CreateRecurringWO createWO, List<IFormFile> file);
+        Task<EditRecurringWorkOrder> GetEditRecurringWO(string id);
+        Task<bool> EditRecurringWO(EditRecurringWorkOrder editWorkOrder, List<IFormFile> file);
     }
 }

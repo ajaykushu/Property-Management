@@ -1,0 +1,218 @@
+﻿@model CreateWorkOrderRecurring
+@{
+    ViewData["Title"] = "Create Recurring WorkOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Model != null)
+{
+    <header>
+        <nav class="navbar bg-success mb-3 fixed-top">
+            <div class="d-inline-flex w-100">
+                <a style="color:white" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <div class="container-block justify-content-center">
+                    <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Create Work Order</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <form class="mform" id="wocreaterecurring" asp-action="CreateWORecurring" asp-controller="WorkOrder">
+        @if (Model == null)
+        {
+            <p>No Record Found</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <partial name="SchedulerView.cshtml" model="Model">
+
+                    </tr>
+                    <tr>
+                        <th>
+                            Location
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            @if (Model.Properties != null)
+                            {
+                                <div class="row padding">
+
+                                    <select class="form-control form-control" asp-for="PropertyId" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
+                                        <option value="">Property</option>
+                                    </select>
+                                    <span asp-validation-for="PropertyId" class="text-danger"></span>
+                                </div>
+                            }
+                            <div class="row top-buffer padding">
+
+                                @if (Model.Locations != null)
+                                {
+                                    <select id="LocationId" name="LocationId" class="form-control" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                        <option value="">Location</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="LocationId" name="LocationId" class="form-control ">
+                                        <option value="">Location</option>
+                                    </select>
+                                }
+                            </div>
+
+                            <div class="row top-buffer padding">
+
+                                <select class="form-control " asp-for="SubLocationId">
+                                    <option value="">Sub-Location</option>
+                                </select>
+                                <span asp-validation-for="SubLocationId" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            What
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
+                                <div class="row padding">
+
+                                    <select class="form-control " asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                        <option value="">Item</option>
+                                    </select>
+                                    <span asp-validation-for="ItemId" class="text-danger"></span>
+                                </div>
+                            }
+                            @if (Model.Issues != null && Model.Issues.Any())
+                            {
+                                <div class="row top-buffer padding">
+
+                                    <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                        <option value="">Issue</option>
+                                    </select>
+                                    <span asp-validation-for="IssueId" class="text-danger"></span>
+                                </div>
+
+                            }
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            Details
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+
+                                <textarea class="form-control " asp-for="Description" placeholder="Additional Details"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="row top-buffer padding">
+                                <select asp-for="Priority" class="form-control">
+                                    <option value="0">Critical</option>
+                                    <option value="1">High</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">Low</option>
+                                </select>
+                                <span asp-validation-for="Priority" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Due Date
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+                                <input class="form-control " asp-for="DueDate">
+                                <span asp-validation-for="DueDate" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    @if (Model.Vendors != null && Model.Vendors.Any())
+                    {
+                        <tr>
+                            <th>
+                                Vendor (Optional)
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row top-buffer padding">
+                                    <select class="form-control form-control" asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"));">
+                                        <option value="">Select Vendor</option>
+                                    </select>
+                                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>Assign To</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+                                <select class="form-control " asp-for="Category">
+                                    <option value="">Choose One</option>
+                                    <option value="department">Department</option>
+                                    <option value="user">User</option>
+                                    <option value="anyone">AnyOne</option>
+                                </select>
+                                <span asp-validation-for="Category" class="text-danger"></span>
+                            </div>
+                            <div class="row padding top-buffer">
+
+                                <select class="form-control" asp-for="OptionId">
+                                    <option value="">Select Option</option>
+                                </select>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Add files</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="File">Attachment</label>
+                                </div>
+                                <div class="col">
+                                    <div class="cont">
+                                        <label class="browsebutton">Browse File</label>
+                                        <input asp-for="File" capture="user" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                    </div>
+                                    <div id="file_selected">
+                                    </div>
+                                    <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+            <div class="bottom-stick" style="padding:5px;">
+                <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Create</button>
+                <input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">
+            </div>
+        }
+        <input asp-for="CronExpression" hidden>
+    </form>
+}

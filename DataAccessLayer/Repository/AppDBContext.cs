@@ -53,7 +53,7 @@ namespace DataAccessLayer.Repository
             builder.Ignore<IdentityUserLogin<long>>();
             builder.Ignore<IdentityUserClaim<long>>();
             builder.Ignore<IdentityRoleClaim<long>>();
-            builder.Entity<WorkOrder>().Property(x => x.IsRecurring).HasDefaultValue(false);
+            builder.Entity<WorkOrder>().Property(x => x.Recurring).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             builder.Entity<Property>().HasIndex(x => x.PropertyName).IsUnique();
@@ -252,7 +252,8 @@ namespace DataAccessLayer.Repository
            .Where(e => e.Entity is Log && (
                 e.State == EntityState.Added
                 || e.State == EntityState.Modified));
-            var user = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier);
+            var user = _httpContextAccessor.HttpContext?.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier);
+            
             foreach (var entityEntry in entries)
             {
                 if (entityEntry.State == EntityState.Added)

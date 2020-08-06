@@ -32,11 +32,68 @@
         </tr>
         <tr>
         </tr>
+        @if (Model.Recurring)
+        {
+        <tr>
+            <th>
+                Schedule Details
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="col">
+                    @if (Model.RecurringEndDate.HasValue)
+                    {
+                        <div class="row ">
+                            <div class="col-md-3">
+                                <label asp-for="RecurringEndDate">Schedule End Date</label>
+                            </div>
+                            <div class="col">
+                                <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.RecurringStartDate.HasValue)
+                    {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="RecurringStartDate">Schedule Start Date</label>
+                            </div>
+                            <div class="col">
+                                <span class="value">@Html.DisplayFor(x => x.RecurringStartDate.Value)</span>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.EndAfterCount.HasValue)
+                    {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="EndAfterCount">End After Count</label>
+                            </div>
+                            <div class="col">
+                                <span class="value">@Html.DisplayFor(x => x.EndAfterCount.Value)</span>
+                            </div>
+                        </div>
+                    }
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="CronExpression">Scheduled At</label>
+                        </div>
+                        <div class="col">
+                            <span class="value" style="color:green"><strong>@Html.DisplayFor(x => x.CronExpression)</strong></span>
+                        </div>
+                    </div>
+                </div>
+               
+            </td>
+</tr>
+        }
         <tr>
             <th>
                 Status Details
             </th>
         </tr>
+
         <tr>
             <td>
                 <div class="col">
@@ -214,14 +271,14 @@
         </tr>
         <tr>
             <td>
-                <a  title="history" data-custom-value="@Model.Id" id="history_button"><i class="fa fa-history fa-2x"></i> <i class="fa fa-chevron-down fa-2x"  aria-hidden="true"></i></a>
+                <a title="history" data-custom-value="@Model.Id" id="history_button"><i class="fa fa-history fa-2x"></i> <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i></a>
             </td>
-            </tr>
+        </tr>
         <tr>
-          <td >
-            <div id="history">
-            </div>
-          </td>
+            <td>
+                <div id="history">
+                </div>
+            </td>
         </tr>
         <tr>
             <th>

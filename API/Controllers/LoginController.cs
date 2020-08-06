@@ -1,9 +1,11 @@
 ﻿using API.Authentication.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Models.RequestModels;
 using Models.ResponseModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -39,7 +41,18 @@ namespace API.Controllers
             }
             return tokenResponse;
         }
-
+        [Route("getmenu")]
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<HashSet<string>>> GetMenu()
+        {
+            var menuData = await _user.GetMenuData();
+            if (menuData == null)
+            {
+                throw new Exception("Internal Server Error");
+            }
+            return menuData;
+        }
         /// <summary>
         /// This Controller Action Post Method for Email based token generation for Password Change.
         /// </summary>

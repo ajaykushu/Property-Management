@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Presentation.ConstModal;
 using Presentation.Utiliity.Interface;
+using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
-using Presentation.ViewModels.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,19 +29,17 @@ namespace Presentation.Controllers
         private readonly IExport<AllWOExport> _allwoexport;
         private readonly IDetection _detection;
 
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, ISessionStorage _session, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDistributedCache _session, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
-                var returnval= _session.GetItem(Convert.ToInt64(id));
+                var returnval = ObjectByteConverter.Deserialize<SessionStore>(_session.Get(id));
                 if (returnval != null)
-                    _token =returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
-               
-                    
-               
+                    _token = returnval.Token;
+
             }
             _export = export;
             _allwoexport = allwoexport;
@@ -72,8 +71,9 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> CreateWorkOrder()
+        public async Task<IActionResult> CreateWorkOrderView()
         {
+
             CreateWorkOrder createWorkOrder = new CreateWorkOrder();
 
             _apiRoute.Value.Routes.TryGetValue("getworkordermodel", out string path);
@@ -84,7 +84,29 @@ namespace Presentation.Controllers
 
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/WorkOrder/Mobile/CreateWorkOrder.cshtml", createWorkOrder);
+           else
             return View("CreateWorkOrder", createWorkOrder);
+           
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> CreateWorkOrderRecurringView()
+        {
+
+            CreateWorkOrderRecurring createWorkOrder = new CreateWorkOrderRecurring();
+
+            _apiRoute.Value.Routes.TryGetValue("getworkordermodel", out string path);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+                createWorkOrder = JsonConvert.DeserializeObject<CreateWorkOrderRecurring>(await response.Content.ReadAsStringAsync());
+
+
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/CreateWorkOrderRecurring.cshtml", createWorkOrder);
+           
+            else
+                return View("CreateWorkOrderRecurring", createWorkOrder);
         }
 
         [HttpGet]
@@ -185,6 +207,27 @@ namespace Presentation.Controllers
                 return View("~/Views/WorkOrder/Mobile/EditWOView.cshtml", editWorkOrder);
             return View(editWorkOrder);
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditRecurringWOView(string id)
+        {
+            EditRecurringWorkOrder editWorkOrder = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("editRecurringwomodel", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    editWorkOrder = JsonConvert.DeserializeObject<EditRecurringWorkOrder>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/EditWOViewRecurring.cshtml", editWorkOrder);
+            return View(editWorkOrder);
+        }
 
         [HttpPost]
         [Authorize]
@@ -220,7 +263,7 @@ namespace Presentation.Controllers
                 msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
             return BadRequest(msg);
         }
-
+        
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder)
@@ -230,6 +273,40 @@ namespace Presentation.Controllers
                 try
                 {
                     _apiRoute.Value.Routes.TryGetValue("createwo", out string path);
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, workOrder, this, _token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                        if (result)
+                        {
+                            return Ok(StringConstants.CreatedSuccess);
+                        }
+                        else
+                            return BadRequest("Unable To Create");
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
+                }
+                catch (Exception)
+                {
+                }
+                return StatusCode(500, StringConstants.Error);
+            }
+            else
+            {
+                var msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
+                return BadRequest(msg);
+            }
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateWORecurring(CreateWorkOrderRecurring workOrder)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _apiRoute.Value.Routes.TryGetValue("createrecurringwo", out string path);
                     var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, workOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
@@ -398,5 +475,41 @@ namespace Presentation.Controllers
             }
             return PartialView(historyDetails);
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditRecurringWO(EditRecurringWorkOrder editWorkOrder)
+        {
+            string msg = String.Empty;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _apiRoute.Value.Routes.TryGetValue("editrecurringwo", out string path);
+                    var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, editWorkOrder, this, _token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                            return Ok(StringConstants.SuccessUpdate);
+                        else
+                            return Ok(StringConstants.UpdateFailed);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                        return BadRequest(await response.Content.ReadAsStringAsync());
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
+                    else
+                        return StatusCode(500, StringConstants.Error);
+                }
+                catch (Exception)
+                {
+                    msg = StringConstants.Error;
+                }
+            }
+            else
+                msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
+            return BadRequest(msg);
+        }
+        
     }
 }

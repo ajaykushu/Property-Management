@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Presentation.ConstModal;
+using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
 using Presentation.ViewModels.Controller.Home;
@@ -23,16 +26,16 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection,ISessionStorage _session)
+        public HomeController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDetection detection,IDistributedCache _session)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
             if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 var id = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
-                var returnval = _session.GetItem(Convert.ToInt64(id));
+                var returnval = ObjectByteConverter.Deserialize<SessionStore>(_session.Get(id));
                 if (returnval != null)
-                    _token = returnval.GetType().GetProperty("token").GetValue(returnval, null).ToString();
+                    _token = returnval.Token;
 
             }
             _detection = detection;
@@ -116,6 +119,10 @@ namespace Presentation.Controllers
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/Home/Mobile/GetAllNotification.cshtml", allNotification);
             return View(allNotification);
+        }
+        public  IActionResult SchedularView()
+        {
+            return PartialView("~/Views/Shared/SchedulerView.cshtml");
         }
     }
 }

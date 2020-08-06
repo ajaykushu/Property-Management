@@ -198,8 +198,11 @@ function disablespinner() {
     msg.dismiss();
 }
 
-$('#adduser, #wocreate, #addprop').submit(function (e) {
+$('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
     e.preventDefault();
+    if ($(this).is('#wocreaterecurring')) {
+        GenarateCron();
+    }
     var url = $(this).attr('action');
     var formData = new FormData(this);
     for (var i = 0; i < selectedFile.length; i++) {
@@ -224,8 +227,11 @@ $('#adduser, #wocreate, #addprop').submit(function (e) {
     }
 });
 
-$('#edituser, #editwo').submit(function (e) {
+$('#edituser, #editwo, #editworecurring').submit(function (e) {
     e.preventDefault();
+    if ($(this).is('#editworecurring')) {
+        GenarateCron();
+    }
     var url = $(this).attr('action');
     var formData = new FormData(this);
     //for multiple files upload
@@ -379,6 +385,161 @@ $('#history_button').click(function (e) {
         $('#history').html(res);
         disablespinner();
     })
-    //disablespinner();
+    
     
 })
+$('#type-select').change(function () {
+    EnableReqInput();
+})
+$('input[name="sub-radio"]').click(function () {
+    EnableReqInput();
+})
+EnableReqInput();
+function EnableReqInput () {
+    var value = '#' + $('#type-select').val();
+    var nodes = $('#type-select > option').each(function (key) {
+        var valuetemp = '#' + $('#type-select > option')[key].value;
+        if (value != valuetemp) {
+            $(valuetemp).hide();
+            $(valuetemp + ' :input[type="number"]').each(function (e) {
+                $(valuetemp + ' :input[type="number"]')[e].disabled = true;
+            })
+            $(valuetemp + ' select').each(function (e) {
+                $(valuetemp + ' select')[e].disabled = true;
+            })
+        }
+    });
+    if (value == '#Yearly') {
+        $(value + ' :input').each(function (e) {
+            $(value + ' :input')[e].disabled = false;
+        });
+    }
+    $(value).show();
+    
+    $('input[name="sub-radio"]').each(function (e) {
+        
+        if ($('input[name="sub-radio"]')[e].checked) {
+            var id = '.' + $('input[name="sub-radio"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = false;
+            });
+            $(id + ' select').each(function (key) {
+                $(id + ' select')[key].disabled = false;
+            });
+        }
+        else {
+            var id = '.' + $('input[name="sub-radio"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = true;
+            });
+            $(id + ' select').each(function (key) {
+                $(id + ' select')[key].disabled = true;
+            });
+        }
+        
+    })
+    
+   
+}
+$('input[name="end-select"]').change(function () {
+    EndInputEnabler();
+});
+EndInputEnabler();
+function EndInputEnabler() {
+    $('input[name="end-select"]').each(function (e) {
+
+        if ($('input[name="end-select"]')[e].checked) {
+            var id = '.' + $('input[name="end-select"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = false;
+            });
+        }
+        else {
+            var id = '.' + $('input[name="end-select"]')[e].id;
+            $(id + ' :input').each(function (key) {
+                $(id + ' :input')[key].disabled = true;
+            });
+        }
+
+    })
+}
+
+
+function GenarateCron() {
+    var cron = '*1 *2 *3 *4 *5';
+    //find start time
+    var time = $('#select-at-time').val();
+    if (time != undefined && time != "") {
+        time = time.split(":");
+        cron = cron.replace('*1', time[1]).replace('*2', time[0]);
+    }
+    else {
+        cron = cron.replace('*1', '0').replace('*2', '0');
+    }
+    // find day
+    //if the value is daily
+    if ($('input[name="type-select"]:checked').val() == "Daily" || $('#type-select').val() == "Daily") {
+
+        if ($('input[name="sub-radio"]:checked').val() == "Every") {
+            var value = $('#daily-occurence').val() != '' ? '*/'+$('#daily-occurence').val() : '*';
+            cron = cron.replace('*3', value);
+
+        }
+        else if ($('input[name="sub-radio"]:checked').val() == "Weekdays") {
+            cron = cron.replace('*5', '2-6');
+        }
+    }
+    else if ($('input[name="type-select"]:checked').val() == "Weekly" || $('#type-select').val() == "Weekly") {
+        var dayofweek = "";
+        $.each($("input[name='exampleCheck1']:checked"), function () {
+            dayofweek = dayofweek + $(this).val() + ",";
+        });
+      
+        dayofweek = dayofweek.substr(0, dayofweek.length - 1);
+        if (dayofweek == "") {
+            dayofweek = '1';
+        }
+        cron = cron.replace('*5', dayofweek);
+
+    }
+    else if ($('input[name="type-select"]:checked').val() == "Monthly" || $('#type-select').val()== "Monthly") {
+        if ($('input[name="sub-radio"]:checked').val() == "Day") {
+            var value = $('#month').val() != '' ? '*/' + $('#month').val() : '*';
+            var value1 = $('#day').val() != '' ? $('#day').val() : "*";
+            cron = cron.replace('*3', value1).replace('*4', value);
+        }
+        else if ($('input[name="sub-radio"]:checked').val() == "Month") {
+            var capturedday = $('#select-day-option').val();
+            if ($('#select-day-option').val() == "L") {
+                var months = [1, 3, 5, 7, 8, 10, 12]
+                if (months.indexOf($('#input-month').val()) != -1)
+                    capturedday = 31;
+                else {
+                    if ($('#input-month').val() == 2)
+                        capturedday = 28;
+                    else
+                        capturedday = 30;
+                }
+            }
+            var value = capturedday != 'L' && capturedday != '' ? capturedday : '*';
+            var value1 = $('#select-week-option').val() != '' ? $('#select-week-option').val() : '*';
+            var value2 = $('#input-month').val() != '' ? '*/'+$('#input-month').val() : '*';
+            cron = cron.replace('*3', value).replace('*4', value2).replace('*5', value1);
+        }
+
+    }
+    else if ($('input[name="type-select"]:checked').val() == "Yearly" || $('#type-select').val() == "Yearly") 
+        {
+           
+        if ($('#year-day').val() != '' && $('#year-day').val() != undefined)
+            cron = cron.replace('*3', $('#year-day').val())
+        if ($('#year-month').val() != '' && $('#year-month').val() != undefined)
+            cron = cron.replace('*4', $('#year-month').val())
+      
+            
+    }
+
+    cron = cron.replace('*1', '*').replace('*2', '*').replace('*3', '*').replace('*4', '*').replace('*5', '*');
+   
+    $('#CronExpression').val(cron);
+};

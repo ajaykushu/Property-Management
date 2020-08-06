@@ -4,6 +4,7 @@ using DataEntity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Models;
 using Models.RequestModels;
 using Models.ResponseModels;
@@ -29,12 +30,12 @@ namespace BusinessLogic.Services
         private readonly IRepo<Notification> _notification;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IImageUploadInFile _imageUploadInFile;
-        private readonly ICache _cache;
+        private readonly IDistributedCache _cache;
         private readonly string _scheme;
         private readonly long userId;
 
         public UserService(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, ICache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, IDistributedCache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -233,7 +234,7 @@ namespace BusinessLogic.Services
             {
                 if (filepath != null)
                     _imageUploadInFile.Delete(prevpath);
-                if (editUser.Password != null) _cache.RemoveItem(applicationUser.Id + "");
+                if (editUser.Password != null) await _cache.RefreshAsync(applicationUser.Id + "");
                 var roles = await _userManager.GetRolesAsync(applicationUser);
                 var roleDeleted = await _userManager.RemoveFromRolesAsync(applicationUser, roles);
                 var roleAdded = await _userManager.AddToRoleAsync(applicationUser, editUser.Role);
@@ -316,7 +317,7 @@ namespace BusinessLogic.Services
             if (identityresult.Succeeded)
             {
                 if (operation == 0)
-                    _cache.RemoveItem(userId + "");
+                    await _cache.RemoveAsync(userId + "");
                 return true;
             }
             else
