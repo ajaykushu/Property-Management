@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Models.RequestModels;
+using Models.Login.RequestModels;
 using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace API.Controllers
         // POST: api/Logins
         [HttpPost]
         [Route("userlogin")]
-        public async Task<ActionResult<TokenResponseModel>> UserLogin([FromBody] LoginUserModel login)
+        public async Task<ActionResult<TokenResponseModel>> UserLogin([FromBody] LoginUserDTO login)
         {
             var tokenResponse = await _user.DoLogin(login);
             if (tokenResponse == null)
@@ -41,6 +41,11 @@ namespace API.Controllers
             }
             return tokenResponse;
         }
+        
+        /// <summary>
+        /// used to get the menu accessible with the user
+        /// </summary>
+        /// <returns>hashset</returns>
         [Route("getmenu")]
         [Authorize]
         [HttpGet]
@@ -57,7 +62,7 @@ namespace API.Controllers
         /// This Controller Action Post Method for Email based token generation for Password Change.
         /// </summary>
         /// <param name="email">string</param>
-        /// <returns>IActionResult</returns>
+        /// <returns>boolean</returns>
         [HttpGet]
         [Route("sendforgotpwdemail")]
         public async Task<ActionResult<bool>> SendForgotPasswordEmail(string email, string verificationPath)
@@ -77,10 +82,10 @@ namespace API.Controllers
         /// This Controller Action updates the new Password of User.
         /// </summary>
         /// <param name="user">RequestUser</param>
-        /// <returns>IActionResult</returns>
+        /// <returns>boolean</returns>
         [HttpPost]
         [Route("changepassword")]
-        public async Task<ActionResult<bool>> ChangePassword([FromBody] PasswordChangeModel user)
+        public async Task<ActionResult<bool>> ChangePassword([FromBody] PasswordChangeDTO user)
         {
             var status = await _user.ChangePassowrd(user.Email, user.Token, user.NewPassword);
             return Ok(status);

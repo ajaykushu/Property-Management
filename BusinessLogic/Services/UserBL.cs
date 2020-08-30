@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Models;
-using Models.RequestModels;
 using Models.ResponseModels;
+using Models.User.RequestModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ using Utilities.Interface;
 
 namespace BusinessLogic.Services
 {
-    public class UserService : IUserService
+    public class UserBL : IUserBL
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -34,7 +34,7 @@ namespace BusinessLogic.Services
         private readonly string _scheme;
         private readonly long userId;
 
-        public UserService(UserManager<ApplicationUser> userManager,
+        public UserBL(UserManager<ApplicationUser> userManager,
               RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, IDistributedCache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification)
         {
             _userManager = userManager;
@@ -54,7 +54,7 @@ namespace BusinessLogic.Services
             _userNotification = userNotification;
         }
 
-        public async Task<bool> RegisterUser(RegisterUser model)
+        public async Task<bool> RegisterUser(RegisterUserDTO model)
         {
             var filepath = await _imageUploadInFile.UploadAsync(model.File);
             var prop = _property.GetAll().ToList();
@@ -104,13 +104,13 @@ namespace BusinessLogic.Services
             }
         }
 
-        public async Task<RegisterUser> GetRegisterModel()
+        public async Task<RegisterUserDTO> GetRegisterModel()
         {
-            RegisterUser registerRequest = new RegisterUser
+            RegisterUserDTO registerRequest = new RegisterUserDTO
             {
                 Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToListAsync(),
                 Languages = await _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToListAsync(),
-                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList()
+                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = x.Id , PropertyName = x.DisplayName }).ToList()
             };
             // finding roles to be displayed a/c to usertype
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
@@ -132,7 +132,7 @@ namespace BusinessLogic.Services
             return registerRequest;
         }
 
-        public async Task<EditUserModel> GetEditUserModelAsync(long Id)
+        public async Task<EditUserDTO> GetEditUserModelAsync(long Id)
         {
             ApplicationUser applicationUser = await _userManager.Users.Where(x => x.Id == Id).Include(x => x.UserProperties).ThenInclude(x => x.Property).AsNoTracking().FirstOrDefaultAsync();
 
@@ -141,10 +141,10 @@ namespace BusinessLogic.Services
 
             var roles = await _userManager.GetRolesAsync(applicationUser);
 
-            EditUserModel editusermodel = new EditUserModel
+            EditUserDTO editusermodel = new EditUserDTO
             {
                 Languages = _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToList(),
-                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = 1, PropertyName = x.DisplayName }).ToList(),
+                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DisplayName }).ToList(),
                 Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
                 Email = applicationUser.Email,
                 UserName = applicationUser.UserName,
@@ -177,7 +177,7 @@ namespace BusinessLogic.Services
             return editusermodel;
         }
 
-        public async Task<bool> UpdateUser(EditUserModel editUser)
+        public async Task<bool> UpdateUser(EditUserDTO editUser)
         {
             IdentityResult identityResult;
 
@@ -191,7 +191,6 @@ namespace BusinessLogic.Services
             applicationUser.Language.Id = editUser.Language;
             applicationUser.LastName = editUser.LastName;
             applicationUser.SMSAltert = editUser.SMSAlert;
-            applicationUser.TimeZone = editUser.TimeZone;
             applicationUser.OfficeExt = editUser.OfficeExt;
             applicationUser.PhoneNumber = editUser.PhoneNumber;
             applicationUser.ClockType = editUser.ClockType;

@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.RequestModels;
+using Models.Property.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,9 +13,9 @@ namespace API.Controllers
     [ApiController]
     public class PropertyController : ControllerBase
     {
-        private readonly IPropertyService _propertyService;
+        private readonly IPropertyBL _propertyService;
 
-        public PropertyController(IPropertyService propertyService)
+        public PropertyController(IPropertyBL propertyService)
         {
             _propertyService = propertyService;
         }
@@ -23,12 +23,12 @@ namespace API.Controllers
         [HttpGet]
         [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         [Route("getproperty")]
-        public async Task<PropertyOperationModel> GetPropertyType(long id) => await _propertyService.GetProperty(id);
+        public async Task<PropertyOperationDTO> GetPropertyType(long id) => await _propertyService.GetProperty(id);
 
         [HttpPost]
         [FeatureBasedAuthorization(MenuEnum.Edit_Property)]
         [Route("updateproperty")]
-        public async Task<IActionResult> UpdateProperty(PropertyOperationModel prop)
+        public async Task<IActionResult> UpdateProperty(PropertyOperationDTO prop)
         {
             var status = await _propertyService.UpdateProperty(prop);
             return Ok(status);
@@ -46,7 +46,7 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Add_Property)]
         [HttpPost]
         [Route("addproperty")]
-        public async Task<ActionResult<bool>> AddProperty([FromBody] PropertyOperationModel modal)
+        public async Task<ActionResult<bool>> AddProperty([FromBody] PropertyOperationDTO modal)
         {
             var status = await _propertyService.AddProperty(modal);
             return Ok(status);
@@ -55,7 +55,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("getPropertyTypes")]
         [FeatureBasedAuthorization(MenuEnum.Add_Property)]
-        public ActionResult<PropertyOperationModel> GetPropertyTypes()
+        public ActionResult<PropertyOperationDTO> GetPropertyTypes()
         {
             var res = _propertyService.GetPropertyType();
             return Ok(res);
@@ -88,7 +88,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("propertyconfig")]
-        public async Task<ActionResult<PropertyConfig>> PropertyConfig(long Id)
+        public async Task<ActionResult<PropertyConfigDTO>> PropertyConfig(long Id)
         {
             var res = await _propertyService.GetPropertyConfig(Id);
             return Ok(res);
@@ -96,7 +96,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("propertyconfig")]
-        public async Task<ActionResult<bool>> PropertyConfig(PropertyConfig propertyConfig)
+        public async Task<ActionResult<bool>> PropertyConfig(PropertyConfigDTO propertyConfig)
         {
             bool res = await _propertyService.SavePropertyConfig(propertyConfig);
             return Ok(res);

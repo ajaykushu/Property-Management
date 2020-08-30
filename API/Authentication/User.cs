@@ -5,8 +5,9 @@ using DataEntity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Models.RequestModels;
+using Models.Login.RequestModels;
 using Models.ResponseModels;
+using Models.User.RequestModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -23,12 +24,12 @@ namespace API.Authentication
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
-        private readonly IUserService _user;
+        private readonly IUserBL _user;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _scheme;
 
         public User(UserManager<ApplicationUser> userManager, ITokenGenerator tokenGenerator, IEmailSender emailSender,
-               IRepo<RoleMenuMap> roleMenuMap, IUserService user, IHttpContextAccessor httpContextAccessor)
+               IRepo<RoleMenuMap> roleMenuMap, IUserBL user, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
@@ -75,11 +76,11 @@ namespace API.Authentication
             }
         }
 
-        public async Task<TokenResponseModel> DoLogin(LoginUserModel loginDTO)
+        public async Task<TokenResponseModel> DoLogin(LoginUserDTO loginDTO)
         {
             if (_userManager.Users.Count() == 0)
             {
-                var newuser = new RegisterUser
+                var newuser = new RegisterUserDTO
                 {
                     UserName = "TestUser",
                     Email = "test@test.com",

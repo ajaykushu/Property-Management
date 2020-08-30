@@ -4,7 +4,7 @@ using DataEntity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.RequestModels;
+using Models.Property.RequestModels;
 using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using Utilities.Interface;
 
 namespace BusinessLogic.Services
 {
-    public class PropertyService : IPropertyService
+    public class PropertyBL : IPropertyBL
     {
         private readonly IRepo<Property> _property;
         private readonly IRepo<PropertyType> _proptype;
@@ -26,7 +26,7 @@ namespace BusinessLogic.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly INotifier _notifier;
 
-        public PropertyService(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor, INotifier notifier)
+        public PropertyBL(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor, INotifier notifier)
         {
             _property = property;
             _proptype = proptype;
@@ -37,19 +37,19 @@ namespace BusinessLogic.Services
             _notifier = notifier;
         }
 
-        public PropertyOperationModel GetPropertyType()
+        public PropertyOperationDTO GetPropertyType()
         {
             var res = _proptype.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyTypeName }).AsNoTracking().ToList();
             if (res == null)
                 throw new BadRequestException("Property type is not available");
-            PropertyOperationModel prop = new PropertyOperationModel
+            PropertyOperationDTO prop = new PropertyOperationDTO
             {
                 PropertyTypes = res
             };
             return prop;
         }
 
-        public async Task<bool> AddProperty(PropertyOperationModel modal)
+        public async Task<bool> AddProperty(PropertyOperationDTO modal)
         {
             var property = _property.Get(x => x.PropertyName.ToLower().Equals(modal.PropertyName.ToLower())).FirstOrDefault();
             if (property != null)
@@ -158,9 +158,9 @@ namespace BusinessLogic.Services
             }
         }
 
-        public async Task<PropertyOperationModel> GetProperty(long id)
+        public async Task<PropertyOperationDTO> GetProperty(long id)
         {
-            var prop = await _property.Get(x => x.Id == id).Select(x => new PropertyOperationModel
+            var prop = await _property.Get(x => x.Id == id).Select(x => new PropertyOperationDTO
             {
                 City = x.City,
                 Country = x.Country,
@@ -183,7 +183,7 @@ namespace BusinessLogic.Services
             return prop;
         }
 
-        public async Task<bool> UpdateProperty(PropertyOperationModel prop)
+        public async Task<bool> UpdateProperty(PropertyOperationDTO prop)
         {
             var property = _property.Get(x => x.Id == prop.Id).FirstOrDefault();
             var status = false;
@@ -217,14 +217,14 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        public async Task<PropertyConfig> GetPropertyConfig(long id)
+        public async Task<PropertyConfigDTO> GetPropertyConfig(long id)
         {
             var res = await _loc.Get(x => x.PropertyId == id).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.LocationName
             }).ToListAsync();
-            var proprtyconfig = new PropertyConfig
+            var proprtyconfig = new PropertyConfigDTO
             {
                 Locations = res,
                 PropertyId = id
@@ -232,7 +232,7 @@ namespace BusinessLogic.Services
             return proprtyconfig;
         }
 
-        public async Task<bool> SavePropertyConfig(PropertyConfig propertyConfig)
+        public async Task<bool> SavePropertyConfig(PropertyConfigDTO propertyConfig)
         {
             if (string.IsNullOrWhiteSpace(propertyConfig.NewLocation) && !propertyConfig.LocationId.HasValue)
             {

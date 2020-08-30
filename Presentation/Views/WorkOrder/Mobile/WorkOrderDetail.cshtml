@@ -7,8 +7,16 @@
 {
     <header>
         <nav class="navbar bg-white mb-3 fixed-top">
+         
             <div class="d-inline-flex w-100">
-                <a style="color:black" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                @if (!Model.Recurring)
+                {
+                    <a style="color:black" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                }
+                else
+                {
+                    <a style="color:black" asp-action="GetRecurringWO" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                }
                 <div class="container-block justify-content-center">
                     <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
                 </div>
@@ -18,7 +26,7 @@
 
     <div class="mform">
 
-        <table class="table border-0 table-striped">
+        <table class="table border-0 table-striped ">
             <thead>
             </thead>
             <tbody>
@@ -77,27 +85,30 @@
 
                     </td>
                 </tr>
-                <tr>
-                    <th>
-                        Update Status
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="flex-sm-row top-buffer">
-                            <form asp-action="WorkOrderStatusChange" class="w-100">
-                                <select class="form-control form-control-lg  mobile-input " name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
-                                    <option value="">Select Status</option>
-                                </select>
-                                <div class="form-group top-buffer">
-                                    <textarea class="form-control form-control  top-buffer mobile-input border-top-0 border-left-0 border-right-0" name="Comment" placeholder="Add Status Description"></textarea>
-                                </div>
-                                <input asp-for="Id" hidden>
-                                <input type="submit" value="Update Status" class="btn w-100 btn btn-success">
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                @if (!Model.Recurring)
+                {
+                    <tr>
+                        <th>
+                            Update Status
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="flex-sm-row top-buffer">
+                                <form asp-action="WorkOrderStatusChange" class="w-100">
+                                    <select class="form-control form-control-lg  mobile-input " name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
+                                        <option value="">Select Status</option>
+                                    </select>
+                                    <div class="form-group top-buffer">
+                                        <textarea class="form-control form-control  top-buffer mobile-input border-top-0 border-left-0 border-right-0" name="Comment" placeholder="Add Status Description"></textarea>
+                                    </div>
+                                    <input asp-for="Id" hidden>
+                                    <input type="submit" value="Update Status" class="btn w-100 btn btn-success">
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <th>
                         WO Information
@@ -172,49 +183,49 @@
                     </tr>
                     <tr>
                         <td>
-                          
-                                @if (Model.RecurringEndDate.HasValue)
-                                {
-                                    <div class="row ">
-                                        <div class="col">
-                                            <label asp-for="RecurringEndDate">Schedule End Date</label>
-                                            <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
-                                        </div>
-                                       
+
+                            @if (Model.RecurringEndDate.HasValue)
+                            {
+                                <div class="row ">
+                                    <div class="col">
+                                        <label asp-for="RecurringEndDate">Schedule End Date</label>
+                                        <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
                                     </div>
-                                }
-                                @if (Model.RecurringStartDate.HasValue)
-                                {
-                                    <div class="row">
-                                        <div class="col">
-                                            <label asp-for="RecurringStartDate">Schedule Start Date</label>
-                                            <span class="value">@Html.DisplayFor(x => x.RecurringStartDate.Value)</span>
-                                        </div>
-                                        
+
+                                </div>
+                            }
+                            @if (Model.RecurringStartDate.HasValue)
+                            {
+                                <div class="row">
+                                    <div class="col">
+                                        <label asp-for="RecurringStartDate">Schedule Start Date</label>
+                                        <span class="value">@Html.DisplayFor(x => x.RecurringStartDate.Value)</span>
                                     </div>
-                                }
-                                @if (Model.EndAfterCount.HasValue)
-                                {
-                                    <div class="row ">
-                                        <div class="col">
-                                            <label asp-for="EndAfterCount">End After Count</label>
-                                            <span class="value">@Html.DisplayFor(x => x.EndAfterCount.Value)</span>
-                                        </div>
-                                        
+
+                                </div>
+                            }
+                            @if (Model.EndAfterCount.HasValue)
+                            {
+                                <div class="row ">
+                                    <div class="col">
+                                        <label asp-for="EndAfterCount">End After Count</label>
+                                        <span class="value">@Html.DisplayFor(x => x.EndAfterCount.Value)</span>
                                     </div>
-                                }
-                           
+
+                                </div>
+                            }
+
                             <div class="row">
                                 <div class="col">
                                     <label asp-for="CronExpression">Scheduled At</label>
                                     <span class="value" style="color:green"><strong>@Html.DisplayFor(x => x.CronExpression)</strong></span>
                                 </div>
-                                
+
                             </div>
                         </td>
                     </tr>
                 }
-               
+
                 <tr>
                     <th>
                         Updated Infomation
@@ -258,28 +269,32 @@
 
                     </td>
                 </tr>
-                <tr>
-                    <td>
+                @if (!Model.Recurring)
+                {
+                    <tr>
+                        <td>
 
-                        <a title="history" href="@Url.Action("GetHistory", new { entity = "workorder", rowId = Model.Id })"><i class="fa fa-history fa-2x"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Comments
-                    </th>
-                </tr>
+                            <a title="history" href="@Url.Action("GetHistory", new { entity = "workorder", rowId = Model.Id })"><i class="fa fa-history fa-2x"></i></a>
+                        </td>
+                    </tr>
 
-                <tr id="CommentSection">
-                    <td>
-                        @await Html.PartialAsync("CommentOperation",
-     Model.Comments,
-     new ViewDataDictionary(ViewData)
-                        {
-                        { "workOrderId", Model.Id }
-                        })
-                    </td>
-                </tr>
+                    <tr>
+                        <th>
+                            Comments
+                        </th>
+                    </tr>
+
+                    <tr id="CommentSection">
+                        <td>
+                            @await Html.PartialAsync("CommentOperation",
+          Model.Comments,
+          new ViewDataDictionary(ViewData)
+                             {
+                            { "workOrderId", Model.Id }
+                             })
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
@@ -297,7 +312,7 @@
             }
             else
             {
-                <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='Edit'></auth-link>
+                <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='Edit'></auth-link>
             }
 
             <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">

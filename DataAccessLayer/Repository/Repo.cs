@@ -39,15 +39,14 @@ namespace DataAccessLayer.Repository
             return query;
         }
 
-        public Task<int> Update(TEntity entity)
+        public async Task<int> Update(TEntity entity)
         {
-            context.Update<TEntity>(entity);
-            return context.SaveChangesAsync();
+            var entityreturned=context.Update<TEntity>(entity);
+            var attached = context.Attach<TEntity>(entity: entity);
+            attached.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            return await context.SaveChangesAsync();
         }
 
-        //public Task<TEntity> ExecuteSql()
-        //{
-        //    context.ExecuteQuery<TEntity>(sql, "ALFKI");
-        //}
+       
     }
 }

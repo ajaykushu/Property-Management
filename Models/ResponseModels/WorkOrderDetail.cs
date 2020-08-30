@@ -29,5 +29,6 @@ namespace Models.ResponseModels
         public int? EndAfterCount { get; set; }
         public string CronExpression { get; set; }
         public DateTime? RecurringStartDate { get; set; }
+
     }
 }

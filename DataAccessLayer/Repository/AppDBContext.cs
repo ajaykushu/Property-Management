@@ -40,6 +40,8 @@ namespace DataAccessLayer.Repository
         public DbSet<Status> Statuses { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
+        public DbSet<RecurringWO> RecurringWOs { set; get; }
+
         public DbSet<Notification> Notifications { set; get; }
         public DbSet<History> Histories { get; set; }
 
@@ -53,7 +55,6 @@ namespace DataAccessLayer.Repository
             builder.Ignore<IdentityUserLogin<long>>();
             builder.Ignore<IdentityUserClaim<long>>();
             builder.Ignore<IdentityRoleClaim<long>>();
-            builder.Entity<WorkOrder>().Property(x => x.Recurring).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             builder.Entity<Property>().HasIndex(x => x.PropertyName).IsUnique();
@@ -63,6 +64,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
+            
             builder.Entity<Property>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<WorkOrder>().Property(x => x.Priority).HasDefaultValue(0);
             builder.Entity<WorkOrder>().Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
@@ -155,73 +157,79 @@ namespace DataAccessLayer.Repository
                     Id = 3,
                     MenuName = "View_Property"
                 }
-            , new Menu()
-            {
-                Id = 4,
-                MenuName = "Edit_User"
-            }
-            , new Menu()
-            {
-                Id = 5,
-                MenuName = "Add_Property"
-            }
-            , new Menu()
-            {
-                Id = 6,
-                MenuName = "Edit_Property"
-            }
-            , new Menu()
-            {
-                Id = 7,
-                MenuName = "ActDct_User"
-            }, new Menu()
-            {
-                Id = 8,
-                MenuName = "View_User_Detail"
-            },
-             new Menu()
-             {
-                 Id = 9,
-                 MenuName = "Act_Deact_Property"
-             }, new Menu()
-             {
-                 Id = 10,
-                 MenuName = "Edit_Feature"
-             }, new Menu()
-             {
-                 Id = 11,
-                 MenuName = "Access_Setting"
-             }, new Menu()
-             {
-                 Id = 12,
-                 MenuName = "Create_WO"
-             }, new Menu()
-             {
-                 Id = 13,
-                 MenuName = "Get_WO"
-             }, new Menu()
-             {
-                 Id = 14,
-                 MenuName = "GetWO_Detail"
-             }, new Menu()
-             {
-                 Id = 15,
-                 MenuName = "Edit_WO"
-             }, new Menu()
-             {
-                 Id = 16,
-                 MenuName = "Post_Comment"
-             }
-             , new Menu()
-             {
-                 Id = 17,
-                 MenuName = "Assign_To_User"
-             }
-              , new Menu()
-              {
-                  Id = 18,
-                  MenuName = "WO_Operation"
-              });
+                , new Menu()
+                {
+                    Id = 4,
+                    MenuName = "Edit_User"
+                }
+                , new Menu()
+                {
+                    Id = 5,
+                    MenuName = "Add_Property"
+                }
+                , new Menu()
+                {
+                    Id = 6,
+                    MenuName = "Edit_Property"
+                }
+                , new Menu()
+                {
+                    Id = 7,
+                    MenuName = "ActDct_User"
+                }, new Menu()
+                {
+                    Id = 8,
+                    MenuName = "View_User_Detail"
+                },
+                new Menu()
+                {
+                    Id = 9,
+                    MenuName = "Act_Deact_Property"
+                }, new Menu()
+                {
+                    Id = 10,
+                    MenuName = "Edit_Feature"
+                }, new Menu()
+                {
+                    Id = 11,
+                    MenuName = "Access_Setting"
+                }, new Menu()
+                {
+                    Id = 12,
+                    MenuName = "Create_WO"
+                }, new Menu()
+                {
+                    Id = 13,
+                    MenuName = "Get_WO"
+                }, new Menu()
+                {
+                    Id = 14,
+                    MenuName = "GetWO_Detail"
+                }, new Menu()
+                {
+                    Id = 15,
+                    MenuName = "Edit_WO"
+                }, new Menu()
+                {
+                    Id = 16,
+                    MenuName = "Post_Comment"
+                }
+                , new Menu()
+                {
+                    Id = 17,
+                    MenuName = "Assign_To_User"
+                }
+                
+                , new Menu()
+                {
+                    Id = 18,
+                    MenuName = "WO_Operation"
+                },
+                 new Menu()
+                 {
+                     Id = 19,
+                     MenuName = "Recurring_WO"
+                 });
 
             builder.Entity<RoleMenuMap>().HasData(
                 new RoleMenuMap { Id = 1, MenuId = 1, RoleId = 1 },

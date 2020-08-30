@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace BusinessLogic.Interfaces
 
 {
-    public interface IConfigService
+    public interface IConfigBL
     {
         Task<List<SelectItem>> GetRoles();
 

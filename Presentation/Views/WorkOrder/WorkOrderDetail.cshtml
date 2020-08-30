@@ -34,59 +34,59 @@
         </tr>
         @if (Model.Recurring)
         {
-        <tr>
-            <th>
-                Schedule Details
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <div class="col">
-                    @if (Model.RecurringEndDate.HasValue)
-                    {
-                        <div class="row ">
-                            <div class="col-md-3">
-                                <label asp-for="RecurringEndDate">Schedule End Date</label>
+            <tr>
+                <th>
+                    Schedule Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col">
+                        @if (Model.RecurringEndDate.HasValue)
+                        {
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label asp-for="RecurringEndDate">Schedule End Date</label>
+                                </div>
+                                <div class="col">
+                                    <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
+                                </div>
                             </div>
-                            <div class="col">
-                                <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
+                        }
+                        @if (Model.RecurringStartDate.HasValue)
+                        {
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="RecurringStartDate">Schedule Start Date</label>
+                                </div>
+                                <div class="col">
+                                    <span class="value">@Html.DisplayFor(x => x.RecurringStartDate.Value)</span>
+                                </div>
                             </div>
-                        </div>
-                    }
-                    @if (Model.RecurringStartDate.HasValue)
-                    {
+                        }
+                        @if (Model.EndAfterCount.HasValue)
+                        {
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="EndAfterCount">End After Count</label>
+                                </div>
+                                <div class="col">
+                                    <span class="value">@Html.DisplayFor(x => x.EndAfterCount.Value)</span>
+                                </div>
+                            </div>
+                        }
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label asp-for="RecurringStartDate">Schedule Start Date</label>
+                                <label asp-for="CronExpression">Scheduled At</label>
                             </div>
                             <div class="col">
-                                <span class="value">@Html.DisplayFor(x => x.RecurringStartDate.Value)</span>
+                                <span class="value" style="color:green"><strong>@Html.DisplayFor(x => x.CronExpression)</strong></span>
                             </div>
-                        </div>
-                    }
-                    @if (Model.EndAfterCount.HasValue)
-                    {
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="EndAfterCount">End After Count</label>
-                            </div>
-                            <div class="col">
-                                <span class="value">@Html.DisplayFor(x => x.EndAfterCount.Value)</span>
-                            </div>
-                        </div>
-                    }
-                    <div class="row top-buffer">
-                        <div class="col-md-3">
-                            <label asp-for="CronExpression">Scheduled At</label>
-                        </div>
-                        <div class="col">
-                            <span class="value" style="color:green"><strong>@Html.DisplayFor(x => x.CronExpression)</strong></span>
                         </div>
                     </div>
-                </div>
-               
-            </td>
-</tr>
+
+                </td>
+            </tr>
         }
         <tr>
             <th>
@@ -128,24 +128,27 @@
                             }
                         </div>
                     </div>
-                    <div class="row top-buffer">
-                        <div class="col-md-3">
-                            <label>Update Status</label>
+                    @if (!Model.Recurring)
+                    {
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label>Update Status</label>
+                            </div>
+                            <div class="col">
+                                <form asp-action="WorkOrderStatusChange">
+                                    <select class="form-control form-control-sm custom-input" name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
+                                        <option value="">Select Status</option>
+                                    </select>
+                                    <div class="form-group">
+                                        <label>Add Status Description</label>
+                                        <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
+                                    </div>
+                                    <input asp-for="Id" hidden>
+                                    <input type="submit" value="Update Status" class="btn btn-sm btn-primary">
+                                </form>
+                            </div>
                         </div>
-                        <div class="col">
-                            <form asp-action="WorkOrderStatusChange">
-                                <select class="form-control form-control-sm custom-input" name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
-                                    <option value="">Select Status</option>
-                                </select>
-                                <div class="form-group">
-                                    <label>Add Status Description</label>
-                                    <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
-                                </div>
-                                <input asp-for="Id" hidden>
-                                <input type="submit" value="Update Status" class="btn btn-sm btn-primary">
-                            </form>
-                        </div>
-                    </div>
+                    }
                 </div>
             </td>
         </tr>
@@ -269,38 +272,52 @@
                 </div>
             </td>
         </tr>
-        <tr>
-            <td>
-                <a title="history" data-custom-value="@Model.Id" id="history_button"><i class="fa fa-history fa-2x"></i> <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i></a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div id="history">
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                Comments
-            </th>
-        </tr>
+        @if (!Model.Recurring)
+        {
+            <tr>
+                <td>
+                    <a title="history" data-custom-value="@Model.Id" id="history_button"><i class="fa fa-history fa-2x"></i> <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i></a>
+                </td>
+            </tr>
 
-        <tr id="CommentSection">
-            <td>
-                @await Html.PartialAsync("CommentOperation",
-                Model.Comments,
-                new ViewDataDictionary(ViewData)
-                {
-                { "workOrderId", Model.Id }
-                })
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <div id="history">
+                    </div>
+                </td>
+            </tr>
+       
+            <tr>
+                <th>
+                    Comments
+                </th>
+            </tr>
+
+            <tr id="CommentSection">
+                <td>
+                    @await Html.PartialAsync("CommentOperation",
+                     Model.Comments,
+                     new ViewDataDictionary(ViewData)
+                     {
+                    { "workOrderId", Model.Id }
+                     })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div>
-    @Html.ActionLink("Edit", "EditWOView", new { id = Model.Id }) |
-    <a asp-action="Index">Back to List</a>
+    @if (!Model.Recurring)
+    {
+        @Html.ActionLink("Edit", "EditWOView", new { id = Model.Id }) <span>|</span>
+        <a asp-action="Index">Back to List</a>
+    }
+    else
+    {
+        @Html.ActionLink("Edit", "EditRecurringWOView", new { id = Model.Id }) <span>|</span>
+        <a asp-action="GetRecurringWO">Back to List</a>
+    }
+
 </div>
 
 }

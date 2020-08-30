@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.RequestModels;
+using Models.WorkOrder.RequestModels;
 using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities;
+using DataTransferObjects.ResponseModels;
 
 namespace API.Controllers
 {
@@ -16,9 +17,9 @@ namespace API.Controllers
     [ApiController]
     public class WorkOrderController : ControllerBase
     {
-        private readonly IWorkOrderService _workOrderService;
+        private readonly IWorkOrderBL _workOrderService;
 
-        public WorkOrderController(IWorkOrderService workOrderService)
+        public WorkOrderController(IWorkOrderBL workOrderService)
         {
             _workOrderService = workOrderService;
         }
@@ -26,9 +27,9 @@ namespace API.Controllers
         [HttpGet]
         [Route("getworkordermodel")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult<CreateWO>> GetCreateWOModel()
+        public async Task<ActionResult<CreateNormalWO>> GetCreateWOModel()
         {
-            CreateWO wo = null;
+            CreateNormalWO wo = null;
             var userId = HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;
             if (userId != null)
                 wo = await _workOrderService.GetCreateWOModel(Convert.ToInt64(userId));
@@ -56,7 +57,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("createwo")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult> CreateWO([FromForm] CreateWO createWO, List<IFormFile> File)
+        public async Task<ActionResult> CreateWO([FromForm] CreateNormalWO createWO, List<IFormFile> File)
          {
             var status = await _workOrderService.CreateWO(createWO, File);
             return Ok(status);
@@ -65,7 +66,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("createrecurringwo")]
         [FeatureBasedAuthorization(MenuEnum.Create_WO)]
-        public async Task<ActionResult> CreateRecurringWO([FromForm] CreateRecurringWO createWO, List<IFormFile> File)
+        public async Task<ActionResult> CreateRecurringWO([FromForm] CreateRecurringWODTO createWO, List<IFormFile> File)
         {
             var status = await _workOrderService.CreateRecurringWO(createWO, File);
             return Ok(status);
@@ -83,7 +84,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("getallworkorder")]
         [FeatureBasedAuthorization(MenuEnum.Get_WO)]
-        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(WOFilterModel wOFilterModel)
+        public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(WOFilterDTO wOFilterModel)
         {
             var workorderassigned = await _workOrderService.GetWO(wOFilterModel);
             return Ok(workorderassigned);
@@ -102,14 +103,14 @@ namespace API.Controllers
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
         public async Task<ActionResult> GetEditRecurringWO(string id)
         {
-            EditRecurringWorkOrder editWorkOrder = await _workOrderService.GetEditRecurringWO(id);
+            EditRecurringWorkOrderDTO editWorkOrder = await _workOrderService.GetEditRecurringWO(id);
             return Ok(editWorkOrder);
         }
 
         [HttpPost]
         [Route("editWO")]
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
-        public async Task<ActionResult<bool>> EditWO([FromForm] EditWorkOrder editWorkOrder, List<IFormFile> File)
+        public async Task<ActionResult<bool>> EditWO([FromForm] EditNormalWorkOrder editWorkOrder, List<IFormFile> File)
         {
             bool status = await _workOrderService.EditWO(editWorkOrder, File);
             return Ok(status);
@@ -118,7 +119,7 @@ namespace API.Controllers
             [HttpPost]
         [Route("editrecurringwo")]
         [FeatureBasedAuthorization(MenuEnum.Edit_WO)]
-        public async Task<ActionResult<bool>> EditRecurringWO([FromForm] EditRecurringWorkOrder editWorkOrder, List<IFormFile> File)
+        public async Task<ActionResult<bool>> EditRecurringWO([FromForm] EditRecurringWorkOrderDTO editWorkOrder, List<IFormFile> File)
         {
             bool status = await _workOrderService.EditRecurringWO(editWorkOrder, File);
             return Ok(status);
@@ -135,7 +136,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("postcomment")]
         [FeatureBasedAuthorization(MenuEnum.Post_Comment)]
-        public async Task<ActionResult<Pagination<List<CommentDTO>>>> PostComment(Post post)
+        public async Task<ActionResult<Pagination<List<CommentDTO>>>> PostComment(PostCommentDTO post)
         {
             var res = await _workOrderService.PostComment(post);
             return Ok(res);
@@ -153,17 +154,43 @@ namespace API.Controllers
         [HttpPost]
         [Route("workordersexport")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
-        public async Task<ActionResult<List<WorkOrderDetail>>> WOExport(WOFilterModel wOFilterModel)
+        public async Task<ActionResult<List<WorkOrderDetail>>> WOExport(WOFilterDTO wOFilterModel)
         {
             var res = await _workOrderService.WOExport(wOFilterModel);
             return Ok(res);
         }
+        
+            [HttpGet]
+        [Route("getRecurringWO")]
+        [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
+        public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(int pageNumber)
+        {
+            Pagination<List<RecurringWOs>> res = await _workOrderService.GetRecurringWO(pageNumber);
+            return Ok(res);
+        }
         [HttpGet]
         [Route("gethistory")]
-        [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
+        [FeatureBasedAuthorization(MenuEnum.Recurring_WO)]
         public async Task<ActionResult<List<HistoryDetail>>> GetHistory(string entity,string rowId)
         {
             List<HistoryDetail> res = await _workOrderService.GetHistory(entity,rowId);
+            return Ok(res);
+        }
+        [HttpGet]
+        [Route("getchildwos")]
+        [FeatureBasedAuthorization(MenuEnum.Recurring_WO)]
+        public async Task<ActionResult<Pagination<List<ChildWo>>>> GetChildWO(int pageNumber, string search ,string rwoId)
+        {
+            Pagination<List<ChildWo>> res = await _workOrderService.GetChildWO(pageNumber,search, rwoId);
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("getrecwodetail")]
+        [FeatureBasedAuthorization(MenuEnum.Recurring_WO)]
+        public async Task<ActionResult<WorkOrderDetail>> GetRecurringWODetail(string id)
+        {
+            WorkOrderDetail res = await _workOrderService.GetRecurringWODetail(id);
             return Ok(res);
         }
     }

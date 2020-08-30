@@ -56,7 +56,7 @@
 <div class="mwrapper">
     <div class="flex-container" style="padding-top:60px;">
         <div class="menu">
-            <a href="@Url.Action("Index","WorkOrder")">
+            <a href="@Url.Action("Index", "WorkOrder")">
                 <div class="item">
                     <span><i class="fa fa-list-alt fa-3x" aria-hidden="true"></i></span>
                     <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Todo</span>
@@ -64,7 +64,7 @@
             </a>
         </div>
         <div class="menu">
-            <a href="@Url.Action("GetAllUsers","User")">
+            <a href="@Url.Action("GetAllUsers", "User")">
                 <div class="item">
                     <span><i class="fa fa-user fa-3x" aria-hidden="true"></i></span>
                     <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">User</span>
@@ -72,7 +72,7 @@
             </a>
         </div>
         <div class="menu">
-            <a href="@Url.Action("Index","Configuration")">
+            <a href="@Url.Action("Index", "Configuration")">
                 <div class="item">
                     <span><i class="fa fa-cogs fa-3x" aria-hidden="true"></i></span>
                     <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Setting</span>
@@ -80,13 +80,27 @@
             </a>
         </div>
         <div class="menu">
-            <a href="@Url.Action("ListProperties","Property")">
+            <a href="@Url.Action("ListProperties", "Property")">
                 <div class="item">
                     <span><i class="fa fa-home fa-3x" aria-hidden="true"></i></span>
                     <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Property</span>
                 </div>
             </a>
         </div>
+        @{  var userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+            var obj = ObjectByteConverter.Deserialize<SessionStore>
+                (await sessionStorage.GetAsync(userId));
+        }
+        @if (obj.MenuList.Contains(MenuEnum.Recurring_WO.ToString())){ 
+        <div class="menu">
+            <a href="@Url.Action("GetRecurringWO","WorkOrder")">
+                <div class="item">
+                    <span><i class="fa fa-hourglass-half fa-3x" aria-hidden="true"></i></span>
+                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Recurring WO</span>
+                </div>
+            </a>
+        </div>
+        }
         <div class="menu">
             <a href="@Url.Action("GetAllNotification","Home")">
                 <div class="item">
@@ -98,18 +112,19 @@
                 </div>
             </a>
         </div>
-        @{  var id = HttpContextAccessor.HttpContext.User.Claims.Where(x=>x.Type==ClaimTypes.Sid).Select(x=>x.Value).FirstOrDefault();
-                             
-            var path = HttpContextAccessor.HttpContext.User.Claims.Where(x=>x.Type=="imageurl").Select(x=>x.Value).FirstOrDefault();
-         }
-        @if (id != "") {
-        <div class="menu">
-            <div class="item">
-               
-                <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
-                
+        @{ var id = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+
+            var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
+        }
+        @if (id != "")
+        {
+            <div class="menu">
+                <div class="item">
+
+                    <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
+
+                </div>
             </div>
-        </div>
         }
     </div>
 </div>

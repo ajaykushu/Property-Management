@@ -150,7 +150,8 @@
                 <label for="select-start-date">Start:</label>
                 @if (Model.RecurringStartDate != null)
                 {
-                    @Html.TextBox("RecurringStartDate", (DateTime?)Model.RecurringStartDate, null, new { @class = "form-control form-control", @min = DateTime.Now })
+                    var date = Convert.ToDateTime(Model.RecurringStartDate).ToString("yyyy-MM-dd");
+                    @Html.TextBox("RecurringStartDate", date, null, new { @type = "date", @class = "form-control form-control-sm custom-input", @min = DateTime.Now.ToString("yyyy-MM-dd") })
                 }
                 else
                 {

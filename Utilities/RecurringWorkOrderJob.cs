@@ -15,19 +15,21 @@ namespace Utilities
         private readonly IRepo<WorkOrder> _workOrder;
         private readonly IRepo<History> _history;
         private readonly IRepo<Status> _status;
+        private readonly IRepo<RecurringWO> _recurringWo;
 
 
-        public RecurringWorkOrderJob(IRepo<WorkOrder> workOrder, IRepo<History> history, IRepo<Status> status)
+        public RecurringWorkOrderJob(IRepo<RecurringWO> recurringWo,IRepo<WorkOrder> workOrder, IRepo<History> history, IRepo<Status> status)
         {
             _workOrder = workOrder;
             _history = history;
             _status = status;
+            _recurringWo = recurringWo;
         }
         public async Task CreateRecurringWO(string woId)
         {
             
-            var obj =  _workOrder.Get(x => x.Id == woId).Include(x=>x.WOAttachments).FirstOrDefault();
-            string status = await _history.Get(x => x.Entity == "WorkOrder" && x.RowId == woId && x.PropertyName=="Status").OrderBy(x => x.CreatedTime).Take(1).Select(x=>x.OldValue).AsNoTracking().FirstOrDefaultAsync();
+            var obj =  _recurringWo.Get(x => x.Id == woId).Include(x=>x.WOAttachments).AsNoTracking().FirstOrDefault();
+
             if (obj.EndAfterCount.HasValue && obj.EndAfterCount.HasValue && obj.EndAfterCount.Value == 0)
             {
                 RecurringJob.RemoveIfExists(woId);
@@ -35,34 +37,55 @@ namespace Utilities
             else if (obj.EndAfterCount.HasValue)
                   obj.EndAfterCount-=1;
 
+
             if (obj != null)
             {
-                obj.Id = null;
-                if (status != null)
+                WorkOrder workOrder = new WorkOrder()
                 {
-                    obj.StatusId= await _status.Get(x => x.StatusDescription.Equals(status)).Select(x => x.Id).FirstAsync();
-                }
-                var res=await _workOrder.Add(obj);
+                    ParentWoId = woId,
+                    AssignedToId = obj.AssignedToId,
+                    AssignedToDeptId = obj.AssignedToDeptId,
+                    VendorId = obj.VendorId,
+                    WOAttachments = obj.WOAttachments,
+                    UpdatedByUserName = "System",
+                    DueDate = DateTime.Now.AddDays(1),
+                    CreatedTime = DateTime.Now,
+                    Description = obj.Description,
+                    IssueId = obj.IssueId,
+                    ItemId = obj.IssueId,
+                    LocationId = obj.LocationId,
+                    SubLocationId = obj.SubLocationId,
+                    PropertyId = obj.PropertyId,
+                    Priority = obj.Priority,
+                    CreatedByUserName = "System",
+                    RequestedBy = obj.CreatedByUserName,
+                    StatusId = obj.StatusId
+
+                };
+
+
+         
+                var res=await _workOrder.Add(workOrder);
             }
         }
 
         
 
-        public void RunAddScheduleJob(string cron, string id, DateTime date)
+        public void RunAddScheduleJob(string cron, string id, DateTime date,TimeZoneInfo timeZone)
         {
-            BackgroundJob.Schedule(() => RunCreateWoJob(cron,id), date);
+            BackgroundJob.Schedule(() => RunCreateWoJob(cron,id,timeZone), date);
             
         }
         
 
-        public void RunCreateWoJob(string cron, string woId)
+        public void RunCreateWoJob(string cron, string woId,TimeZoneInfo timeZone)
         {
-            var wo = _workOrder.Get(x => x.Id.Equals(woId)).FirstOrDefault();
+            var wo = _recurringWo.Get(x => x.Id.Equals(woId)).FirstOrDefault();
             if (wo != null)
                 if (wo.RecurringStartDate.HasValue)
                     if (wo.RecurringStartDate.Value.Date != DateTime.Now.Date)
                         return;
-            RecurringJob.AddOrUpdate(woId,() => CreateRecurringWO(woId),cron);
+            RecurringJob.AddOrUpdate(woId,() => CreateRecurringWO(woId),cron,timeZone:timeZone);
         }
 
         public void RunRemoveScheduleJob(DateTime datetime, string id)

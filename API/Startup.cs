@@ -51,6 +51,7 @@ namespace API
                     return new BadRequestObjectResult(action.ModelState.Where(model => model.Value.Errors.Count > 0).Select(modelError => modelError.Value.Errors.FirstOrDefault().ErrorMessage));
                 };
             });
+
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContextPool<AppDBContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>(op =>
@@ -62,6 +63,7 @@ namespace API
                 op.Tokens.AuthenticatorIssuer = Configuration.GetSection("token").GetSection("issuer").Value;
             }).AddUserValidator<ApplicationUserPhoneValidator>()
            .AddEntityFrameworkStores<AppDBContext>().AddDefaultTokenProviders();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -82,18 +84,21 @@ namespace API
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("token").GetSection("key").Value))
                };
            });
-           
+            services.AddCors(x => x.AddPolicy("MyCors", op =>
+            {
+                op.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<EmailConfigurationModel>(Configuration.GetSection("EmailConfig"));
             services.AddScoped(typeof(IRepo<>), typeof(Repo<>));
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IUserManager, User>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IConfigService, ConfigService>();
+            services.AddScoped<IUserBL, UserBL>();
+            services.AddScoped<IConfigBL, ConfigBL>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IImageUploadInFile, ImageUploadInFile>();
-            services.AddScoped<IPropertyService, PropertyService>();
-            services.AddScoped<IWorkOrderService, WorkOrderService>();
+            services.AddScoped<IPropertyBL, PropertyBL>();
+            services.AddScoped<IWorkOrderBL, WorkOrderBL>();
             services.AddScoped<INotifier, Notifications>();
             services.AddScoped<IRecurringWorkOrderJob,RecurringWorkOrderJob>();
         }
@@ -113,7 +118,7 @@ namespace API
             {
                 options.UseMiddleware<ExceptionHandlerMiddlerwarecs>();
             });
-            //app.UseHttpsRedirection();
+            
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
@@ -121,15 +126,18 @@ namespace API
                 RequestPath = "/ImageFileStore"
             });
 
+            app.UseCors("MyCors");
             app.UseAuthentication();
             app.UseMiddleware<BlackListCheckMiddleware>();
             app.UseRouting();
             app.UseAuthorization();
-      
             app.UseSerilogRequestLogging();
             app.UseHangfireServer();
             app.UseHangfireDashboard();
+            
+            
             app.UseMvc();
+           
         }
     }
 }
