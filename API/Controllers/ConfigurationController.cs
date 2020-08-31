@@ -12,22 +12,29 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        private readonly IConfigService _configService;
+        private readonly IConfigBL _configService;
 
-        public ConfigurationController(IConfigService configService)
+        public ConfigurationController(IConfigBL configService)
         {
             _configService = configService;
         }
-
+        /// <summary>
+        /// Used to return features corresponding to role Id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>List</returns>
         [HttpGet]
         [Route("getfeatues")]
         [FeatureBasedAuthorization(MenuEnum.Edit_Feature)]
-        public async Task<ActionResult<List<FeatureRoleModel>>> GetAllRolesAndFeatues(long id)
+        public async Task<ActionResult<List<FeatureRoleModel>>> GetAllFeatues(long id)
         {
             var data = await _configService.GetFeatureRoles(id);
             return Ok(data);
         }
-
+        /// <summary>
+        /// used to get all roles
+        /// </summary>
+        /// <returns>List</returns>
         [HttpGet]
         [Route("getrole")]
         [FeatureBasedAuthorization(MenuEnum.Edit_Feature)]
@@ -36,7 +43,11 @@ namespace API.Controllers
             var data = await _configService.GetRoles();
             return Ok(data);
         }
-
+        /// <summary>
+        /// used to update the feature corresponding to role
+        /// </summary>
+        /// <param name="valuePairs"></param>
+        /// <returns>boolean</returns>
         [HttpPost]
         [Route("updatefeature")]
         [FeatureBasedAuthorization(MenuEnum.Edit_Feature)]

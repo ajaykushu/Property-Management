@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataEntity\DataEntity.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Models\DataTransferObjects.csproj" />
   </ItemGroup>
 
 </Project>

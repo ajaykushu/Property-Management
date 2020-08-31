@@ -14,4 +14,8 @@
     <ProjectReference Include="..\DataEntity\DataEntity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RequestModels\Configuration\" />
+  </ItemGroup>
+
 </Project>

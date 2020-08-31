@@ -1,4 +1,4 @@
-﻿using Models.RequestModels;
+﻿using Models.Login.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ namespace API.Authentication.Interfaces
 {
     public interface IUserManager
     {
-        Task<TokenResponseModel> DoLogin(LoginUserModel loginDTO);
+        Task<TokenResponseModel> DoLogin(LoginUserDTO loginDTO);
 
         Task<bool> GetPasswordChangeTokenAsync(string email, string verificationPath);
 

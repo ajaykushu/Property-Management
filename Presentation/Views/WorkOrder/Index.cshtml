@@ -118,7 +118,7 @@
                     {
                         <tr>
                             <td>
-                                <span><strong class="@if (item.Recurring) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
+                                <span><strong class="@if (item.ParentId!=null) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
                             </td>
 
                             <td><span style="word-break:normal">@item.Description</span></td>
@@ -134,15 +134,9 @@
                                 @{
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                     keyValuePairs.Add("id", item.Id + "");
-                                    if (!item.Recurring)
-                                    {
+                                   
                                         <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                    }
-                                    else
-                                    {
-                                        <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                        
-                                                    }
+                                   
                                     <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                                 }
                             </td>

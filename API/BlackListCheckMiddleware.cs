@@ -20,7 +20,7 @@ namespace API
         }
 
         public async Task Invoke(HttpContext httpContext)
-        {
+          {
             if (httpContext.User.Identity.IsAuthenticated)
             {
                 var id = httpContext.User.FindFirst(x => x.Type == ClaimTypes.Sid).Value;

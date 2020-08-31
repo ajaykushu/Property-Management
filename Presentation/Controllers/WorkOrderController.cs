@@ -165,13 +165,21 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(string id)
+        public async Task<ActionResult<WorkOrderDetail>> GetWODetail(string id,int type=1)
         {
             WorkOrderDetail workOrderDetail = null;
-            
+
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("wodetail", out string path);
+                string path;
+                if (type == 2)
+                {
+                    _apiRoute.Value.Routes.TryGetValue("getrecwodetail", out path);
+                }
+                else {
+                    _apiRoute.Value.Routes.TryGetValue("wodetail", out path);
+                }
+            
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
@@ -474,6 +482,38 @@ namespace Presentation.Controllers
                 return View("~/Views/WorkOrder/Mobile/GetHistory.cshtml", historyDetails);
             }
             return PartialView(historyDetails);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetRecurringWO(int pageNumber)
+        {
+            Pagination<List<RecurringWOs>> recWo = null;
+            _apiRoute.Value.Routes.TryGetValue("getRecurringWO", out string path);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?pageNumber"+ pageNumber, this, _token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                recWo = JsonConvert.DeserializeObject<Pagination<List<RecurringWOs>>>(await response.Content.ReadAsStringAsync());
+            }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/GetRecurringWO.cshtml", recWo);
+            return View(recWo);
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetChildWO(string rwoId,string search, int pageNumber = 0)
+        {
+            Pagination<List<ChildWo>> recWo = null;
+            _apiRoute.Value.Routes.TryGetValue("getchildwos", out string path);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?pageNumber" + pageNumber+"&search="+search+"&rwoId="+rwoId, this, _token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                recWo = JsonConvert.DeserializeObject<Pagination<List<ChildWo>>>(await response.Content.ReadAsStringAsync());
+            }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/GetChildWO.cshtml", recWo);
+
+            return View(recWo);
         }
 
         [HttpPost]

@@ -1,20 +1,20 @@
 ﻿using Models;
-using Models.RequestModels;
 using Models.ResponseModels;
+using Models.User.RequestModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Interfaces
 {
-    public interface IUserService
+    public interface IUserBL
     {
-        Task<bool> RegisterUser(RegisterUser model);
+        Task<bool> RegisterUser(RegisterUserDTO model);
 
-        Task<RegisterUser> GetRegisterModel();
+        Task<RegisterUserDTO> GetRegisterModel();
 
-        Task<EditUserModel> GetEditUserModelAsync(long Id);
+        Task<EditUserDTO> GetEditUserModelAsync(long Id);
 
-        Task<bool> UpdateUser(EditUserModel editUser);
+        Task<bool> UpdateUser(EditUserDTO editUser);
 
         Task<Pagination<IList<UsersListModel>>> GetAllUsers(int pageNumber, FilterEnum filter, string matchString);
 

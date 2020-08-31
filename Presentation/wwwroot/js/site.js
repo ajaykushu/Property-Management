@@ -467,15 +467,8 @@ function EndInputEnabler() {
 
 function GenarateCron() {
     var cron = '*1 *2 *3 *4 *5';
-    //find start time
-    var time = $('#select-at-time').val();
-    if (time != undefined && time != "") {
-        time = time.split(":");
-        cron = cron.replace('*1', time[1]).replace('*2', time[0]);
-    }
-    else {
-        cron = cron.replace('*1', '0').replace('*2', '0');
-    }
+    cron = cron.replace('*1', '0').replace('*2', '0');
+    
     // find day
     //if the value is daily
     if ($('input[name="type-select"]:checked').val() == "Daily" || $('#type-select').val() == "Daily") {
@@ -539,7 +532,7 @@ function GenarateCron() {
             
     }
 
-    cron = cron.replace('*1', '*').replace('*2', '*').replace('*3', '*').replace('*4', '*').replace('*5', '*');
+    cron = cron.replace('*1', '0').replace('*2', '0').replace('*3', '*').replace('*4', '*').replace('*5', '*');
    
     $('#CronExpression').val(cron);
 };

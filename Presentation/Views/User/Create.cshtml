@@ -96,7 +96,7 @@
                                     <div class="col">
                                         @if (Model.TimeZones.Any())
                                             {
-                                        <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "PropertyName"))">
+                                        <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "Id", "PropertyName"))">
                                             <option value="">Please select one</option>
                                         </select>
                                         <span asp-validation-for="TimeZone" class="text-danger"></span>

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
-    public class ConfigService : IConfigService
+    public class ConfigBL : IConfigBL
     {
         private readonly IRepo<ApplicationRole> _applicationRole;
         private readonly IRepo<Menu> _menu;
         private readonly IRepo<RoleMenuMap> _roleMenuMap;
 
-        public ConfigService(IRepo<ApplicationRole> applicationRole, IRepo<Menu> menu, IRepo<RoleMenuMap> roleMenuMap)
+        public ConfigBL(IRepo<ApplicationRole> applicationRole, IRepo<Menu> menu, IRepo<RoleMenuMap> roleMenuMap)
         {
             _applicationRole = applicationRole;
             _menu = menu;

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Utilities.Interface;
 
 namespace API.Authentication
 {
@@ -32,7 +31,8 @@ namespace API.Authentication
                 new Claim(ClaimTypes.Email, applicationuser.Email),
                 new Claim(ClaimTypes.GivenName,applicationuser.FirstName+" "+applicationuser.LastName+" "+applicationuser.Suffix),
                 new Claim(ClaimTypes.Sid,applicationuser.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti,jti)
+                new Claim(JwtRegisteredClaimNames.Jti,jti),
+                new Claim("TimeZone",applicationuser.TimeZone??TimeZoneInfo.Utc.Id)
             };
             foreach (var feature in features)
                 authClaims.Add(new Claim("Feature", feature));

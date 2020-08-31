@@ -26,6 +26,7 @@
         Edit_WO = 15,
         Post_Comment = 16,
         Assign_To_User = 17,
-        WO_Operation = 18
+        WO_Operation = 18,
+        Recurring_WO=19
     }
 }

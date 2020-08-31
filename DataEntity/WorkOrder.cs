@@ -24,13 +24,7 @@ namespace DataEntity
         public string RequestedBy { get; set; }
         public long? AssignedToId { get; set; }
         public int? AssignedToDeptId { get; set; }
-        #region Recurring
-        public bool Recurring { get; set; }
-        public string CronExpression { get; set; }
-        public DateTime? RecurringEndDate { get; set; }
-        public DateTime? RecurringStartDate { get; set; } 
-        public int? EndAfterCount { get; set; } 
-        #endregion
+       
         public int? VendorId { get; set; }
         public Vendor Vendor { get; set; }
         public DateTime DueDate { get; set; }
@@ -38,10 +32,14 @@ namespace DataEntity
         public Location Location { get; set; }
         public int? SubLocationId { get; set; }
         public SubLocation SubLocation { get; set; }
+        [ForeignKey("ParentRecurringWO")]
+        public string ParentWoId { set; get; }
+        public RecurringWO ParentRecurringWO { get; set; }
         public int Priority { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
         public virtual Department AssignedToDept { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+     
         public virtual ICollection<WOAttachments> WOAttachments { get; set; }
     }
 }

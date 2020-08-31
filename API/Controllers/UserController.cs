@@ -2,7 +2,7 @@
 using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.RequestModels;
+using Models.User.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,10 +16,10 @@ namespace API.Controllers
     public class UserController : ControllerBase
     {
         public IConfiguration Configuration;
-        private readonly IUserService _userService;
+        private readonly IUserBL _userService;
         private readonly INotifier _notifier;
 
-        public UserController(IUserService userService, INotifier notifier)
+        public UserController(IUserBL userService, INotifier notifier)
         {
             _userService = userService;
             _notifier = notifier;
@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("register")]
         [FeatureBasedAuthorization(MenuEnum.Add_User)]
-        public async Task<ActionResult> Register([FromForm] RegisterUser user)
+        public async Task<ActionResult> Register([FromForm] RegisterUserDTO user)
         {
             var status = await _userService.RegisterUser(user);
             return Ok(status);
@@ -44,7 +44,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("getregisterrequestmodel")]
         [FeatureBasedAuthorization(MenuEnum.Add_User)]
-        public async Task<ActionResult<RegisterUser>> GetRegisterRequestModel()
+        public async Task<ActionResult<RegisterUserDTO>> GetRegisterRequestModel()
         {
             return await _userService.GetRegisterModel();
         }
@@ -52,7 +52,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("getedituserrequestmodel")]
         [FeatureBasedAuthorization(MenuEnum.Edit_User)]
-        public async Task<ActionResult<EditUserModel>> GeUserEditRequestModel(long Id)
+        public async Task<ActionResult<EditUserDTO>> GeUserEditRequestModel(long Id)
         {
             return await _userService.GetEditUserModelAsync(Id);
         }
@@ -60,7 +60,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("updateuser")]
         [FeatureBasedAuthorization(MenuEnum.Edit_User)]
-        public async Task<ActionResult<EditUserModel>> UpdateUser([FromForm] EditUserModel user)
+        public async Task<ActionResult<EditUserDTO>> UpdateUser([FromForm] EditUserDTO user)
         {
             var status = await _userService.UpdateUser(user);
             return Ok(status);
