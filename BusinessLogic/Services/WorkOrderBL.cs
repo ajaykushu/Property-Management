@@ -42,6 +42,7 @@ namespace BusinessLogic.Services
         private readonly string _scheme;
         private readonly IRecurringWorkOrderJob _recurringWorkOrderJob;
         private readonly TimeZoneInfo timeZone;
+        private readonly bool is24HrFormat = false;
 
         public WorkOrderBL(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Status> status, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors, IRepo<History> history,IRecurringWorkOrderJob recurringWorkOrderJob, IRepo<RecurringWO> recuringWo)
         {
@@ -64,8 +65,10 @@ namespace BusinessLogic.Services
             _scheme = _httpContextAccessor.HttpContext.Request.IsHttps ? "https://" : "http://";
             _vendors = vendors;
             _recurringWorkOrderJob = recurringWorkOrderJob;
-            timeZone = TimeZoneInfo.FindSystemTimeZoneById(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == "TimeZone").Value);
-                 
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == "TimeZone")?.Value);
+            is24HrFormat = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == "Clock")?.Value=="24" ? true : false;
+
+
         }
 
         public async Task<bool> CreateWO(CreateNormalWO createWO, List<IFormFile> File)
@@ -765,8 +768,8 @@ namespace BusinessLogic.Services
             editwo.VendorId = temp.VendorId;
             editwo.Priority = temp.Priority;
             editwo.CronExpression =!string.IsNullOrEmpty(temp.CronExpression)? new ExpressionDescriptor(temp.CronExpression, new Options {
-                DayOfWeekStartIndexZero = false,
-                Use24HourTimeFormat=true
+                DayOfWeekStartIndexZero = true,
+                Use24HourTimeFormat= is24HrFormat
             }).GetDescription(DescriptionTypeEnum.FULL):"";
             editwo.DueDate = temp.DueDate;
             editwo.LocationId = temp.LocationId.GetValueOrDefault();
@@ -926,8 +929,8 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 ScheduleAt= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
                 {
-                    DayOfWeekStartIndexZero = false,
-                    Use24HourTimeFormat = true
+                    DayOfWeekStartIndexZero = true,
+                    Use24HourTimeFormat = is24HrFormat
                 }).GetDescription(DescriptionTypeEnum.FULL) : null,
                 Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
@@ -989,8 +992,8 @@ namespace BusinessLogic.Services
                 UpdatedTime = x.UpdatedTime,
                 CronExpression= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
                 {
-                    DayOfWeekStartIndexZero = false,
-                    Use24HourTimeFormat = true
+                    DayOfWeekStartIndexZero = true,
+                    Use24HourTimeFormat = is24HrFormat
                 }).GetDescription(DescriptionTypeEnum.FULL) : null,
                 EndAfterCount=x.EndAfterCount,
                 RecurringEndDate=x.RecurringEndDate,

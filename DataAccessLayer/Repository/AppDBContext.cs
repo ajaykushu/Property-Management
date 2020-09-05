@@ -68,6 +68,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<Property>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<WorkOrder>().Property(x => x.Priority).HasDefaultValue(0);
             builder.Entity<WorkOrder>().Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
+            builder.Entity<RecurringWO>().Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("Concat('RWO', NEXT VALUE FOR workordersequence)");
             DataSeeder(builder);
         }
 

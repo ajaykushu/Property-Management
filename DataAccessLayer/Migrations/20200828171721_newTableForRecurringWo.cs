@@ -3,16 +3,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class fornewChnages : Migration
+    public partial class newTableForRecurringWo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_WorkOrders_WorkOrders_ParentWorkOrderId",
+                table: "WorkOrders");
+
+            migrationBuilder.DropIndex(
+                name: "IX_WorkOrders_ParentWorkOrderId",
+                table: "WorkOrders");
+
             migrationBuilder.DropColumn(
                 name: "CronExpression",
                 table: "WorkOrders");
 
             migrationBuilder.DropColumn(
                 name: "EndAfterCount",
+                table: "WorkOrders");
+
+            migrationBuilder.DropColumn(
+                name: "ParentWorkOrderId",
                 table: "WorkOrders");
 
             migrationBuilder.DropColumn(
@@ -134,26 +146,21 @@ namespace DataAccessLayer.Migrations
                 keyColumn: "Id",
                 keyValue: 1L,
                 column: "ConcurrencyStamp",
-                value: "108f8f66-ae91-46db-be33-b2d45940c0c1");
+                value: "76fe1008-2b3d-4dc0-8f06-cb5b87fd4b82");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 column: "ConcurrencyStamp",
-                value: "93ba2d51-7bb1-494f-82bb-75543c0191ad");
+                value: "ee5ab939-3d26-4dc7-a643-7a35bdde27f4");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 3L,
                 column: "ConcurrencyStamp",
-                value: "53753b36-ca44-4d2c-853f-8328435f0cbb");
-
-            migrationBuilder.InsertData(
-                table: "Menu",
-                columns: new[] { "Id", "CreatedByUserName", "CreatedTime", "MenuName", "UpdatedByUserName", "UpdatedTime" },
-                values: new object[] { 19L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Recurring_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+                value: "7d8f66f6-c391-4983-a387-85c9383b40ca");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_ParentWoId",
@@ -269,11 +276,6 @@ namespace DataAccessLayer.Migrations
                 name: "IX_Comments_RecurringWOId",
                 table: "Comments");
 
-            migrationBuilder.DeleteData(
-                table: "Menu",
-                keyColumn: "Id",
-                keyValue: 19L);
-
             migrationBuilder.DropColumn(
                 name: "ParentWoId",
                 table: "WorkOrders");
@@ -296,6 +298,12 @@ namespace DataAccessLayer.Migrations
                 name: "EndAfterCount",
                 table: "WorkOrders",
                 type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ParentWorkOrderId",
+                table: "WorkOrders",
+                type: "nvarchar(450)",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
@@ -322,21 +330,34 @@ namespace DataAccessLayer.Migrations
                 keyColumn: "Id",
                 keyValue: 1L,
                 column: "ConcurrencyStamp",
-                value: "a81c8f7a-5cec-4827-a746-b23371a6fcc1");
+                value: "f4328861-3dfd-4586-a84e-f730890ad7b0");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 column: "ConcurrencyStamp",
-                value: "c2df9448-938f-4719-b220-334c2922674b");
+                value: "5cff61fb-0cc6-4346-bcdd-c045dffbf683");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: 3L,
                 column: "ConcurrencyStamp",
-                value: "eff581ad-97b5-4df2-a404-14e9662f5c11");
+                value: "d3540943-1c0f-484e-9139-59bb46ec5289");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkOrders_ParentWorkOrderId",
+                table: "WorkOrders",
+                column: "ParentWorkOrderId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_WorkOrders_WorkOrders_ParentWorkOrderId",
+                table: "WorkOrders",
+                column: "ParentWorkOrderId",
+                principalTable: "WorkOrders",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

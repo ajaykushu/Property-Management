@@ -9,7 +9,7 @@ namespace DataEntity
     public class RecurringWO:Log
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string Id { get; set; }
         public long PropertyId { get; set; }
         public Property Property { get; set; }

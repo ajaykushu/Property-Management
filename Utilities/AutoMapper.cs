@@ -8,7 +8,7 @@ namespace Utilities
     {
         public AutoMapper()
         {
-            CreateMap<EditWorkOrder, WorkOrder>();
+           
         }
 
     }

@@ -13,16 +13,16 @@
     <table class="table table-striped wordorderdetail table_container table-responsive-lg">
 
         <tbody>
-            @{ int inc = 1;}
+          
             @foreach (var item in Model.Payload)
             {
             <tr>
                 <td>
-                    <span><strong class="green">RWO @inc</strong></span>
+                    <span><strong class="green">@item.Id</strong></span>
                 </td>
 
-                @{ inc++;}
-                <td><span style="word-break:normal">@item.Description</span></td>
+              
+                <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
                 <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
                 <td>
                     <span class="text-dark">
@@ -34,15 +34,18 @@
                 <td>
                     <span><strong>@item.ScheduleAt</strong></span>
                 </td>
-                <td style="min-width:200px;">
+                <td class="value" style="width:250px;">
+                    <div class="form-inline">
                     @{
                         Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                         keyValuePairs.Add("id", item.Id + "");
 
                         <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                        <a class="btn btn-sm btn-primary" asp-action="GetChildWO" asp-route-rwoId="@item.Id">Get Child WOs</a>
-                        <a class="btn btn-sm btn-primary" asp-action="GetWODetail" asp-route-id="@item.Id" asp-route-type="2">Detail</a>
+                        <a class="btn btn-sm btn-light ml-1" asp-action="GetChildWO" asp-route-rwoId="@item.Id">Child WOs</a>
+                        <a class="btn btn-sm btn-info ml-1" asp-action="GetWODetail" asp-route-id="@item.Id" asp-route-type="2">Detail</a>
                     }
+
+                    </div>
                 </td>
 
             </tr>

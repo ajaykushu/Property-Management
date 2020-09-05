@@ -32,7 +32,8 @@ namespace API.Authentication
                 new Claim(ClaimTypes.GivenName,applicationuser.FirstName+" "+applicationuser.LastName+" "+applicationuser.Suffix),
                 new Claim(ClaimTypes.Sid,applicationuser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti,jti),
-                new Claim("TimeZone",applicationuser.TimeZone??TimeZoneInfo.Utc.Id)
+                new Claim("TimeZone",applicationuser.TimeZone??TimeZoneInfo.Utc.Id),
+                new Claim("Clock",applicationuser.ClockType)
             };
             foreach (var feature in features)
                 authClaims.Add(new Claim("Feature", feature));
