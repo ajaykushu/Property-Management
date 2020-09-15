@@ -4,12 +4,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="workordertitle">
-    Work Order Detail
-    @if(Model!=null){
-    <a asp-action="DownloadWO" class="fa-pull-right" title="Export" style="padding:5px;color:white" asp-route-woId="@Model.Id" download="File.csv"><i class="fas fa-file-export"></i></a>
-    }
-</div>
+    <div class="workordertitle">
+        @if (Model != null && Model.Recurring)
+        {
+            <span>Recurring Work Order Detail</span>
+        }
+        else
+        {
+            <span>Work Order Detail</span>
+        }
+        @if (Model != null)
+        {
+            <a asp-action="DownloadWO" class="fa-pull-right" title="Export" style="padding:5px;color:white" asp-route-woId="@Model.Id" download="File.csv"><i class="fas fa-file-export"></i></a>
+        }
+    </div>
 @if (Model != null)
 {
 <table class="table table-striped  ">
@@ -304,6 +312,19 @@
                 </td>
             </tr>
         }
+        else
+        {
+            <tr>
+                <th>
+                    Child WO
+                </th>
+             </tr>
+            <tr>
+                <td  id="ChildWOSection">
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div>
@@ -343,3 +364,19 @@
      alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
 </script>
 }
+
+<script>
+     var workorderId = '@Model.Id';
+    $(document).ready(function () {
+           
+            $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=',
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $('#ChildWOSection').append(data);
+                    }
+                });
+
+        
+    });
+         
+</script>

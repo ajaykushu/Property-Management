@@ -505,7 +505,7 @@ namespace Presentation.Controllers
         {
             Pagination<List<ChildWo>> recWo = null;
             _apiRoute.Value.Routes.TryGetValue("getchildwos", out string path);
-            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?pageNumber" + pageNumber+"&search="+search+"&rwoId="+rwoId, this, _token).ConfigureAwait(false);
+            var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?pageNumber=" + pageNumber+"&search="+search+"&rwoId="+rwoId, this, _token).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
                 recWo = JsonConvert.DeserializeObject<Pagination<List<ChildWo>>>(await response.Content.ReadAsStringAsync());
@@ -513,7 +513,7 @@ namespace Presentation.Controllers
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/WorkOrder/Mobile/GetChildWO.cshtml", recWo);
 
-            return View(recWo);
+            return PartialView(recWo);
         }
 
         [HttpPost]

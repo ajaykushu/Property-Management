@@ -179,7 +179,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("getchildwos")]
         [FeatureBasedAuthorization(MenuEnum.Recurring_WO)]
-        public async Task<ActionResult<Pagination<List<ChildWo>>>> GetChildWO(int pageNumber, string search ,string rwoId)
+        public async Task<ActionResult<Pagination<List<ChildWo>>>> GetChildWO( string rwoId, string search,int pageNumber)
         {
             Pagination<List<ChildWo>> res = await _workOrderService.GetChildWO(pageNumber,search, rwoId);
             return Ok(res);

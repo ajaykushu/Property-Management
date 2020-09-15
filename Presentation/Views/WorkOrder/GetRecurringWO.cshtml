@@ -1,54 +1,57 @@
 ﻿@model Pagination<List<RecurringWOs>>
-<div>
-<a class="btn btn-success mb-1" value="CreateWorkOrderRecurring" asp-action="CreateWorkOrderRecurringView"><i class="fa fa-plus"></i>&nbsp;Recurring WO</a>
-</div>
+
 
 <div class="workordertitle">
     Recurring Work Orders
 </div>
 
+<div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
+  
+    <div class="justify-content-end col-md-12">
+        <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderRecurringView"><i class="fa fa-plus"></i>&nbsp;New Recurring WO</a>
+    </div>
 
+</div>
 @if (Model != null && Model.Payload != null && Model.Payload.Any())
 {
     <table class="table table-striped wordorderdetail table_container table-responsive-lg">
 
         <tbody>
-          
+
             @foreach (var item in Model.Payload)
             {
-            <tr>
-                <td>
-                    <span><strong class="green">@item.Id</strong></span>
-                </td>
+                <tr>
+                    <td>
+                        <span><strong class="green">@item.Id</strong></span>
+                    </td>
 
-              
-                <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
-                <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
-                <td>
-                    <span class="text-dark">
-                        @if (item.Property != null)
-                        {@item.Property.PropertyName}
-                    </span>
-                </td>
-                <td>@item.DueDate</td>
-                <td>
-                    <span><strong>@item.ScheduleAt</strong></span>
-                </td>
-                <td class="value" style="width:250px;">
-                    <div class="form-inline">
-                    @{
-                        Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                        keyValuePairs.Add("id", item.Id + "");
 
-                        <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                        <a class="btn btn-sm btn-light ml-1" asp-action="GetChildWO" asp-route-rwoId="@item.Id">Child WOs</a>
-                        <a class="btn btn-sm btn-info ml-1" asp-action="GetWODetail" asp-route-id="@item.Id" asp-route-type="2">Detail</a>
-                    }
+                    <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
+                    <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                    <td>
+                        <span class="text-dark">
+                            @if (item.Property != null)
+                            {@item.Property.PropertyName}
+                        </span>
+                    </td>
+                    <td>@item.DueDate</td>
+                    <td>
+                        <span><strong>@item.ScheduleAt</strong></span>
+                    </td>
+                    <td class="value" style="width:250px;">
+                        <div class="form-inline">
+                            @{
+                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                keyValuePairs.Add("id", item.Id + "");
 
-                    </div>
-                </td>
+                                <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <a class="btn btn-sm btn-info ml-1" asp-action="GetWODetail" asp-route-id="@item.Id" asp-route-type="2">Detail</a>
+                            }
 
-            </tr>
+                        </div>
+                    </td>
+
+                </tr>
             }
         </tbody>
 
