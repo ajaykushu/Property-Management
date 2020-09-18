@@ -586,12 +586,14 @@ namespace BusinessLogic.Services
 
         private async Task<IQueryable<WorkOrder>> FilterWO(WOFilterDTO wOFilterModel, IQueryable<WorkOrder> query)
         {
+
             #region init
             var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
             var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var userdept = await _appuser.FindByNameAsync(username);
             var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
             #endregion
+            
             #region filter based on filtermodel
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
@@ -646,6 +648,73 @@ namespace BusinessLogic.Services
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
                 query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) ||x.CreatedByUserName.Equals(username));
+            }
+            return query;
+        }
+        private async Task<IQueryable<RecurringWO>> FilterWO(WOFilterDTO wOFilterModel, IQueryable<RecurringWO> query)
+        {
+
+            #region init
+            var role = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Role).Value;
+            var username = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var userdept = await _appuser.FindByNameAsync(username);
+            var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+            #endregion
+
+            #region filter based on filtermodel
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
+            {
+                var startDate = Convert.ToDateTime(wOFilterModel.CreationStartDate);
+                query = query.Where(x => x.CreatedTime.Date >= startDate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationEndDate))
+            {
+                var enddate = Convert.ToDateTime(wOFilterModel.CreationEndDate);
+                query = query.Where(x => x.CreatedTime.Date <= enddate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Status))
+            {
+                query = query.Where(x => x.Status.StatusCode.Equals(wOFilterModel.Status));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.WOId))
+            {
+                query = query.Where(x => x.Id.Contains(wOFilterModel.WOId));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.AssignedTo))
+            {
+                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.FirstName.StartsWith(wOFilterModel.AssignedTo)) ||
+                (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.StartsWith(wOFilterModel.AssignedTo) || (x.AssignedTo != null && x.AssignedTo.Email.StartsWith(wOFilterModel.AssignedTo)))
+                );
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
+            {
+                var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
+                query = query.Where(x => x.DueDate.Date == dueDate.Date);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
+            {
+                var index = Convert.ToInt32(wOFilterModel.Priority);
+                query = query.Where(x => x.Priority == index);
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.PropertyName))
+            {
+                query = query.Where(x => x.Property.PropertyName.Contains(wOFilterModel.PropertyName));
+            }
+            if (!string.IsNullOrWhiteSpace(wOFilterModel.Vendor))
+            {
+                query = query.Where(x => x.Vendor != null && x.Vendor.VendorName.Contains(wOFilterModel.Vendor));
+            }
+            #endregion
+            //joins we need
+            query = query.Include(x => x.AssignedTo).Include(x => x.AssignedToDept).Include(x => x.Status).Include(x => x.Property).Include(x => x.Vendor);
+
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                query = query.Where(x => propIds.Contains(x.Property.Id));
+            }
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) || x.CreatedByUserName.Equals(username));
             }
             return query;
         }
@@ -916,13 +985,14 @@ namespace BusinessLogic.Services
             return false;
         }
 
-        public async Task<Pagination<List<RecurringWOs>>> GetRecurringWO(int pagenumber)
+        public async Task<Pagination<List<RecurringWOs>>> GetRecurringWO(WOFilterDTO wOFilterDTO)
         {
             int iteminpage = 20;
             var query = _recuringWo.GetAll();
+            query = await FilterWO(wOFilterDTO, query);
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
-            recWorkOrder = await query.OrderByDescending(x => x.DueDate).Skip(pagenumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
+            recWorkOrder = await query.OrderByDescending(x => x.DueDate).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -941,7 +1011,7 @@ namespace BusinessLogic.Services
             Pagination<List<RecurringWOs>> pagination = new Pagination<List<RecurringWOs>>
             {
                 Payload = recWorkOrder,
-                CurrentPage = pagenumber,
+                CurrentPage = wOFilterDTO.PageNumber,
                 ItemsPerPage = count > iteminpage ? iteminpage : count,
                 PageCount = count <= iteminpage ? 1 : count % iteminpage == 0 ? count / iteminpage : count / iteminpage + 1
             };
@@ -979,6 +1049,7 @@ namespace BusinessLogic.Services
 
         public async Task<WorkOrderDetail> GetRecurringWODetail(string rwoId)
         {
+            var iteminpage = 12;
             var workorder = await _recuringWo.Get(x => x.Id.Equals(rwoId)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Status).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Vendor).Select(x => new
                              WorkOrderDetail
             {
@@ -1012,7 +1083,16 @@ namespace BusinessLogic.Services
                  string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
                  )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
-
+            var comment = await GetComment(workorder.Id, 0);
+            var count = _comments.Get(x => x.WorkOrderId == workorder.Id).Count();
+            Pagination<List<CommentDTO>> pagedcomments = new Pagination<List<CommentDTO>>
+            {
+                Payload = comment,
+                ItemsPerPage = count > iteminpage ? iteminpage : count,
+                PageCount = count <= iteminpage ? 1 : count % iteminpage == 0 ? count / iteminpage : count / iteminpage + 1,
+                CurrentPage = 0
+            };
+            workorder.Comments = pagedcomments;
             return workorder;
         }
     }

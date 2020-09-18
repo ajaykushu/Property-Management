@@ -160,12 +160,12 @@ namespace API.Controllers
             return Ok(res);
         }
         
-            [HttpGet]
+            [HttpPost]
         [Route("getRecurringWO")]
         [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
-        public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(int pageNumber)
+        public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(WOFilterDTO wOFilterDTO)
         {
-            Pagination<List<RecurringWOs>> res = await _workOrderService.GetRecurringWO(pageNumber);
+            Pagination<List<RecurringWOs>> res = await _workOrderService.GetRecurringWO(wOFilterDTO);
             return Ok(res);
         }
         [HttpGet]

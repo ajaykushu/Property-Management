@@ -12,14 +12,18 @@
                 @if (!Model.Recurring)
                 {
                     <a style="color:black" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <div class="container-block justify-content-center">
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
+                    </div>
                 }
                 else
                 {
                     <a style="color:black" asp-action="GetRecurringWO" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <div class="container-block justify-content-center">
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Recurring Work Order</span>
+                    </div>
                 }
-                <div class="container-block justify-content-center">
-                    <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
-                </div>
+
             </div>
         </nav>
     </header>
@@ -258,7 +262,6 @@
                 </tr>
                 <tr>
                     <td>
-
                         <div class="row">
                             <div class="col d-inline">
                                 <label for="AsignedTo">Vendor</label>
@@ -270,6 +273,7 @@
                     </td>
                 </tr>
                 @if (!Model.Recurring)
+
                 {
                     <tr>
                         <td>
@@ -277,7 +281,7 @@
                             <a title="history" href="@Url.Action("GetHistory", new { entity = "workorder", rowId = Model.Id })"><i class="fa fa-history fa-2x"></i></a>
                         </td>
                     </tr>
-
+                }
                     <tr>
                         <th>
                             Comments
@@ -294,8 +298,29 @@
                              })
                         </td>
                     </tr>
-                }
-            </tbody>
+
+                    @if (Model.Recurring)
+
+                    {
+                        <tr>
+                            <th>
+                                Child WO
+                            </th>
+                        </tr>
+                        <tr>
+                            <td id="ChildWOSection">
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
         </table>
 
     </div>
@@ -344,3 +369,18 @@
         </script>
     }
 
+<script>
+     var workorderId = '@Model.Id';
+    $(document).ready(function () {
+
+            $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=',
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $('#ChildWOSection').append(data);
+                    }
+                });
+
+
+    });
+
+</script>

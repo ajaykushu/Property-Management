@@ -1,29 +1,8 @@
 ﻿@model Pagination<List<ChildWo>>
-@*<div class="form-inline pb-1" >
-    <input type="text" class="form-control form-control-sm mr-1" placeholder="search" id="search" />
 
-    <a href="javascript:;" onclick="this.href = '?search=' + document.getElementById('search').value" class="btn btn btn-primary"><i class="fa fa-search"></i></a>
-    </div>*@
-
-<header>
-    <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="GetRecurringWO">Child Work Orders</a>
-            <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
-                <li class="nav-item" style="margin-right:5px;">
-                    <a class="nav-link text-white" asp-controller="Login" asp-action="Mobile"><i class="fa fa-bars fa-1x" aria-hidden="true"></i></a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
-<br />
-<br />
-<br/>
 @if (Model != null && Model.Payload != null && Model.Payload.Any())
 {
-    <table class="table m-1 table-striped wordorderdetail table_container table-responsive-lg">
+    <table class="table table-striped border-0 wordorderdetail table_container table-responsive-lg">
 
         <tbody>
 
@@ -31,10 +10,10 @@
             {
                 <tr>
                     <td>
-                        <span><strong class="@if (item.ParentId!=null) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
+                        <span><strong class="green">@item.Id</strong></span>
                     </td>
 
-                    <td><span class="value" style="min-width:200px;">@item.Description</span></td>
+                    <td><span class="value" style="min-width:100px;text-align:left">@item.Description</span></td>
                     <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
                     <td>
                         <span class="text-dark">
@@ -43,21 +22,24 @@
                         </span>
                     </td>
                     <td>@item.DueDate</td>
-                    <td style="min-width:200px;">
-                        @{
-                            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                            keyValuePairs.Add("id", item.Id + "");
+                    <td style="min-width:180px;">
+                        <div class="form-inline">
+                            @{
+                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                keyValuePairs.Add("id", item.Id + "");
 
-                            <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
 
-                            <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
-                        }
+                                <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                            }
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
 
     </table>
+
     <hr />
     <nav>
         <ul class="pagination m-1">
@@ -98,14 +80,19 @@ else
 {
     <span>No Record found</span>
 }
-@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-{
-    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-    <script>
-        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-    </script>
-}
-<div>
-    <a asp-action="GetRecurringWo">Back</a>
-</div>
+
+
+<script>
+    var workorderId = '@Model.Payload[0].ParentId';
+    function GetPage(pagenumber) {
+            $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=&pageNumber='+pagenumber,
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $('#ChildWOSection').html(data);
+                    }
+                });
+    }
+
+
+</script>

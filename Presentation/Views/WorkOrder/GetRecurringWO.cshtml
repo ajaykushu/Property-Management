@@ -1,30 +1,121 @@
-﻿@model Pagination<List<RecurringWOs>>
+﻿@model WOFilterModel
+@{var ResponseModel = ViewBag.Response as Pagination<List<RecurringWOs>>; }
+<form class="form">
+    <div class="card wofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
+        <div class="card-body">
+            <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times"></i></a></div>
+            <div class="form-row">
+                <div class="col-xs-5">
+                    <label asp-for="TermSearch"></label>
+                    <input asp-for="TermSearch" class="form-control form-control-sm custom-input">
 
+                </div>
+                <div class="col-xs-5">
+                    <label asp-for="WOId"></label>
+                    <input asp-for="WOId" class="form-control form-control-sm custom-input">
 
-<div class="workordertitle">
-    Recurring Work Orders
-</div>
+                </div>
+                <div class="col-xs-5">
+                    <label asp-for="AssignedTo"></label>
+                    <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
 
-<div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
-  
-    <div class="justify-content-end col-md-12">
-        <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderRecurringView"><i class="fa fa-plus"></i>&nbsp;New Recurring WO</a>
+                </div>
+                <div class="col-xs-5">
+                    <label asp-for="PropertyName"></label>
+                    <input asp-for="PropertyName" class="form-control form-control-sm custom-input">
+
+                </div>
+                <div class="col-xs-5">
+                    <label asp-for="CreationStartDate"></label>
+                    <input asp-for="CreationStartDate" type="date" class="form-control form-control-sm custom-input">
+                </div>
+                <div class="col-xs-5">
+                    <label asp-for="CreationEndDate"></label>
+                    <input asp-for="CreationEndDate" type="date" class="form-control form-control-sm custom-input">
+                </div>
+                <div class="col-xs-5">
+                    <label asp-for="DueDate"></label>
+                    <input asp-for="DueDate" type="date" class="form-control form-control-sm custom-input">
+                </div>
+                <div class="col-xs-5">
+                    <label>Priority</label>
+                    <select asp-for="Priority" type="date" class="form-control form-control-sm custom-input">
+                        <option value="">--Select--</option>
+                        <option value="0">Critical</option>
+                        <option value="1">High</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Low</option>
+                    </select>
+                </div>
+                <div class="col-xs-5">
+                    <label>Status</label>
+                    <select asp-for="Status" class="form-control top-buffer form-control-sm custom-input">
+                        <option value="">--Select--</option>
+                        <option value="ADCM">Add Comment Only</option>
+                        <option value="BINE">BID Needed</option>
+                        <option value="BIRE">BID Received</option>
+                        <option value="COMP">Complete</option>
+                        <option value="COBQ">Complete But Bad Quality</option>
+                        <option value="CONI">Complete, Need Inspection</option>
+                        <option value="DAIL">Daily</option>
+                        <option value="FISC">Finalize Scope</option>
+                        <option value="HOLD">Hold</option>
+                        <option value="NEWO">New WO</option>
+                        <option value="ORMA">Order Materials</option>
+                        <option value="PEND">Pending</option>
+                        <option value="REAS">Ready To Assign</option>
+                        <option value="WOAS">Work Assigned</option>
+                        <option value="WOPR">Work In Progress</option>
+                        <option value="WOOR">Work Ordered</option>
+                    </select>
+                </div>
+                <div class="col-xs-5">
+                    <label>Vendor</label>
+                    <input asp-for="Vendor" class="form-control top-buffer form-control-sm custom-input">
+                </div>
+            </div>
+            <div class="d-lg-inline-flex">
+                <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
+                &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
+            </div>
+        </div>
+    </div>
+    <hr />
+    @{ var param = Model.GetType()
+            .GetProperties()
+            .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
+    }
+    <div class="workordertitle">
+        Recurring Work Orders
+        <div class="Filter_con float-right">
+            <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
+            <i class="fa fa-filter"></i>
+        </div>
+
+        <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>
     </div>
 
-</div>
-@if (Model != null && Model.Payload != null && Model.Payload.Any())
-{
-    <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+    <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
+      
+        <div class="justify-content-end col-md-12">
+            <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderView"><i class="fa fa-plus"></i>&nbsp;New Recurring WO</a>
+        </div>
 
-        <tbody>
+    </div>
 
-            @foreach (var item in Model.Payload)
-            {
+
+    @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
+    {
+        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+
+            <tbody>
+
+                @foreach (var item in ResponseModel.Payload)
+                {
                 <tr>
                     <td>
                         <span><strong class="green">@item.Id</strong></span>
                     </td>
-
 
                     <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
                     <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
@@ -35,68 +126,66 @@
                         </span>
                     </td>
                     <td>@item.DueDate</td>
-                    <td>
-                        <span><strong>@item.ScheduleAt</strong></span>
-                    </td>
-                    <td class="value" style="width:250px;">
+                    <td>@item.ScheduleAt</td>
+                    <td style="width:180px;">
                         <div class="form-inline">
                             @{
-                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                                keyValuePairs.Add("id", item.Id + "");
+                                <a class="btn btn-sm btn-primary mr-1" asp-route-id="@item.Id" asp-action="EditRecurringWOView" asp-controller="WorkOrder">
+                                    <i class="fa fa-pencil-alt"></i>&nbsp; Edit
+                                </a>
+                                <a class="btn btn-sm btn-info mr-1" asp-route-id="@item.Id" asp-route-type="2" asp-action="GetWODetail" asp-controller="WorkOrder">
+                                    <i class="fa fa-pencil-alt"></i>&nbsp; Detail
+                                </a>
 
-                                <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                <a class="btn btn-sm btn-info ml-1" asp-action="GetWODetail" asp-route-id="@item.Id" asp-route-type="2">Detail</a>
+                                
                             }
-
                         </div>
                     </td>
-
                 </tr>
-            }
-        </tbody>
-
-    </table>
-    <hr />
-    <nav>
-        <ul class="pagination">
-            @{ int prev = Model.CurrentPage - 1;}
-            <li class="page-item @if (Model.CurrentPage == 0)
-                {<text>disabled</text> }">
-                <a class="page-link" asp-action="GetRecurringWO" asp-controller="WorkOrder" asp-route-pageNumber='@prev'>Prev</a>
-            </li>
-
-            @for (int i = 0; i < Model.PageCount; i++)
-            {
-
-                if (Model.CurrentPage == i)
-                {
-                    <li class="page-item active">
-                        <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-                    </li>
-
                 }
-                else
-                {
-                    var x = i + 1;
-                    <li class="page-item">
-                        <a class="page-link" asp-action="GetRecurringWO" asp-controller="WorkOrder" asp-route-pageNumber='@x'>@x</a>
+            </tbody>
 
-                    </li>
-                }
-            }
-            @{ var PageNumber = Model.CurrentPage + 1;}
-            <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount)
+        </table>
+        <hr />
+        <nav>
+            <ul class="pagination">
+                @{ int current = 0;}
+                <li class="page-item @if (ResponseModel.CurrentPage == 0)
                     {<text>disabled</text> }">
-                <a class="page-link" asp-action="GetRecurringWO" asp-controller="WorkOrder" asp-route-pageNumber='@PageNumber'>Next</a>
-            </li>
-        </ul>
-    </nav>
-}
-else
-{
-    <span>No Record found</span>
-}
+                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                </li>
 
+                @for (int i = 0; i < ResponseModel.PageCount; i++)
+                {
+
+                    if (ResponseModel.CurrentPage == i)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                        </li>
+                        current = i;
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            @{ Model.PageNumber = i;}
+                            @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                        </li>
+                    }
+                }
+                @{ Model.PageNumber = current + 1;}
+                <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
+                    {<text>disabled</text> }">
+                    @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <span>No Record found</span>
+    }
+</form>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
@@ -105,4 +194,51 @@ else
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
     </script>
 }
+
+<script>
+
+    $('.filter_check').click(function () {
+        if ($(this).prop("checked") == true) {
+            $('.wofilter').show();
+        }
+    });
+
+    $('.closefilter').click(function () {
+        $('.filter_check').prop("checked", false);
+        $('.wofilter').hide(100);
+    });
+    $('#Export').change(function () {
+        $('input[type="submit"]').click();
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
