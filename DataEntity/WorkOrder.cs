@@ -37,7 +37,6 @@ namespace DataEntity
         public int Priority { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
         public virtual Department AssignedToDept { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<WOAttachments> WOAttachments { get; set; }
     }
 }

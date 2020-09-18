@@ -349,7 +349,7 @@ namespace BusinessLogic.Services
         {
             History history = new History();
             var userObj = await _appuser.FindByIdAsync(userId.ToString());
-            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.Comments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
             
             if (wo != null)
             {
@@ -499,29 +499,29 @@ namespace BusinessLogic.Services
             }
             if (status)
             {
-                var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
-                var users = await GetUsersToSendNotification(wo);
-                var repliedto = post.RepliedTo != null ? await _appuser.FindByNameAsync(post.RepliedTo) : null;
-                if (repliedto != null && !users.Contains(repliedto.Id))
-                    users.Add(repliedto.Id);
-                await _notifier.CreateNotification(message, users, wo.Id, type);
+                
+                if (!post.WorkOrderId.Contains("R"))
+                {
+                   var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
+
+
+                    var users = await GetUsersToSendNotification(wo);
+                    var repliedto = post.RepliedTo != null ? await _appuser.FindByNameAsync(post.RepliedTo) : null;
+                    if (repliedto != null && !users.Contains(repliedto.Id))
+                        users.Add(repliedto.Id);
+                    await _notifier.CreateNotification(message, users, wo.Id, type);
+                }
             }
             return status;
         }
 
         public async Task<bool> WorkOrderStatusChange(string id, int statusId, string comment)
         {
-            var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Status).Include(x => x.Comments).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Status).FirstOrDefaultAsync();
             var status = await _status.Get(x => x.Id == statusId).FirstOrDefaultAsync();
             if (status != null)
             {
-                if (wo.Comments == null)
-                    wo.Comments = new List<Comment>();
-                wo.Comments.Add(new Comment
-                {
-                    CommentString = string.Concat("Work Order Status Changed From ", wo.Status.StatusDescription, " To ", status.StatusDescription, " --Additional Comment: ", comment),
-                     CommentById = userId
-                });
+               
                 #region history Add
                 History history = new History();
                 history.PropertyName = "Status";

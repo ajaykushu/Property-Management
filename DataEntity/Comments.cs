@@ -16,7 +16,6 @@ namespace DataEntity
         public long Id { get; set; }
 
         public string WorkOrderId { get; set; }
-        public WorkOrder WorkOrder { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
         public string CommentString { get; set; }

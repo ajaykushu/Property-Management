@@ -380,7 +380,14 @@ namespace Presentation.Controllers
             catch (Exception)
             {
             }
-            return Redirect("~/WorkOrder/GetWODetail?id=" + post.WorkOrderId + "#CommentSection");
+            if (!post.WorkOrderId.Contains("R"))
+            {
+                return Redirect("~/WorkOrder/GetWODetail?id=" + post.WorkOrderId + "#CommentSection");
+            }
+            else
+            {
+                return Redirect("~/WorkOrder/GetWODetail?id=" + post.WorkOrderId + "&type=2#CommentSection");
+            }
         }
 
         [HttpPost]
