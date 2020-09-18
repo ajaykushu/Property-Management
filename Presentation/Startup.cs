@@ -48,7 +48,8 @@ namespace Presentation
             services.AddHttpClient<HttpHelper>();
             services.AddScoped<IExport<WorkOrderDetail>, Export<WorkOrderDetail>>();
             services.AddScoped<IExport<AllWOExport>, Export<AllWOExport>>();
-           
+            services.AddScoped<IExport<AllWOExportRecurring>, Export<AllWOExportRecurring>>();
+
 
         }
 

@@ -27,9 +27,10 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IExport<WorkOrderDetail> _export;
         private readonly IExport<AllWOExport> _allwoexport;
+        private readonly IExport<AllWOExportRecurring> _allrecurringwoexport;
         private readonly IDetection _detection;
 
-        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDistributedCache _session, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection)
+        public WorkOrderController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IHttpContextAccessor httpContextAccessor, IDistributedCache _session, IExport<WorkOrderDetail> export, IExport<AllWOExport> allwoexport, IDetection detection, IExport<AllWOExportRecurring> allrecurringwoexport)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -44,6 +45,7 @@ namespace Presentation.Controllers
             _export = export;
             _allwoexport = allwoexport;
             _detection = detection;
+            _allrecurringwoexport = allrecurringwoexport;
         }
 
         [HttpGet]
@@ -459,6 +461,36 @@ namespace Presentation.Controllers
 
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
                 file = await _allwoexport.CreateListCSV(workOrderDetail);
+            }
+            catch (Exception)
+            {
+            }
+            return File(file, contentType);
+        }
+        [Authorize]
+        public async Task<IActionResult> ExportRecurringWO(WOFilterModel wo)
+        {
+            List<AllWOExportRecurring> workOrderDetail = null;
+            string filename = "File.csv";
+            string contentType = "text/csv";
+            byte[] file = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("workordersrecurringexport", out string path);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, wo, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    workOrderDetail = JsonConvert.DeserializeObject<List<AllWOExportRecurring>>(await response.Content.ReadAsStringAsync());
+                }
+
+                var cd = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = filename,
+                    Inline = true,
+                };
+
+                HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
+                file = await _allrecurringwoexport.CreateListCSV(workOrderDetail);
             }
             catch (Exception)
             {

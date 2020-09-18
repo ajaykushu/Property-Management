@@ -150,6 +150,7 @@ namespace API.Controllers
             bool res = await _workOrderService.WorkOrderStatusChange(id, statusId, comment);
             return Ok(res);
         }
+        
 
         [HttpPost]
         [Route("workordersexport")]
@@ -159,8 +160,16 @@ namespace API.Controllers
             var res = await _workOrderService.WOExport(wOFilterModel);
             return Ok(res);
         }
-        
-            [HttpPost]
+        [HttpPost]
+        [Route("workordersrecurringexport")]
+        [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
+        public async Task<ActionResult<List<WorkOrderDetail>>> WOExportRecurring(WOFilterDTO wOFilterModel)
+        {
+            List <AllWOExportRecurring> res = await _workOrderService.WOExportRecurring(wOFilterModel);
+            return Ok(res);
+        }
+
+        [HttpPost]
         [Route("getRecurringWO")]
         [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
         public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(WOFilterDTO wOFilterDTO)

@@ -40,5 +40,6 @@ namespace Models.WorkOrder.RequestModels
             set;
         }
         public int PageNumber { get; set; }
+        
     }
 }

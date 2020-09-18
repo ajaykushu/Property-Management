@@ -13,10 +13,7 @@
         {
             <span>Work Order Detail</span>
         }
-        @if (Model != null)
-        {
-            <a asp-action="DownloadWO" class="fa-pull-right" title="Export" style="padding:5px;color:white" asp-route-woId="@Model.Id" download="File.csv"><i class="fas fa-file-export"></i></a>
-        }
+       
     </div>
 @if (Model != null)
 {

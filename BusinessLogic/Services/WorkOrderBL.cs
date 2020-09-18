@@ -557,32 +557,37 @@ namespace BusinessLogic.Services
             return res;
         }
 
+       
         public async Task<List<AllWOExport>> WOExport(WOFilterDTO wOFilterModel)
         {
-            var query = _workOrder.GetAll();
-            query = await FilterWO(wOFilterModel, query);
             List<AllWOExport> workOrders = null;
-            workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExport
-            {
-                PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
-                StatusDescription = x.Status.StatusDescription,
-                Item = x.Item.ItemName,
-                CreatedTime = x.CreatedTime,
-                DueDate = x.DueDate,
-                UpdatedTime = x.UpdatedTime,
-                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
-                Requestedby = x.RequestedBy,
-                Id = x.Id,
-                Priority = x.Priority,
-                UpdatedBy = x.UpdatedByUserName,
-                Description = x.Description,
-                Location = x.Location.LocationName,
-                SubLocation = x.SubLocation.AreaName,
-                Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
-            }).AsNoTracking().ToListAsync();
+                var query = _workOrder.GetAll();
+                query = await FilterWO(wOFilterModel, query);
+               
+
+                workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExport
+                {
+                    PropertyName = x.Property.PropertyName,
+                    Issue = x.Issue.IssueName,
+                    StatusDescription = x.Status.StatusDescription,
+                    Item = x.Item.ItemName,
+                    CreatedTime = x.CreatedTime,
+                    DueDate = x.DueDate,
+                    UpdatedTime = x.UpdatedTime,
+                    AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
+                    Requestedby = x.RequestedBy,
+                    Id = x.Id,
+                    Priority = x.Priority,
+                    UpdatedBy = x.UpdatedByUserName,
+                    Description = x.Description,
+                    Location = x.Location.LocationName,
+                    SubLocation = x.SubLocation.AreaName,
+                    Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
+                }).AsNoTracking().ToListAsync();
+        
             return workOrders;
         }
+        
 
         private async Task<IQueryable<WorkOrder>> FilterWO(WOFilterDTO wOFilterModel, IQueryable<WorkOrder> query)
         {
@@ -1094,6 +1099,42 @@ namespace BusinessLogic.Services
             };
             workorder.Comments = pagedcomments;
             return workorder;
+        }
+
+        public async Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel)
+        {
+            List<AllWOExportRecurring> workOrders = null;
+            var query = _recuringWo.GetAll();
+            query = await FilterWO(wOFilterModel, query);
+
+
+            workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExportRecurring
+            {
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StatusDescription = x.Status.StatusDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                DueDate = x.DueDate,
+                UpdatedTime = x.UpdatedTime,
+                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
+                Requestedby = x.RequestedBy,
+                Id = x.Id,
+                ScheduledAt = !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
+                {
+                    DayOfWeekStartIndexZero = true,
+                    Use24HourTimeFormat = is24HrFormat
+                }).GetDescription(DescriptionTypeEnum.FULL) : "",
+                ChildWO = x.ChildWorkOrders.Select(x => x.Id).ToList<string>(),
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
+            }).AsNoTracking().ToListAsync();
+
+            return workOrders;
         }
     }
 }

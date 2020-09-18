@@ -40,5 +40,6 @@ namespace BusinessLogic.Interfaces
         Task<Pagination<List<RecurringWOs>>> GetRecurringWO(WOFilterDTO wOFilterDTO);
         Task<Pagination<List<ChildWo>>> GetChildWO(int pageNumber,string search, string rwoId);
         Task<WorkOrderDetail> GetRecurringWODetail(string rwoId);
+        Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel);
     }
 }
