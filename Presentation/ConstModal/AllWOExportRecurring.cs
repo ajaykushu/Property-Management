@@ -13,7 +13,7 @@ namespace Presentation.ConstModal
         public string Requestedby { get; set; }
         public string StatusDescription { get; set; }
         public string Issue { get; set; }
-        public DateTime DueDate { get; set; }
+        public string DueAfterDays { get; set; }
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
         public string Description { get; set; }

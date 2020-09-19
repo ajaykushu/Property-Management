@@ -28,7 +28,7 @@ namespace DataEntity
 
         public int? VendorId { get; set; }
         public Vendor Vendor { get; set; }
-        public DateTime DueDate { get; set; }
+        public uint DueAfterDays { get; set; }
         public int? LocationId { get; set; }
         public Location Location { get; set; }
         public int? SubLocationId { get; set; }

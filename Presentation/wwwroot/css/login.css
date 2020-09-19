@@ -862,5 +862,5 @@ label {
 .value {
     display: inline-block;
     word-break: break-word;
-    padding-top: 8px;
+    padding-top: 0px;
 }

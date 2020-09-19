@@ -98,7 +98,7 @@
     <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
       
         <div class="justify-content-end col-md-12">
-            <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderView"><i class="fa fa-plus"></i>&nbsp;New Recurring WO</a>
+            <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderRecurringView"><i class="fa fa-plus"></i>&nbsp;New Recurring WO</a>
         </div>
 
     </div>
@@ -125,7 +125,7 @@
                             {@item.Property.PropertyName}
                         </span>
                     </td>
-                    <td>@item.DueDate</td>
+                    <td>@item.DueAfterDays</td>
                     <td>@item.ScheduleAt</td>
                     <td style="width:180px;">
                         <div class="form-inline">

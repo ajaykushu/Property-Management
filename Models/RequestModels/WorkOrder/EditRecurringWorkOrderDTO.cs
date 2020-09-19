@@ -40,7 +40,7 @@ namespace Models.WorkOrder.RequestModels
         public Dictionary<string, List<SelectItem>> Options { get; set; }
         public int? OptionId { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public uint DueAfterDays { get; set; }
         public List<SelectItem> Users { get; set; }
         public string FilesRemoved { get; set; }
         public int Priority { get; set; }

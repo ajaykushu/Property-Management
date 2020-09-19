@@ -27,7 +27,7 @@ namespace Presentation.ViewModels
         public string Issue { get; set; }
 
         [DisplayName("Due Date")]
-        public DateTime DueDate { get; set; }
+        public string DueDate { get; set; }
         public string Vendor { get; set; }
 
         public string Item { get; set; }

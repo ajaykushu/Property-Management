@@ -139,7 +139,7 @@ namespace BusinessLogic.Services
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
                 Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
-                DueDate = x.DueDate,
+                DueDate = x.DueDate.ToString("dd-MMM-yyyy"),
                 UpdatedTime = x.UpdatedTime,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Requestedby = x.RequestedBy,
@@ -691,11 +691,7 @@ namespace BusinessLogic.Services
                 (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.StartsWith(wOFilterModel.AssignedTo) || (x.AssignedTo != null && x.AssignedTo.Email.StartsWith(wOFilterModel.AssignedTo)))
                 );
             }
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.DueDate))
-            {
-                var dueDate = Convert.ToDateTime(wOFilterModel.DueDate);
-                query = query.Where(x => x.DueDate.Date == dueDate.Date);
-            }
+            
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
             {
                 var index = Convert.ToInt32(wOFilterModel.Priority);
@@ -766,7 +762,7 @@ namespace BusinessLogic.Services
                 IssueId = createWO.IssueId,
                 ItemId = createWO.ItemId,
                 Description = createWO.Description,
-                DueDate = createWO.DueDate,
+                DueAfterDays = createWO.DueAfterDays,
                 LocationId = createWO.LocationId,
                 VendorId = createWO.VendorId,
                 SubLocationId = createWO.SubLocationId,
@@ -845,7 +841,7 @@ namespace BusinessLogic.Services
                 DayOfWeekStartIndexZero = true,
                 Use24HourTimeFormat= is24HrFormat
             }).GetDescription(DescriptionTypeEnum.FULL):"";
-            editwo.DueDate = temp.DueDate;
+            editwo.DueAfterDays = temp.DueAfterDays;
             editwo.LocationId = temp.LocationId.GetValueOrDefault();
             editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
@@ -914,7 +910,7 @@ namespace BusinessLogic.Services
                 wo.Description = editWorkOrder.Description;
                 wo.IssueId = editWorkOrder.IssueId;
                 wo.ItemId = editWorkOrder.ItemId;
-                wo.DueDate = editWorkOrder.DueDate;
+                wo.DueAfterDays = editWorkOrder.DueAfterDays;
                 wo.LocationId = editWorkOrder.LocationId;
                 wo.VendorId = editWorkOrder.VendorId;
                 wo.Priority = editWorkOrder.Priority;
@@ -997,9 +993,9 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterDTO, query);
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
-            recWorkOrder = await query.OrderByDescending(x => x.DueDate).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
+            recWorkOrder = await query.OrderByDescending(x => x.CreatedTime).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
-                DueDate = x.DueDate.ToString("dd-MMM-yy"),
+                DueDate = "After "+x.DueAfterDays+ " Days",
                 Description = x.Description,
                 Id = x.Id,
                 ScheduleAt= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
@@ -1064,7 +1060,7 @@ namespace BusinessLogic.Services
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
                 Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
-                DueDate = x.DueDate,
+                DueDate = "After "+ x.DueAfterDays+" Days",
                 UpdatedTime = x.UpdatedTime,
                 CronExpression= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
                 {
@@ -1108,14 +1104,14 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterModel, query);
 
 
-            workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExportRecurring
+            workOrders = await query.OrderByDescending(x => x.CreatedTime).Select(x => new AllWOExportRecurring
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
-                DueDate = x.DueDate,
+                DueAfterDays = "After "+x.DueAfterDays+" Days",
                 UpdatedTime = x.UpdatedTime,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Requestedby = x.RequestedBy,

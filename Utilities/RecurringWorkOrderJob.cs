@@ -48,7 +48,7 @@ namespace Utilities
                     VendorId = obj.VendorId,
                     WOAttachments = obj.WOAttachments,
                     UpdatedByUserName = "System",
-                    DueDate = DateTime.Now.AddDays(1),
+                    DueDate = DateTime.Now.AddDays(obj.DueAfterDays),
                     CreatedTime = DateTime.Now,
                     Description = obj.Description,
                     IssueId = obj.IssueId,
