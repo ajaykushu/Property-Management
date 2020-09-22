@@ -9,7 +9,7 @@ namespace DataEntity
     public class RecurringWO:Log
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string Id { get; set; }
         public long PropertyId { get; set; }
         public Property Property { get; set; }
@@ -28,7 +28,7 @@ namespace DataEntity
 
         public int? VendorId { get; set; }
         public Vendor Vendor { get; set; }
-        public DateTime DueDate { get; set; }
+        public uint DueAfterDays { get; set; }
         public int? LocationId { get; set; }
         public Location Location { get; set; }
         public int? SubLocationId { get; set; }

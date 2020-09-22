@@ -132,8 +132,12 @@
                                 <label for="DueDate">Due Date</label>
                             </div>
                             <div class="col">
-                                <input class="form-control custom-input" asp-for="DueDate">
-                                <span asp-validation-for="DueDate" class="text-danger"></span>
+                                <div class="form-inline">
+                                    <span class="mr-1"><strong>After</strong></span>
+                                    <input class="form-control custom-input mr-1" style="width:127px" asp-for="DueAfterDays">
+                                    <span><strong>Days</strong></span>
+                                </div>
+                                <span asp-validation-for="DueAfterDays" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row top-buffer">

@@ -10,7 +10,7 @@
         <div class="d-inline-flex w-100">
             <a style="color:white" asp-action="GetWODetail" asp-route-id="@Model.Id" asp-route-type="2" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
             <div class="container-block justify-content-center">
-                <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Edit Work Order</span>
+                <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Edit Recurring WO</span>
             </div>
         </div>
     </nav>
@@ -204,14 +204,14 @@
 
             <tr>
                 <th>
-                    Due Date
+                    Due After Days
                 </th>
             </tr>
             <tr>
                 <td>
                     <div class="row padding">
-                        <input class="form-control" asp-for="DueDate">
-                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                        <input class="form-control" asp-for="DueAfterDays">
+                        <span asp-validation-for="DueAfterDays" class="text-danger"></span>
                     </div>
                 </td>
             </tr>

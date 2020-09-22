@@ -745,6 +745,7 @@ label {
 
 .green {
     background-color: green;
+    color:white;
 }
 
 .bottom-stick {
@@ -753,7 +754,6 @@ label {
     width: 100%;
     position: fixed;
     height: 45px;
-    ;
     z-index: 9999;
     background-color: grey;
 }
@@ -862,5 +862,5 @@ label {
 .value {
     display: inline-block;
     word-break: break-word;
-    padding-top: 8px;
+    padding-top: 0px;
 }

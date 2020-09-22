@@ -92,7 +92,6 @@ namespace API.Authentication
                     DepartmentId = 1,
 
                     Password = "Testuser123@",
-                    TimeZone = "India +5:30",
                     File = null,
                     OfficeExt = "234",
                 };

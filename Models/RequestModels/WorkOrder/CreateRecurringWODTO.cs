@@ -38,7 +38,7 @@ namespace Models.WorkOrder.RequestModels
         public int? OptionId { get; set; }
 
         [Required]
-        public DateTime DueDate { get; set; }
+        public uint DueAfterDays { get; set; }
 
         public int Priority { get; set; }
 

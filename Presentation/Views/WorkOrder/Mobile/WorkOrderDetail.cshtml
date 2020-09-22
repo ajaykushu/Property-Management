@@ -3,23 +3,57 @@
     ViewData["Title"] = "WO Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    var url = HttpContextAccessor.HttpContext.Request.Headers["Referer"].ToString();
+    var redirector = string.Empty;
+    if (Model.Recurring)
+        redirector = "/WorkOrder/GetRecurringWO";
+    else
+        redirector = "/WorkOrder";
+    if (url != null && HttpContextAccessor.HttpContext.Request.Path.HasValue)
+    {
+
+        Regex rx = new Regex(@"(http[s]?:\/\/)?([^\/\s]+\/)(.*)",
+        RegexOptions.Compiled);
+        MatchCollection mc = rx.Matches(url);
+        foreach (Match m in mc)
+        {
+            GroupCollection groups = m.Groups;
+            Console.WriteLine(
+            groups[3]);
+            if (url.Contains("GetWODetail") && url.Contains("type"))
+            {
+
+                //means the reffer is different
+                redirector = "/" + groups[3].Value+"#ChildWOSection";
+
+            }
+        }
+    }
+}
+
 @if (Model != null)
 {
+
     <header>
         <nav class="navbar bg-white mb-3 fixed-top">
-         
+
             <div class="d-inline-flex w-100">
                 @if (!Model.Recurring)
                 {
-                    <a style="color:black" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <a style="color:black" href="@redirector" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <div class="container-block justify-content-center">
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
+                    </div>
                 }
                 else
                 {
-                    <a style="color:black" asp-action="GetRecurringWO" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <a style="color:black" href="@redirector" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <div class="container-block justify-content-center">
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Recurring Work Order</span>
+                    </div>
                 }
-                <div class="container-block justify-content-center">
-                    <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
-                </div>
+
             </div>
         </nav>
     </header>
@@ -39,7 +73,7 @@
                             <div>
                                 <div>
                                     <h2>@Model.PropertyName</h2>
-                                    <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp; <strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
+                                    <img src="~/hotel.svg" width="25" height="35"><strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
                                     <strong style="color:grey">@Model.Item @Model.Issue</strong><br><br>
                                     <p>Assigned to: <strong class="text-success">@Model.AssignedTo</strong></p>
                                 </div>
@@ -258,7 +292,6 @@
                 </tr>
                 <tr>
                     <td>
-
                         <div class="row">
                             <div class="col d-inline">
                                 <label for="AsignedTo">Vendor</label>
@@ -270,6 +303,7 @@
                     </td>
                 </tr>
                 @if (!Model.Recurring)
+
                 {
                     <tr>
                         <td>
@@ -277,24 +311,45 @@
                             <a title="history" href="@Url.Action("GetHistory", new { entity = "workorder", rowId = Model.Id })"><i class="fa fa-history fa-2x"></i></a>
                         </td>
                     </tr>
+                }
+                <tr>
+                    <th>
+                        Comments
+                    </th>
+                </tr>
 
+                <tr id="CommentSection">
+                    <td>
+                        @await Html.PartialAsync("CommentOperation",
+      Model.Comments,
+      new ViewDataDictionary(ViewData)
+                         {
+                        { "workOrderId", Model.Id }
+                         })
+                    </td>
+                </tr>
+
+                @if (Model.Recurring)
+
+                {
                     <tr>
                         <th>
-                            Comments
+                            Child WO
                         </th>
                     </tr>
-
-                    <tr id="CommentSection">
-                        <td>
-                            @await Html.PartialAsync("CommentOperation",
-          Model.Comments,
-          new ViewDataDictionary(ViewData)
-                             {
-                            { "workOrderId", Model.Id }
-                             })
+                    <tr>
+                        <td id="ChildWOSection">
                         </td>
                     </tr>
                 }
+                <tr>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -302,8 +357,8 @@
     <div class="pop-up justify-content-center" style="display:none">
         <div class="">
             @{Dictionary<string, string>
-                            keyValuePairs = new Dictionary<string, string>
-                                ();
+                              keyValuePairs = new Dictionary<string, string>
+                                  ();
                 keyValuePairs.Add("id", Model.Id + "");};
             <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
             @if (!Model.Recurring)
@@ -334,13 +389,28 @@
             <a href="#" class="nav-link edit-link" style="color:lightgray"><i class="fa fa-pencil-alt fa-2x"></i></a>
         </div>
     </div>
-                }
-    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-    {
-        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+}
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-        <script>
+    <script>
      alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-        </script>
-    }
+    </script>
+}
 
+<script>
+     var workorderId = '@Model.Id';
+    $(document).ready(function () {
+
+            $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=',
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $('#ChildWOSection').append(data);
+                    }
+                });
+
+
+    });
+
+</script>

@@ -37,8 +37,9 @@ namespace BusinessLogic.Interfaces
         Task<bool> CreateRecurringWO(CreateRecurringWODTO createWO, List<IFormFile> file);
         Task<EditRecurringWorkOrderDTO> GetEditRecurringWO(string id);
         Task<bool> EditRecurringWO(EditRecurringWorkOrderDTO editWorkOrder, List<IFormFile> file);
-        Task<Pagination<List<RecurringWOs>>> GetRecurringWO(int pageNumber);
+        Task<Pagination<List<RecurringWOs>>> GetRecurringWO(WOFilterDTO wOFilterDTO);
         Task<Pagination<List<ChildWo>>> GetChildWO(int pageNumber,string search, string rwoId);
         Task<WorkOrderDetail> GetRecurringWODetail(string rwoId);
+        Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel);
     }
 }

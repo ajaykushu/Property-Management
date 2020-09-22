@@ -24,7 +24,6 @@ namespace DataEntity
         public string RequestedBy { get; set; }
         public long? AssignedToId { get; set; }
         public int? AssignedToDeptId { get; set; }
-       
         public int? VendorId { get; set; }
         public Vendor Vendor { get; set; }
         public DateTime DueDate { get; set; }
@@ -38,8 +37,6 @@ namespace DataEntity
         public int Priority { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
         public virtual Department AssignedToDept { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-     
         public virtual ICollection<WOAttachments> WOAttachments { get; set; }
     }
 }

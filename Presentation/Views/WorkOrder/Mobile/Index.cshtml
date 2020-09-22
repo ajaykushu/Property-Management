@@ -3,7 +3,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model WOFilterModel
-@{ var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
+@{ var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>;
+
+    }
 @{ var param = Model.GetType()
            .GetProperties()
            .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
@@ -88,7 +90,7 @@
             <label class="DueDatelabel" style="padding-left:15px;">Due Date</label>
             <span class="dateinc" style="padding-left:15px;"><i class="fa fa-chevron-right fa-1x"></i></span>
         </div>
-        @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
+        @if (ResponseModel != null && ResponseModel.Payload != null)
         {
         <table class="table border-0" style="table-layout:fixed;">
             <tbody>
@@ -104,7 +106,7 @@
             </tbody>
         </table>
         <hr />
-        <nav>
+       <nav>
             <ul class="pagination">
                 @{ int current = 0;}
                 <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
@@ -139,14 +141,14 @@
         }
         else
         {
-        <span> No Record Found</span>
+        <span>No Record Found</span>
 
         }
     </div>
 </form>
 
 <div class="bottom-stick">
-    <a  asp-action="CreateWorkOrderRecurringView" class="nav-link" style="color:lightgray"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
+    <a  onClick="location.href=location.href" class="nav-link" style="color:lightgray"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
     <div class="container-block justify-content-end">
         <a asp-action="CreateWorkOrderView" class="nav-link" style="color:lightgray"><i class="fa fa-plus fa-2x"></i></a>
     </div>

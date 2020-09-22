@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200828171721_newTableForRecurringWo")]
+    partial class newTableForRecurringWo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2f6582da-870e-46b5-8c05-fd07808e253a",
+                            ConcurrencyStamp = "76fe1008-2b3d-4dc0-8f06-cb5b87fd4b82",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "e586587a-79c9-4187-9244-ca1623d27c2a",
+                            ConcurrencyStamp = "ee5ab939-3d26-4dc7-a643-7a35bdde27f4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "644228e7-ea83-4a71-a2d5-f0a58d448127",
+                            ConcurrencyStamp = "7d8f66f6-c391-4983-a387-85c9383b40ca",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -220,13 +222,15 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("WorkOrderId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommentById");
 
                     b.HasIndex("RecurringWOId");
+
+                    b.HasIndex("WorkOrderId");
 
                     b.ToTable("Comments");
                 });
@@ -617,13 +621,6 @@ namespace DataAccessLayer.Migrations
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MenuName = "WO_Operation",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 19L,
-                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MenuName = "Recurring_WO",
-                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -770,8 +767,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasDefaultValueSql("Concat('RWO', NEXT VALUE FOR workordersequence)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("AssignedToDeptId")
                         .HasColumnType("int");
@@ -791,8 +787,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("varchar(200)");
 
-                    b.Property<long>("DueAfterDays")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("EndAfterCount")
                         .HasColumnType("int");
@@ -1526,6 +1522,10 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataEntity.RecurringWO", null)
                         .WithMany("Comments")
                         .HasForeignKey("RecurringWOId");
+
+                    b.HasOne("DataEntity.WorkOrder", "WorkOrder")
+                        .WithMany("Comments")
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("DataEntity.Location", b =>

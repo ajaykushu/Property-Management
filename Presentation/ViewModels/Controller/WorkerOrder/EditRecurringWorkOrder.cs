@@ -56,10 +56,10 @@ namespace Presentation.ViewModels
         [DisplayName("Option")]
         public int? OptionId { get; set; }
 
+        [Range(0, 366)]
         [Required]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd/MMM/yyyy}")]
-        public DateTime DueDate { get; set; }
+        public uint DueAfterDays { get; set; }
+
 
         public List<SelectItem> Sections { get; set; }
         public IList<IFormFile> File { get; set; }

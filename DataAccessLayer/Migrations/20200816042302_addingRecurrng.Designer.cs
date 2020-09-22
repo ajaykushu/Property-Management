@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200816042302_addingRecurrng")]
+    partial class addingRecurrng
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2f6582da-870e-46b5-8c05-fd07808e253a",
+                            ConcurrencyStamp = "f4328861-3dfd-4586-a84e-f730890ad7b0",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "e586587a-79c9-4187-9244-ca1623d27c2a",
+                            ConcurrencyStamp = "5cff61fb-0cc6-4346-bcdd-c045dffbf683",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "644228e7-ea83-4a71-a2d5-f0a58d448127",
+                            ConcurrencyStamp = "d3540943-1c0f-484e-9139-59bb46ec5289",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -210,9 +212,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RecurringWOId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -220,13 +219,13 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("WorkOrderId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommentById");
 
-                    b.HasIndex("RecurringWOId");
+                    b.HasIndex("WorkOrderId");
 
                     b.ToTable("Comments");
                 });
@@ -617,13 +616,6 @@ namespace DataAccessLayer.Migrations
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MenuName = "WO_Operation",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 19L,
-                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MenuName = "Recurring_WO",
-                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -764,102 +756,6 @@ namespace DataAccessLayer.Migrations
                             PropertyTypeName = "PG",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("DataEntity.RecurringWO", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasDefaultValueSql("Concat('RWO', NEXT VALUE FOR workordersequence)");
-
-                    b.Property<int?>("AssignedToDeptId")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("AssignedToId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CreatedByUserName")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CronExpression")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<long>("DueAfterDays")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("EndAfterCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IssueId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ParentWorkOrderId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<long>("PropertyId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("RecurringEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RecurringStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RequestedBy")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SubLocationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedByUserName")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("VendorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignedToDeptId");
-
-                    b.HasIndex("AssignedToId");
-
-                    b.HasIndex("IssueId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("PropertyId");
-
-                    b.HasIndex("StatusId");
-
-                    b.HasIndex("SubLocationId");
-
-                    b.HasIndex("VendorId");
-
-                    b.ToTable("RecurringWOs");
                 });
 
             modelBuilder.Entity("DataEntity.Reply", b =>
@@ -1380,9 +1276,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("varchar(300)");
 
-                    b.Property<string>("RecurringWOId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -1393,8 +1286,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Key");
-
-                    b.HasIndex("RecurringWOId");
 
                     b.HasIndex("WorkOrderId");
 
@@ -1420,11 +1311,17 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CronExpression")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("varchar(200)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("EndAfterCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("IssueId")
                         .HasColumnType("int");
@@ -1435,7 +1332,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ParentWoId")
+                    b.Property<string>("ParentWorkOrderId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Priority")
@@ -1445,6 +1342,17 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("Recurring")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("RecurringEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RecurringStartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RequestedBy")
                         .HasColumnType("varchar(50)");
@@ -1476,7 +1384,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("ParentWoId");
+                    b.HasIndex("ParentWorkOrderId");
 
                     b.HasIndex("PropertyId");
 
@@ -1523,9 +1431,9 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataEntity.RecurringWO", null)
+                    b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("Comments")
-                        .HasForeignKey("RecurringWOId");
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("DataEntity.Location", b =>
@@ -1544,53 +1452,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("PropertyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataEntity.RecurringWO", b =>
-                {
-                    b.HasOne("DataEntity.Department", "AssignedToDept")
-                        .WithMany()
-                        .HasForeignKey("AssignedToDeptId");
-
-                    b.HasOne("DataEntity.ApplicationUser", "AssignedTo")
-                        .WithMany()
-                        .HasForeignKey("AssignedToId");
-
-                    b.HasOne("DataEntity.Issue", "Issue")
-                        .WithMany()
-                        .HasForeignKey("IssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataEntity.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataEntity.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-
-                    b.HasOne("DataEntity.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataEntity.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataEntity.SubLocation", "SubLocation")
-                        .WithMany()
-                        .HasForeignKey("SubLocationId");
-
-                    b.HasOne("DataEntity.Vendor", "Vendor")
-                        .WithMany()
-                        .HasForeignKey("VendorId");
                 });
 
             modelBuilder.Entity("DataEntity.Reply", b =>
@@ -1664,10 +1525,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.WOAttachments", b =>
                 {
-                    b.HasOne("DataEntity.RecurringWO", null)
-                        .WithMany("WOAttachments")
-                        .HasForeignKey("RecurringWOId");
-
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("WOAttachments")
                         .HasForeignKey("WorkOrderId");
@@ -1699,9 +1556,9 @@ namespace DataAccessLayer.Migrations
                         .WithMany("WorkOrders")
                         .HasForeignKey("LocationId");
 
-                    b.HasOne("DataEntity.RecurringWO", "ParentRecurringWO")
-                        .WithMany("ChildWorkOrders")
-                        .HasForeignKey("ParentWoId");
+                    b.HasOne("DataEntity.WorkOrder", "RecurringParentWO")
+                        .WithMany("RecurringChildWOs")
+                        .HasForeignKey("ParentWorkOrderId");
 
                     b.HasOne("DataEntity.Property", "Property")
                         .WithMany()

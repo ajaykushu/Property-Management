@@ -66,9 +66,10 @@ namespace BusinessLogic.Services
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                ClockType = "12",
                 LanguageId = model.Language,
                 Suffix = model.Suffix,
-                TimeZone = model.TimeZone,
+                TimeZone = "India Standard Time",
                 OfficeExt = model.OfficeExt ?? null,
                 PhotoPath = filepath,
                 DepartmentId = model.DepartmentId
@@ -110,7 +111,7 @@ namespace BusinessLogic.Services
             {
                 Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToListAsync(),
                 Languages = await _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToListAsync(),
-                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = x.Id , PropertyName = x.DisplayName }).ToList()
+                
             };
             // finding roles to be displayed a/c to usertype
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))

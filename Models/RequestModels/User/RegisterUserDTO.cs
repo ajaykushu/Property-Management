@@ -27,18 +27,17 @@ namespace Models.User.RequestModels
         public string PrimaryProperty { get; set; }
 
         public List<SelectItem> Languages { get; set; }
-
+       
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Please Select Time Zone")]
-        public string TimeZone { set; get; }
+       
 
         [StringLength(50, MinimumLength = 0, ErrorMessage = "Please keep length less than 50")]
         public string OfficeExt { get; set; }
 
-        public List<SelectItem> TimeZones { set; get; }
+       
         public List<SelectItem> Departments { get; set; }
 
         [Required(ErrorMessage = "Please give Department Id")]

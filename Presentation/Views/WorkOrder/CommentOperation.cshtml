@@ -77,7 +77,8 @@
         transition-delay: 0s, 0s;
     }
 </style>
-<script>
+
+    <script>
 
     $('.reply,#addcomment').click(function (e) {
         e.preventDefault();
@@ -97,15 +98,17 @@
             "</div>"
             )
     });
-    var currentpage =@Model.CurrentPage;
-    var pagecount =@Model.PageCount;
-    var workorderId='@ViewData["workOrderId"]';
+
+        var currentpage = @Model?.CurrentPage;
+        var pagecount = @Model?.PageCount;
+        var workorderId = '@ViewData["workOrderId"]';
+
     jQuery(function($) {
         $('.mycontainer').on('scroll', function () {
 
-        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-            if (currentpage < pagecount) {
-                 currentpage++;
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                if (currentpage < pagecount) {
+                    currentpage++;
                 $.get('@Url.Action("GetComment","WorkOrder")' + '?requestedPage=' + currentpage + '&workorderId=' + workorderId,
                     function (data) {
                         if (data != null || data != undefined) {
@@ -113,9 +116,9 @@
                         }
                     });
 
-            }
+                }
 
-        }
-    })
+            }
+        })
 });
-</script>
+    </script>

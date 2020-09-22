@@ -1,99 +1,104 @@
 ﻿@model Pagination<List<ChildWo>>
-
-    @*<div class="form-inline pb-1" >
-        <input type="text" class="form-control form-control-sm mr-1" placeholder="search" id="search" />
-
-        <a href="javascript:;" onclick="this.href = '?search=' + document.getElementById('search').value" class="btn btn btn-primary"><i class="fa fa-search"></i></a>
-        </div>*@
-    <div class="workordertitle">
-        Work Orders Created With Recurrence 
-    </div>
-
     @if (Model != null && Model.Payload != null && Model.Payload.Any())
-    {
-        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+    { 
+    <table class="table table-striped wordorderdetail table_container table-responsive-lg">
 
-            <tbody>
+        <tbody>
 
-                @foreach (var item in Model.Payload)
-                {
-                    <tr>
-                        <td>
-                            <span><strong class="@if (item.ParentId!=null) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
-                        </td>
+            @foreach (var item in Model.Payload)
+            {
+                <tr>
+                    <td>
+                        <span><strong class="green">@item.Id</strong></span>
+                    </td>
 
-                        <td><span style="word-break:normal">@item.Description</span></td>
-                        <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
-                        <td>
-                            <span class="text-dark">
-                                @if (item.Property != null)
-                                {@item.Property.PropertyName}
-                            </span>
-                        </td>
-                        <td>@item.DueDate</td>
-                        <td style="min-width:200px;">
+                    <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
+                    <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                    <td>
+                        <span class="text-dark">
+                            @if (item.Property != null)
+                            {@item.Property.PropertyName}
+                        </span>
+                    </td>
+                    <td>@item.DueDate</td>
+                    <td style="min-width:180px;">
+                        <div class="form-inline">
                             @{
                                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                 keyValuePairs.Add("id", item.Id + "");
 
-                                <auth-link bclass="btn btn-sm btn-primary" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
+                                <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
 
                                 <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                             }
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
 
-        </table>
-        <hr />
-        <nav>
-            <ul class="pagination">
-                @{ int prev = Model.CurrentPage - 1;}
-                <li class="page-item @if (Model.CurrentPage == 0)
+    </table>
+   
+    <hr />
+    <nav>
+        <ul class="pagination">
+            @{ int prev = Model.CurrentPage - 1;}
+            <li class="page-item @if (Model.CurrentPage == 0)
                 {<text>disabled</text> }">
-                    <a class="page-link" asp-action="GetRecurringWO" asp-controller="WorkOrder" asp-route-pageNumber='@prev'>Prev</a>
-                </li>
+                <a class="page-link" onclick="GetPage('@prev');">Prev</a>
+            </li>
 
-                @for (int i = 0; i < Model.PageCount; i++)
+            @for (int i = 0; i < Model.PageCount; i++)
+            {
+
+                if (Model.CurrentPage == i)
                 {
+                    <li class="page-item active">
+                        <a class="page-link" >@(i + 1) <span class="sr-only">(current)</span></a>
+                    </li>
 
-                    if (Model.CurrentPage == i)
-                    {
-                        <li class="page-item active">
-                            <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-                        </li>
-
-                    }
-                    else
-                    {
-                        var x = i + 1;
-                        <li class="page-item">
-                            <a class="page-link" asp-action="GetRecurringWO" asp-controller="WorkOrder" asp-route-pageNumber='@x'>@x</a>
-
-                        </li>
-                    }
                 }
-                @{ var PageNumber = Model.CurrentPage + 1;}
-                <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount)
+                else
+                {
+                    var x = i + 1;
+                    <li class="page-item">
+                        <a class="page-link" onclick="GetPage('@i');" >@x</a>
+
+                    </li>
+                }
+            }
+            @{ var PageNumber = Model.CurrentPage + 1;}
+            <li class="page-item @if (Model.CurrentPage + 1 == Model.PageCount)
                     {<text>disabled</text> }">
-                    <a class="page-link" asp-action="GetRecurringWO" asp-controller="WorkOrder" asp-route-pageNumber='@PageNumber'>Next</a>
-                </li>
-            </ul>
-        </nav>
+                <a class="page-link"  onclick="GetPage('@PageNumber');">Next</a>
+            </li>
+        </ul>
+    </nav>
     }
     else
     {
-        <span>No Record found</span>
+    <span>No Record found</span>
     }
-@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-{
-    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+    {
+        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-    <script>
+        <script>
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-    </script>
-}
-<div>
-    <a asp-action="GetRecurringWo">Back</a>
-</div>
+        </script>
+    }
+    
+
+<script>
+    var workorderId = '@Model.Payload[0].ParentId';
+    function GetPage(pagenumber) {
+            $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=&pageNumber='+pagenumber,
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $('#ChildWOSection').html(data);
+                    }
+                });
+    }
+
+
+</script>

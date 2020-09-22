@@ -17,7 +17,7 @@ namespace Models.ResponseModels
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
         public int Priority { get; set; }
-        public DateTime DueDate { get; set; }
+        public string DueDate { get; set; }
         public List<KeyValuePair<string, string>> Attachment { get; set; }
         public string UpdatedBy { get; set; }
         public string AssignedTo { get; set; }

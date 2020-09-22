@@ -16,6 +16,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200724144730_Cron.cs" />
     <Compile Remove="Migrations\20200724144730_Cron.Designer.cs" />
+    <Compile Remove="Migrations\20200905154311_add-identity.cs" />
+    <Compile Remove="Migrations\20200905154311_add-identity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

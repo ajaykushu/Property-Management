@@ -21,5 +21,6 @@ namespace Presentation.ConstModal
         public List<string> Attachment { get; set; }
         public string AssignedTo { get; set; }
         public string UpdatedBy { get; set; }
+      
     }
 }

@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200918162931_NewOne")]
+    partial class NewOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2f6582da-870e-46b5-8c05-fd07808e253a",
+                            ConcurrencyStamp = "2829255b-7b2a-4016-99cc-634b44a8fbe7",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "e586587a-79c9-4187-9244-ca1623d27c2a",
+                            ConcurrencyStamp = "2895e5e1-733e-4ab9-bda8-986522617bd2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "644228e7-ea83-4a71-a2d5-f0a58d448127",
+                            ConcurrencyStamp = "45b60997-aeaf-4080-bc6f-339f57586d62",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -791,8 +793,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("varchar(200)");
 
-                    b.Property<long>("DueAfterDays")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("EndAfterCount")
                         .HasColumnType("int");

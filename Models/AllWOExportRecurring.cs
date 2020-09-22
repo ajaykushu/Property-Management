@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Models
 {
-    public class AllWOExport
+    public class AllWOExportRecurring
     {
         public string Id { get; set; }
         public string PropertyName { get; set; }
@@ -12,7 +13,7 @@ namespace Models
         public string Requestedby { get; set; }
         public string StatusDescription { get; set; }
         public string Issue { get; set; }
-        public DateTime DueDate { get; set; }
+        public string DueAfterDays { get; set; }
         public string Item { get; set; }
         public DateTime CreatedTime { get; set; }
         public string Description { get; set; }
@@ -21,6 +22,7 @@ namespace Models
         public List<string> Attachment { get; set; }
         public string AssignedTo { get; set; }
         public string UpdatedBy { get; set; }
-       
+        public string ScheduledAt { get; set; }
+        public List<string> ChildWO { get; set; }
     }
 }

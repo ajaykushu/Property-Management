@@ -39,17 +39,17 @@ namespace Presentation.ViewModels
         [Remote("CheckEmail", "User")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Please Select Time Zone")]
-        public string TimeZone { set; get; }
+     
 
         public string OfficeExt { get; set; }
-        public List<SelectItem> TimeZones { set; get; }
+      
 
         [DisplayName("Cell Number")]
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
+       
 
         [Remote("CheckUserName", "User")]
         [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length between 4 to 256 charcters")]

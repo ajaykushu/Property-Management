@@ -51,8 +51,10 @@ namespace Presentation.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+           
             if (HttpContext.User.Identity.IsAuthenticated)
             {
+                
                 var userId = HttpContext.User.FindFirstValue(ClaimTypes.Sid);
                 var obj= ObjectByteConverter.Deserialize<SessionStore>(await _sessionStorage.GetAsync(userId));
                 if (obj != null)
@@ -116,7 +118,11 @@ namespace Presentation.Controllers
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
+                    
                     TempData["Error"] = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    if(TempData["Error"].ToString().ToLower().Replace(" ",String.Empty).Equals("invalidpassword"))
+                        TempData["email"] = login.Email;
+  
                     return RedirectToAction("Index");
                 }
                 else

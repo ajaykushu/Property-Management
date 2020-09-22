@@ -150,6 +150,7 @@ namespace API.Controllers
             bool res = await _workOrderService.WorkOrderStatusChange(id, statusId, comment);
             return Ok(res);
         }
+        
 
         [HttpPost]
         [Route("workordersexport")]
@@ -159,13 +160,21 @@ namespace API.Controllers
             var res = await _workOrderService.WOExport(wOFilterModel);
             return Ok(res);
         }
-        
-            [HttpGet]
+        [HttpPost]
+        [Route("workordersrecurringexport")]
+        [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
+        public async Task<ActionResult<List<WorkOrderDetail>>> WOExportRecurring(WOFilterDTO wOFilterModel)
+        {
+            List <AllWOExportRecurring> res = await _workOrderService.WOExportRecurring(wOFilterModel);
+            return Ok(res);
+        }
+
+        [HttpPost]
         [Route("getRecurringWO")]
         [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
-        public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(int pageNumber)
+        public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(WOFilterDTO wOFilterDTO)
         {
-            Pagination<List<RecurringWOs>> res = await _workOrderService.GetRecurringWO(pageNumber);
+            Pagination<List<RecurringWOs>> res = await _workOrderService.GetRecurringWO(wOFilterDTO);
             return Ok(res);
         }
         [HttpGet]
@@ -179,7 +188,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("getchildwos")]
         [FeatureBasedAuthorization(MenuEnum.Recurring_WO)]
-        public async Task<ActionResult<Pagination<List<ChildWo>>>> GetChildWO(int pageNumber, string search ,string rwoId)
+        public async Task<ActionResult<Pagination<List<ChildWo>>>> GetChildWO( string rwoId, string search,int pageNumber)
         {
             Pagination<List<ChildWo>> res = await _workOrderService.GetChildWO(pageNumber,search, rwoId);
             return Ok(res);
