@@ -50,6 +50,7 @@ namespace DataAccessLayer.Migrations
                     CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
                     Entity = table.Column<string>(nullable: true),
+                    RowId = table.Column<string>(nullable: true),
                     PropertyName = table.Column<string>(nullable: true),
                     OldValue = table.Column<string>(nullable: true),
                     NewValue = table.Column<string>(nullable: true),
@@ -432,6 +433,125 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RecurringWOs",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false, defaultValueSql: "Concat('RWO', NEXT VALUE FOR workordersequence)"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    PropertyId = table.Column<long>(nullable: false),
+                    ItemId = table.Column<int>(nullable: false),
+                    IssueId = table.Column<int>(nullable: false),
+                    StatusId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(type: "varchar(200)", nullable: true),
+                    RequestedBy = table.Column<string>(type: "varchar(50)", nullable: true),
+                    AssignedToId = table.Column<long>(nullable: true),
+                    AssignedToDeptId = table.Column<int>(nullable: true),
+                    VendorId = table.Column<int>(nullable: true),
+                    DueAfterDays = table.Column<long>(nullable: false),
+                    LocationId = table.Column<int>(nullable: true),
+                    SubLocationId = table.Column<int>(nullable: true),
+                    Priority = table.Column<int>(nullable: false),
+                    CronExpression = table.Column<string>(nullable: true),
+                    RecurringEndDate = table.Column<DateTime>(nullable: true),
+                    RecurringStartDate = table.Column<DateTime>(nullable: true),
+                    ParentWorkOrderId = table.Column<string>(nullable: true),
+                    EndAfterCount = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringWOs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Departments_AssignedToDeptId",
+                        column: x => x.AssignedToDeptId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_AspNetUsers_AssignedToId",
+                        column: x => x.AssignedToId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Issues_IssueId",
+                        column: x => x.IssueId,
+                        principalTable: "Issues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Properties_PropertyId",
+                        column: x => x.PropertyId,
+                        principalTable: "Properties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Areas_SubLocationId",
+                        column: x => x.SubLocationId,
+                        principalTable: "Areas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecurringWOs_Vendor_VendorId",
+                        column: x => x.VendorId,
+                        principalTable: "Vendor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    WorkOrderId = table.Column<string>(nullable: true),
+                    CommentString = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommentById = table.Column<long>(nullable: false),
+                    RecurringWOId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_CommentById",
+                        column: x => x.CommentById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_RecurringWOs_RecurringWOId",
+                        column: x => x.RecurringWOId,
+                        principalTable: "RecurringWOs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkOrders",
                 columns: table => new
                 {
@@ -448,13 +568,11 @@ namespace DataAccessLayer.Migrations
                     RequestedBy = table.Column<string>(type: "varchar(50)", nullable: true),
                     AssignedToId = table.Column<long>(nullable: true),
                     AssignedToDeptId = table.Column<int>(nullable: true),
-                    IsRecurring = table.Column<bool>(nullable: false, defaultValue: false),
-                    RecurringType = table.Column<string>(type: "varchar(1)", nullable: true),
-                    RecurringTime = table.Column<DateTime>(nullable: false),
                     VendorId = table.Column<int>(nullable: true),
                     DueDate = table.Column<DateTime>(nullable: false),
                     LocationId = table.Column<int>(nullable: true),
                     SubLocationId = table.Column<int>(nullable: true),
+                    ParentWoId = table.Column<string>(nullable: true),
                     Priority = table.Column<int>(nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
@@ -491,6 +609,12 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_WorkOrders_RecurringWOs_ParentWoId",
+                        column: x => x.ParentWoId,
+                        principalTable: "RecurringWOs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_WorkOrders_Properties_PropertyId",
                         column: x => x.PropertyId,
                         principalTable: "Properties",
@@ -512,62 +636,6 @@ namespace DataAccessLayer.Migrations
                         name: "FK_WorkOrders_Vendor_VendorId",
                         column: x => x.VendorId,
                         principalTable: "Vendor",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
-                    UpdatedTime = table.Column<DateTime>(nullable: false),
-                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    WorkOrderId = table.Column<string>(nullable: true),
-                    CommentString = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CommentById = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_CommentById",
-                        column: x => x.CommentById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comments_WorkOrders_WorkOrderId",
-                        column: x => x.WorkOrderId,
-                        principalTable: "WorkOrders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WOAttachments",
-                columns: table => new
-                {
-                    Key = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
-                    UpdatedTime = table.Column<DateTime>(nullable: false),
-                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    FileName = table.Column<string>(type: "varchar(100)", nullable: true),
-                    FilePath = table.Column<string>(type: "varchar(300)", nullable: true),
-                    WorkOrderId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WOAttachments", x => x.Key);
-                    table.ForeignKey(
-                        name: "FK_WOAttachments_WorkOrders_WorkOrderId",
-                        column: x => x.WorkOrderId,
-                        principalTable: "WorkOrders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -604,14 +672,46 @@ namespace DataAccessLayer.Migrations
                         onDelete: ReferentialAction.NoAction);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "WOAttachments",
+                columns: table => new
+                {
+                    Key = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    UpdatedByUserName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    FileName = table.Column<string>(type: "varchar(100)", nullable: true),
+                    FilePath = table.Column<string>(type: "varchar(300)", nullable: true),
+                    WorkOrderId = table.Column<string>(nullable: true),
+                    RecurringWOId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WOAttachments", x => x.Key);
+                    table.ForeignKey(
+                        name: "FK_WOAttachments_RecurringWOs_RecurringWOId",
+                        column: x => x.RecurringWOId,
+                        principalTable: "RecurringWOs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WOAttachments_WorkOrders_WorkOrderId",
+                        column: x => x.WorkOrderId,
+                        principalTable: "WorkOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "5186a513-ea03-41b6-b6de-715c638f7147", "Master Admin", "MASTER ADMIN" },
-                    { 2L, "56d774ab-fc17-4983-9548-563f2dd67df2", "Admin", "ADMIN" },
-                    { 3L, "bcf02d3d-42b3-4d53-9371-9dce2f0c2868", "User", "USER" }
+                    { 1L, "47765cc5-155f-4f8e-857c-5bebc765601f", "Master Admin", "MASTER ADMIN" },
+                    { 2L, "56fdbf85-079d-4bfc-adf2-ca75e9357c5c", "Admin", "ADMIN" },
+                    { 3L, "88796e86-0e8a-4779-9bf8-4a8235d4e2ea", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -653,14 +753,15 @@ namespace DataAccessLayer.Migrations
                 values: new object[,]
                 {
                     { 11L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Access_Setting", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 19L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Recurring_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 18L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "WO_Operation", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 17L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Assign_To_User", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 16L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Post_Comment", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 15L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 14L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "GetWO_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 13L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Get_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 12L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Create_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 10L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edit_Feature", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 13L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Get_WO", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 14L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "GetWO_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 8L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_User_Detail", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 9L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Act_Deact_Property", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "View_Users", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
@@ -789,9 +890,9 @@ namespace DataAccessLayer.Migrations
                 column: "CommentById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_WorkOrderId",
+                name: "IX_Comments_RecurringWOId",
                 table: "Comments",
-                column: "WorkOrderId");
+                column: "RecurringWOId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_PropertyId",
@@ -816,6 +917,51 @@ namespace DataAccessLayer.Migrations
                 column: "PropertyTypeName",
                 unique: true,
                 filter: "[PropertyTypeName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_AssignedToDeptId",
+                table: "RecurringWOs",
+                column: "AssignedToDeptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_AssignedToId",
+                table: "RecurringWOs",
+                column: "AssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_IssueId",
+                table: "RecurringWOs",
+                column: "IssueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_ItemId",
+                table: "RecurringWOs",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_LocationId",
+                table: "RecurringWOs",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_PropertyId",
+                table: "RecurringWOs",
+                column: "PropertyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_StatusId",
+                table: "RecurringWOs",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_SubLocationId",
+                table: "RecurringWOs",
+                column: "SubLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringWOs_VendorId",
+                table: "RecurringWOs",
+                column: "VendorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Replies_CommentId",
@@ -858,6 +1004,11 @@ namespace DataAccessLayer.Migrations
                 column: "PropertyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WOAttachments_RecurringWOId",
+                table: "WOAttachments",
+                column: "RecurringWOId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WOAttachments_WorkOrderId",
                 table: "WOAttachments",
                 column: "WorkOrderId");
@@ -886,6 +1037,11 @@ namespace DataAccessLayer.Migrations
                 name: "IX_WorkOrders_LocationId",
                 table: "WorkOrders",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkOrders_ParentWoId",
+                table: "WorkOrders",
+                column: "ParentWoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_PropertyId",
@@ -945,6 +1101,9 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "WorkOrders");
+
+            migrationBuilder.DropTable(
+                name: "RecurringWOs");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

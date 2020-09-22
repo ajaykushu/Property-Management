@@ -51,21 +51,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2f6582da-870e-46b5-8c05-fd07808e253a",
+                            ConcurrencyStamp = "47765cc5-155f-4f8e-857c-5bebc765601f",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "e586587a-79c9-4187-9244-ca1623d27c2a",
+                            ConcurrencyStamp = "56fdbf85-079d-4bfc-adf2-ca75e9357c5c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "644228e7-ea83-4a71-a2d5-f0a58d448127",
+                            ConcurrencyStamp = "88796e86-0e8a-4779-9bf8-4a8235d4e2ea",
                             Name = "User",
                             NormalizedName = "USER"
                         });
