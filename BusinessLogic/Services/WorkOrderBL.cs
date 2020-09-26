@@ -175,36 +175,48 @@ namespace BusinessLogic.Services
 
         public async Task<CreateNormalWO> GetCreateWOModel(long userId)
         {
-            var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x => x.Locations).ThenInclude(x => x.SubLocations).AsNoTracking().ToListAsync();
-            var primaryprop = property.Where(x => x.IsPrimary == true).Select(x => x.Property).FirstOrDefault();
-
-            CreateNormalWO wo = new CreateNormalWO()
+            CreateNormalWO wo = new CreateNormalWO();
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
-                Properties = property.Select(x => new SelectItem
+                var prop = await _property.GetAll().Include(x => x.Locations).ThenInclude(x => x.SubLocations).AsNoTracking().ToListAsync();
+                wo.Properties = prop.Select(x => new SelectItem
+                {
+                    Id = x.Id,
+                    PropertyName = x.PropertyName
+                }).ToList();
+            }
+            else
+            {
+                var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x => x.Locations).ThenInclude(x => x.SubLocations).AsNoTracking().ToListAsync();
+                var primaryprop = property.Where(x => x.IsPrimary == true).Select(x => x.Property).FirstOrDefault();
+                wo.Properties = property.Select(x => new SelectItem
                 {
                     Id = x.Property.Id,
                     PropertyName = x.Property.PropertyName
-                }).ToList(),
-                PropertyId = primaryprop != null ? primaryprop.Id : 0,
-                Issues = await _issueRepo.GetAll().Select(x => new SelectItem
+                }).ToList();
+                if (primaryprop != null && primaryprop.Locations != null)
+                    wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
+                wo.PropertyId = primaryprop != null ? primaryprop.Id : 0;
+            }
+
+         
+                wo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
                 {
                     Id = x.Id,
                     PropertyName = x.IssueName
-                }).AsNoTracking().ToListAsync(),
-                Items = await _itemRepo.GetAll().Select(x => new SelectItem
-                {
-                    Id = x.Id,
-                    PropertyName = x.ItemName
-                }).AsNoTracking().ToListAsync(),
-                Vendors = await _vendors.GetAll().Select(x => new SelectItem
-                {
-                    Id = x.Id,
-                    PropertyName = x.VendorName
-                }).AsNoTracking().ToListAsync(),
-                DueDate = DateTime.Now,
-            };
-            if (primaryprop != null && primaryprop.Locations != null)
-                wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
+                }).AsNoTracking().ToListAsync();
+            wo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.ItemName
+            }).AsNoTracking().ToListAsync();
+            wo.Vendors = await _vendors.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.VendorName
+            }).AsNoTracking().ToListAsync();
+            wo.DueDate = DateTime.Now;
+           
             wo.OptionId = 0;
             return wo;
         }

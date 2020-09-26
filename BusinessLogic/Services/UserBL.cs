@@ -111,20 +111,25 @@ namespace BusinessLogic.Services
             {
                 Departments = await _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToListAsync(),
                 Languages = await _langrepo.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.Language }).AsNoTracking().ToListAsync(),
-                
             };
+             registerRequest.Roles = await _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToListAsync();
             // finding roles to be displayed a/c to usertype
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                registerRequest.Roles = new List<SelectItem> { new SelectItem { Id = 1, PropertyName = "User" } };
+                registerRequest.Roles= registerRequest.Roles.Where(x=>x.PropertyName!="Master Admin").ToList();
                 registerRequest.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
-                registerRequest.Role = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "user").Select(x => x.PropertyName).FirstOrDefault();
+                registerRequest.Role = "User";
             }
-            else
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
-                registerRequest.Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList();
                 registerRequest.Properties = await _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToListAsync();
-                registerRequest.Role = registerRequest.Roles.Where(x => x.PropertyName.ToLower() == "admin").Select(x => x.PropertyName).FirstOrDefault();
+                registerRequest.Role = "Admin";
+            }
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                registerRequest.Roles = registerRequest.Roles.Where(x => x.PropertyName.ToLower().Equals("user")).ToList();
+                registerRequest.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
+                registerRequest.Role = registerRequest.Roles[0].PropertyName;
             }
 
             var langId = registerRequest.Languages.Where(x => x.PropertyName.ToLower().Equals("english")).FirstOrDefault();
@@ -165,16 +170,25 @@ namespace BusinessLogic.Services
                 PrimaryProperty = applicationUser.UserProperties.Where(x => x.IsPrimary).Select(x => x.Property.PropertyName).FirstOrDefault()
             };
             // finding roles to be displayed a/c to usertype
+            // finding roles to be displayed a/c to usertype
+            editusermodel.Roles = await _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToListAsync();
             if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                editusermodel.Roles = new List<SelectItem> { new SelectItem { Id = 1, PropertyName = "User" } };
+                editusermodel.Roles = editusermodel.Roles.Where(x => x.PropertyName != "Master Admin").ToList();
                 editusermodel.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
             }
-            else
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
-                editusermodel.Roles = _roleManager.Roles.Select(x => new SelectItem { Id = x.Id, PropertyName = x.Name }).AsNoTracking().ToList();
                 editusermodel.Properties = await _property.GetAll().Where(x => x.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).AsNoTracking().ToListAsync();
+               
             }
+            else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                editusermodel.Roles = editusermodel.Roles.Where(x => x.PropertyName.ToLower().Equals("user")).ToList();
+                editusermodel.Properties = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).Where(x => x.Property.IsActive).Select(x => new SelectItem { Id = x.Id, PropertyName = x.Property.PropertyName }).AsNoTracking().ToListAsync();
+               
+            }
+     
             return editusermodel;
         }
 
