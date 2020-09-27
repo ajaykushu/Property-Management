@@ -148,23 +148,15 @@
         <td>
             <div class="form-group row padding">
                 <label for="select-start-date">Start:</label>
-                @if (Model.RecurringStartDate != null)
-                {
-                    var date = Convert.ToDateTime(Model.RecurringStartDate).ToString("yyyy-MM-dd");
-                    @Html.TextBox("RecurringStartDate", date, null, new { @type = "date", @class = "form-control form-control-sm custom-input", @min = DateTime.Now.ToString("yyyy-MM-dd") })
+                @{ var date = Convert.ToDateTime(Model.RecurringStartDate).ToString("yyyy-MM-dd");
+                   date = Model.RecurringStartDate!=null?date: null;
                 }
-                else
-                {
-                    <input class="form-control form-control" type="date" id='RecurringStartDate' name="RecurringStartDate">
-                }
+                @Html.TextBox("RecurringStartDate", date, null, new { @type = "date", @class = "form-control form-control", @min = DateTime.Now.ToString("yyyy-MM-dd") })
 
+
+              
             </div>
-            <div class="form-group row padding top-buffer">
-                <label for="select-at-time">Runs At:</label>
-                <input class="form-control form-control" type="time" id="select-at-time">
-            </div>
-
-
+           
             <div class="form-check row padding top-buffer ml-1">
                 <input class="form-check-input" checked name="end-select" type="radio" id="end-select" value="Always">
                 <label class="form-check-label" for="end-select">No End Date</label>
@@ -192,16 +184,11 @@
 
                     <section class="end-select3">
                         <div class="form-group row padding">
-                            @if (Model.RecurringEndDate != null)
-                            {
-                                @Html.TextBox("RecurringEndDate", (DateTime?)Model.RecurringEndDate, null, new { @class = "form-control form-control", @min = DateTime.Now, @disabled = true })
-
+                            @{ var enddate = Convert.ToDateTime(Model.RecurringEndDate).ToString("yyyy-MM-dd");
+                                date = Model.RecurringEndDate != null ? date : null;
                             }
-                            else
-                            {
+                            @Html.TextBox("RecurringEndDate",enddate, null, new { @class = "form-control form-control", @min =date??DateTime.Now.ToString("yyyy-MM-dd"), @disabled = true, @type = "date" })
 
-                                <input class="form-control form-control" type="date" id="RecurringEndDate" name="RecurringEndDate">
-                            }
                         </div>
                     </section>
 

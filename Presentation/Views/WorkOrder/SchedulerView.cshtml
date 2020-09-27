@@ -170,16 +170,14 @@
         <td colspan="1">
             <div class="form-inline">
                 <div class="form-group">
-                    <label for="select-start-date">Start:</label>
-                    @if (Model.RecurringStartDate != null)
-                    {
-                        var date =  Convert.ToDateTime(Model.RecurringStartDate).ToString("yyyy-MM-dd");
+                    <label for="select-start-date" class="pr-1">Start:</label>
+                   
+                       @{ var date = Convert.ToDateTime(Model.RecurringStartDate).ToString("yyyy-MM-dd");
+                           date = Model.RecurringStartDate!=null?date: null;
+                           }
                         @Html.TextBox("RecurringStartDate", date , null, new { @type="date",  @class = "form-control form-control-sm custom-input", @min = DateTime.Now.ToString("yyyy-MM-dd") })
-                    }
-                    else
-                    {
-                        <input class="form-control form-control-sm custom-input" type="date" id='RecurringStartDate' name="RecurringStartDate">
-                    }
+                  
+                   
                 </div>
             </div>
 
@@ -217,15 +215,11 @@
                 </div>
                 <section class="end-select3">
                     <div class="form-group">
-                        @if (Model.RecurringEndDate != null)
-                        {
-                            @Html.TextBox("RecurringEndDate", (DateTime?)Model.RecurringEndDate, null, new { @class = "form-control form-control-sm custom-input", @min = DateTime.Now, @disabled = true })
+                        @{ var enddate = Convert.ToDateTime(Model.RecurringEndDate).ToString("yyyy-MM-dd");
+                            enddate = Model.RecurringEndDate!=null ?enddate: null;
+                        }
+                        @Html.TextBox("RecurringEndDate","", enddate, new { @class = "form-control form-control-sm custom-input", @min = date??DateTime.Now.ToString("yyyy-MM-dd"), @disabled = true, @type = "date"})
 
-                        }
-                        else
-                        {
-                            <input class="form-control form-control-sm custom-input " type="date" id="RecurringEndDate" name="RecurringEndDate">
-                        }
                     </div>
                 </section>
             </div>
@@ -241,6 +235,8 @@
         });
         $(value).show();
     });
+
+
 </script>
 
 

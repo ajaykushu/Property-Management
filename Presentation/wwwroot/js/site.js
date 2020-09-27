@@ -98,6 +98,8 @@ function ConvertDatetoString(d) {
     return datestring;
 }
 
+
+
 var datestring = ConvertDatetoString(d);
 $('#CreationEndDate').prop("max", datestring);
 $('#CreationStartDate').prop("max", datestring);
@@ -536,3 +538,8 @@ function GenarateCron() {
    
     $('#CronExpression').val(cron);
 };
+
+
+$('#RecurringStartDate').on('change', function () {
+    $('#RecurringEndDate').prop('min', $(this).val());
+});
