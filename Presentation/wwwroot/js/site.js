@@ -285,7 +285,9 @@ $('.datedec').click(function () {
     $('.DueDatelabel').text(datestring);
     $('.mform').submit();
 });
-$(".DueDateMobile").datepicker();
+if ($(".DueDateMobile").length) {
+    $(".DueDateMobile").datepicker();
+}
 $('.dateinc').click(function () {
     var val = $("#DueDate").val();
     if (val == "NaN-NaN-NaN" || val == undefined|| val=='')
