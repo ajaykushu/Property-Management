@@ -552,7 +552,7 @@ namespace Presentation.Controllers
                 recWo = JsonConvert.DeserializeObject<Pagination<List<ChildWo>>>(await response.Content.ReadAsStringAsync());
             }
             if (_detection.Device.Type == DeviceType.Mobile)
-                return PartialView("~/Views/WorkOrder/Mobile/GetChildWO.cshtml", recWo);
+                return View("~/Views/WorkOrder/Mobile/GetChildWO.cshtml", recWo);
 
             return PartialView(recWo);
         }
