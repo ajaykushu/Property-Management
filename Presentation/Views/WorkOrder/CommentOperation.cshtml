@@ -6,7 +6,7 @@
         {
             <p>
                 <div class="mycon">
-                    <button class="btn btn-outline-primary btn-sm" value="0" id="addcomment"><i class="fa fa-comment" aria-hidden="true"></i>&nbsp;Comment</button>
+                    <button class="btn btn-outline-primary btn-sm" value="0" id="addcomment"><i class="fa fa-comment" aria-hidden="true"></i>&nbsp;Add Comment</button>
                 </div>
             </p>
         }
@@ -82,21 +82,22 @@
 
     $('.reply,#addcomment').click(function (e) {
         e.preventDefault();
-        console.log($(this).val());
         var con = $(this).closest('div.mycon');
         var parent = $(this).closest('div.parent');
-        con.append(
-
-            "<div class='card reply top-buffer' style='margin-left:24px'>" +
-            "<div class='card-body'>"+
-            "<textarea id='Comment' name='Comment' class='note' required></textarea>" +
-            "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
-            "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
-            "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).val() + "'hidden required>" +
-             "<button  class='btn btn-outline-primary btn-sm top-buffer'>Post</button>"+
-             "</div>"+
-            "</div>"
+        if ($('#Comment').length==0) {
+            con.append(
+                "<div class='card reply popup top-buffer' style='margin-left:24px'>" +
+                "<div class='card-body'>" +
+                "<textarea id='Comment' name='Comment' class='note' required></textarea>" +
+                "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
+                "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
+                "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).val() + "'hidden required>" +
+                "<button  class='btn btn-outline-primary btn-sm top-buffer'>Post</button>" +
+                 "<input type='button' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
+                "</div>" +
+                "</div>"
             )
+        }
     });
 
         var currentpage = @Model?.CurrentPage;
@@ -105,7 +106,6 @@
 
     jQuery(function($) {
         $('.mycontainer').on('scroll', function () {
-
             if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
                 if (currentpage < pagecount) {
                     currentpage++;
@@ -120,5 +120,8 @@
 
             }
         })
-});
+    });
+        function closePopUp() {
+            $('.popup').remove();
+        }
     </script>

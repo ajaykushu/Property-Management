@@ -269,7 +269,7 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();
-            workOrderAssigned = await query.OrderByDescending(x => x.DueDate).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.OrderByDescending(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -577,7 +577,7 @@ namespace BusinessLogic.Services
                 query = await FilterWO(wOFilterModel, query);
                
 
-                workOrders = await query.OrderByDescending(x => x.DueDate).Select(x => new AllWOExport
+                workOrders = await query.OrderByDescending(x => x.Priority).Select(x => new AllWOExport
                 {
                     PropertyName = x.Property.PropertyName,
                     Issue = x.Issue.IssueName,
@@ -1005,9 +1005,9 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterDTO, query);
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
-            recWorkOrder = await query.OrderByDescending(x => x.CreatedTime).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
+            recWorkOrder = await query.OrderByDescending(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
-                DueDate = "After "+x.DueAfterDays+ " Days",
+                DueAfterDays = "After "+x.DueAfterDays+ " Days",
                 Description = x.Description,
                 Id = x.Id,
                 ScheduleAt= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
@@ -1038,7 +1038,7 @@ namespace BusinessLogic.Services
             var query = _workOrder.GetAll().Where(x => x != null && x.ParentWoId.Equals(rwoId));
             List<ChildWo> recWorkOrder = null;
             var count = query.Count();
-            recWorkOrder = await query.OrderByDescending(x => x.DueDate).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new ChildWo
+            recWorkOrder = await query.OrderByDescending(x => x.Priority).Skip(pageNumber * iteminpage).Take(iteminpage).Select(x => new ChildWo
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -1116,7 +1116,7 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterModel, query);
 
 
-            workOrders = await query.OrderByDescending(x => x.CreatedTime).Select(x => new AllWOExportRecurring
+            workOrders = await query.OrderByDescending(x => x.Priority).Select(x => new AllWOExportRecurring
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,

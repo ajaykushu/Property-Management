@@ -106,46 +106,70 @@
 
     @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
     {
-        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+<table class="table table-striped wordorderdetail table_container table-responsive-lg">
+    <thead>
+        <tr>
+            <th>
+                WO#
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Assigned To
+            </th>
+            <th>
+                Property
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Scheduled At
+            </th>
+            <th>
 
-            <tbody>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
 
-                @foreach (var item in ResponseModel.Payload)
-                {
-                <tr>
-                    <td>
-                        <span><strong class="green">@item.Id</strong></span>
-                    </td>
+        @foreach (var item in ResponseModel.Payload)
+        {
+            <tr>
+                <td>
+                    <span><strong class="green">@item.Id</strong></span>
+                </td>
 
-                    <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
-                    <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
-                    <td>
-                        <span class="text-dark">
-                            @if (item.Property != null)
-                            {@item.Property.PropertyName}
-                        </span>
-                    </td>
-                    <td>@item.DueAfterDays</td>
-                    <td>@item.ScheduleAt</td>
-                    <td style="width:180px;">
-                        <div class="form-inline">
-                            @{
-                                <a class="btn btn-sm btn-primary mr-1" asp-route-id="@item.Id" asp-action="EditRecurringWOView" asp-controller="WorkOrder">
-                                    <i class="fa fa-pencil-alt"></i>&nbsp; Edit
-                                </a>
-                                <a class="btn btn-sm btn-info mr-1" asp-route-id="@item.Id" asp-route-type="2" asp-action="GetWODetail" asp-controller="WorkOrder">
-                                    <i class="fa fa-pencil-alt"></i>&nbsp; Detail
-                                </a>
+                <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
+                <td><span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                <td>
+                    <span class="text-dark">
+                        @if (item.Property != null)
+                        {@item.Property.PropertyName}
+                    </span>
+                </td>
+                <td>@item.DueAfterDays</td>
+                <td>@item.ScheduleAt</td>
+                <td style="width:180px;">
+                    <div class="form-inline">
+                        @{
+                            <a class="btn btn-sm btn-primary mr-1" asp-route-id="@item.Id" asp-action="EditRecurringWOView" asp-controller="WorkOrder">
+                                <i class="fa fa-pencil-alt"></i>&nbsp; Edit
+                            </a>
+                            <a class="btn btn-sm btn-info mr-1" asp-route-id="@item.Id" asp-route-type="2" asp-action="GetWODetail" asp-controller="WorkOrder">
+                                <i class="fa fa-pencil-alt"></i>&nbsp; Detail
+                            </a>
 
-                                
-                            }
-                        </div>
-                    </td>
-                </tr>
-                }
-            </tbody>
 
-        </table>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
         <hr />
         <nav>
             <ul class="pagination">

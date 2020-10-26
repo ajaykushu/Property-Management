@@ -109,7 +109,28 @@
         @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
         {
             <table class="table table-striped wordorderdetail table_container table-responsive-lg">
-               
+               <thead>
+                   <tr>
+                       <th>
+                           WO#
+                       </th>
+                       <th>
+                           Description
+                       </th>
+                       <th>
+                           Assigned To
+                       </th>
+                       <th>
+                           Property
+                       </th>
+                       <th>
+                           Due Date
+                       </th>
+                       <th>
+                           
+                       </th>
+                   </tr>
+               </thead>
                 <tbody>
 
                     @foreach (var item in ResponseModel.Payload)
@@ -120,7 +141,7 @@
                             </td>
 
                             <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
-                            <td>Assigned to&nbsp;<span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                            <td><span class="text-success"><strong>@item.AssignedTo</strong></span></td>
                             <td>
                                 <span class="text-dark">
                                     @if (item.Property != null)
