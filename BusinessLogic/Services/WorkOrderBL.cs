@@ -269,7 +269,7 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();
-            workOrderAssigned = await query.OrderByDescending(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Where(x=>x.Status.StatusCode!= "COMP").OrderByDescending(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -1143,6 +1143,34 @@ namespace BusinessLogic.Services
             }).AsNoTracking().ToListAsync();
 
             return workOrders;
+        }
+
+        public async Task<Pagination<List<WorkOrderAssigned>>> GetCompletedWO(int PageNumber )
+        {
+            int iteminpage = 20;
+            var query = _workOrder.GetAll();
+            //query = await FilterWO(wOFilterModel, query);
+            List<WorkOrderAssigned> workOrderAssigned = null;
+            var count = query.Count();
+            workOrderAssigned = await query.Where(x => x.Status.StatusCode == "COMP").OrderByDescending(x => x.Priority).Skip(PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            {
+                DueDate = x.DueDate.ToString("dd-MMM-yy"),
+                Description = x.Description,
+                Id = x.Id,
+                ParentId = x.ParentWoId,
+                Status = x.Status.StatusDescription,
+                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
+                Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
+            }).AsNoTracking().ToListAsync();
+            Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
+            {
+                Payload = workOrderAssigned,
+                CurrentPage = PageNumber,
+                ItemsPerPage = count > iteminpage ? iteminpage : count,
+                PageCount = count <= iteminpage ? 1 : count % iteminpage == 0 ? count / iteminpage : count / iteminpage + 1
+            };
+
+            return pagination;
         }
     }
 }

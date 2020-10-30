@@ -41,5 +41,7 @@ namespace BusinessLogic.Interfaces
         Task<Pagination<List<ChildWo>>> GetChildWO(int pageNumber,string search, string rwoId);
         Task<WorkOrderDetail> GetRecurringWODetail(string rwoId);
         Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel);
+        Task<Pagination<List<WorkOrderAssigned>>> GetCompletedWO(int pageNumber);
+
     }
 }

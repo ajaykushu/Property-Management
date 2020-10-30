@@ -632,6 +632,30 @@ namespace Presentation.Controllers
                 msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
             return BadRequest(msg);
         }
-        
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCompletedWO(int pageNumber)
+        {  
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("completedwo", out string path);
+                StringBuilder query = new StringBuilder();
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?pageNumber="+pageNumber, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    var WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
+                    ViewBag.Response = WorkOrderAssigned;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/GetCompletedWO.cshtml");
+            return View();
+        }
+
     }
 }
