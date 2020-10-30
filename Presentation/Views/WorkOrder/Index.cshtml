@@ -52,15 +52,16 @@
                         <select asp-for="Status" class="form-control top-buffer form-control-sm custom-input">
                             <option value="">--Select--</option>
                             <option value="ADCM">Add Comment Only</option>
-                            <option value="BINE">BID Needed</option>
-                            <option value="BIRE">BID Received</option>
+                            <option value="BINE">Bid Needed</option>
+                            <option value="BIRE">Bid Received</option>
+                            <option value="BIRQ">Bid Requested</option>
                             <option value="COMP">Complete</option>
                             <option value="COBQ">Complete But Bad Quality</option>
                             <option value="CONI">Complete, Need Inspection</option>
                             <option value="DAIL">Daily</option>
                             <option value="FISC">Finalize Scope</option>
                             <option value="HOLD">Hold</option>
-                            <option value="NEWO">New WO</option>
+                            <option value="NEWO">New work order</option>
                             <option value="ORMA">Order Materials</option>
                             <option value="PEND">Pending</option>
                             <option value="REAS">Ready To Assign</option>
@@ -85,15 +86,23 @@
                .GetProperties()
                .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
         }
-        <div class="workordertitle">
-            Work Orders
-            <div class="Filter_con float-right">
-                <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
-                <i class="fa fa-filter"></i>
-            </div>
-
-            <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>
+    <div class="workordertitle">
+        Work Orders
+        <div class="Filter_con float-right">
+            <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
+            <i class="fa fa-filter"></i>
         </div>
+        <a  class="float-right nav-link dropdown-toggle" id="navbarDropdownExportLink" style="color:white;padding:5px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownExportLink">
+            <li class="dropdown-submenu">
+                <a asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
+                <a asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
+
+            </li>
+            
+        </ul>
+        @*<a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>*@
+    </div>
        
                 <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;" >
                     <div class="justify-content-lg-start col-md-9">

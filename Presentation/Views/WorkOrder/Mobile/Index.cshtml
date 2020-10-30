@@ -54,17 +54,18 @@
                 <option value="3">Low</option>
             </select>
             <select asp-for="Status" class="form-control form-control top-buffer mobile-input">
-                <option value="">Search One</option>
+                <option value="">--Select--</option>
                 <option value="ADCM">Add Comment Only</option>
-                <option value="BINE">BID Needed</option>
-                <option value="BIRE">BID Received</option>
+                <option value="BINE">Bid Needed</option>
+                <option value="BIRE">Bid Received</option>
+                <option value="BIRQ">Bid Requested</option>
                 <option value="COMP">Complete</option>
                 <option value="COBQ">Complete But Bad Quality</option>
                 <option value="CONI">Complete, Need Inspection</option>
                 <option value="DAIL">Daily</option>
                 <option value="FISC">Finalize Scope</option>
                 <option value="HOLD">Hold</option>
-                <option value="NEWO">New WO</option>
+                <option value="NEWO">New work order</option>
                 <option value="ORMA">Order Materials</option>
                 <option value="PEND">Pending</option>
                 <option value="REAS">Ready To Assign</option>
@@ -81,15 +82,6 @@
         </div>
     </div>
     <div class="container">
-        @*<div class="d-inline-flex due-date w-100 justify-content-center ">
-            <span class="datedec" style="padding-left:15px;"><i class="fa fa-chevron-left fa-1x"></i></span>
-            <div class="date-con" style="padding-left:15px;">
-                <span class="fa fa-calendar fa-1x"></span>
-                <input asp-for="DueDate" class="DueDateMobile">
-            </div>
-            <label class="DueDatelabel" style="padding-left:15px;">Due Date</label>
-            <span class="dateinc" style="padding-left:15px;"><i class="fa fa-chevron-right fa-1x"></i></span>
-        </div>*@
         @if (ResponseModel != null && ResponseModel.Payload != null)
         {
         <table class="table border-0" style="table-layout:fixed;">

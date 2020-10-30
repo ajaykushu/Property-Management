@@ -126,10 +126,10 @@ namespace DataAccessLayer.Repository
                  .HasData(new Item() { Id = 1, ItemName = "Tv" }, new Item() { Id = 2, ItemName = "AC" });
             builder.Entity<Issue>()
                  .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
-            builder.Entity<Status>().HasData(new Status() { Id = 1, StatusCode = "ADCM", StatusDescription = "Add Comment Only" }, new Status() { Id = 2, StatusCode = "BINE", StatusDescription = "BID NEEDED" }, new Status() { Id = 3, StatusCode = "BIRE", StatusDescription = "BID Recieved" },
-                new Status() { Id = 4, StatusCode = "BIRE", StatusDescription = "Bid Requested" },
+            builder.Entity<Status>().HasData(new Status() { Id = 1, StatusCode = "ADCM", StatusDescription = "Add Comment Only" }, new Status() { Id = 2, StatusCode = "BINE", StatusDescription = "Bid Needed" }, new Status() { Id = 3, StatusCode = "BIRE", StatusDescription = "Bid Recieved" },
+                new Status() { Id = 4, StatusCode = "BIRQ", StatusDescription = "Bid Requested" },
                 new Status() { Id = 5, StatusCode = "COMP", StatusDescription = "Complete" },
-                new Status() { Id = 6, StatusCode = "COBQ", StatusDescription = "Complete but bad Quality" },
+                new Status() { Id = 6, StatusCode = "COBQ", StatusDescription = "Complete But Bad Quality" },
                 new Status() { Id = 7, StatusCode = "CONI", StatusDescription = "Complete, Need Inspection" },
                 new Status() { Id = 8, StatusCode = "DAIL", StatusDescription = "Daily" },
                 new Status() { Id = 9, StatusCode = "FISC", StatusDescription = "Finalize Scope" },
@@ -139,8 +139,8 @@ namespace DataAccessLayer.Repository
                 new Status() { Id = 13, StatusCode = "PEND", StatusDescription = "Pending" },
                 new Status() { Id = 14, StatusCode = "REAS", StatusDescription = "Ready To Assign" },
                 new Status() { Id = 15, StatusCode = "WOAS", StatusDescription = "Work Assigned" },
-                new Status() { Id = 17, StatusCode = "WOPR", StatusDescription = "Work In Progress" },
-                new Status() { Id = 18, StatusCode = "WOOR", StatusDescription = "Work Ordered" }
+                new Status() { Id = 16, StatusCode = "WOPR", StatusDescription = "Work In Progress" },
+                new Status() { Id = 17, StatusCode = "WOOR", StatusDescription = "Work Ordered" }
                 );
 
             builder.Entity<Menu>().HasData(

@@ -81,5 +81,36 @@ namespace Presentation.Utiliity
             File.Delete(guid);
             return filedata;
         }
+        public async Task<byte[]> CreateExcel(T model)
+        {
+            DataTable table = new DataTable();
+            if (model != null)
+            {
+                AddToDatatable(model, table, ref isColumnAdded);
+            }
+
+            string guid = "Templates/" + Guid.NewGuid().ToString()+ ".xlsx";
+            table.ToExcel(guid);
+            byte[] filedata = await System.IO.File.ReadAllBytesAsync(guid);
+            File.Delete(guid);
+            return filedata;
+        }
+
+        public async Task<byte[]> CreateListExcel(List<T> model)
+        {
+            DataTable table = new DataTable();
+            if (model != null)
+            {
+                foreach (var item in model)
+                {
+                    AddToDatatable(item, table, ref isColumnAdded);
+                }
+            }
+            string guid = "Templates/" + Guid.NewGuid().ToString()+ ".xlsx";
+            table.ToExcel(guid);
+            byte[] filedata = await System.IO.File.ReadAllBytesAsync(guid);
+            File.Delete(guid);
+            return filedata;
+        }
     }
 }

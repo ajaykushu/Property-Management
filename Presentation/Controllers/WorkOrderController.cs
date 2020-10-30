@@ -414,11 +414,21 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> DownloadWO(string woId)
+        public async Task<IActionResult> DownloadWO(string woId,int type)
         {
             WorkOrderDetail workOrderDetail = null;
-            string filename = "File.csv";
-            string contentType = "text/csv";
+            string filename = String.Empty;
+            string contentType = String.Empty;
+            if (type == 1)
+            {
+                filename = "File.csv";
+                 contentType = "text/csv";
+            }
+            else
+            {
+                filename = "File.xlsx";
+                contentType = "text/xlsx";
+            }
             byte[] file = null;
             try
             {
@@ -428,7 +438,7 @@ namespace Presentation.Controllers
                 {
                     workOrderDetail = JsonConvert.DeserializeObject<WorkOrderDetail>(await response.Content.ReadAsStringAsync());
                 }
-
+                
                 var cd = new System.Net.Mime.ContentDisposition
                 {
                     FileName = filename,
@@ -436,7 +446,10 @@ namespace Presentation.Controllers
                 };
 
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
+                if(type==1)
                 file = await _export.CreateCSV(workOrderDetail);
+                else
+                    file = await _export.CreateExcel(workOrderDetail);
             }
             catch (Exception)
             {
@@ -445,11 +458,21 @@ namespace Presentation.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ExportWO(WOFilterModel wo)
+        public async Task<IActionResult> ExportWO(WOFilterModel wo,int type)
         {
             List<AllWOExport> workOrderDetail = null;
-            string filename = "File.csv";
-            string contentType = "text/csv";
+            string filename = String.Empty;
+            string contentType = String.Empty;
+            if (type == 1)
+            {
+                filename = "File.csv";
+                contentType = "text/csv";
+            }
+            else
+            {
+                filename = "File.xlsx";
+                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            }
             byte[] file = null;
             try
             {
@@ -467,7 +490,11 @@ namespace Presentation.Controllers
                 };
 
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
-                file = await _allwoexport.CreateListCSV(workOrderDetail);
+                if (type == 1)
+                    file = await _allwoexport.CreateListCSV(workOrderDetail);
+                else
+                    file = await _allwoexport.CreateListExcel(workOrderDetail);
+                
             }
             catch (Exception)
             {
@@ -475,11 +502,21 @@ namespace Presentation.Controllers
             return File(file, contentType);
         }
         [Authorize]
-        public async Task<IActionResult> ExportRecurringWO(WOFilterModel wo)
+        public async Task<IActionResult> ExportRecurringWO(WOFilterModel wo,int type)
         {
             List<AllWOExportRecurring> workOrderDetail = null;
-            string filename = "File.csv";
-            string contentType = "text/csv";
+            string filename = String.Empty;
+            string contentType = String.Empty;
+            if (type == 1)
+            {
+                filename = "File.csv";
+                contentType = "text/csv";
+            }
+            else
+            {
+                filename = "File.xlsx";
+                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            }
             byte[] file = null;
             try
             {
@@ -497,7 +534,11 @@ namespace Presentation.Controllers
                 };
 
                 HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
-                file = await _allrecurringwoexport.CreateListCSV(workOrderDetail);
+                if (type == 1)
+                    file = await _allrecurringwoexport.CreateListCSV(workOrderDetail);
+                else
+                    file = await _allrecurringwoexport.CreateListExcel(workOrderDetail);
+                //file = await _allrecurringwoexport.CreateListCSV(workOrderDetail);
             }
             catch (Exception)
             {

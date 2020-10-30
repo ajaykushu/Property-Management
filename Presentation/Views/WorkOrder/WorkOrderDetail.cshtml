@@ -53,17 +53,7 @@
                 <tr>
                     <td>
                         <div class="col">
-                            @if (Model.RecurringEndDate.HasValue)
-                            {
-                                <div class="row ">
-                                    <div class="col-md-3">
-                                        <label asp-for="RecurringEndDate">Schedule End Date</label>
-                                    </div>
-                                    <div class="col">
-                                        <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
-                                    </div>
-                                </div>
-                            }
+
                             @if (Model.RecurringStartDate.HasValue)
                             {
                                 <div class="row top-buffer">
@@ -94,6 +84,17 @@
                                     <span class="value" style="color:green"><strong>@Html.DisplayFor(x => x.CronExpression)</strong></span>
                                 </div>
                             </div>
+                            @if (Model.RecurringEndDate.HasValue)
+                            {
+                                <div class="row ">
+                                    <div class="col-md-3">
+                                        <label asp-for="RecurringEndDate">Schedule End Date</label>
+                                    </div>
+                                    <div class="col">
+                                        <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
+                                    </div>
+                                </div>
+                            }
                         </div>
 
                     </td>
