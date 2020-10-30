@@ -269,7 +269,7 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();
-            workOrderAssigned = await query.Where(x=>x.Status.StatusCode!= "COMP").OrderByDescending(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Where(x=>x.Status.StatusCode!= "COMP").OrderBy(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
@@ -1151,8 +1151,11 @@ namespace BusinessLogic.Services
             var query = _workOrder.GetAll();
             //query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
-            var count = query.Count();
-            workOrderAssigned = await query.Where(x => x.Status.StatusCode == "COMP").OrderByDescending(x => x.Priority).Skip(PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+
+            var count = query.Where(x => x.Status.StatusCode == "COMP").OrderBy(x => x.Priority).Count();
+
+
+workOrderAssigned = await query.Where(x => x.Status.StatusCode == "COMP").OrderBy(x => x.Priority).Skip(PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
             {
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,

@@ -4,9 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="workordertitle">
-    Edit Recurring WorkOder 
-</div>
+    <div class="workordertitle">
+        Edit Recurring WorkOder
+        <span class="fa-pull-right">@Model.Id</span>
+    </div>
 
 <form class="form" asp-action="EditRecurringWO" asp-controller="WorkOrder" id="editworecurring">
     @if (Model == null)

@@ -4,9 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="workordertitle">
-    Edit WorkOder
-</div>
+    <div class="workordertitle">
+        Edit WorkOder
+        <span class="fa-pull-right">@Model.Id</span>
+    </div>
 
 <form class="form" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
     @if (Model == null)

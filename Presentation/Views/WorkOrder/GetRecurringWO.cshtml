@@ -92,6 +92,7 @@
         <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
         <i class="fa fa-filter"></i>
     </div>
+    
     <a class="float-right nav-link dropdown-toggle" id="navbarDropdownExportLink" style="color:white;padding:5px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdownExportLink">
         <li class="dropdown-submenu">
@@ -99,7 +100,7 @@
             <a asp-action="ExportRecurringWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
         </li>
     </ul>
-    
+
 
     @*<a asp-action="ExportRecurringWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>*@
 </div>
