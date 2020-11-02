@@ -222,8 +222,10 @@ $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
         }, function (res) {
             disablespinner();
             $("input[type=password]").val("");
-            $("form :input").prop("disabled", false);
-            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                $("form :input").prop("disabled", false);
+                if (res.status == 302)
+                    window.location.href = res.responseText.href;
+                alertify.alert('Error', '<p>' + res.responseText.message + '</p>', function () {
             });
         }, "");
     }
@@ -545,3 +547,19 @@ function GenarateCron() {
 $('#RecurringStartDate').on('change', function () {
     $('#RecurringEndDate').prop('min', $(this).val());
 });
+
+$("a[name='exportlink']").click(function () {
+    var href = this.href;
+    event.preventDefault();
+
+    alertify.confirm(this.innerText, 'Export Current Displayed List', function () {
+        href = href.replace("&IsCurrent=False", "&IsCurrent=true");
+
+        alertify.closeAll();
+        window.location = href;
+
+
+    }
+        , function () { alertify.closeAll(); window.location = href; });
+});
+

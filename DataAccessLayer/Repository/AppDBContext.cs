@@ -230,7 +230,13 @@ namespace DataAccessLayer.Repository
                  {
                      Id = 19,
                      MenuName = "Recurring_WO"
-                 });
+                 },
+                  new Menu()
+                  {
+                      Id = 20,
+                      MenuName = "Completed_WO"
+                  });
+            
 
             builder.Entity<RoleMenuMap>().HasData(
                 new RoleMenuMap { Id = 1, MenuId = 1, RoleId = 1 },

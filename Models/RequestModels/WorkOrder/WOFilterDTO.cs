@@ -40,6 +40,7 @@ namespace Models.WorkOrder.RequestModels
             set;
         }
         public int PageNumber { get; set; }
-        
+        public bool IsCurrent { get; set; }
+
     }
 }

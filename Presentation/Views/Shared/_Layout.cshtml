@@ -66,7 +66,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-envelope fa-1x"></i></a>
+                                    <a class="nav-link text-white" id="Email"><i class="fa fa-envelope fa-1x"></i></a>
                                 </li>
                                 <li class="nav-item active">
                                     <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><i class="fa fa-sign-out-alt fa-1x"></i></a>
@@ -120,11 +120,45 @@
 </html>
 @if(device.Device.Type != DeviceType.Mobile && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated){
 <script>
-        $(document).ready(function () {
-            $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
-                $("#notification_count").html('<strong>'+data+'</strong>');
-            })
+    $(document).ready(function () {
+        $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
+            $("#notification_count").html('<strong>' + data + '</strong>');
         })
-   
+    });
+
+
+       
 </script>
 }
+<script>
+     alertify.genericDialog || alertify.dialog('genericDialog',function(){
+    return {
+        main:function(content){
+            this.setContent(content);
+        },
+        setup:function(){
+            return {
+                focus:{
+                    element:function(){
+                        return this.elements.body.querySelector(this.get('selector'));
+                    },
+                    select:true
+                },
+                options:{
+                    basic:true,
+                    maximizable:true,
+                    resizable:false,
+                    padding:true
+                }
+            };
+        },
+        settings:{
+            selector:undefined
+        }
+    };
+     });
+    $('#Email').click(function () {
+        //force focusing password box
+        alertify.genericDialog('<h1>Send Mail</h1><form><div class="form-group"><label>Content</label><textarea class="form-control">Hello</textarea><input class="form-control mt-1 w-50" type="file"><input type="submit" class="btn btn-primary mt-1" value="send"></div><form>');
+    });
+</script>

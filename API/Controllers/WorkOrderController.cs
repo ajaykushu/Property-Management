@@ -204,7 +204,7 @@ namespace API.Controllers
         }
         [HttpGet]
         [Route("completedwo")]
-        [FeatureBasedAuthorization(MenuEnum.Get_WO)]
+        [FeatureBasedAuthorization(MenuEnum.Completed_WO)]
        public async Task<ActionResult<List<WorkOrderAssigned>>> GetCompletedWO(int pageNumber)
         {
             var res = await _workOrderService.GetCompletedWO(pageNumber);

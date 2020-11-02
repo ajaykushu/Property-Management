@@ -92,55 +92,53 @@
             <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
             <i class="fa fa-filter"></i>
         </div>
-        <a  class="float-right nav-link dropdown-toggle" id="navbarDropdownExportLink" style="color:white;padding:5px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdownExportLink">
-            <li class="dropdown-submenu">
-                <a asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
-                <a asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
+        <div class=" float-right btn-group dropup">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownExportLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
+            <div class="dropdown-menu">
 
-            </li>
-            
-        </ul>
-        @*<a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export"></i></a>*@
-    </div>
-       
-                <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;" >
-                    <div class="justify-content-lg-start col-md-6">
-                    <strong>To Do List</strong>
-                 </div>
-                    <div class="justify-content-end col-md-6">
-                        <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderView"><i class="fa fa-plus"></i>&nbsp;New WO</a>
-                        <a class="btn btn-info fa-pull-right mr-1" value="CompletedWo" asp-action="GetCompletedWO"><i class="fa fa-check-double" aria-hidden="true"></i>Completed WO</a>
-                    </div>
-               
-                    </div>
-      
-       
+                <a name="exportlink"  asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
+                <a name="exportlink" asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
+
+            </div>
+            </div>
+        </div>
+
+        <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
+            <div class="justify-content-lg-start col-md-6">
+                <strong>To Do List</strong>
+            </div>
+            <div class="justify-content-end col-md-6">
+                <a class="btn btn-success fa-pull-right" value="CreateWorkOrder" asp-action="CreateWorkOrderView"><i class="fa fa-plus"></i>&nbsp;New WO</a>
+            </div>
+
+        </div>
+
+
         @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
         {
             <table class="table table-striped wordorderdetail table_container table-responsive-lg">
-               <thead>
-                   <tr>
-                       <th>
-                           WO#
-                       </th>
-                       <th>
-                           Description
-                       </th>
-                       <th>
-                           Assigned To
-                       </th>
-                       <th>
-                           Property
-                       </th>
-                       <th>
-                           Due Date
-                       </th>
-                       <th>
-                           
-                       </th>
-                   </tr>
-               </thead>
+                <thead>
+                    <tr>
+                        <th>
+                            WO#
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Assigned To
+                        </th>
+                        <th>
+                            Property
+                        </th>
+                        <th>
+                            Due Date
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                </thead>
                 <tbody>
 
                     @foreach (var item in ResponseModel.Payload)
@@ -175,48 +173,48 @@
                         </tr>
                     }
                 </tbody>
-               
+
             </table>
             <hr />
-                <nav>
-                    <ul class="pagination">
-                        @{ int current = 0;}
-                        <li class="page-item @if (ResponseModel.CurrentPage == 0)
+            <nav>
+                <ul class="pagination">
+                    @{ int current = 0;}
+                    <li class="page-item @if (ResponseModel.CurrentPage == 0)
                     {<text>disabled</text> }">
-                            @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                        </li>
+                        @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                    </li>
 
-                        @for (int i = 0; i < ResponseModel.PageCount; i++)
+                    @for (int i = 0; i < ResponseModel.PageCount; i++)
+                    {
+
+                        if (ResponseModel.CurrentPage == i)
                         {
-
-                            if (ResponseModel.CurrentPage == i)
-                            {
-                                <li class="page-item active">
-                                    <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-                                </li>
-                                current = i;
-                            }
-                            else
-                            {
-                                <li class="page-item">
-                                    @{ Model.PageNumber = i;}
-                                    @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                                </li>
-                            }
+                            <li class="page-item active">
+                                <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                            </li>
+                            current = i;
                         }
-                        @{ Model.PageNumber = current + 1;}
-                        <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
+                        else
+                        {
+                            <li class="page-item">
+                                @{ Model.PageNumber = i;}
+                                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                            </li>
+                        }
+                    }
+                    @{ Model.PageNumber = current + 1;}
+                    <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
                     {<text>disabled</text> }">
-                            @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                        </li>
-                    </ul>
-                </nav>
-                            }
-                            else
-                            {
-                                <span>No Record found</span>
-                            }
-        </form>
+                        @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                    </li>
+                </ul>
+            </nav>
+        }
+        else
+        {
+            <span>No Record found</span>
+        }
+</form>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
@@ -241,4 +239,11 @@
     $('#Export').change(function () {
         $('input[type="submit"]').click();
     })
+
+   
 </script>
+<style>
+.dropup .dropdown-item {
+    color: black;
+}
+</style>

@@ -25,5 +25,6 @@ namespace Presentation.ViewModels
         [DisplayName("Work Order Number")]
         public string WOId { get; set; }
         public bool FilterActive { get; set; }
+        public bool IsCurrent { get;set; }
     }
 }

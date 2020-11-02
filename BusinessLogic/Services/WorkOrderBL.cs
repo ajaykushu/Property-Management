@@ -575,9 +575,9 @@ namespace BusinessLogic.Services
             List<AllWOExport> workOrders = null;
                 var query = _workOrder.GetAll();
                 query = await FilterWO(wOFilterModel, query);
-               
-
-                workOrders = await query.OrderByDescending(x => x.Priority).Select(x => new AllWOExport
+            var skip = wOFilterModel.PageNumber > 0 && wOFilterModel.IsCurrent ? wOFilterModel.PageNumber * 20 : 0;
+            var count=await query.CountAsync();
+            workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExport
                 {
                     PropertyName = x.Property.PropertyName,
                     Issue = x.Issue.IssueName,
@@ -595,7 +595,7 @@ namespace BusinessLogic.Services
                     Location = x.Location.LocationName,
                     SubLocation = x.SubLocation.AreaName,
                     Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
-                }).AsNoTracking().ToListAsync();
+                }).Skip(skip).Take(wOFilterModel.IsCurrent?20:count).AsNoTracking().ToListAsync();
         
             return workOrders;
         }
@@ -1111,12 +1111,13 @@ namespace BusinessLogic.Services
 
         public async Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel)
         {
+            var skip = wOFilterModel.PageNumber > 0 && wOFilterModel.IsCurrent ? wOFilterModel.PageNumber * 20:0;
             List<AllWOExportRecurring> workOrders = null;
             var query = _recuringWo.GetAll();
             query = await FilterWO(wOFilterModel, query);
 
-
-            workOrders = await query.OrderByDescending(x => x.Priority).Select(x => new AllWOExportRecurring
+            var count = await query.CountAsync();
+            workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExportRecurring
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue.IssueName,
@@ -1140,7 +1141,7 @@ namespace BusinessLogic.Services
                 Location = x.Location.LocationName,
                 SubLocation = x.SubLocation.AreaName,
                 Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
-            }).AsNoTracking().ToListAsync();
+            }).Skip(skip).Take(wOFilterModel.IsCurrent?20:count).AsNoTracking().ToListAsync();
 
             return workOrders;
         }

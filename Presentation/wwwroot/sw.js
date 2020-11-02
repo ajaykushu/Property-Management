@@ -2,7 +2,7 @@
     'use strict';
 
     // Update 'version' if you need to refresh the cache
-    var version = 'Worker 1.7::CacheFirstSafe';
+    var version = 'Worker 1.3::CacheFirstSafe';
     var offlineUrl = "/Offline.html";
 
     // Store core files in a cache (including a page to display when offline)

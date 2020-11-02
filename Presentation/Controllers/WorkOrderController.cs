@@ -323,7 +323,9 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            return Ok(StringConstants.CreatedSuccess);
+                            var href= Url.Action("GetRecurringWO");
+                            return StatusCode((int)HttpStatusCode.Redirect,new { href = href,message=StringConstants.CreatedSuccess });
+                           
                         }
                         else
                             return BadRequest("Unable To Create");
