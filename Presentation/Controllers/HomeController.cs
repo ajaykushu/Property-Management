@@ -12,6 +12,7 @@ using Presentation.ViewModels.Controller.Home;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,28 @@ namespace Presentation.Controllers
             //getting all notification
 
             return Ok(status);
+        }
+
+        public async Task<IActionResult> GetUserEmail()
+        {
+            List<UserList> allNotification = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getUserEmail", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode) {
+                    allNotification = JsonConvert.DeserializeObject<List<UserList>>(await response.Content.ReadAsStringAsync());
+                    return StatusCode((int)HttpStatusCode.OK,allNotification);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            //getting all notification
+            
+            return BadRequest("Unable to fetch");
+
         }
 
         [HttpGet]

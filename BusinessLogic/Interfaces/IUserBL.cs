@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using DataTransferObjects.ResponseModels;
+using Models;
 using Models.ResponseModels;
 using Models.User.RequestModels;
 using System.Collections.Generic;
@@ -33,5 +34,6 @@ namespace BusinessLogic.Interfaces
         Task<int> GetNotificationCount();
 
         Task<bool> MarkAsRead(int id);
+        Task<List<UserList>> GetUserEmail();
     }
 }

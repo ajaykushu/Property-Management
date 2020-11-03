@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using DataAccessLayer.Interfaces;
 using DataEntity;
+using DataTransferObjects.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -443,6 +444,12 @@ namespace BusinessLogic.Services
             }
 
             return false;
+        }
+
+        public async Task<List<UserList>> GetUserEmail()
+        {
+           var res= await _userManager.Users.Select(x => new UserList {  Email = x.Email,  DisplayName = x.FirstName + " " + x.LastName }).AsNoTracking().ToListAsync();
+            return res;
         }
     }
 }

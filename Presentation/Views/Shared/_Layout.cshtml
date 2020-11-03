@@ -159,6 +159,32 @@
      });
     $('#Email').click(function () {
         //force focusing password box
-        alertify.genericDialog('<h1>Send Mail</h1><form><div class="form-group"><label>Content</label><textarea class="form-control">Hello</textarea><input class="form-control mt-1 w-50" type="file"><input type="submit" class="btn btn-primary mt-1" value="send"></div><form>');
+         var opt = '';
+        $.get("@Url.Action("GetUserEmail","Home")", function (data) {
+            console.log(data);
+            for (var i = 0; i < data.length; i++)
+                opt += '<option value="' + data[i].email + '">' + data[i].displayName + '</option>';
+
+            alertify.genericDialog(
+                '<h1>Mail</h1 >' +
+                '<form id="mail" ><div class="form-group">' +
+                '<label>Sent To</label >' +
+                '<select id="User" multiple  class="form-control">' +
+                opt +
+                '</select > ' +
+                '<label>Content</label>' +
+                '<textarea class="form-control">Hello</textarea>' +
+                '<input class="form-control mt-1 w-50" type="file">' +
+                '<input type="submit" class="btn btn-primary mt-1" value="send"></div>' +
+                '<form>');
+           
+        });
+       
+        
+    });
+    $('#mail').on('submit', function (e) {
+        if (!isValid) {
+            e.preventDefault();    //stop form from submitting
+        }
     });
 </script>

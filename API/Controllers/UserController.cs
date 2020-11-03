@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Interface;
+using DataTransferObjects.ResponseModels;
 
 namespace API.Controllers
 {
@@ -142,6 +143,14 @@ namespace API.Controllers
         public async Task<ActionResult<int>> MarkAsRead(int id)
         {
             bool res = await _userService.MarkAsRead(id);
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("getUserEmail")]
+        public async Task<ActionResult<List<UserList>>> GetUserEmail()
+        {
+            var res = await _userService.GetUserEmail();
             return Ok(res);
         }
     }
