@@ -223,10 +223,14 @@ $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
             disablespinner();
             $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
-                if (res.status == 302)
-                    window.location.href = res.responseText.href;
-                alertify.alert('Error', '<p>' + res.responseText.message + '</p>', function () {
-            });
+                var data = res.responseText.split('@');
+                if (res.status == 302) {
+                    alertify.alert('Error', '<p>' + data[1] + '</p>', function () {
+                        window.location.href = data[0];
+                    });
+                }
+                   
+                
         }, "");
     }
 });
@@ -328,8 +332,16 @@ $('.edit-link').click(function () {
 });
 
 $(window).on('beforeunload', function () {
-    alertify.message("<div style='display:-webkit-box'>Processing &nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
+    if (!isdownload)
+        alertify.message("<div style='display:-webkit-box'>Processing &nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
+    else
+        isdownload = false;
 });
+$(window).on('unload', function () {
+
+    this.disablespinner();
+});
+
 
 $('#LocationId').change(function () {
     $.get("/Property/GetSubLocation?id=" + $(this).val(),
@@ -547,19 +559,20 @@ function GenarateCron() {
 $('#RecurringStartDate').on('change', function () {
     $('#RecurringEndDate').prop('min', $(this).val());
 });
-
+var isdownload = false;
 $("a[name='exportlink']").click(function () {
     var href = this.href;
     event.preventDefault();
 
     alertify.confirm(this.innerText, 'Export Current Displayed List', function () {
+        isdownload = true;
         href = href.replace("&IsCurrent=False", "&IsCurrent=true");
-
-        alertify.closeAll();
+        
         window.location = href;
-
-
     }
-        , function () { alertify.closeAll(); window.location = href; });
+        , function () {
+            isdownload = true;
+            alertify.closeAll(); window.location = href;
+        });
 });
 

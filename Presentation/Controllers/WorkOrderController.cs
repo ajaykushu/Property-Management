@@ -324,7 +324,7 @@ namespace Presentation.Controllers
                         if (result)
                         {
                             var href= Url.Action("GetRecurringWO");
-                            return StatusCode((int)HttpStatusCode.Redirect,new { href = href,message=StringConstants.CreatedSuccess });
+                            return StatusCode((int)HttpStatusCode.Redirect,href+"@"+StringConstants.CreatedSuccess);
                            
                         }
                         else

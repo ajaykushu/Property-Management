@@ -1005,7 +1005,7 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterDTO, query);
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
-            recWorkOrder = await query.OrderByDescending(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
+            recWorkOrder = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
                 DueAfterDays = "After "+x.DueAfterDays+ " Days",
                 Description = x.Description,
