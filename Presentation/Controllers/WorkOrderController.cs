@@ -289,7 +289,8 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            return Ok(StringConstants.CreatedSuccess);
+                            var href = Url.Action("Index");
+                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.CreatedSuccess);
                         }
                         else
                             return BadRequest("Unable To Create");

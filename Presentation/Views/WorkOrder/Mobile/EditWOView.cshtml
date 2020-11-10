@@ -15,6 +15,7 @@
             </div>
         </nav>
     </header>
+    
     <form class="mform" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
         @if (Model == null)
         {
@@ -24,6 +25,8 @@
         {
             <table class="table table-striped">
                 <tbody>
+                    <tr></tr>
+                    <tr><th class="text-center" >@Model.Id</th></tr>
                     <tr>
                         <th>
                             Location
@@ -141,7 +144,7 @@
                                     <option value="">Choose One</option>
                                     <option value="department">Department</option>
                                     <option value="user">User</option>
-                                    <option value="anyone">AnyOne</option>
+                                    <option value="anyone">Anyone</option>
                                 </select>
                                 <span asp-validation-for="Category" class="text-danger"></span>
                             </div>
@@ -245,15 +248,15 @@
         }
     </form>
 }
-    <script>
+<script>
 
-        function AddItem(e) {
-            var val = $('#FilesRemoved').val();
-            if (val == "" || val == undefined)
-                $('#FilesRemoved').val(e.target.name)
-            else
-                $('#FilesRemoved').val(val + ',' + e.target.name)
-            e.target.remove();
+    function AddItem(e) {
+        var val = $('#FilesRemoved').val();
+        if (val == "" || val == undefined)
+            $('#FilesRemoved').val(e.target.name)
+        else
+            $('#FilesRemoved').val(val + ',' + e.target.name)
+        e.target.remove();
 
-        }
-    </script>
+    }
+</script>

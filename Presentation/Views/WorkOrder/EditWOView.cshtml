@@ -2,11 +2,13 @@
 @{
     ViewData["Title"] = "Edit WorkOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+}<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
     <div class="workordertitle">
         Edit WorkOder
-        <span class="fa-pull-right">@Model.Id</span>
+        <span class="fa-pull-right pr-2">@Model.Id</span>
     </div>
 
 <form class="form" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
@@ -146,7 +148,7 @@
                                     <option value="">Choose One</option>
                                     <option value="department">Department</option>
                                     <option value="user">User</option>
-                                    <option value="anyone">AnyOne</option>
+                                    <option value="anyone">Anyone</option>
                                 </select>
                                 <span asp-validation-for="Category" class="text-danger"></span>
                             </div>
@@ -242,9 +244,7 @@
     @*passing data to controller*@
     }
 </form>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 <script>
 
     function AddItem(e) {

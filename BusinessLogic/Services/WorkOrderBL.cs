@@ -361,8 +361,8 @@ namespace BusinessLogic.Services
         {
             History history = new History();
             var userObj = await _appuser.FindByIdAsync(userId.ToString());
-            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id)).Include(x => x.WOAttachments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
-            
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id) && x.Status.StatusCode!="COMP").Include(x => x.WOAttachments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
+
             if (wo != null)
             {
 
@@ -416,29 +416,32 @@ namespace BusinessLogic.Services
                     history.NewValue = "";
                 }
 
-            }
-            if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
-            {
-                var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
-                foreach (var item in remove)
+
+                if (!string.IsNullOrWhiteSpace(editWorkOrder.FilesRemoved))
                 {
-                    var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
-                    _imageuploadinfile.Delete(tempurl);
-                    var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
-                    wo.WOAttachments.Remove(woAttch);
+                    var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
+                    foreach (var item in remove)
+                    {
+                        var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
+                        _imageuploadinfile.Delete(tempurl);
+                        var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
+                        wo.WOAttachments.Remove(woAttch);
+                    }
                 }
-            }
 
-           
 
-            var status = await _workOrder.Update(wo);
 
-            await _history.Add(history);
-            if (status > 0)
-            {
-                var users = await GetUsersToSendNotification(wo);
-                await _notifier.CreateNotification(editWorkOrder.Id + " has been updated by " + userObj.FirstName + " " + userObj.LastName, users, editWorkOrder.Id, "WE");
-                return true;
+
+
+                var status = await _workOrder.Update(wo);
+
+                await _history.Add(history);
+                if (status > 0)
+                {
+                    var users = await GetUsersToSendNotification(wo);
+                    await _notifier.CreateNotification(editWorkOrder.Id + " has been updated by " + userObj.FirstName + " " + userObj.LastName, users, editWorkOrder.Id, "WE");
+                    return true;
+                }
             }
             return false;
         }

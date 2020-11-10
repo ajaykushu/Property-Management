@@ -60,7 +60,6 @@
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                     keyValuePairs.Add("id", item.Id + "");
 
-                                    <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
 
                                     <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                                 }

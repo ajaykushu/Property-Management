@@ -2,11 +2,13 @@
 @{
     ViewData["Title"] = "Edit WorkOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+}<div>
+    <a asp-action="GetRecurringWO">Back to List</a>
+</div>
 
     <div class="workordertitle">
         Edit Recurring WorkOder
-        <span class="fa-pull-right">@Model.Id</span>
+        <span class="fa-pull-right pr-2">@Model.Id</span>
     </div>
 
 <form class="form" asp-action="EditRecurringWO" asp-controller="WorkOrder" id="editworecurring">
@@ -171,7 +173,7 @@
                                     <option value="">Choose One</option>
                                     <option value="department">Department</option>
                                     <option value="user">User</option>
-                                    <option value="anyone">AnyOne</option>
+                                    <option value="anyone">Anyone</option>
                                 </select>
                                 <span asp-validation-for="Category" class="text-danger"></span>
                             </div>
@@ -268,9 +270,7 @@
     @*passing data to controller*@
     }
 </form>
-<div>
-    <a asp-action="GetRecurringWO">Back to List</a>
-</div>
+
 <script>
 
     function AddItem(e) {

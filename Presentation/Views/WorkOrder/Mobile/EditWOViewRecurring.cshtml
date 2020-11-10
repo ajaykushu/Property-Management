@@ -24,25 +24,24 @@
     {
     <table class="table table-striped">
         <tbody>
-            <tr>
-            </tr>
+            <tr><th class="text-center">@Model.Id</th></tr>
             <tr>
                 <partial name="SchedulerView.cshtml" model="Model">
 
             </tr>
             <tr>
                 <th>Current Schedule</th>
-                </tr>
+            </tr>
             <tr>
-                
+
                 <td>
                     <div class="row ">
-                     <strong class="pl-3" style="color:green;"> @Html.DisplayTextFor(x => x.CronExpression)</strong>
+                        <strong class="pl-3" style="color:green;"> @Html.DisplayTextFor(x => x.CronExpression)</strong>
                         <input asp-for="CronExpression" hidden>
-                        
+
                     </div>
-                   
-                </td>    
+
+                </td>
             </tr>
             <tr>
                 <th>
@@ -161,7 +160,7 @@
                             <option value="">Choose One</option>
                             <option value="department">Department</option>
                             <option value="user">User</option>
-                            <option value="anyone">AnyOne</option>
+                            <option value="anyone">Anyone</option>
                         </select>
                         <span asp-validation-for="Category" class="text-danger"></span>
                     </div>

@@ -225,7 +225,7 @@ $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
                 $("form :input").prop("disabled", false);
                 var data = res.responseText.split('@');
                 if (res.status == 302) {
-                    alertify.alert('Error', '<p>' + data[1] + '</p>', function () {
+                    alertify.alert('Success', '<p>' + data[1] + '</p>', function () {
                         window.location.href = data[0];
                     });
                 }
@@ -564,15 +564,14 @@ $("a[name='exportlink']").click(function () {
     var href = this.href;
     event.preventDefault();
 
-    alertify.confirm(this.innerText, 'Export Current Displayed List', function () {
+    alertify.confirm(this.innerText, 'Currently filtered list (all pages)', function () {
         isdownload = true;
-        href = href.replace("&IsCurrent=False", "&IsCurrent=true");
-        
-        window.location = href;
+        alertify.closeAll(); window.location = href;
     }
         , function () {
-            isdownload = true;
-            alertify.closeAll(); window.location = href;
+            //window.location = href;
+            //isdownload = true;
+            //href = href.replace("&IsCurrent=False", "&IsCurrent=true");
         });
 });
 
