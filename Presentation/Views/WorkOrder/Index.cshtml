@@ -87,7 +87,7 @@
                .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
         }
     <div class="workordertitle">
-        @if (ResponseModel!=null && !ResponseModel.Payload[0].isCompleted) {
+        @if (ResponseModel!=null && !ResponseModel.Payload.All(x=>x.isCompleted)) {
         <span>Work Orders</span>  
                           }
         else
@@ -108,7 +108,7 @@
             </div>
             </div>
         </div>
-        @if (ResponseModel != null && !ResponseModel.Payload[0].isCompleted)
+        @if (ResponseModel != null && !ResponseModel.Payload.All(x=>x.isCompleted))
         {
         <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
             <div class="justify-content-lg-start col-md-6">
