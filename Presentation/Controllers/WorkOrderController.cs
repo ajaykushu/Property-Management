@@ -639,13 +639,14 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetCompletedWO(int pageNumber)
+        public async Task<IActionResult> GetCompletedWO( WOFilterModel wOFilterModel)
         {  
             try
             {
-                _apiRoute.Value.Routes.TryGetValue("completedwo", out string path);
+                wOFilterModel.Status = "COMP";
+                _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
                 StringBuilder query = new StringBuilder();
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?pageNumber="+pageNumber, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, wOFilterModel, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     var WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
@@ -656,8 +657,8 @@ namespace Presentation.Controllers
             {
             }
             if (_detection.Device.Type == DeviceType.Mobile)
-                return View("~/Views/WorkOrder/Mobile/GetCompletedWO.cshtml");
-            return View();
+                return View("~/Views/WorkOrder/Mobile/Index.cshtml", wOFilterModel);
+            return View("~/Views/WorkOrder/Index.cshtml", wOFilterModel);
         }
 
     }

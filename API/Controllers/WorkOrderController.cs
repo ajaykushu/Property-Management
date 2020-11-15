@@ -202,13 +202,6 @@ namespace API.Controllers
             WorkOrderDetail res = await _workOrderService.GetRecurringWODetail(id);
             return Ok(res);
         }
-        [HttpGet]
-        [Route("completedwo")]
-        [FeatureBasedAuthorization(MenuEnum.Completed_WO)]
-       public async Task<ActionResult<List<WorkOrderAssigned>>> GetCompletedWO(int pageNumber)
-        {
-            var res = await _workOrderService.GetCompletedWO(pageNumber);
-            return Ok(res);
-        }
+      
     }
 }

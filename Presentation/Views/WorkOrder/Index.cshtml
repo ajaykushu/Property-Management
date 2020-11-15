@@ -87,8 +87,14 @@
                .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
         }
     <div class="workordertitle">
-        Work Orders
-        <div class="Filter_con float-right">
+        @if (ResponseModel!=null && !ResponseModel.Payload[0].isCompleted) {
+        <span>Work Orders</span>  
+                          }
+        else
+        {
+            <span> Completed Work Orders</span>
+        }
+            <div class="Filter_con float-right">
             <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
             <i class="fa fa-filter"></i>
         </div>
@@ -102,7 +108,8 @@
             </div>
             </div>
         </div>
-
+        @if (ResponseModel != null && !ResponseModel.Payload[0].isCompleted)
+        {
         <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
             <div class="justify-content-lg-start col-md-6">
                 <strong>To Do List</strong>
@@ -112,6 +119,7 @@
             </div>
 
         </div>
+        }
 
 
         @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
@@ -163,9 +171,10 @@
 
                                         Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                         keyValuePairs.Add("id", item.Id + "");
-
+                                        if (!item.isCompleted)
+                                        {
                                         <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-
+                                        }
                                         <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
                                     }
                                 </div>
@@ -215,6 +224,7 @@
             <span>No Record found</span>
         }
 </form>
+
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";

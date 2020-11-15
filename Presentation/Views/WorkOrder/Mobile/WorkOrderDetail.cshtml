@@ -361,13 +361,15 @@
                                   ();
                 keyValuePairs.Add("id", Model.Id + "");};
             <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
-            @if (!Model.Recurring)
-            {
+            @if (!Model.StatusDescription.Equals("Complete")) {
+                if (!Model.Recurring)
+                {
                 <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit'></auth-link>
-            }
-            else
-            {
+                }
+                else
+                {
                 <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='Edit'></auth-link>
+                }
             }
 
             <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">
