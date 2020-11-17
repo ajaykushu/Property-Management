@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -19,6 +20,13 @@ namespace DataAccessLayer.Repository
         {
             this.context.Add<TEntity>(entity);
             return this.context.SaveChangesAsync();
+        }
+
+        public async Task<int> BulkInsert(List<TEntity> entities)
+        {
+
+             await this.context.Set<TEntity>().AddRangeAsync(entities);
+            return await context.SaveChangesAsync();
         }
 
         public Task<int> Delete(TEntity entity)

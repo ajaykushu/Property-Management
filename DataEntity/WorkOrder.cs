@@ -35,8 +35,10 @@ namespace DataEntity
         public string ParentWoId { set; get; }
         public RecurringWO ParentRecurringWO { get; set; }
         public int Priority { get; set; }
+        public long TotalEffort { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
         public virtual Department AssignedToDept { get; set; }
         public virtual ICollection<WOAttachments> WOAttachments { get; set; }
+        public virtual ICollection<Effort> Efforts { get; set; }
     }
 }

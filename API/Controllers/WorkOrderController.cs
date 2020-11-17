@@ -202,6 +202,21 @@ namespace API.Controllers
             WorkOrderDetail res = await _workOrderService.GetRecurringWODetail(id);
             return Ok(res);
         }
-      
+
+       
+        [HttpPost]
+        [Route("addeffort")]
+        public async Task<ActionResult<bool>> AddEffort(List<EffortDTO> effortDTOs, string id)
+        {
+            bool res = await _workOrderService.AddEffort(effortDTOs,id);
+            return Ok(res);
+        }
+        [HttpGet]
+        [Route("geteffort")]
+        public async Task<ActionResult<EffortPagination>> GetEffort(string id)
+        {
+            EffortPagination res = await _workOrderService.GetEffort(id);
+            return Ok(res);
+        }
     }
 }

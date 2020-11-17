@@ -43,8 +43,9 @@ namespace BusinessLogic.Services
         private readonly IRecurringWorkOrderJob _recurringWorkOrderJob;
         private readonly TimeZoneInfo timeZone;
         private readonly bool is24HrFormat = false;
+        private readonly IRepo<Effort> _effort;
 
-        public WorkOrderBL(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Status> status, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors, IRepo<History> history,IRecurringWorkOrderJob recurringWorkOrderJob, IRepo<RecurringWO> recuringWo)
+        public WorkOrderBL(IRepo<Issue> issueRepo, IRepo<Item> itemRepo, IRepo<UserProperty> userProperty, IRepo<Department> department, IRepo<WorkOrder> workOrder, IRepo<Status> status, IHttpContextAccessor httpContextAccessor, IRepo<Comment> comments, IImageUploadInFile imageuploadinfile, UserManager<ApplicationUser> appuser, IRepo<SubLocation> sublocation, IRepo<Property> property, INotifier notifier, IRepo<Vendor> vendors, IRepo<History> history, IRecurringWorkOrderJob recurringWorkOrderJob, IRepo<RecurringWO> recuringWo, IRepo<Effort> effort)
         {
             _issueRepo = issueRepo;
             _itemRepo = itemRepo;
@@ -52,6 +53,7 @@ namespace BusinessLogic.Services
             _department = department;
             _workOrder = workOrder;
             _history = history;
+            _effort = effort;
             _status = status;
             _httpContextAccessor = httpContextAccessor;
             _comments = comments;
@@ -66,7 +68,7 @@ namespace BusinessLogic.Services
             _vendors = vendors;
             _recurringWorkOrderJob = recurringWorkOrderJob;
             timeZone = TimeZoneInfo.FindSystemTimeZoneById(_httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == "TimeZone")?.Value);
-            is24HrFormat = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == "Clock")?.Value=="24" ? true : false;
+            is24HrFormat = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == "Clock")?.Value == "24" ? true : false;
 
 
         }
@@ -124,11 +126,11 @@ namespace BusinessLogic.Services
             return false;
         }
 
-        
+
 
         public async Task<WorkOrderDetail> GetWODetail(string id)
         {
-          
+
             var iteminpage = 12;
             var workorder = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Issue).Include(x => x.Item).Include(x => x.Status).Include(x => x.WOAttachments).Include(x => x.AssignedTo).ThenInclude(x => x.Department).Include(x => x.SubLocation).Include(x => x.Location).Include(x => x.Vendor).Select(x => new
                             WorkOrderDetail
@@ -199,12 +201,12 @@ namespace BusinessLogic.Services
                 wo.PropertyId = primaryprop != null ? primaryprop.Id : 0;
             }
 
-         
-                wo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
-                {
-                    Id = x.Id,
-                    PropertyName = x.IssueName
-                }).AsNoTracking().ToListAsync();
+
+            wo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.IssueName
+            }).AsNoTracking().ToListAsync();
             wo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -216,7 +218,7 @@ namespace BusinessLogic.Services
                 PropertyName = x.VendorName
             }).AsNoTracking().ToListAsync();
             wo.DueDate = DateTime.Now;
-           
+
             wo.OptionId = 0;
             return wo;
         }
@@ -265,7 +267,7 @@ namespace BusinessLogic.Services
         public async Task<Pagination<List<WorkOrderAssigned>>> GetWO(WOFilterDTO wOFilterModel)
         {
             int iteminpage = 20;
-          var query = _workOrder.GetAll();
+            var query = _workOrder.GetAll();
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
             var count = query.Count();
@@ -274,7 +276,7 @@ namespace BusinessLogic.Services
                 DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 Description = x.Description,
                 Id = x.Id,
-                isCompleted=x.Status.StatusCode.Equals("COMP")?true:false,
+                isCompleted = x.Status.StatusCode.Equals("COMP") ? true : false,
                 ParentId = x.ParentWoId,
                 Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
@@ -284,9 +286,9 @@ namespace BusinessLogic.Services
             if (!string.IsNullOrWhiteSpace(wOFilterModel.TermSearch))
             {
                 workOrderAssigned = workOrderAssigned.Where(x => (x.DueDate +
-                x.Description  +
+                x.Description +
                   x.Id +
-                  x.AssignedTo+x.Property.PropertyName).Contains(wOFilterModel.TermSearch,StringComparison.OrdinalIgnoreCase)
+                  x.AssignedTo + x.Property.PropertyName).Contains(wOFilterModel.TermSearch, StringComparison.OrdinalIgnoreCase)
                 ).ToList();
             }
 
@@ -311,7 +313,7 @@ namespace BusinessLogic.Services
             editwo.PropertyName = temp.Property.PropertyName;
             editwo.Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
             editwo.Description = temp.Description;
-                editwo.IssueId = temp.IssueId;
+            editwo.IssueId = temp.IssueId;
             editwo.ItemId = temp.ItemId;
             editwo.CreatedDate = temp.CreatedTime;
             editwo.VendorId = temp.VendorId;
@@ -321,7 +323,7 @@ namespace BusinessLogic.Services
             editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList();
-           
+
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -362,7 +364,7 @@ namespace BusinessLogic.Services
         {
             History history = new History();
             var userObj = await _appuser.FindByIdAsync(userId.ToString());
-            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id) && x.Status.StatusCode!="COMP").Include(x => x.WOAttachments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(editWorkOrder.Id) && x.Status.StatusCode != "COMP").Include(x => x.WOAttachments).Include(x => x.AssignedToDept).Include(x => x.AssignedTo).FirstOrDefaultAsync();
 
             if (wo != null)
             {
@@ -447,7 +449,7 @@ namespace BusinessLogic.Services
             return false;
         }
 
-       
+
 
         public async Task<List<CommentDTO>> GetComment(string workorderId, int pageNumber)
         {
@@ -515,10 +517,10 @@ namespace BusinessLogic.Services
             }
             if (status)
             {
-                
+
                 if (!post.WorkOrderId.Contains("R"))
                 {
-                   var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
+                    var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
 
 
                     var users = await GetUsersToSendNotification(wo);
@@ -537,7 +539,7 @@ namespace BusinessLogic.Services
             var status = await _status.Get(x => x.Id == statusId).FirstOrDefaultAsync();
             if (status != null)
             {
-               
+
                 #region history Add
                 History history = new History();
                 history.PropertyName = "Status";
@@ -555,7 +557,7 @@ namespace BusinessLogic.Services
                 {
                     var users = await GetUsersToSendNotification(wo);
                     await _notifier.CreateNotification("Work Order Status Changed for WOId " + wo.Id, users, wo.Id, "WE");
-                    
+
                     return true;
                 }
             }
@@ -573,37 +575,37 @@ namespace BusinessLogic.Services
             return res;
         }
 
-       
+
         public async Task<List<AllWOExport>> WOExport(WOFilterDTO wOFilterModel)
         {
             List<AllWOExport> workOrders = null;
-                var query = _workOrder.GetAll();
-                query = await FilterWO(wOFilterModel, query);
+            var query = _workOrder.GetAll();
+            query = await FilterWO(wOFilterModel, query);
             var skip = wOFilterModel.PageNumber > 0 && wOFilterModel.IsCurrent ? wOFilterModel.PageNumber * 20 : 0;
-            var count=await query.CountAsync();
+            var count = await query.CountAsync();
             workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExport
-                {
-                    PropertyName = x.Property.PropertyName,
-                    Issue = x.Issue.IssueName,
-                    StatusDescription = x.Status.StatusDescription,
-                    Item = x.Item.ItemName,
-                    CreatedTime = x.CreatedTime,
-                    DueDate = x.DueDate,
-                    UpdatedTime = x.UpdatedTime,
-                    AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
-                    Requestedby = x.RequestedBy,
-                    Id = x.Id,
-                    Priority = x.Priority,
-                    UpdatedBy = x.UpdatedByUserName,
-                    Description = x.Description,
-                    Location = x.Location.LocationName,
-                    SubLocation = x.SubLocation.AreaName,
-                    Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
-                }).Skip(skip).Take(wOFilterModel.IsCurrent?20:count).AsNoTracking().ToListAsync();
-        
+            {
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StatusDescription = x.Status.StatusDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                DueDate = x.DueDate,
+                UpdatedTime = x.UpdatedTime,
+                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
+                Requestedby = x.RequestedBy,
+                Id = x.Id,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
+            }).Skip(skip).Take(wOFilterModel.IsCurrent ? 20 : count).AsNoTracking().ToListAsync();
+
             return workOrders;
         }
-        
+
 
         private async Task<IQueryable<WorkOrder>> FilterWO(WOFilterDTO wOFilterModel, IQueryable<WorkOrder> query)
         {
@@ -614,7 +616,7 @@ namespace BusinessLogic.Services
             var userdept = await _appuser.FindByNameAsync(username);
             var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
             #endregion
-            
+
             #region filter based on filtermodel
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
@@ -668,7 +670,7 @@ namespace BusinessLogic.Services
             }
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
-                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) ||x.CreatedByUserName.Equals(username));
+                query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) || x.CreatedByUserName.Equals(username));
             }
             return query;
         }
@@ -707,7 +709,7 @@ namespace BusinessLogic.Services
                 (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.StartsWith(wOFilterModel.AssignedTo) || (x.AssignedTo != null && x.AssignedTo.Email.StartsWith(wOFilterModel.AssignedTo)))
                 );
             }
-            
+
             if (!string.IsNullOrWhiteSpace(wOFilterModel.Priority))
             {
                 var index = Convert.ToInt32(wOFilterModel.Priority);
@@ -739,7 +741,7 @@ namespace BusinessLogic.Services
         public async Task<List<long>> GetUsersToSendNotification(WorkOrder woId)
         {
 
-            
+
             var users = _userProperty.GetAll().Where(x => x.PropertyId == woId.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToHashSet();
             if (woId.AssignedToId.HasValue)
                 users.Add(woId.AssignedToId.GetValueOrDefault());
@@ -753,9 +755,9 @@ namespace BusinessLogic.Services
             return users.ToList();
         }
 
-        public  async Task<List<HistoryDetail>> GetHistory(string entity,string rowId)
+        public async Task<List<HistoryDetail>> GetHistory(string entity, string rowId)
         {
-            var data= await _history.Get(x => x.Entity.ToLower() == entity.ToLower() && x.RowId.Equals(rowId)).Select(x => new HistoryDetail
+            var data = await _history.Get(x => x.Entity.ToLower() == entity.ToLower() && x.RowId.Equals(rowId)).Select(x => new HistoryDetail
             {
                 Comment = x.Comment,
                 NewValue = x.NewValue,
@@ -808,7 +810,7 @@ namespace BusinessLogic.Services
                 }
             }
 
-            
+
             workOrder.EndAfterCount = createWO.EndAfterCount;
             workOrder.RecurringEndDate = createWO.RecurringEndDate;
             workOrder.CronExpression = createWO.CronExpression;
@@ -817,18 +819,18 @@ namespace BusinessLogic.Services
             {
                 if (createWO.RecurringStartDate.HasValue)
                 {
-                    _recurringWorkOrderJob.RunAddScheduleJob(workOrder.CronExpression, workOrder.Id, createWO.RecurringStartDate.Value,timeZone);
+                    _recurringWorkOrderJob.RunAddScheduleJob(workOrder.CronExpression, workOrder.Id, createWO.RecurringStartDate.Value, timeZone);
                 }
                 else
                 {
-                    _recurringWorkOrderJob.RunCreateWoJob(workOrder.CronExpression, workOrder.Id,timeZone);
+                    _recurringWorkOrderJob.RunCreateWoJob(workOrder.CronExpression, workOrder.Id, timeZone);
                 }
 
                 if (createWO.RecurringEndDate.HasValue)
                 {
                     _recurringWorkOrderJob.RunRemoveScheduleJob(createWO.RecurringEndDate.Value, workOrder.Id);
                 }
-                
+
                 return true;
             }
 
@@ -853,10 +855,11 @@ namespace BusinessLogic.Services
             editwo.CreatedDate = temp.CreatedTime;
             editwo.VendorId = temp.VendorId;
             editwo.Priority = temp.Priority;
-            editwo.CronExpression =!string.IsNullOrEmpty(temp.CronExpression)? new ExpressionDescriptor(temp.CronExpression, new Options {
+            editwo.CronExpression = !string.IsNullOrEmpty(temp.CronExpression) ? new ExpressionDescriptor(temp.CronExpression, new Options
+            {
                 DayOfWeekStartIndexZero = true,
-                Use24HourTimeFormat= is24HrFormat
-            }).GetDescription(DescriptionTypeEnum.FULL):"";
+                Use24HourTimeFormat = is24HrFormat
+            }).GetDescription(DescriptionTypeEnum.FULL) : "";
             editwo.DueAfterDays = temp.DueAfterDays;
             editwo.LocationId = temp.LocationId.GetValueOrDefault();
             editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
@@ -932,8 +935,8 @@ namespace BusinessLogic.Services
                 wo.Priority = editWorkOrder.Priority;
                 wo.CronExpression = editWorkOrder.CronExpression;
                 wo.EndAfterCount = editWorkOrder.EndAfterCount;
-                wo.RecurringEndDate= editWorkOrder.RecurringEndDate;
-                wo.RecurringStartDate= editWorkOrder.RecurringStartDate;
+                wo.RecurringEndDate = editWorkOrder.RecurringEndDate;
+                wo.RecurringStartDate = editWorkOrder.RecurringStartDate;
                 wo.SubLocationId = editWorkOrder.SubLocationId;
 
                 //adding history
@@ -987,16 +990,16 @@ namespace BusinessLogic.Services
                 //create new jobs
                 if (wo.RecurringStartDate.HasValue)
                 {
-                    _recurringWorkOrderJob.RunAddScheduleJob(wo.CronExpression, wo.Id, wo.RecurringStartDate.Value,timeZone);
+                    _recurringWorkOrderJob.RunAddScheduleJob(wo.CronExpression, wo.Id, wo.RecurringStartDate.Value, timeZone);
                 }
                 else
-                    _recurringWorkOrderJob.RunCreateWoJob(wo.CronExpression, wo.Id,timeZone);
+                    _recurringWorkOrderJob.RunCreateWoJob(wo.CronExpression, wo.Id, timeZone);
 
                 if (wo.RecurringEndDate.HasValue)
                 {
                     _recurringWorkOrderJob.RunRemoveScheduleJob(wo.RecurringEndDate.Value, wo.Id);
                 }
-              
+
                 return true;
             }
             return false;
@@ -1011,10 +1014,10 @@ namespace BusinessLogic.Services
             var count = query.Count();
             recWorkOrder = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
-                DueAfterDays = "After "+x.DueAfterDays+ " Days",
+                DueAfterDays = "After " + x.DueAfterDays + " Days",
                 Description = x.Description,
                 Id = x.Id,
-                ScheduleAt= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
+                ScheduleAt = !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
                 {
                     DayOfWeekStartIndexZero = true,
                     Use24HourTimeFormat = is24HrFormat
@@ -1024,7 +1027,7 @@ namespace BusinessLogic.Services
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
 
-           
+
             Pagination<List<RecurringWOs>> pagination = new Pagination<List<RecurringWOs>>
             {
                 Payload = recWorkOrder,
@@ -1036,7 +1039,7 @@ namespace BusinessLogic.Services
             return pagination;
         }
 
-        public async Task<Pagination<List<ChildWo>>> GetChildWO(int pageNumber,string search ,string rwoId)
+        public async Task<Pagination<List<ChildWo>>> GetChildWO(int pageNumber, string search, string rwoId)
         {
             int iteminpage = 20;
             var query = _workOrder.GetAll().Where(x => x != null && x.ParentWoId.Equals(rwoId));
@@ -1076,21 +1079,21 @@ namespace BusinessLogic.Services
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
                 Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
-                DueDate = "After "+ x.DueAfterDays+" Days",
+                DueDate = "After " + x.DueAfterDays + " Days",
                 UpdatedTime = x.UpdatedTime,
-                CronExpression= !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
+                CronExpression = !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
                 {
                     DayOfWeekStartIndexZero = true,
                     Use24HourTimeFormat = is24HrFormat
                 }).GetDescription(DescriptionTypeEnum.FULL) : null,
-                EndAfterCount=x.EndAfterCount,
-                RecurringEndDate=x.RecurringEndDate,
-                RecurringStartDate=x.RecurringStartDate,
+                EndAfterCount = x.EndAfterCount,
+                RecurringEndDate = x.RecurringEndDate,
+                RecurringStartDate = x.RecurringStartDate,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Requestedby = x.RequestedBy,
                 Id = x.Id,
                 Priority = x.Priority,
-                Recurring=true,
+                Recurring = true,
                 UpdatedBy = x.UpdatedByUserName,
                 Description = x.Description,
                 Location = x.Location.LocationName,
@@ -1115,7 +1118,7 @@ namespace BusinessLogic.Services
 
         public async Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel)
         {
-            var skip = wOFilterModel.PageNumber > 0 && wOFilterModel.IsCurrent ? wOFilterModel.PageNumber * 20:0;
+            var skip = wOFilterModel.PageNumber > 0 && wOFilterModel.IsCurrent ? wOFilterModel.PageNumber * 20 : 0;
             List<AllWOExportRecurring> workOrders = null;
             var query = _recuringWo.GetAll();
             query = await FilterWO(wOFilterModel, query);
@@ -1128,7 +1131,7 @@ namespace BusinessLogic.Services
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
-                DueAfterDays = "After "+x.DueAfterDays+" Days",
+                DueAfterDays = "After " + x.DueAfterDays + " Days",
                 UpdatedTime = x.UpdatedTime,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Requestedby = x.RequestedBy,
@@ -1145,10 +1148,56 @@ namespace BusinessLogic.Services
                 Location = x.Location.LocationName,
                 SubLocation = x.SubLocation.AreaName,
                 Attachment = x.WOAttachments.Select(x => x.FileName).ToList()
-            }).Skip(skip).Take(wOFilterModel.IsCurrent?20:count).AsNoTracking().ToListAsync();
+            }).Skip(skip).Take(wOFilterModel.IsCurrent ? 20 : count).AsNoTracking().ToListAsync();
 
             return workOrders;
         }
 
+        public async Task<bool> AddEffort(List<EffortDTO> effortDTOs, string id)
+        {   //add effort
+            if (effortDTOs != null)//post request fired we have  to add the effort
+            {
+                var datelist = await _effort.Get(x => x.WOId == id).Select(x => x.Date).ToListAsync();
+                var TobeAddedlist = effortDTOs.Where(x => !datelist.Contains(x.DateTime)).ToList();
+                List<Effort> effort = new List<Effort>();
+                foreach (var item in TobeAddedlist)
+                {
+                    Effort ef = new Effort
+                    {
+                        Repair = item.Repair,
+                        TaxBO = item.BOTax,
+                        WOId = id,
+                        Date = item.DateTime
+                    };
+                    effort.Add(ef);
+                }
+               var status= await _effort.BulkInsert(effort);
+                if (status >= 1)
+                    return true;
+                
+            }
+            return false;
+
+           
+        }
+
+        public async Task<EffortPagination> GetEffort(string id)
+        {
+            var start = DateTime.Now.Date.AddDays(-1 * (int)DateTime.Now.DayOfWeek);
+            var end = start.AddDays(7);
+
+            var wo = await _effort.Get(x => x.WOId == id).Where(x => x.Date >= start && x.Date <= end).Select(x => new EffortDTO
+            {
+                BOTax = x.TaxBO,
+                Repair = x.Repair,
+                DateTime = x.Date
+            }).AsNoTracking().ToListAsync();
+           
+
+            return new EffortPagination
+            {
+                EffortDTOs = wo
+            };
+        }
     }
 }

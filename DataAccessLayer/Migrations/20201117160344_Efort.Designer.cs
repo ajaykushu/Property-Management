@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201117160344_Efort")]
+    partial class Efort
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "5dab226c-a25b-4732-91ab-e7b9c43fb8f7",
+                            ConcurrencyStamp = "999a8642-62e7-4bef-a1f5-56405d6a6876",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "acca5c0d-07f0-4857-babc-c71a57f2dc49",
+                            ConcurrencyStamp = "0d796dc5-69a3-4688-a6d8-e825d4b2d19d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "8f81a6e6-e1c7-4ff1-be21-58d6500f0ad7",
+                            ConcurrencyStamp = "188e2125-891d-432d-805c-0594a467fd1b",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -291,12 +293,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedByUserName")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -305,12 +301,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("TaxBO")
                         .HasColumnType("int");
-
-                    b.Property<string>("UpdatedByUserName")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime>("UpdatedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("WOId")
                         .HasColumnType("nvarchar(450)");

@@ -636,6 +636,26 @@ namespace Presentation.Controllers
             return BadRequest(msg);
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetEffort(string id)
+        {
+            EffortPagination data = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("geteffort", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this);
+                if (response.IsSuccessStatusCode)
+                {
+                     data = JsonConvert.DeserializeObject<EffortPagination>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return PartialView(data);
+        }
+       
 
         [HttpGet]
         [Authorize]
@@ -659,6 +679,14 @@ namespace Presentation.Controllers
             if (_detection.Device.Type == DeviceType.Mobile)
                 return View("~/Views/WorkOrder/Mobile/Index.cshtml", wOFilterModel);
             return View("~/Views/WorkOrder/Index.cshtml", wOFilterModel);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> AddEffortView()
+        {
+            
+            return PartialView();
         }
 
     }

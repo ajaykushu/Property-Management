@@ -35,7 +35,7 @@ namespace DataEntity
 
         [Column(TypeName = "varchar(50)")]
         public string OfficeExt { set; get; }
-
+        public bool IsEffortVisible { get; set; }
         public string PhotoPath { set; get; }
 
         public int? DepartmentId { set; get; }

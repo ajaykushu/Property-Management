@@ -22,6 +22,11 @@ namespace DataAccessLayer.Repository
             return await context.SaveChangesAsync();
         }
 
+        public Task<int> BulkInsert(List<WorkOrder> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> Delete(WorkOrder entity)
         {
              context.WorkOrders.Remove(entity: entity);
