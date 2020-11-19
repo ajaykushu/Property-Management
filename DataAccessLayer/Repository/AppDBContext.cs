@@ -196,11 +196,11 @@ namespace DataAccessLayer.Repository
                     MenuName = "Access_Setting"
                 }, new Menu()
                 {
-                    Id = 12,
+                    Id = 13,
                     MenuName = "Create_WO"
                 }, new Menu()
                 {
-                    Id = 13,
+                    Id = 12,
                     MenuName = "Get_WO"
                 }, new Menu()
                 {
