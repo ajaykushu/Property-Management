@@ -41,6 +41,7 @@ namespace DataAccessLayer.Repository
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
         public DbSet<RecurringWO> RecurringWOs { set; get; }
+        public DbSet<Effort> Efforts { get; set; }
 
         public DbSet<Notification> Notifications { set; get; }
         public DbSet<History> Histories { get; set; }
@@ -56,6 +57,7 @@ namespace DataAccessLayer.Repository
             builder.Ignore<IdentityUserClaim<long>>();
             builder.Ignore<IdentityRoleClaim<long>>();
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
+            builder.Entity<ApplicationUser>().Property(x => x.IsEffortVisible).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             builder.Entity<Property>().HasIndex(x => x.PropertyName).IsUnique();
             builder.Entity<PropertyType>().HasIndex(x => x.PropertyTypeName).IsUnique();
