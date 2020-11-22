@@ -44,6 +44,7 @@
                     <a style="color:black" href="@redirector" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
                     <div class="container-block justify-content-center">
                         <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order</span>
+                      
                     </div>
                 }
                 else
@@ -72,6 +73,7 @@
                         <div class="d-md-inline-flex myview">
                             <div>
                                 <div>
+                                    <h2>@Model.Id</h2>
                                     <h2>@Model.PropertyName</h2>
                                     <img src="~/hotel.svg" width="25" height="35"><strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
                                     <strong style="color:grey">@Model.Item @Model.Issue</strong><br><br>

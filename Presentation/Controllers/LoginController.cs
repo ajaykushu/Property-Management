@@ -177,7 +177,7 @@ namespace Presentation.Controllers
                         menuView[menu.Value.MainMenuName].Add(menu.Value);
                 }
             }
-
+            menuView["WO Manager"]= menuView["WO Manager"].OrderBy(x =>x.SubMenuName).ToList<MenuProperty>();
             foreach (var item in _menuDetails.Value.Menus)
                 item.Value.Enabled = false;
         }

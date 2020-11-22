@@ -683,7 +683,7 @@ namespace BusinessLogic.Services
             var userdept = await _appuser.FindByNameAsync(username);
             var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
             #endregion
-
+            
             #region filter based on filtermodel
             if (!string.IsNullOrWhiteSpace(wOFilterModel.CreationStartDate))
             {
