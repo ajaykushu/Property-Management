@@ -201,17 +201,12 @@ namespace BusinessLogic.Services
                 wo.PropertyId = primaryprop != null ? primaryprop.Id : 0;
             }
 
-
-            wo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
-            {
-                Id = x.Id,
-                PropertyName = x.IssueName
-            }).AsNoTracking().ToListAsync();
             wo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
             }).AsNoTracking().ToListAsync();
+
             wo.Vendors = await _vendors.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
@@ -270,27 +265,50 @@ namespace BusinessLogic.Services
             var query = _workOrder.GetAll();
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
-            var count = query.Count();
-            workOrderAssigned = await query.OrderBy(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            var count = query.Where(x => x.IsActive == wOFilterModel.IsActive).Count();
+            
+            var temp = await query.Where(x=>x.IsActive== wOFilterModel.IsActive).OrderBy(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new 
             {
-                DueDate = x.DueDate.ToString("dd-MMM-yy"),
-                Description = x.Description,
+                PropertyName = x.Property.PropertyName,
+                Issue = x.Issue.IssueName,
+                StatusDescription = x.Status.StatusDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                UpdatedTime = x.UpdatedTime,
+                Requestedby = x.RequestedBy,
                 Id = x.Id,
+                isActive=x.IsActive,
+                PropId=x.PropertyId,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Description = x.Description,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
+                DueDate = x.DueDate.ToString("dd-MMM-yy"),
                 isCompleted = x.Status.StatusCode.Equals("COMP") ? true : false,
                 ParentId = x.ParentWoId,
                 Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
                 Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
             }).AsNoTracking().ToListAsync();
-
-            if (!string.IsNullOrWhiteSpace(wOFilterModel.TermSearch))
-            {
-                workOrderAssigned = workOrderAssigned.Where(x => (x.DueDate +
+            wOFilterModel.TermSearch = wOFilterModel.TermSearch == null ? "" : wOFilterModel.TermSearch;
+           
+            workOrderAssigned = temp.Where(x => (x.DueDate +
                 x.Description +
                   x.Id +
-                  x.AssignedTo + x.Property.PropertyName).Contains(wOFilterModel.TermSearch, StringComparison.OrdinalIgnoreCase)
-                ).ToList();
-            }
+                  x.AssignedTo + x.Property.PropertyName+x.Issue+x.Item +x.Location+x.SubLocation).Contains(wOFilterModel.TermSearch, StringComparison.OrdinalIgnoreCase)
+                ).Select(x => new WorkOrderAssigned
+                {
+                    DueDate = x.DueDate,
+                    Description = x.Description,
+                    Id = x.Id,
+                    IsActive=x.isActive,
+                    ParentId = x.ParentId,
+                    Property=new SelectItem {Id=x.PropId,PropertyName=x.PropertyName },
+                    Status = x.Status,
+                    AssignedTo = x.AssignedTo
+                }).ToList();
+            
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
             {
@@ -334,7 +352,7 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.VendorName
             }).AsNoTracking().ToListAsync();
-            editwo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
+            editwo.Issues = await _issueRepo.GetAll().Where(x=>x.ItemId==editwo.ItemId).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.IssueName
@@ -551,6 +569,11 @@ namespace BusinessLogic.Services
                 #endregion
 
                 wo.StatusId = statusId;
+                if(status.StatusCode=="COMP" || status.StatusCode == "COBQ" || status.StatusCode == "CONI")
+                    wo.IsActive = false;
+                else
+                    wo.IsActive = true;
+
                 var updatestatus = await _workOrder.Update(wo);
                 await _history.Add(history);
                 if (updatestatus > 0)
@@ -876,7 +899,7 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.VendorName
             }).AsNoTracking().ToListAsync();
-            editwo.Issues = await _issueRepo.GetAll().Select(x => new SelectItem
+            editwo.Issues = await _issueRepo.GetAll().Where(x=>x.ItemId==editwo.ItemId).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.IssueName
@@ -1012,7 +1035,8 @@ namespace BusinessLogic.Services
             query = await FilterWO(wOFilterDTO, query);
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
-            recWorkOrder = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
+          
+            var temp = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new
             {
                 DueAfterDays = "After " + x.DueAfterDays + " Days",
                 Description = x.Description,
@@ -1024,9 +1048,34 @@ namespace BusinessLogic.Services
                 }).GetDescription(DescriptionTypeEnum.FULL) : null,
                 Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
-                Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
+                Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName },
+                Issue = x.Issue.IssueName,
+                StatusDescription = x.Status.StatusDescription,
+                Item = x.Item.ItemName,
+                CreatedTime = x.CreatedTime,
+                UpdatedTime = x.UpdatedTime,
+                Requestedby = x.RequestedBy,
+                PropId = x.PropertyId,
+                Priority = x.Priority,
+                UpdatedBy = x.UpdatedByUserName,
+                Location = x.Location.LocationName,
+                SubLocation = x.SubLocation.AreaName,
             }).AsNoTracking().ToListAsync();
+            wOFilterDTO.TermSearch = wOFilterDTO.TermSearch == null ? "" : wOFilterDTO.TermSearch;
 
+            recWorkOrder = temp.Where(x => (x.DueAfterDays +
+                x.Description +
+                  x.Id +
+                  x.AssignedTo + x.Property.PropertyName + x.Issue + x.Item + x.Location + x.SubLocation).Contains(wOFilterDTO.TermSearch, StringComparison.OrdinalIgnoreCase)
+                ).Select(x => new RecurringWOs
+                {
+                    DueAfterDays =x.DueAfterDays,
+                    Description = x.Description,
+                    Id = x.Id,
+                    ScheduleAt = x.ScheduleAt,
+                    Status =x.Status,
+                    AssignedTo = x.AssignedTo
+                }).ToList();
 
             Pagination<List<RecurringWOs>> pagination = new Pagination<List<RecurringWOs>>
             {
@@ -1198,6 +1247,17 @@ namespace BusinessLogic.Services
             {
                 EffortDTOs = wo
             };
+        }
+
+        public async  Task<List<SelectItem>> GetIssues(long id)
+        {
+          var res=  await _issueRepo.GetAll().Where(x => x.ItemId == id).Select(x => new SelectItem
+            {
+              Id=x.Id,
+              PropertyName=x.IssueName
+            }).AsNoTracking().ToListAsync();
+
+            return res;
         }
     }
 }

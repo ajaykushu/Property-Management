@@ -8,6 +8,8 @@
     var redirector = string.Empty;
     if (Model.Recurring)
         redirector = "/WorkOrder/GetRecurringWO";
+    else if (Model.StatusDescription.Contains("complete",StringComparison.InvariantCultureIgnoreCase))
+        redirector = "/WorkOrder/GetCompletedWO";
     else
         redirector = "/WorkOrder";
     if (url != null && HttpContextAccessor.HttpContext.Request.Path.HasValue)

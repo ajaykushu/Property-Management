@@ -54,6 +54,7 @@ namespace Presentation.Controllers
         {
             try
             {
+                wOFilterModel.IsActive = true;
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
                 StringBuilder query = new StringBuilder();
                 var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, wOFilterModel, this, _token).ConfigureAwait(false);
@@ -663,7 +664,7 @@ namespace Presentation.Controllers
         {  
             try
             {
-                wOFilterModel.Status = "COMP";
+                wOFilterModel.IsActive = false;
                 _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
                 StringBuilder query = new StringBuilder();
                 var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, wOFilterModel, this, _token).ConfigureAwait(false);
@@ -680,6 +681,24 @@ namespace Presentation.Controllers
                 return View("~/Views/WorkOrder/Mobile/Index.cshtml", wOFilterModel);
             return View("~/Views/WorkOrder/Index.cshtml", wOFilterModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetIssue(long id)
+        {
+            List<SelectItem> result = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getissue", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    result = JsonConvert.DeserializeObject<List<SelectItem>>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+            }
+            return Ok(result);
+        }
+      
 
         [HttpGet]
         [Authorize]

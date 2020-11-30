@@ -218,5 +218,13 @@ namespace API.Controllers
             EffortPagination res = await _workOrderService.GetEffort(id);
             return Ok(res);
         }
+
+        [HttpGet]
+        [Route("getissue")]
+        public async Task<ActionResult<List<SelectItem>>> GetIssues(long id)
+        {
+            List<SelectItem> res = await _workOrderService.GetIssues(id);
+            return Ok(res);
+        }
     }
 }

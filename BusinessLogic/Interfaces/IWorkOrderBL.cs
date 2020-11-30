@@ -43,5 +43,6 @@ namespace BusinessLogic.Interfaces
         Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel);
         Task<bool> AddEffort(List<EffortDTO> effortDTOs, string id);
         Task<EffortPagination> GetEffort(string id);
+        Task<List<SelectItem>> GetIssues( long id);
     }
 }

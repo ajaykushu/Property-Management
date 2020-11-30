@@ -20,7 +20,6 @@ namespace DataAccessLayer.Interfaces
         Task<int> Add(TEntity entity);
 
         Task<int> BulkInsert(List<TEntity> entities);
-
-     
+      
     }
 }

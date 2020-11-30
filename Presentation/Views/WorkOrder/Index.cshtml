@@ -11,17 +11,17 @@
 
                     </div>
                     <div class="col-xs-5">
-                        <label asp-for="WOId"></label>
+                        <label asp-for="WOId">Search WO Number</label>
                         <input asp-for="WOId" class="form-control form-control-sm custom-input">
 
                     </div>
                     <div class="col-xs-5">
-                        <label asp-for="AssignedTo"></label>
+                        <label asp-for="AssignedTo">Assigned To</label>
                         <input asp-for="AssignedTo" class="form-control form-control-sm custom-input">
 
                     </div>
                     <div class="col-xs-5">
-                        <label asp-for="PropertyName"></label>
+                        <label asp-for="PropertyName">Search by Property Name</label>
                         <input asp-for="PropertyName" class="form-control form-control-sm custom-input">
 
                     </div>
@@ -38,9 +38,9 @@
                         <input asp-for="DueDate" type="date" class="form-control form-control-sm custom-input">
                     </div>
                     <div class="col-xs-5">
-                        <label>Priority</label>
+                        <label>Filter by Priority</label>
                         <select asp-for="Priority" type="date" class="form-control form-control-sm custom-input">
-                            <option value="">--Select--</option>
+                            <option value="">Filter by Status</option>
                             <option value="0">Critical</option>
                             <option value="1">High</option>
                             <option value="2">Medium</option>
@@ -71,7 +71,7 @@
                         </select>
                     </div>
                     <div class="col-xs-5">
-                        <label>Vendor</label>
+                        <label>Search by Vendor</label>
                         <input asp-for="Vendor" class="form-control top-buffer form-control-sm custom-input">
                     </div>
                 </div>
@@ -87,8 +87,8 @@
                .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
         }
     <div class="workordertitle">
-        @if (ResponseModel!=null && !ResponseModel.Payload.All(x=>x.isCompleted)) {
-        <span>Work Orders</span>  
+        @if (ResponseModel!=null && ResponseModel.Payload.All(x=>x.IsActive)) {
+        <span>Active Work Orders</span>  
                           }
         else
         {
@@ -108,7 +108,7 @@
             </div>
             </div>
         </div>
-        @if (ResponseModel != null && !ResponseModel.Payload.All(x=>x.isCompleted))
+        @if (ResponseModel != null && ResponseModel.Payload.All(x=>x.IsActive))
         {
         <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
             <div class="justify-content-lg-start col-md-6">
@@ -171,7 +171,7 @@
 
                                         Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                                         keyValuePairs.Add("id", item.Id + "");
-                                        if (!item.isCompleted)
+                                        if (item.IsActive)
                                         {
                                         <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
                                         }

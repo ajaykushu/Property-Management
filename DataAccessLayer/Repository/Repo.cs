@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace DataAccessLayer.Repository
         public async Task<int> BulkInsert(List<TEntity> entities)
         {
 
-             await this.context.Set<TEntity>().AddRangeAsync(entities);
+            await this.context.Set<TEntity>().AddRangeAsync(entities);
             return await context.SaveChangesAsync();
         }
 
@@ -49,12 +50,14 @@ namespace DataAccessLayer.Repository
 
         public async Task<int> Update(TEntity entity)
         {
-            var entityreturned=context.Update<TEntity>(entity);
+            var entityreturned = context.Update<TEntity>(entity);
             var attached = context.Attach<TEntity>(entity: entity);
             attached.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             return await context.SaveChangesAsync();
         }
 
        
+
+
     }
 }

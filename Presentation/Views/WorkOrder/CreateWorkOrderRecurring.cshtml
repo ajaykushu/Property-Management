@@ -92,20 +92,19 @@
                                     </div>
                                 </div>
                             }
-                            @if (Model.Issues != null && Model.Issues.Any())
-                            {
+                           
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
                                         <label asp-for="IssueId"> </label>
                                     </div>
                                     <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                        <select class="form-control form-control-sm custom-input" asp-for="IssueId" >
                                             <option value="">Please select one</option>
                                         </select>
                                         <span asp-validation-for="IssueId" class="text-danger"></span>
                                     </div>
                                 </div>
-                            }
+                            
                         </div>
                     </td>
                 </tr>

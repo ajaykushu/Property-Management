@@ -26,5 +26,6 @@ namespace Presentation.ViewModels
         public string WOId { get; set; }
         public bool FilterActive { get; set; }
         public bool IsCurrent { get;set; }
+        public bool IsActive { get; set; }
     }
 }

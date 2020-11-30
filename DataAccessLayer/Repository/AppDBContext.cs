@@ -65,8 +65,9 @@ namespace DataAccessLayer.Repository
             builder.Entity<ApplicationUser>().Property(x => x.ClockType).HasDefaultValue(12);
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
+            builder.Entity<WorkOrder>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<UserProperty>().Property(x => x.IsPrimary).HasDefaultValue(false);
-            
+
             builder.Entity<Property>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<WorkOrder>().Property(x => x.Priority).HasDefaultValue(0);
             builder.Entity<WorkOrder>().Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
@@ -127,7 +128,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<Item>()
                  .HasData(new Item() { Id = 1, ItemName = "Tv" }, new Item() { Id = 2, ItemName = "AC" });
             builder.Entity<Issue>()
-                 .HasData(new Issue() { Id = 1, IssueName = "Power Problem" }, new Issue() { Id = 2, IssueName = "Item Not Available" });
+                 .HasData(new Issue() { Id = 1, IssueName = "Power Problem",ItemId=1 }, new Issue() { Id = 2, IssueName = "Item Not Available",ItemId=2 });
             builder.Entity<Status>().HasData(new Status() { Id = 1, StatusCode = "ADCM", StatusDescription = "Add Comment Only" }, new Status() { Id = 2, StatusCode = "BINE", StatusDescription = "Bid Needed" }, new Status() { Id = 3, StatusCode = "BIRE", StatusDescription = "Bid Recieved" },
                 new Status() { Id = 4, StatusCode = "BIRQ", StatusDescription = "Bid Requested" },
                 new Status() { Id = 5, StatusCode = "COMP", StatusDescription = "Complete" },
@@ -222,7 +223,7 @@ namespace DataAccessLayer.Repository
                     Id = 17,
                     MenuName = "Assign_To_User"
                 }
-                
+
                 , new Menu()
                 {
                     Id = 18,
@@ -238,7 +239,7 @@ namespace DataAccessLayer.Repository
                       Id = 20,
                       MenuName = "Completed_WO"
                   });
-            
+
 
             builder.Entity<RoleMenuMap>().HasData(
                 new RoleMenuMap { Id = 1, MenuId = 1, RoleId = 1 },
@@ -270,7 +271,7 @@ namespace DataAccessLayer.Repository
                 e.State == EntityState.Added
                 || e.State == EntityState.Modified));
             var user = _httpContextAccessor.HttpContext?.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier);
-            
+
             foreach (var entityEntry in entries)
             {
                 if (entityEntry.State == EntityState.Added)
@@ -292,4 +293,5 @@ namespace DataAccessLayer.Repository
             return (await base.SaveChangesAsync(true, cancellationToken));
         }
     }
+
 }

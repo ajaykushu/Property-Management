@@ -147,5 +147,14 @@ namespace Presentation.Controllers
         {
             return PartialView("~/Views/Shared/SchedulerView.cshtml");
         }
+        [HttpGet]
+        public IActionResult ValidateDateEqualOrGreater(DateTime duedate)
+        {
+            if (duedate >= DateTime.Now)
+            {
+                return Json(true);
+            }
+            return Json(false);
+        }
     }
 }

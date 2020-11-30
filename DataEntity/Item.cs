@@ -9,6 +9,7 @@ namespace DataEntity
         public Item()
         {
             WorkOrders = new HashSet<WorkOrder>();
+            Issues = new HashSet<Issue>();
         }
 
         [Key]
@@ -17,7 +18,7 @@ namespace DataEntity
 
         [Column(TypeName = "varchar(50)")]
         public string ItemName { get; set; }
-
+        public ICollection<Issue> Issues { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

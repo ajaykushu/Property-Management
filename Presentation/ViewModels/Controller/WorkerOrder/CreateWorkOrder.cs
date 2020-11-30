@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 
 namespace Presentation.ViewModels
 {
@@ -49,6 +51,8 @@ namespace Presentation.ViewModels
 
         [Required]
         [DataType(DataType.Date)]
+        [Remote("ValidateDateEqualOrGreater","Home",
+    ErrorMessage = "Date isn't equal or greater than current date.")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DueDate { get; set; }
 

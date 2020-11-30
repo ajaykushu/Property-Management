@@ -8,7 +8,7 @@
         public string ParentId { get; set; }
         public string DueDate { get; set; }
         public SelectItem Property { get; set; }
-        public bool isCompleted { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

@@ -9,6 +9,6 @@
         public string DueDate { get; set; }
         public string Status { get; set; }
         public SelectItem Property { get; set; }
-        public bool isCompleted { get; set; }
+        public bool IsActive { get; set; }
     }
 }

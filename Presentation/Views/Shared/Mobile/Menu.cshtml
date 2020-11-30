@@ -23,12 +23,14 @@
 
     .item {
         display: grid;
+        text-align: center;
     }
 
     .mwrapper {
         display: block;
         width: 100%;
         padding: 5%;
+        margin-top: 10%;
     }
 </style>
 <header>
@@ -40,7 +42,7 @@
                 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 {
                 <li class="nav-item active">
-                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><i class="fa fa-sign-out-alt fa-1x"></i></a>
+                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><u>Logout</u></a>
                 </li>
                 }
                 else
@@ -54,89 +56,132 @@
     </nav>
 </header>
 <div class="mwrapper">
-    <div class="flex-container" style="padding-top:60px;">
-        <div class="menu">
-            <a href="@Url.Action("Index", "WorkOrder")">
-                <div class="item">
-                    <span><i class="fa fa-list-alt fa-3x" aria-hidden="true"></i></span>
-                    <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Active WO</span>
-                </div>
-            </a>
-        </div>
-        <div class="menu">
-            <a href="@Url.Action("GetAllUsers", "User")">
-                <div class="item">
-                    <span><i class="fa fa-user fa-3x" aria-hidden="true"></i></span>
-                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">User</span>
-                </div>
-            </a>
-        </div>
-        <div class="menu">
-            <a href="@Url.Action("Index", "Configuration")">
-                <div class="item">
-                    <span><i class="fa fa-cogs fa-3x" aria-hidden="true"></i></span>
-                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Setting</span>
-                </div>
-            </a>
-        </div>
-        <div class="menu">
-            <a href="@Url.Action("ListProperties", "Property")">
-                <div class="item">
-                    <span><i class="fa fa-home fa-3x" aria-hidden="true"></i></span>
-                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Property</span>
-                </div>
-            </a>
-        </div>
-        <div class="menu">
-            <a href="@Url.Action("GetCompletedWO", "WorkOrder")">
-                <div class="item">
-                    <span><i class="fa fa-check-double fa-3x" aria-hidden="true"></i></span>
-                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Completed WO</span>
-                </div>
-            </a>
-        </div>
-        @{ var userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-            var obj = ObjectByteConverter.Deserialize<SessionStore>
-                (await sessionStorage.GetAsync(userId));
-        }
-        @if (obj.MenuList.Contains(MenuEnum.Recurring_WO.ToString()))
-        {
+    <div class="row">
+        <div class="col">
             <div class="menu">
-                <a href="@Url.Action("GetRecurringWO","WorkOrder")">
+                <a href="@Url.Action("CreateWorkOrderView", "WorkOrder")">
                     <div class="item">
-                        <span><i class="fa fa-hourglass-half fa-3x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Recurring WO</span>
+                        <span><i class="fa fa-plus-circle fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Create WO</span>
                     </div>
                 </a>
             </div>
-        }
-        <div class="menu">
-            <a href="@Url.Action("GetAllNotification","Home")">
-                <div class="item">
-                    <div class="notifiaction-cont">
-                        <span><i class="fa fa-bell fa-3x" aria-hidden="true"></i></span>
-                        <span id="notification_count" style="color:red;position:absolute;font-size:1.2em;"></span>
-                    </div>
-                    <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Notification</span>
-                </div>
-            </a>
         </div>
-        @{ var id = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-
-            var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
-        }
-        @if (id != "")
-        {
+        <div class="col">
             <div class="menu">
-                <div class="item">
-
-                    <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="60" height="60" alt="Pet Image" class="avtaar" /></a>
-
-                </div>
+                <a href="@Url.Action("Index", "WorkOrder")">
+                    <div class="item">
+                        <span><i class="fa fa-list-alt fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Active WO</span>
+                    </div>
+                </a>
             </div>
-        }
+        </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="menu">
+                <a href="@Url.Action("GetAllUsers", "User")">
+                    <div class="item">
+                        <span><i class="fa fa-user fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">User</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="menu">
+                <a href="@Url.Action("Index", "Configuration")">
+                    <div class="item">
+                        <span><i class="fa fa-cogs fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Setting</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+
+            <div class="menu">
+                <a href="@Url.Action("ListProperties", "Property")">
+                    <div class="item">
+                        <span><i class="fa fa-home fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Property</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="menu">
+                <a href="@Url.Action("GetCompletedWO", "WorkOrder")">
+                    <div class="item">
+                        <span><i class="fa fa-check-double fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Completed WO</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+
+            @{ var userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+                var obj = ObjectByteConverter.Deserialize<SessionStore>
+                    (await sessionStorage.GetAsync(userId));
+            }
+            @if (obj.MenuList.Contains(MenuEnum.Recurring_WO.ToString()))
+            {
+                <div class="menu">
+                    <a href="@Url.Action("GetRecurringWO","WorkOrder")">
+                        <div class="item">
+                            <span><i class="fa fa-hourglass-half fa-7x" aria-hidden="true"></i></span>
+                            <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Recurring WO</span>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="col">
+
+            <div class="menu">
+                <a href="@Url.Action("GetAllNotification","Home")">
+                    <div class="item">
+                        <div class="notifiaction-cont">
+                            <span><i class="fa fa-bell fa-7x" aria-hidden="true"></i></span>
+                            <span id="notification_count" style="color:red;position:absolute;font-size:1.2em;"></span>
+                        </div>
+                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Notification</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+   
+   
+    @{ var id = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+
+        var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
+    }
+    @if (id != "")
+    {
+        <div class="menu">
+            <div class="item">
+
+                <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" /></a>
+
+            </div>
+        </div>
+    }
 </div>
+
 <script>
     $('#notification_count').ready(function () {
             $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
@@ -145,3 +190,17 @@
     })
 
 </script>
+
+<style>
+    .row {
+  display: flex; /* equal height of the children */
+}
+
+.col {
+  flex: 1; /* additionally, equal width */
+  
+  padding: 1em;
+  
+}
+
+</style>

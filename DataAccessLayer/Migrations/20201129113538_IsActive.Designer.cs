@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201129113538_IsActive")]
+    partial class IsActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "6688425e-0fb9-40c8-9585-097c874fd8ff",
+                            ConcurrencyStamp = "3f4a1a17-e53b-4d8f-bc81-db3d049a8faa",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "32aa2ce1-e5b2-44bd-a4be-a5b83c5893f5",
+                            ConcurrencyStamp = "3d3f9549-4037-4c2b-90b4-6e38eca9918f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "01fb0d12-f5fe-4bbd-a372-43a5a578a551",
+                            ConcurrencyStamp = "34ddcc8c-adca-4749-a60f-2c501c989517",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -382,9 +384,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("IssueName")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -392,8 +391,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
 
                     b.ToTable("Issues");
 
@@ -403,7 +400,6 @@ namespace DataAccessLayer.Migrations
                             Id = 1,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IssueName = "Power Problem",
-                            ItemId = 1,
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -411,7 +407,6 @@ namespace DataAccessLayer.Migrations
                             Id = 2,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IssueName = "Item Not Available",
-                            ItemId = 2,
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1598,15 +1593,6 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataEntity.WorkOrder", "WorkOrder")
                         .WithMany("Efforts")
                         .HasForeignKey("WOId");
-                });
-
-            modelBuilder.Entity("DataEntity.Issue", b =>
-                {
-                    b.HasOne("DataEntity.Item", "Item")
-                        .WithMany("Issues")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DataEntity.Location", b =>

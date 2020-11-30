@@ -92,17 +92,16 @@
                                     <span asp-validation-for="ItemId" class="text-danger"></span>
                                 </div>
                             }
-                            @if (Model.Issues != null && Model.Issues.Any())
-                            {
+                           
                                 <div class="row top-buffer padding">
 
-                                    <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                    <select class="form-control " asp-for="IssueId" >
                                         <option value="">Issue</option>
                                     </select>
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
 
-                            }
+                            
                         </td>
                     </tr>
 
@@ -194,9 +193,9 @@
                                     <label for="File">Attachment</label>
                                 </div>
                                 <div class="col">
-                                    <div class="cont">
-                                        <label class="browsebutton">Browse File</label>
-                                        <input asp-for="File" capture="user" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                    <div class="cont" style="width:100%" >
+                                        <label style="width:100%"  class="browsebutton">Browse File</label>
+                                        <input style="width:100%"  asp-for="File" capture="user" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
                                     <div id="file_selected">
                                     </div>

@@ -66,7 +66,7 @@ $('.File').change(function (e) {
     if (file != undefined) {
         for (var i = 0; i < file.length; i++) {
             selectedFile.push(file[i]);
-            $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'></span>");
+            $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'></span><br/>");
         }
         $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     }
@@ -275,37 +275,37 @@ $('#Role').change(function () {
 
 /*index*/
 /* regarding mobile view*/
-$("#DueDate").change(function () {
-    $('.DueDatelabel').text($(this).val());
-    $('.mform').submit();
-})
-$('.datedec').click(function () {
-    var val = $("#DueDate").val();
-    if (val == "NaN-NaN-NaN" || val == undefined || val == '')
-        val = new Date();
-    else
-        val = new Date(val);
-    val.setDate(val.getDate() - 1);
-    var datestring = ConvertDatetoString(val);
-    $("#DueDate").val(datestring);
-    $('.DueDatelabel').text(datestring);
-    $('.mform').submit();
-});
-if ($(".DueDateMobile").length) {
-    $(".DueDateMobile").datepicker();
-}
-$('.dateinc').click(function () {
-    var val = $("#DueDate").val();
-    if (val == "NaN-NaN-NaN" || val == undefined|| val=='')
-        val = new Date();
-    else
-        val = new Date(val);
-    val.setDate(val.getDate() + 1);
-    var datestring = ConvertDatetoString(val);
-    $("#DueDate").val(datestring);
-    $('.DueDatelabel').text(datestring);
-    $('.mform').submit();
-});
+//$("#DueDate").change(function () {
+//    $('.DueDatelabel').text($(this).val());
+//    $('.mform').submit();
+//})
+//$('.datedec').click(function () {
+//    var val = $("#DueDate").val();
+//    if (val == "NaN-NaN-NaN" || val == undefined || val == '')
+//        val = new Date();
+//    else
+//        val = new Date(val);
+//    val.setDate(val.getDate() - 1);
+//    var datestring = ConvertDatetoString(val);
+//    $("#DueDate").val(datestring);
+//    $('.DueDatelabel').text(datestring);
+//    $('.mform').submit();
+//});
+//if ($(".DueDateMobile").length) {
+//    $(".DueDateMobile").datepicker();
+//}
+//$('.dateinc').click(function () {
+//    var val = $("#DueDate").val();
+//    if (val == "NaN-NaN-NaN" || val == undefined|| val=='')
+//        val = new Date();
+//    else
+//        val = new Date(val);
+//    val.setDate(val.getDate() + 1);
+//    var datestring = ConvertDatetoString(val);
+//    $("#DueDate").val(datestring);
+//    $('.DueDatelabel').text(datestring);
+//    $('.mform').submit();
+//});
 
 $('.filter_check').click(function () {
     if ($(this).prop("checked") == true) {
@@ -350,6 +350,17 @@ $('#LocationId').change(function () {
             if (data != null || data != undefined) {
                 for (var i = 0; i < data.length; i++) {
                     $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                }
+            }
+        });
+});
+$('#ItemId').change(function () {
+    $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
+        function (data) {
+            $("#IssueId").html("<option value=''>Please select Issue</option>")
+            if (data != null || data != undefined) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#IssueId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                 }
             }
         });
@@ -564,7 +575,7 @@ $("a[name='exportlink']").click(function () {
     var href = this.href;
     event.preventDefault();
 
-    alertify.confirm(this.innerText, 'Currently filtered list (all pages)', function () {
+    alertify.confirm(this.innerText, 'Export currently filtered list (all pages)?', function () {
         isdownload = true;
         alertify.closeAll(); window.location = href;
     }

@@ -43,9 +43,9 @@
                 </div>
                 <section class="monthly-sub-section-1">
                     <div class="form-group pt-1">
-                        <input class="form-control form-control-sm custom-input mr-1" min="1" max="31" type="number" id="day">
+                        <input class="form-control form-control-sm custom-input mr-1" onkeypress="return event.charCode >= 48 && test(event);"  min="1" max="31" type="number" id="day">
                         <label class="ml-1" for="day">Of Every</label>
-                        <input class="form-control form-control-sm custom-input mr-1" min="1" max="12" type="number" id="month">
+                        <input class="form-control form-control-sm custom-input mr-1" onkeypress="return event.charCode >= 48 && test2(event);" m min="1" max="12" type="number" id="month">
                         <label for="month">Month</label>
                     </div>
                     </section>
@@ -77,7 +77,7 @@
                             </select>
 
                             <label class="mr-1">Of Every</label>
-                            <input class="form-control form-control-sm custom-input  mr-1" min="1" max="12" type="number" id="input-month">
+                            <input class="form-control form-control-sm custom-input  mr-1" onkeypress="return event.charCode >= 48 && test2(event);" min="1" max="12" type="number" id="input-month">
                             <label for="month">Month</label>
                         </div>
                         </section>
@@ -93,7 +93,7 @@
                         </div>
                         <section class="daily-sub-section-1">
                             <div class="form-group pt-1">
-                                <input class="form-control form-control-sm custom-input ml-1 mr-1" id="daily-occurence" type="number" min="1" max="90">
+                                <input class="form-control form-control-sm custom-input ml-1 mr-1" id="daily-occurence" onkeypress="return event.charCode >= 48" type="number" min="1" max="90">
                                 <label>Day(s)</label>
                             </div>
                         </section>
@@ -110,12 +110,12 @@
                     <div class="form-inline">
                         <div class="form-group">
                             <label class="year-month-day mr-1">Day</label>
-                            <input type="number" id="year-day" max="31" min="1" class="form-control form-control-sm custom-input mr-1">
+                            <input type="number" onkeypress="return event.charCode >= 48 && test(event);" id="year-day" max="31" min="1" class="form-control form-control-sm custom-input mr-1">
                         </div>
 
                         <div class="form-group">
                             <label for="year-month" class="mr-1">Month</label>
-                            <input type="number" id="year-month" class="form-control form-control-sm custom-input" min="1" max="12">
+                            <input type="number" onkeypress="return event.charCode >= 48 && test2(event);" id="year-month" class="form-control form-control-sm custom-input" min="1" max="12">
                         </div>
                     </div>
                 </section>
@@ -202,7 +202,7 @@
                     }
                     else
                     {
-                        <input class="form-control form-control-sm custom-input mr-1" min="1" type="number" id="EndAfterCount" name="EndAfterCount">
+                        <input class="form-control form-control-sm custom-input mr-1" min="1"  onkeypress="return event.charCode >= 48" type="number" id="EndAfterCount" name="EndAfterCount">
                     }
                     <label for="select-occur">Occurrences</label>
                 </div>
@@ -236,7 +236,22 @@
         $(value).show();
     });
 
-
+    function test(e) {
+        var res = e.target.value + String.fromCharCode(e.charCode);
+        console.log(res);
+        if (res > 31) {
+            e.target.value = 31;
+            return false;
+        }
+    }
+      function test2(e) {
+        var res = e.target.value + String.fromCharCode(e.charCode);
+       
+        if (res > 12) {
+            e.target.value = 12;
+            return false;
+        }
+    }
 </script>
 
 

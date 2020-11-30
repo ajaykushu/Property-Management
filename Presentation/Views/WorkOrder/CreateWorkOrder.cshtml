@@ -78,26 +78,25 @@
                                     </div>
                                     <div class="col">
                                         <select class="form-control form-control-sm custom-input" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
+                                            <option value="">Please select Item</option>
                                         </select>
                                         <span asp-validation-for="ItemId" class="text-danger"></span>
                                     </div>
                                 </div>
                             }
-                            @if (Model.Issues != null && Model.Issues.Any())
-                            {
+                           
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
                                         <label asp-for="IssueId"> </label>
                                     </div>
                                     <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                            <option value="">Please select one</option>
+                                        <select class="form-control form-control-sm custom-input" asp-for="IssueId">
+                                            <option value="">Please select Issue</option>
                                         </select>
                                         <span asp-validation-for="IssueId" class="text-danger"></span>
                                     </div>
                                 </div>
-                            }
+                            
                         </div>
                     </td>
                 </tr>
@@ -109,7 +108,7 @@
                                     <label asp-for="Description"> </label>
                                 </div>
                                 <div class="col">
-                                    <textarea class="form-control custom-input" asp-for="Description" placeholder="additional Details"></textarea>
+                                    <textarea class="form-control custom-input" asp-for="Description" placeholder="Additional Details"></textarea>
                                     <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                             </div>
@@ -184,7 +183,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="cont">
-                                        <label class="browsebutton">Browse File</label>
+                                        <label class="browsebutton">Add File</label>
                                         <input asp-for="File" capture="user" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
                                     <div id="file_selected">

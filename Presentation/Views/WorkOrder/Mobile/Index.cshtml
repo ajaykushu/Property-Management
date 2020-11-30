@@ -20,9 +20,6 @@
                         <i class="fa fa-filter fa-1x" title="Filter" style="color:white"></i>
                     </div>
                 </li>
-                @*<li class="nav-item">
-                     <a asp-action="ExportWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export fa-1x"></i></a>
-                </li>*@
             </ul>
             <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">To Do</a>
             <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
@@ -39,22 +36,22 @@
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
             <input asp-for="TermSearch" placeholder="Search all fields" class="form-control top-buffer form-control mobile-input">
-            <input asp-for="WOId" placeholder="Work Order Number" class="form-control top-buffer form-control mobile-input">
+            <input asp-for="WOId" placeholder="Search WO Number" class="form-control top-buffer form-control mobile-input">
            
-            <input asp-for="AssignedTo" placeholder="Assigned To" class="form-control top-buffer form-control mobile-input">
+            <input asp-for="AssignedTo" placeholder="Search by Assigned To" class="form-control top-buffer form-control mobile-input">
            
-            <input asp-for="PropertyName" placeholder="Property Name" class="form-control top-buffer form-control mobile-input">
+            <input asp-for="PropertyName" placeholder="Search by Property Name" class="form-control top-buffer form-control mobile-input">
            
 
             <select asp-for="Priority" type="date" class="form-control top-buffer form-control mobile-input">
-                <option value="">Search Priority</option>
+                <option value="">Filter by Priority</option>
                 <option value="0">Critical</option>
                 <option value="1">High</option>
                 <option value="2">Medium</option>
                 <option value="3">Low</option>
             </select>
             <select asp-for="Status" class="form-control form-control top-buffer mobile-input">
-                <option value="">--Select--</option>
+                <option value="">Filter by Status</option>
                 <option value="ADCM">Add Comment Only</option>
                 <option value="BINE">Bid Needed</option>
                 <option value="BIRE">Bid Received</option>
@@ -73,7 +70,7 @@
                 <option value="WOPR">Work In Progress</option>
                 <option value="WOOR">Work Ordered</option>
             </select>
-            <input asp-for="Vendor" placeholder="Vendor" class="form-control top-buffer form-control mobile-input">
+            <input asp-for="Vendor" placeholder="Search by Vendor" class="form-control top-buffer form-control mobile-input">
 
         </div>
         <div class="d-lg-inline-flex" style="padding:0 0 10px 10px;">
@@ -140,9 +137,9 @@
 </form>
 
 <div class="bottom-stick">
-    <a  onClick="location.href=location.href" class="nav-link" style="color:lightgray"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
+    <a  onClick="location.href=location.href" class="nav-link" style="color:#fdfdfdf2"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
     <div class="container-block justify-content-end">
-        <a asp-action="CreateWorkOrderView" class="nav-link" style="color:lightgray"><i class="fa fa-plus fa-2x"></i></a>
+        <a asp-action="CreateWorkOrderView" class="nav-link" style="color:#fdfdfdf2"><i class="fa fa-plus fa-2x"></i></a>
     </div>
 </div>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
