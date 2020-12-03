@@ -346,7 +346,7 @@ $(window).on('unload', function () {
 $('#LocationId').change(function () {
     $.get("/Property/GetSubLocation?id=" + $(this).val(),
         function (data) {
-            $("#SubLocationId").html("<option value=''>Please select Sublocation</option>")
+            $("#SubLocationId").html("<option value=''>Select Sublocation</option>")
             if (data != null || data != undefined) {
                 for (var i = 0; i < data.length; i++) {
                     $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
@@ -357,7 +357,7 @@ $('#LocationId').change(function () {
 $('#ItemId').change(function () {
     $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
         function (data) {
-            $("#IssueId").html("<option value=''>Please select Issue</option>")
+            $("#IssueId").html("<option value=''>Select Issue</option> <option value='-1'>Other</option>")
             if (data != null || data != undefined) {
                 for (var i = 0; i < data.length; i++) {
                     $("#IssueId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
@@ -368,8 +368,8 @@ $('#ItemId').change(function () {
 $('#PropertyId').change(function () {
     $.get("GetLocation?id=" + $(this).val(),
         function (data) {
-            $("#LocationId").html("<option value=''>Please choose Location</option>")
-            $("#SubLocationId").html("<option value=''>Please choose SubLocation</option>")
+            $("#LocationId").html("<option value=''>Select Location</option>")
+            $("#SubLocationId").html("<option value=''>Select SubLocation</option>")
             if (data != null || data != undefined) {
                 for (var i = 0; i < data.length; i++) {
                     $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
@@ -586,3 +586,25 @@ $("a[name='exportlink']").click(function () {
         });
 });
 
+$('#IssueId').change(function () {
+    if ($(this).val() =='-1') {
+        $('#CustomIssueDiv').show();
+        $('#CustomIssueDiv').prop("required", 'true');
+    }
+    else
+        $('#CustomIssueDiv').hide();
+        $('#CustomIssueDiv').removeProp("required");
+})
+
+
+
+$('.filter_check').click(function () {
+    if ($(this).prop("checked") == true) {
+        $('.wofilter').show();
+    }
+});
+
+$('.closefilter').click(function () {
+    $('.filter_check').prop("checked", false);
+    $('.wofilter').hide(100);
+});

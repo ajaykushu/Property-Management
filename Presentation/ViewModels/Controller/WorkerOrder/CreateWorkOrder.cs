@@ -55,7 +55,8 @@ namespace Presentation.ViewModels
     ErrorMessage = "Date isn't equal or greater than current date.")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DueDate { get; set; }
-
+        
+        
         public IList<IFormFile> File { get; set; }
 
         [Required]

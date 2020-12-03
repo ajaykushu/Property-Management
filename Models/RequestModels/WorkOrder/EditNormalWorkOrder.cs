@@ -46,6 +46,7 @@ namespace Models.WorkOrder.RequestModels
         public int Priority { get; set; }
         public int? VendorId { get; set; }
         public List<SelectItem> Vendors { get; set; }
+
        
     }
 }

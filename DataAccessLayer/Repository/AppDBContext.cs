@@ -238,7 +238,12 @@ namespace DataAccessLayer.Repository
                   {
                       Id = 20,
                       MenuName = "Completed_WO"
-                  });
+                  },
+                   new Menu()
+                   {
+                       Id = 21,
+                       MenuName = "All_WO"
+                   }); 
 
 
             builder.Entity<RoleMenuMap>().HasData(

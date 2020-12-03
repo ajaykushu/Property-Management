@@ -32,105 +32,60 @@
 </header>
 
 <form class="mform">
-    <div class="card mwofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
-        <div class="card-body">
-            <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
-            <input asp-for="TermSearch" placeholder="Search all fields" class="form-control top-buffer form-control mobile-input">
-            <input asp-for="WOId" placeholder="Search WO Number" class="form-control top-buffer form-control mobile-input">
-           
-            <input asp-for="AssignedTo" placeholder="Search by Assigned To" class="form-control top-buffer form-control mobile-input">
-           
-            <input asp-for="PropertyName" placeholder="Search by Property Name" class="form-control top-buffer form-control mobile-input">
-           
-
-            <select asp-for="Priority" type="date" class="form-control top-buffer form-control mobile-input">
-                <option value="">Filter by Priority</option>
-                <option value="0">Critical</option>
-                <option value="1">High</option>
-                <option value="2">Medium</option>
-                <option value="3">Low</option>
-            </select>
-            <select asp-for="Status" class="form-control form-control top-buffer mobile-input">
-                <option value="">Filter by Status</option>
-                <option value="ADCM">Add Comment Only</option>
-                <option value="BINE">Bid Needed</option>
-                <option value="BIRE">Bid Received</option>
-                <option value="BIRQ">Bid Requested</option>
-                <option value="COMP">Complete</option>
-                <option value="COBQ">Complete But Bad Quality</option>
-                <option value="CONI">Complete, Need Inspection</option>
-                <option value="DAIL">Daily</option>
-                <option value="FISC">Finalize Scope</option>
-                <option value="HOLD">Hold</option>
-                <option value="NEWO">New work order</option>
-                <option value="ORMA">Order Materials</option>
-                <option value="PEND">Pending</option>
-                <option value="REAS">Ready To Assign</option>
-                <option value="WOAS">Work Assigned</option>
-                <option value="WOPR">Work In Progress</option>
-                <option value="WOOR">Work Ordered</option>
-            </select>
-            <input asp-for="Vendor" placeholder="Search by Vendor" class="form-control top-buffer form-control mobile-input">
-
-        </div>
-        <div class="d-lg-inline-flex" style="padding:0 0 10px 10px;">
-            <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
-            &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
-        </div>
-    </div>
+    <partial name="~/Views/WorkOrder/Mobile/_filter.cshtml" model="Model" />
     <div class="container">
         @if (ResponseModel != null && ResponseModel.Payload != null)
         {
-        <table class="table border-0" style="table-layout:fixed;">
-            <tbody>
-                @foreach (var item in ResponseModel.Payload)
+            <table class="table border-0" style="table-layout:fixed;">
+                <tbody>
+                    @foreach (var item in ResponseModel.Payload)
                     {
-                     <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id})'">
-                     <td style="padding-top:20px;padding-bottom:20px;">
-                        <span style="word-wrap:break-word;font-size:15px"><span class="d-inline-flex status @if(item.ParentId!=null){<text>green</text>}else{ <text>orange</text>}"></span>@item.Description</span>
-                    </td>
-                    <td style="padding-right:0px;text-align:end;font-size:14px;color:grey;padding-top:20px;padding-bottom:20px;">@item.DueDate.Substring(0, 6)&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></td>
-                </tr>
+                        <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id})'">
+                            <td style="padding-top:20px;padding-bottom:20px;">
+                                <span style="word-wrap:break-word;font-size:15px"><span class="d-inline-flex status @if(item.ParentId!=null){<text>green</text>}else{ <text>orange</text>}"></span>@item.Description</span>
+                            </td>
+                            <td style="padding-right:0px;text-align:end;font-size:14px;color:grey;padding-top:20px;padding-bottom:20px;">@item.DueDate.Substring(0, 6)&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></td>
+                        </tr>
                     }
-            </tbody>
-        </table>
-        <hr />
-       <nav>
-            <ul class="pagination">
-                @{ int current = 0;}
-                <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
-                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                </li>
+                </tbody>
+            </table>
+            <hr />
+            <nav>
+                <ul class="pagination">
+                    @{ int current = 0;}
+                    <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
+                        @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                    </li>
 
-                @for (int i = 0; i < ResponseModel.PageCount; i++)
+                    @for (int i = 0; i < ResponseModel.PageCount; i++)
                     {
 
                         if (ResponseModel.CurrentPage == i)
                         {
-                <li class="page-item active">
-                    <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
-                </li>
+                            <li class="page-item active">
+                                <a class="page-link" asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                            </li>
                             current = i;
                         }
                         else
                         {
-                <li class="page-item">
-                    @{ Model.PageNumber = i;}
-                    @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                </li>
+                            <li class="page-item">
+                                @{ Model.PageNumber = i;}
+                                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                            </li>
                         }
                     }
-                @{ Model.PageNumber = current + 1;}
-                <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
-                    @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                </li>
-            </ul>
-        </nav>
+                    @{ Model.PageNumber = current + 1;}
+                    <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
+                        @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                    </li>
+                </ul>
+            </nav>
 
         }
         else
         {
-        <span>No Record Found</span>
+            <span>No Record Found</span>
 
         }
     </div>

@@ -23,6 +23,7 @@ namespace DataEntity
         public string Description { get; set; }
         [Column(TypeName = "varchar(50)")]
         public string RequestedBy { get; set; }
+     
         public long? AssignedToId { get; set; }
         public int? AssignedToDeptId { get; set; }
 

@@ -708,5 +708,30 @@ namespace Presentation.Controllers
             return PartialView();
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAllWOs(WOFilterModel model)
+        {
+            model.isGeneralSearch = true;
+
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getallworkorder", out string path);
+                StringBuilder query = new StringBuilder();
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, model, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    var WorkOrderAssigned = JsonConvert.DeserializeObject<Pagination<List<WorkOrderAssigned>>>(await response.Content.ReadAsStringAsync());
+                    ViewBag.Response = WorkOrderAssigned;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/WorkOrder/Mobile/Index.cshtml", model);
+            return View("~/Views/WorkOrder/Index.cshtml", model);
+        }
+
     }
 }

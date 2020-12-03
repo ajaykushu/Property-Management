@@ -41,7 +41,7 @@ namespace Models.WorkOrder.RequestModels
         }
         public int PageNumber { get; set; }
         public bool IsCurrent { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
 
     }
 }

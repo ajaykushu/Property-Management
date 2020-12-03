@@ -150,7 +150,7 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult ValidateDateEqualOrGreater(DateTime duedate)
         {
-            if (duedate >= DateTime.Now)
+            if (duedate.Date >= DateTime.Now.Date)
             {
                 return Json(true);
             }

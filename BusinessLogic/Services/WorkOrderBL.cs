@@ -263,51 +263,26 @@ namespace BusinessLogic.Services
         {
             int iteminpage = 20;
             var query = _workOrder.GetAll();
+            int count = 0;
             query = await FilterWO(wOFilterModel, query);
             List<WorkOrderAssigned> workOrderAssigned = null;
-            var count = query.Where(x => x.IsActive == wOFilterModel.IsActive).Count();
-            
-            var temp = await query.Where(x=>x.IsActive== wOFilterModel.IsActive).OrderBy(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new 
-            {
-                PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
-                StatusDescription = x.Status.StatusDescription,
-                Item = x.Item.ItemName,
-                CreatedTime = x.CreatedTime,
-                UpdatedTime = x.UpdatedTime,
-                Requestedby = x.RequestedBy,
-                Id = x.Id,
-                isActive=x.IsActive,
-                PropId=x.PropertyId,
-                Priority = x.Priority,
-                UpdatedBy = x.UpdatedByUserName,
-                Description = x.Description,
-                Location = x.Location.LocationName,
-                SubLocation = x.SubLocation.AreaName,
-                DueDate = x.DueDate.ToString("dd-MMM-yy"),
-                isCompleted = x.Status.StatusCode.Equals("COMP") ? true : false,
-                ParentId = x.ParentWoId,
-                Status = x.Status.StatusDescription,
-                AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
-                Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName }
-            }).AsNoTracking().ToListAsync();
-            wOFilterModel.TermSearch = wOFilterModel.TermSearch == null ? "" : wOFilterModel.TermSearch;
-           
-            workOrderAssigned = temp.Where(x => (x.DueDate +
-                x.Description +
-                  x.Id +
-                  x.AssignedTo + x.Property.PropertyName+x.Issue+x.Item +x.Location+x.SubLocation).Contains(wOFilterModel.TermSearch, StringComparison.OrdinalIgnoreCase)
-                ).Select(x => new WorkOrderAssigned
+            if (wOFilterModel.IsActive.HasValue)
+                count = query.Where(x => x.IsActive == wOFilterModel.IsActive).Count();
+            else
+                count = query.Count();
+
+            workOrderAssigned = await query.OrderBy(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
                 {
-                    DueDate = x.DueDate,
+                    DueDate = x.DueDate.ToString("dd-MMM-yy"),
                     Description = x.Description,
                     Id = x.Id,
-                    IsActive=x.isActive,
-                    ParentId = x.ParentId,
-                    Property=new SelectItem {Id=x.PropId,PropertyName=x.PropertyName },
-                    Status = x.Status,
-                    AssignedTo = x.AssignedTo
-                }).ToList();
+                    IsActive = x.IsActive,
+                    ParentId = x.ParentWoId,
+                    Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName },
+                    Status = x.Status.StatusDescription,
+                    AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone"
+                }).ToListAsync();
+               
             
 
             Pagination<List<WorkOrderAssigned>> pagination = new Pagination<List<WorkOrderAssigned>>
@@ -603,9 +578,13 @@ namespace BusinessLogic.Services
         {
             List<AllWOExport> workOrders = null;
             var query = _workOrder.GetAll();
+            var count = 0;
             query = await FilterWO(wOFilterModel, query);
             var skip = wOFilterModel.PageNumber > 0 && wOFilterModel.IsCurrent ? wOFilterModel.PageNumber * 20 : 0;
-            var count = await query.CountAsync();
+            if(wOFilterModel.IsActive.HasValue)
+             count = query.Where(x => x.IsActive == wOFilterModel.IsActive).Count();
+            else
+                count = query.Count();
             workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExport
             {
                 PropertyName = x.Property.PropertyName,
@@ -694,6 +673,15 @@ namespace BusinessLogic.Services
             else if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
                 query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) || x.CreatedByUserName.Equals(username));
+            }
+            if (wOFilterModel.IsActive.HasValue)
+            {
+                query=query.Where(x => x.IsActive==wOFilterModel.IsActive);
+            }
+            if (!String.IsNullOrEmpty(wOFilterModel.TermSearch))
+            {
+                query=query.Include(x => x.Issue).ThenInclude(x => x.Item).Where(x => x.Item.ItemName.Contains(wOFilterModel.TermSearch) || x.Issue.IssueName.Contains(wOFilterModel.TermSearch) || x.Property.PropertyName.Contains(wOFilterModel.TermSearch) || x.Id.Contains(wOFilterModel.TermSearch) || x.Description.Contains(wOFilterModel.TermSearch) || x.Status.StatusDescription.Contains(wOFilterModel.TermSearch) || x.Location.LocationName.Contains(wOFilterModel.TermSearch)|| (x.AssignedTo != null && x.AssignedTo.FirstName.Contains(wOFilterModel.TermSearch)|| x.AssignedTo.LastName.Contains(wOFilterModel.TermSearch)) ||
+                (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.Contains(wOFilterModel.TermSearch)));
             }
             return query;
         }

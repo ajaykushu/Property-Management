@@ -9,7 +9,7 @@ using Utilities;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PropertyController : ControllerBase
     {

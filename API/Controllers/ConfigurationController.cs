@@ -9,7 +9,7 @@ using Utilities;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
         private readonly IConfigBL _configService;
