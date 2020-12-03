@@ -153,7 +153,7 @@ namespace BusinessLogic.Services
                 SubLocation = x.SubLocation.AreaName,
                 Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
                  x.FileName,
-                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath)
                  )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
             workorder.Statuses = _status.GetAll().Select(x => new SelectItem
@@ -315,7 +315,7 @@ namespace BusinessLogic.Services
             editwo.LocationId = temp.LocationId.GetValueOrDefault();
             editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
-             string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList();
+             string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
@@ -875,7 +875,7 @@ namespace BusinessLogic.Services
             editwo.LocationId = temp.LocationId.GetValueOrDefault();
             editwo.SubLocationId = temp.SubLocationId.GetValueOrDefault();
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
-             string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath))).ToList();
+             string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
             editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
@@ -1060,6 +1060,7 @@ namespace BusinessLogic.Services
                     DueAfterDays =x.DueAfterDays,
                     Description = x.Description,
                     Id = x.Id,
+                    Property= x.Property,
                     ScheduleAt = x.ScheduleAt,
                     Status =x.Status,
                     AssignedTo = x.AssignedTo
@@ -1137,7 +1138,7 @@ namespace BusinessLogic.Services
                 SubLocation = x.SubLocation.AreaName,
                 Attachment = x.WOAttachments.Select(x => new KeyValuePair<string, string>(
                  x.FileName,
-                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/", x.FilePath)
+                 string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath)
                  )).ToList()
             }).AsNoTracking().FirstOrDefaultAsync();
             var comment = await GetComment(workorder.Id, 0);
