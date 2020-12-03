@@ -126,17 +126,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
-
-            <div class="menu">
-                <a href="@Url.Action("GetAllWOs", "WorkOrder")">
-                    <div class="item">
-                        <span><i class="fa fa-home fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Search WOs</span>
-                    </div>
-                </a>
-            </div>
-        </div>
+       
         <div class="col">
 
             @{ var userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
@@ -173,24 +163,39 @@
 
 
 
-
-
-   
-   
-    @{ var id = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-
-        var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
-    }
-    @if (id != "")
-    {
-        <div class="menu">
-            <div class="item">
-
-                <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" /></a>
-
+    <div class="row">
+        <div class="col">
+            <div class="menu">
+                <a href="@Url.Action("GetAllWos", "WorkOrder")">
+                    <div class="item">
+                        <span><i class="fa fa-search fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Search WO</span>
+                    </div>
+                </a>
             </div>
         </div>
-    }
+        <div class="col">
+            @{ var id = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+
+                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
+            }
+            @if (id != "")
+            {
+                <div class="menu">
+                    <div class="item">
+
+                        <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" /></a>
+
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+
+   
+   
+    
 </div>
 
 <script>
