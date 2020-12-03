@@ -357,7 +357,7 @@ $('#LocationId').change(function () {
 $('#ItemId').change(function () {
     $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
         function (data) {
-            $("#IssueId").html("<option value=''>Select Issue</option> <option value='-1'>Other</option>")
+            $("#IssueId").html("<option value=''>Select Issue</option>")
             if (data != null || data != undefined) {
                 for (var i = 0; i < data.length; i++) {
                     $("#IssueId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')

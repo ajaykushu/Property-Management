@@ -11,7 +11,7 @@ namespace Models.Property.RequestModels
         [Required]
         public string PropertyName { get; set; }
 
-        [Required(ErrorMessage = "Please Choose Property Type")]
+        [Required(ErrorMessage = "Choose Property Type")]
         public int PropertyTypeId { get; set; }
 
         public List<SelectItem> PropertyTypes { get; set; }

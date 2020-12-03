@@ -29,7 +29,7 @@
                                         @if (Model.PropertyTypes != null)
                                         {
                                             <select class="form-control form-control-sm custom-input" asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes, "Id", "PropertyName"))">
-                                                <option value="">Please select one</option>
+                                                <option value="">Select Property</option>
                                             </select>
                                         }
                                         <span asp-validation-for="PropertyTypeId" class="text-danger"></span>

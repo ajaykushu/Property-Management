@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
+                                        <option value="">Select Location</option>
                                     </select>
                                     <span asp-validation-for="LocationId" class="text-danger"></span>
                                 </div>

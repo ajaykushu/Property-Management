@@ -4,11 +4,11 @@ namespace Models.Login.RequestModels
 {
     public class LoginUserDTO
     {
-        [Required(ErrorMessage = "Please Enter Email")]
+        [Required(ErrorMessage = "Enter Email")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Email")]
+        [Required(ErrorMessage = "Enter Email")]
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Passoword")]
         public string Password { get; set; }
 

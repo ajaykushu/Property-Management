@@ -19,20 +19,20 @@ namespace Models.RequestModels
 
         public List<SelectItem> Items { get; set; }
 
-        [Required(ErrorMessage = "Please Select Item")]
+        [Required(ErrorMessage = "Select Item")]
         public int ItemId { get; set; }
 
         public string PropertyName { get; set; }
 
         public List<SelectItem> Issues { get; set; }
 
-        [Required(ErrorMessage = "Please Select Issue Id")]
+        [Required(ErrorMessage = "Select Issue Id")]
         public int IssueId { get; set; }
 
-        [Required(ErrorMessage = "Please Give Some Detail")]
+        [Required(ErrorMessage = "Give Some Detail")]
         public string Description { set; get; }
 
-        [Required(ErrorMessage = "Please give Date")]
+        [Required(ErrorMessage = "Enter Date")]
         public DateTime CreatedDate { get; set; }
 
         public List<KeyValuePair<string, string>> FileAvailable { get; set; }

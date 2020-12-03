@@ -71,7 +71,7 @@
                                     @if (Model.Roles.Any())
                                     {
                                     <select class="form-control form-control-sm custom-input" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "PropertyName", "PropertyName"))">
-                                        <option value="">Please select one</option>
+                                        <option value="">Select Role</option>
                                     </select>
                                     <span asp-validation-for="Role" class="text-danger"></span>
                                     }
@@ -85,7 +85,7 @@
                                     @if (Model.Departments != null && Model.Departments.Any())
                                     {
                                     <select class="form-control form-control-sm custom-input" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
+                                        <option value="">Select Department</option>
                                     </select>
                                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                     }
@@ -132,7 +132,7 @@
                                     @if (Model.Languages.Any())
                                     {
                                     <select class="form-control form-control-sm custom-input" asp-for="Language" asp-items="@(new SelectList(Model.Languages, "Id", "PropertyName"))">
-                                        <option value="">Please select one</option>
+                                        <option value="">Select Language</option>
                                     </select>
                                     <span asp-validation-for="Language" class="text-danger"></span>
                                     }
