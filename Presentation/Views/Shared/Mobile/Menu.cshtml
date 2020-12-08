@@ -33,6 +33,19 @@
         margin-top: 10%;
     }
 </style>
+@{ 
+    var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
+    var id=HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+    var obj=ObjectByteConverter.Deserialize<SessionStore>(sessionStorage.Get(id));
+    var ret = obj.MenuView.SelectMany(x => x.Value).OrderBy(x=>x.SubMenuName).ToList();
+    ret.RemoveAt(0);
+    var findinndex = ret.FindIndex(x => x.Action == "CreateWorkOrderView");
+    var temp = ret[0];
+    ret[0] = ret[findinndex];
+    ret[findinndex] = temp;
+    var isvisible = false;
+
+}
 <header>
     <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
         <div class="container-fluid">
@@ -56,146 +69,67 @@
     </nav>
 </header>
 <div class="mwrapper">
-    <div class="row">
+    @for (int i = 0; i < ret.Count; i = i + 2)
+    {
+        <div class="row">
         <div class="col">
             <div class="menu">
-                <a href="@Url.Action("CreateWorkOrderView", "WorkOrder")">
+                <a asp-action="@ret[i].Action" asp-controller="@ret[i].Controller">
                     <div class="item">
-                        <span><i class="fa fa-plus-circle fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Create WO</span>
+                        <span><i class="@ret[i].Class fa-7x" aria-hidden="true"></i></span>
+                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">@ret[i].SubMenuName</span>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col">
-            <div class="menu">
-                <a href="@Url.Action("Index", "WorkOrder")">
-                    <div class="item">
-                        <span><i class="fa fa-list-alt fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Active WO</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="menu">
-                <a href="@Url.Action("GetAllUsers", "User")">
-                    <div class="item">
-                        <span><i class="fa fa-user fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">User</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-
-            <div class="menu">
-                <a href="@Url.Action("Index", "Configuration")">
-                    <div class="item">
-                        <span><i class="fa fa-cogs fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Setting</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-
-            <div class="menu">
-                <a href="@Url.Action("ListProperties", "Property")">
-                    <div class="item">
-                        <span><i class="fa fa-home fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Property</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-
-            <div class="menu">
-                <a href="@Url.Action("GetCompletedWO", "WorkOrder")">
-                    <div class="item">
-                        <span><i class="fa fa-check-double fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Completed WO</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-       
-        <div class="col">
-
-            @{ var userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-                var obj = ObjectByteConverter.Deserialize<SessionStore>
-                    (await sessionStorage.GetAsync(userId));
-            }
-            @if (obj.MenuList.Contains(MenuEnum.Recurring_WO.ToString()))
-            {
+        @if (i + 1 < ret.Count)
+        {
+            <div class="col">
                 <div class="menu">
-                    <a href="@Url.Action("GetRecurringWO","WorkOrder")">
+                    <a asp-action="@ret[i + 1].Action" asp-controller="@ret[i + 1].Controller">
                         <div class="item">
-                            <span><i class="fa fa-hourglass-half fa-7x" aria-hidden="true"></i></span>
-                            <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Recurring WO</span>
+                            <span><i class="@ret[i + 1].Class fa-7x" aria-hidden="true"></i></span>
+                            <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">@ret[i + 1].SubMenuName</span>
                         </div>
                     </a>
                 </div>
-            }
-        </div>
-        <div class="col">
-
-            <div class="menu">
-                <a href="@Url.Action("GetAllNotification","Home")">
-                    <div class="item">
-                        <div class="notifiaction-cont">
-                            <span><i class="fa fa-bell fa-7x" aria-hidden="true"></i></span>
-                            <span id="notification_count" style="color:red;position:absolute;font-size:1.2em;"></span>
-                        </div>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Notification</span>
-                    </div>
-                </a>
             </div>
-        </div>
-    </div>
-
-
-
-    <div class="row">
-        <div class="col">
-            <div class="menu">
-                <a href="@Url.Action("GetAllWos", "WorkOrder")">
-                    <div class="item">
-                        <span><i class="fa fa-search fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family:Georgia, 'Times New Roman', Times, serif; color:grey">Search WO</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            @{ var id = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-
-                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "imageurl").Select(x => x.Value).FirstOrDefault();
             }
-            @if (id != "")
+            else
             {
+                isvisible = true;
+
+            <div class="col">
                 <div class="menu">
                     <div class="item">
+                        <a href="@Url.Action("UserDetailView", "User", new { Id = id })">
+                            <img src='@if (string.IsNullOrEmpty(path))
+                        { <text>/NA.jpg</text>}
+                        else
+                        { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" />
+                        </a>
+                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Profile</span>
+                    </div>
+                   
 
+                </div>
+            </div>
+        }
+    </div>
+    }
+
+    <div class="row" @if (isvisible) { <text>hidden</text>}>
+        <div class="col">
+                <div class="menu">
+                    <div class="item">
                         <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" /></a>
-
+                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Profile</span>
                     </div>
                 </div>
 
-            }
         </div>
     </div>
 
-   
-   
-    
 </div>
 
 <script>

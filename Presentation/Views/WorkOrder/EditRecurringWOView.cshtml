@@ -237,7 +237,7 @@
                                 @foreach (var item in Model.FileAvailable)
                                 {
                                     <div class="col">
-                                        <a href="@item.Value" download>@item.Key</a>
+                                        <a href="@item.Value" >@item.Key</a>
                                         <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
                                     </div>
                                 }

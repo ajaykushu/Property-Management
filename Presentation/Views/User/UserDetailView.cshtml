@@ -182,7 +182,7 @@
 </div>
 <div>
     @Html.ActionLink("Edit", "EditUserView", new { id = Model.Id }) |
-    <a asp-action="GetAllUsers">Back to List</a>
+    <a href="javascript:history.back()">Back to List</a>
 </div>
 <style>
     .myview .card {
