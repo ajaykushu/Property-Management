@@ -8,6 +8,7 @@ namespace Models.User.RequestModels
     {
         [Required(ErrorMessage = "Please Enter First Name")]
         public string FirstName { get; set; }
+        public bool IsEffortVisible { get; set; }
 
         [Required(ErrorMessage = "Please Enter Last Name")]
         public string LastName { get; set; }

@@ -62,6 +62,8 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
+
+        public string CustomIssue { get; set; }
        
     }
 }

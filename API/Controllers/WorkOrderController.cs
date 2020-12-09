@@ -226,5 +226,13 @@ namespace API.Controllers
             List<SelectItem> res = await _workOrderService.GetIssues(id);
             return Ok(res);
         }
+        [HttpGet]
+        [Route("getitem")]
+        public async Task<ActionResult<List<SelectItem>>> GetItem(long id)
+        {
+            List<SelectItem> res = await _workOrderService.GetItem(id);
+            return Ok(res);
+        }
+        
     }
 }

@@ -28,18 +28,27 @@ else
             <span>Work Order Detail</span>
 
         }
-        <span class="fa-pull-right pr-2">@Model.Id</span>
+        if (string.IsNullOrEmpty(Model.ParentWOId))
+        {
+            <span class="fa-pull-right pr-2">@Model.Id</span>
+        }
+        else
+        {
+            <span class="fa-pull-right pr-2"><a asp-action="GetWODetail"asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2" >@Model.Id</a></span>
+        }
     }
 
 
 </div>
+@if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
+{
 <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
     <div class="justify-content-lg-start col-md-6">
         <input type="button" value="Enter Hours" class="btn btn-primary" id='AddEffort' data-toggle="modal" data-target="#timesheet" />
         <input type="button" value="Show Hours" class="btn btn-info" />
     </div>
 </div>
-
+}
 @if (Model != null)
 {
     <table class="table table-striped">

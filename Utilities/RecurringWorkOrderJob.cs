@@ -52,13 +52,14 @@ namespace Utilities
                     CreatedTime = DateTime.Now,
                     Description = obj.Description,
                     IssueId = obj.IssueId,
-                    ItemId = obj.IssueId,
+                    CustomIssue=obj.CustomIssue,
+                    ItemId = obj.ItemId,
                     LocationId = obj.LocationId,
                     SubLocationId = obj.SubLocationId,
                     PropertyId = obj.PropertyId,
                     Priority = obj.Priority,
                     CreatedByUserName = "System",
-                    RequestedBy = obj.CreatedByUserName,
+                    RequestedBy = "Recurring"+obj.Id,
                     StatusId = obj.StatusId
 
                 };

@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201208171302_ItemWithProperty")]
+    partial class ItemWithProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "5fc4bc8c-a36d-4c3b-b69a-2878b84bf864",
+                            ConcurrencyStamp = "8f80acf5-78b1-43b9-9002-7d4528574a44",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "0a3d9216-e334-4df8-804d-5cdf9eb9c55d",
+                            ConcurrencyStamp = "d90b930d-cf7c-4deb-a09c-4b398dec0072",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "7a8efbb1-fa24-430a-9727-9bd80552888f",
+                            ConcurrencyStamp = "302d2f9f-bda8-43de-9a9a-c0b909ef6016",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -432,10 +434,11 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ItemName")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("LocationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("PropertyId1")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
@@ -445,7 +448,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("PropertyId1");
 
                     b.ToTable("Items");
 
@@ -455,7 +458,7 @@ namespace DataAccessLayer.Migrations
                             Id = 1,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ItemName = "Tv",
-                            LocationId = 0,
+                            PropertyId = 0,
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -463,7 +466,7 @@ namespace DataAccessLayer.Migrations
                             Id = 2,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ItemName = "AC",
-                            LocationId = 0,
+                            PropertyId = 0,
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1633,11 +1636,9 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataEntity.Item", b =>
                 {
-                    b.HasOne("DataEntity.Location", "Location")
+                    b.HasOne("DataEntity.Property", "Property")
                         .WithMany("Items")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PropertyId1");
                 });
 
             modelBuilder.Entity("DataEntity.Location", b =>

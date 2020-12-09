@@ -14,12 +14,23 @@
             <div class="d-inline-flex w-100">
                     <a style="color:black" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
                     <div class="container-block justify-content-center">
-                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order <b><u>@Model.Id</u></b></span>
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">
+                            Work Order
+                            @if (string.IsNullOrEmpty(Model.ParentWOId))
+                            {
+                                <b><u>@Model.Id</u></b>
+                            }
+                            else
+                            {
+                                <b><u><a asp-action="GetWODetail" asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2">@Model.Id</a></u></b>
+                               
+                            }
+
+                        </span>
                     </div>
             </div>
         </nav>
     </header>
-
     <div class="mform">
 
         <table class="table border-0 table-striped ">

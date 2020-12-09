@@ -64,6 +64,7 @@ namespace BusinessLogic.Services
             {
                 UserName = model.UserName,
                 Email = model.Email,
+                IsEffortVisible=model.IsEffortVisible,
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -155,6 +156,7 @@ namespace BusinessLogic.Services
                 Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
                 Email = applicationUser.Email,
                 UserName = applicationUser.UserName,
+                IsEffortVisible=applicationUser.IsEffortVisible,
                 FirstName = applicationUser.FirstName,
                 LastName = applicationUser.LastName,
                 Suffix = applicationUser.Suffix,
@@ -204,6 +206,7 @@ namespace BusinessLogic.Services
             applicationUser.TimeZone = editUser.TimeZone;
             applicationUser.Suffix = editUser.Suffix;
             applicationUser.FirstName = editUser.FirstName;
+            applicationUser.IsEffortVisible = editUser.IsEffortVisible;
             applicationUser.Language.Id = editUser.Language;
             applicationUser.LastName = editUser.LastName;
             applicationUser.SMSAltert = editUser.SMSAlert;
@@ -349,6 +352,7 @@ namespace BusinessLogic.Services
                 UserModel = new UserDetailModel
                 {
                     EmailAddress = x.Email,
+                    IsEffortVisible=x.IsEffortVisible,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
                     PhotoPath = !string.IsNullOrWhiteSpace(x.PhotoPath)?string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.PhotoPath):"",

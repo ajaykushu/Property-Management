@@ -9,6 +9,7 @@ namespace DataEntity
         public Property()
         {
             this.UserProperties = new HashSet<UserProperty>();
+            this.UserProperties = new HashSet<UserProperty>();
         }
 
         [Key]
@@ -46,6 +47,7 @@ namespace DataEntity
         public bool IsActive { get; set; }
 
         public virtual ICollection<Location> Locations { get; set; }
+        
         public virtual ICollection<UserProperty> UserProperties { get; set; }
     }
 }

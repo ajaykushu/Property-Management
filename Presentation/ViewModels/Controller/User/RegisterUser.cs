@@ -13,6 +13,7 @@ namespace Presentation.ViewModels
 
         [Required(ErrorMessage = "Please Enter Last Name")]
         public string LastName { get; set; }
+        public bool IsEffortVisible { get; set; }
 
         public string Suffix { get; set; }
 

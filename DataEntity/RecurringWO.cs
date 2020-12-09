@@ -15,7 +15,8 @@ namespace DataEntity
         public Property Property { get; set; }
         public int ItemId { get; set; }
         public Item Item { get; set; }
-        public int IssueId { get; set; }
+        public int? IssueId { get; set; }
+        public string CustomIssue { get; set; }
         public Issue Issue { get; set; }
         public int StatusId { get; set; }
         public Status Status { get; set; }

@@ -63,6 +63,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<PropertyType>().HasIndex(x => x.PropertyTypeName).IsUnique();
             builder.Entity<ApplicationUser>().Property(x => x.SMSAltert).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().Property(x => x.ClockType).HasDefaultValue(12);
+            builder.Entity<Item>().Property(x => x.LocationId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<WorkOrder>().Property(x => x.IsActive).HasDefaultValue(true);

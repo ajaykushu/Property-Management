@@ -85,11 +85,16 @@
                                 <div class="row top-buffer padding">
 
                                     <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                        <option>Issue</option>
+                                        <option value=""></option>
+                                        <option value="-1">Other</option>
                                     </select>
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
                             }
+                        <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                            <textarea class="form-control" placeholder="write your own issue" asp-for="CustomIssue"></textarea>
+                            <span class="text-danger">Please enter issue</span>
+                        </div>
                         </td>
                     </tr>
                     <tr>

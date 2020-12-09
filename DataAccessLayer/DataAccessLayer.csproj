@@ -18,6 +18,8 @@
     <Compile Remove="Migrations\20200724144730_Cron.Designer.cs" />
     <Compile Remove="Migrations\20200905154311_add-identity.cs" />
     <Compile Remove="Migrations\20200905154311_add-identity.Designer.cs" />
+    <Compile Remove="Migrations\20201208171940_ItemWithProp1.cs" />
+    <Compile Remove="Migrations\20201208171940_ItemWithProp1.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

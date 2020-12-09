@@ -68,6 +68,7 @@ namespace Presentation.ViewModels
         public DateTime? RecurringEndDate { get; set; }
         public int? EndAfterCount { get; set; }
         public DateTime? RecurringStartDate { get; set; }
-        
+        public string CustomIssue { get; set; }
+
     }
 }

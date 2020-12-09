@@ -21,6 +21,7 @@ namespace Models.WorkOrder.RequestModels
 
         [Required(ErrorMessage = "Please Select Item")]
         public int ItemId { get; set; }
+        public string CustomIssue { get; set; }
 
         public string PropertyName { get; set; }
 

@@ -121,6 +121,7 @@ namespace API.Authentication
                     {
                         FullName = identityUser.FirstName + " " + identityUser.LastName + " " + identityUser.Suffix,
                         UId = identityUser.Id,
+                        IsEffortVisible=identityUser.IsEffortVisible,
                         Roles = roles.ToHashSet(),
                         Token = _tokenGenerator.GetToken(claims),
                         MenuItems = submenu,

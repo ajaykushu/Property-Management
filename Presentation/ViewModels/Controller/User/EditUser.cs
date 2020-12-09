@@ -14,6 +14,7 @@ namespace Presentation.ViewModels
         public string LastName { get; set; }
 
         public string Suffix { get; set; }
+        public bool IsEffortVisible { get; set; }
 
         [Required(ErrorMessage = "Please Choose Role")]
         public string Role { get; set; }
