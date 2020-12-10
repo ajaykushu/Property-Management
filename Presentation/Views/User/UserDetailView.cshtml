@@ -137,15 +137,15 @@
                             </div>
                             <div class="col">
                                 @if (Model.Roles != null)
+                                {
+                                    foreach (var item in Model.Roles)
                                     {
-                                        foreach (var item in Model.Roles)
-                                        {
 
-                                <div class="d-inline-flex">
-                                    <span class="btn bg-primary"> @item</span>
-                                </div>
-                                        }
+                                        <div class="d-inline-flex">
+                                            <span class="btn bg-primary"> @item</span>
+                                        </div>
                                     }
+                                }
                             </div>
                         </div>
                         <div class="row top-buffer">
@@ -154,7 +154,15 @@
                             </div>
                             <div class="col">
                                 <span class="value">@Html.DisplayFor(x => x.Department)</span>
-</div>
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="IsEffortVisible"></label>
+                            </div>
+                            <div class="col">
+                                <span class="value">@Html.DisplayFor(x => x.IsEffortVisible)</span>
+                            </div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -162,7 +170,7 @@
                             </div>
                             <div class="col">
                                 <span class="value">@Html.DisplayFor(x => x.TimeZone)</span>
-</div>
+                            </div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -170,7 +178,7 @@
                             </div>
                             <div class="col">
                                 <span class="value">@Html.DisplayFor(x => x.SMSAlert)</span>
-</div>
+                            </div>
                         </div>
                     </div>
                 </td>
@@ -182,7 +190,7 @@
 </div>
 <div>
     @Html.ActionLink("Edit", "EditUserView", new { id = Model.Id }) |
-    <a asp-action="GetAllUsers">Back to List</a>
+    <a href="javascript:history.back()">Back to List</a>
 </div>
 <style>
     .myview .card {

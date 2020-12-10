@@ -66,7 +66,7 @@ $('.File').change(function (e) {
     if (file != undefined) {
         for (var i = 0; i < file.length; i++) {
             selectedFile.push(file[i]);
-            $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'></span><br/>");
+            $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'><br/></span>");
         }
         $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
     }
@@ -353,11 +353,20 @@ $('#LocationId').change(function () {
                 }
             }
         });
+    $.get("GetItem?id=" + $(this).val(),
+        function (data) {
+            $("#ItemId").html("<option value=''>Select Item</option>")
+            if (data != null || data != undefined) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#ItemId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                }
+            }
+        });
 });
 $('#ItemId').change(function () {
     $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
         function (data) {
-            $("#IssueId").html("<option value=''>Select Issue</option>")
+            $("#IssueId").html("<option value=''>Select Issue</option><option value='-1'>Other</option>")
             if (data != null || data != undefined) {
                 for (var i = 0; i < data.length; i++) {
                     $("#IssueId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
@@ -586,16 +595,16 @@ $("a[name='exportlink']").click(function () {
         });
 });
 
-$('#IssueId').change(function () {
-    if ($(this).val() =='-1') {
-        $('#CustomIssueDiv').show();
-        $('#CustomIssueDiv').prop("required", 'true');
-    }
-    else
-        $('#CustomIssueDiv').hide();
-        $('#CustomIssueDiv').removeProp("required");
-})
-
+ $('#IssueId').change(function () {
+     if ($(this).val() == '-1') {
+         $('.CustomIssueDiv').show();
+         $('.CustomIssueDiv').prop("required", 'true');
+     }
+     else {
+         $('.CustomIssueDiv').hide();
+         $('.CustomIssueDiv').removeProp("required");
+     }
+ })
 
 
 $('.filter_check').click(function () {

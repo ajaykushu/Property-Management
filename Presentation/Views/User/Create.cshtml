@@ -49,6 +49,15 @@
                                         <span asp-validation-for="Suffix" class="text-danger"></span>
                                     </div>
                                 </div>
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="IsEffortVisible"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <input asp-for="IsEffortVisible" class="custom-checkbox">
+                                        <span asp-validation-for="IsEffortVisible" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -227,5 +236,5 @@
     }
 </div>
 <div>
-    <a asp-action="GetAllUsers">Back</a>
+    <a href="javascript:history.back()">Back</a>
 </div>

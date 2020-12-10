@@ -8,7 +8,7 @@
     <header>
         <nav class="navbar bg-success mb-3 fixed-top">
             <div class="d-inline-flex w-100 h-25">
-                <a style="color:white" asp-action="Index" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
                 <div class="container-block justify-content-center">
                     <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Create Reccurring WO</span>
                 </div>
@@ -93,15 +93,22 @@
                                 </div>
                             }
                            
-                                <div class="row top-buffer padding">
 
-                                    <select class="form-control " asp-for="IssueId" >
-                                        <option value="">Issue</option>
-                                    </select>
-                                    <span asp-validation-for="IssueId" class="text-danger"></span>
-                                </div>
+                            <div class="row top-buffer padding">
 
-                            
+                                <select class="form-control " asp-for="IssueId">
+                                    <option value="">Issue</option>
+                                    <option value="-1">Other</option>
+                                </select>
+                                <span asp-validation-for="IssueId" class="text-danger"></span>
+                            </div>
+                            <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                                <textarea class="form-control" placeholder="write your own issue" asp-for="CustomIssue"></textarea>
+                                <span class="text-danger">Please enter issue</span>
+                            </div>
+
+
+
                         </td>
                     </tr>
 
@@ -194,8 +201,8 @@
                                 </div>
                                 <div class="col">
                                     <div class="cont" style="width:100%" >
-                                        <label style="width:100%"  class="browsebutton">Browse File</label>
-                                        <input style="width:100%"  asp-for="File" capture="user" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                        <label style="width:100%" class="browsebutton">Add Photo</label>
+                                        <input style="width:100%"  asp-for="File"  accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
                                     <div id="file_selected">
                                     </div>
@@ -208,8 +215,8 @@
             </table>
             <hr />
             <div class="bottom-stick" style="padding:5px;">
-                <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Create</button>
-                <input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">
+                <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn w-50 float-right btn-success submit">Create</button>
+                @*<input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">*@
             </div>
         }
         <input asp-for="CronExpression" hidden>

@@ -145,6 +145,7 @@ namespace Presentation.Controllers
             identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "Cookies"));
             identity.AddClaim(new Claim(ClaimTypes.Role, tokenResponse.Roles.FirstOrDefault()));
             identity.AddClaim(new Claim(ClaimTypes.Sid, tokenResponse.UId + ""));
+            identity.AddClaim(new Claim("IsEffortVisible", tokenResponse.IsEffortVisible + ""));
             identity.AddClaim(new Claim(ClaimTypes.IsPersistent, "true"));
             identity.AddClaim(new Claim("ImageUrl", tokenResponse.PhotoPath));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, tokenResponse.FullName));

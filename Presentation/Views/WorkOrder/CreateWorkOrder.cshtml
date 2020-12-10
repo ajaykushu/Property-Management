@@ -70,33 +70,42 @@
                 <tr>
                     <td>
                         <div class="col">
-                            @if (Model.Items != null && Model.Items.Any())
-                            {
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label asp-for="ItemId"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
-                                            <option value="">Select Item</option>
-                                        </select>
-                                        <span asp-validation-for="ItemId" class="text-danger"></span>
-                                    </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="ItemId"> </label>
                                 </div>
-                            }
-                           
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="IssueId"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="IssueId">
-                                            <option value="">Select Issue</option>
-                                        </select>
-                                        <span asp-validation-for="IssueId" class="text-danger"></span>
-                                    </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="ItemId">
+                                        <option value="">Select Item</option>
+                                    </select>
+                                    <span asp-validation-for="ItemId" class="text-danger"></span>
                                 </div>
+                            </div>
+
                             
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="IssueId"> </label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="IssueId">
+                                        <option value="">Select Issue</option>
+                                        <option value="-1">Other</option>
+                                    </select>
+                                    <span asp-validation-for="IssueId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                                <div class="col-md-3">
+                                    <label asp-for="CustomIssue">Custom Issue</label>
+                                </div>
+                                <div class="col">
+                                    <textarea class="form-control form-control-sm custom-input" placeholder="write your own issue" asp-for="CustomIssue"></textarea>
+                                    <span asp-validation-for="CustomIssue" class="text-danger"></span>
+                                </div>
+                            </div>
+
                         </div>
                     </td>
                 </tr>
@@ -203,6 +212,6 @@
     }
 </form>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="javascript:history.back()">Back</a>
 </div>
 

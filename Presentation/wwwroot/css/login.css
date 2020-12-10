@@ -751,7 +751,7 @@ label {
 }
 
 .bottom-stick {
-    display: flex;
+    
     bottom: 0;
     width: 100%;
     position: fixed;

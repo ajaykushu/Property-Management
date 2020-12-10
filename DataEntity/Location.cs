@@ -6,6 +6,10 @@ namespace DataEntity
 {
     public class Location
     {
+        public Location()
+        {
+            this.Items = new HashSet<Item>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -16,6 +20,7 @@ namespace DataEntity
         public long PropertyId { get; set; }
         public Property Property { get; set; }
         public virtual ICollection<SubLocation> SubLocations { get; set; }
+        public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

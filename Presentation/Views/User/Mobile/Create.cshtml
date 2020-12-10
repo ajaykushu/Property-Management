@@ -13,7 +13,7 @@
 <header>
     <nav class="navbar bg-success mb-3 fixed-top">
         <div class="d-inline-flex w-100">
-            <a style="color:white" asp-action="GetAllUsers" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
             <div class="container-block justify-content-center">
                 <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Add User</span>
             </div>
@@ -55,6 +55,15 @@
                                 <div class="col">
                                     <input asp-for="Suffix" autocomplete="off" class="form-control-sm custom-input">
                                     <span asp-validation-for="Suffix" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="IsEffortVisible"> </label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="IsEffortVisible"  class="custom-checkbox">
+                                    <span asp-validation-for="IsEffortVisible" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

@@ -44,5 +44,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> AddEffort(List<EffortDTO> effortDTOs, string id);
         Task<EffortPagination> GetEffort(string id);
         Task<List<SelectItem>> GetIssues( long id);
+        Task<List<SelectItem>> GetItem(long id);
     }
 }

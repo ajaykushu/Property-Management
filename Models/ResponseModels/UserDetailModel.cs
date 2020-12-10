@@ -12,6 +12,7 @@ namespace Models.ResponseModels
         public string Department { get; set; }
         public string EmailAddress { get; set; }
         public string UserId { get; set; }
+        public bool IsEffortVisible { get; set; }
         public string OfficeExtension { get; set; }
         public bool SMSAlert { get; set; }
         public bool IsActive { get; set; }

@@ -7,7 +7,7 @@
 <header>
     <nav class="navbar bg-success mb-3 fixed-top">
         <div class="d-inline-flex w-100">
-            <a style="color:white" asp-action="GetAllUsers" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <a style="color:white" href="javascript:history.back()"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
             <div class="container-block justify-content-center">
                 <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">User Detail</span>
             </div>
@@ -144,15 +144,15 @@
                             </div>
                             <div class="col">
                                 @if (Model.Roles != null)
+                                {
+                                    foreach (var item in Model.Roles)
                                     {
-                                        foreach (var item in Model.Roles)
-                                        {
 
-                                <div class="d-inline-flex">
-                                    <span class="btn bg-primary"> @item</span>
-                                </div>
-                                        }
+                                        <div class="d-inline-flex">
+                                            <span class="btn bg-primary"> @item</span>
+                                        </div>
                                     }
+                                }
                             </div>
                         </div>
                         <div class="row top-buffer">
@@ -161,7 +161,15 @@
                             </div>
                             <div class="col">
                                 <span class="value">@Html.DisplayFor(x => x.Department)</span>
-</div>
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="IsEffortVisible"></label>
+                            </div>
+                            <div class="col">
+                                <span class="value">@Html.DisplayFor(x => x.IsEffortVisible)</span>
+                            </div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -169,7 +177,7 @@
                             </div>
                             <div class="col">
                                 <span class="value">@Html.DisplayFor(x => x.TimeZone)</span>
-</div>
+                            </div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -177,7 +185,7 @@
                             </div>
                             <div class="col">
                                 <span class="value">@Html.DisplayFor(x => x.SMSAlert)</span>
-</div>
+                            </div>
                         </div>
                     </div>
                 </td>

@@ -8,7 +8,7 @@
     <header>
         <nav class="navbar bg-success mb-3 fixed-top">
             <div class="d-inline-flex w-100">
-                <a style="color:white" asp-action="GetWODetail" asp-route-id="@Model.Id" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
                 <div class="container-block justify-content-center">
                     <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Edit Work Order</span>
                 </div>
@@ -85,11 +85,16 @@
                                 <div class="row top-buffer padding">
 
                                     <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                        <option>Issue</option>
+                                        <option value=""></option>
+                                        <option value="-1">Other</option>
                                     </select>
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
                             }
+                        <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                            <textarea class="form-control" placeholder="write your own issue" asp-for="CustomIssue"></textarea>
+                            <span class="text-danger">Please enter issue</span>
+                        </div>
                         </td>
                     </tr>
                     <tr>
@@ -215,7 +220,7 @@
                                     @foreach (var item in Model.FileAvailable)
                                     {
                                         <div class="col">
-                                            <a href="@item.Value" download>@item.Key</a>
+                                            <a href="@item.Value" >@item.Key</a>
                                             <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
                                         </div>
                                     }
@@ -227,9 +232,9 @@
                                     <label for="File">Attachment</label>
                                 </div>
                                 <div class="col">
-                                    <div class="cont">
-                                        <label class="browsebutton">Browse File</label>
-                                        <input asp-for="File" capture="user" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                    <div class="cont" style="width:100%">
+                                        <label style="width:100%" class="browsebutton">Add Photo</label>
+                                        <input  style="width:100%" asp-for="File"  accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
                                     <div id="file_selected">
                                     </div>

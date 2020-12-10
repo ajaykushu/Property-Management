@@ -3,36 +3,7 @@
     ViewData["Title"] = "WO Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@{
-    var url = HttpContextAccessor.HttpContext.Request.Headers["Referer"].ToString();
-    var redirector = string.Empty;
-    if (Model.Recurring)
-        redirector = "/WorkOrder/GetRecurringWO";
-     else if (Model.StatusDescription.Contains("complete",StringComparison.InvariantCultureIgnoreCase))
-        redirector = "/WorkOrder/GetCompletedWO";
-    else
-        redirector = "/WorkOrder";
-    if (url != null && HttpContextAccessor.HttpContext.Request.Path.HasValue)
-    {
 
-        Regex rx = new Regex(@"(http[s]?:\/\/)?([^\/\s]+\/)(.*)",
-        RegexOptions.Compiled);
-        MatchCollection mc = rx.Matches(url);
-        foreach (Match m in mc)
-        {
-            GroupCollection groups = m.Groups;
-            Console.WriteLine(
-            groups[3]);
-            if (url.Contains("GetWODetail") && url.Contains("type"))
-            {
-
-                //means the reffer is different
-                redirector = "/" + groups[3].Value+"#ChildWOSection";
-
-            }
-        }
-    }
-}
 
 @if (Model != null)
 {
@@ -41,27 +12,25 @@
         <nav class="navbar bg-white mb-3 fixed-top">
 
             <div class="d-inline-flex w-100">
-                @if (!Model.Recurring)
-                {
-                    <a style="color:black" href="@redirector" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <a style="color:black" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
                     <div class="container-block justify-content-center">
-                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Work Order <b><u>@Model.Id</u></b></span>
-                        
-                    </div>
-                }
-                else
-                {
-                    <a style="color:black" href="@redirector" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
-                    <div class="container-block justify-content-center">
-                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">Recurring Work Order <b><u>@Model.Id</u></b></span>
-                       
-                    </div>
-                }
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">
+                            Work Order
+                            @if (string.IsNullOrEmpty(Model.ParentWOId))
+                            {
+                                <b><u>@Model.Id</u></b>
+                            }
+                            else
+                            {
+                                <b><u><a asp-action="GetWODetail" asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2">@Model.Id</a></u></b>
+                               
+                            }
 
+                        </span>
+                    </div>
             </div>
         </nav>
     </header>
-
     <div class="mform">
 
         <table class="table border-0 table-striped ">
@@ -204,7 +173,7 @@
                                 @foreach (var file in Model.Attachment)
                                 {
                                     <div class="col">
-                                        <a href="@file.Value" download="random">@file.Key</a>
+                                        <a href="@file.Value" >@file.Key</a>
                                     </div>
                                 }
                             </div>

@@ -7,6 +7,7 @@ namespace Presentation.ViewModels
     {
         public long Id { get; set; }
         public string FullName { get; set; }
+        public bool IsEffortVisible { get; set; }
         public List<string> Roles { get; set; }
         public List<Properties> ListProperties { set; get; }
 

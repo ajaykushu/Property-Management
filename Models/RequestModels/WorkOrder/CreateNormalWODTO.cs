@@ -44,6 +44,7 @@ namespace Models.WorkOrder.RequestModels
 
         public int? VendorId { get; set; }
         public List<SelectItem> Vendors { get; set; }
+        public string CustomIssue { get; set; }
 
         
     }

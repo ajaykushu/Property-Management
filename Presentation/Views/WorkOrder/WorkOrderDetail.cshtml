@@ -3,52 +3,19 @@
     ViewData["Title"] = "WO Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@{
-    var url = HttpContextAccessor.HttpContext.Request.Headers["Referer"].ToString();
-    var redirector = string.Empty;
-    if (Model.Recurring)
-        redirector = "/WorkOrder/GetRecurringWO";
-    else if (Model.StatusDescription.Contains("complete",StringComparison.InvariantCultureIgnoreCase))
-        redirector = "/WorkOrder/GetCompletedWO";
-    else
-        redirector = "/WorkOrder";
-    if (url != null && HttpContextAccessor.HttpContext.Request.Path.HasValue)
-    {
-
-        Regex rx = new Regex(@"(http[s]?:\/\/)?([^\/\s]+\/)(.*)",
-        RegexOptions.Compiled);
-        MatchCollection mc = rx.Matches(url);
-        foreach (Match m in mc)
-        {
-            GroupCollection groups = m.Groups;
-            Console.WriteLine(
-            groups[3]);
-            if (url.Contains("GetWODetail") && url.Contains("type"))
-            {
-
-                //means the reffer is different
-                redirector = "/" + groups[3].Value + "#ChildWOSection";
-
-            }
-        }
-    }
+@if (!Model.Recurring && !Model.StatusDescription.Equals("Complete"))
+{
+    @Html.ActionLink("Edit", "EditWOView", new { id = Model.Id }) <span>|</span>
 }
-<div>
-    @if (!Model.Recurring && !Model.StatusDescription.Equals("Complete"))
+else
+{
+    if (!Model.StatusDescription.Equals("Complete"))
     {
-        @Html.ActionLink("Edit", "EditWOView", new { id = Model.Id }) <span>|</span>
+        @Html.ActionLink("Edit", "EditRecurringWOView", new { id = Model.Id }) <span>|</span>
     }
-    else
-    {
-        if (!Model.StatusDescription.Equals("Complete"))
-        {
-            @Html.ActionLink("Edit", "EditRecurringWOView", new { id = Model.Id }) <span>|</span>}
 
-    }
-    <a href="@redirector">Back to List</a>
-</div>
-
-
+}
+<a href="javascript:history.back()">Back to List</a>
 <div class="workordertitle">
     @if (Model != null)
     {
@@ -61,18 +28,27 @@
             <span>Work Order Detail</span>
 
         }
-        <span class="fa-pull-right pr-2">@Model.Id</span>
+        if (string.IsNullOrEmpty(Model.ParentWOId))
+        {
+            <span class="fa-pull-right pr-2">@Model.Id</span>
+        }
+        else
+        {
+            <span class="fa-pull-right pr-2"><a asp-action="GetWODetail"asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2" >@Model.Id</a></span>
+        }
     }
 
 
 </div>
+@if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
+{
 <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
     <div class="justify-content-lg-start col-md-6">
-        <input type="button" value="Enter Hours" class="btn btn-primary" id='AddEffort' data-toggle="modal" data-target="#timesheet"/>
+        <input type="button" value="Enter Hours" class="btn btn-primary" id='AddEffort' data-toggle="modal" data-target="#timesheet" />
         <input type="button" value="Show Hours" class="btn btn-info" />
     </div>
 </div>
-
+}
 @if (Model != null)
 {
     <table class="table table-striped">
@@ -282,7 +258,7 @@
                                 @foreach (var file in Model.Attachment)
                                 {
                                     <div class="col">
-                                        <a href="@file.Value" download="random">@file.Key</a>
+                                        <a href="@file.Value" >@file.Key</a>
                                     </div>
                                 }
                             </div>
@@ -383,7 +359,6 @@ new ViewDataDictionary(ViewData)
 
 }
 <!-- Button trigger modal -->
-
 <!-- Modal -->
 <div class="modal fade bd-example-modal-lg" id="timesheet" tabindex="-1" role="dialog" aria-labelledby="timesheet" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -448,7 +423,7 @@ new ViewDataDictionary(ViewData)
     });
     function test(e) {
         var res = e.target.value + String.fromCharCode(e.charCode);
-       
+
         if (res > 24) {
             e.target.value = 24;
             return false;
@@ -482,7 +457,7 @@ new ViewDataDictionary(ViewData)
         $('.day').each(function (x) {
             sum += parseInt($('.day')[x].value);
         });
-      
+
         $('.total').val(sum);
     }
 
@@ -495,11 +470,11 @@ new ViewDataDictionary(ViewData)
 
     $('#submit').click(function (e) {
          $('#effortform').click();
-       
-        
-    })
-   
 
-    
-    
+
+    })
+
+
+
+
 </script>

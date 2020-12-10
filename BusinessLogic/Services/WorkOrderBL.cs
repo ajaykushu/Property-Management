@@ -79,7 +79,8 @@ namespace BusinessLogic.Services
             {
                 RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value,
                 PropertyId = createWO.PropertyId,
-                IssueId = createWO.IssueId,
+                IssueId = createWO.IssueId==-1? (int?)null: createWO.IssueId,
+                CustomIssue=createWO.CustomIssue,
                 ItemId = createWO.ItemId,
                 Description = createWO.Description,
                 DueDate = createWO.DueDate,
@@ -136,10 +137,11 @@ namespace BusinessLogic.Services
                             WorkOrderDetail
             {
                 PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
+                Issue = x.Issue!=null?x.Issue.IssueName:x.CustomIssue,
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
+                ParentWOId = x.ParentWoId,
                 Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
                 DueDate = x.DueDate.ToString("dd-MMM-yyyy"),
                 UpdatedTime = x.UpdatedTime,
@@ -200,12 +202,6 @@ namespace BusinessLogic.Services
                     wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
                 wo.PropertyId = primaryprop != null ? primaryprop.Id : 0;
             }
-
-            wo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
-            {
-                Id = x.Id,
-                PropertyName = x.ItemName
-            }).AsNoTracking().ToListAsync();
 
             wo.Vendors = await _vendors.GetAll().Select(x => new SelectItem
             {
@@ -306,8 +302,9 @@ namespace BusinessLogic.Services
             editwo.PropertyName = temp.Property.PropertyName;
             editwo.Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
             editwo.Description = temp.Description;
-            editwo.IssueId = temp.IssueId;
+            editwo.IssueId = temp.IssueId.HasValue? temp.IssueId.Value:-1;
             editwo.ItemId = temp.ItemId;
+            editwo.CustomIssue = temp.CustomIssue;
             editwo.CreatedDate = temp.CreatedTime;
             editwo.VendorId = temp.VendorId;
             editwo.Priority = temp.Priority;
@@ -317,7 +314,7 @@ namespace BusinessLogic.Services
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
-            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
+            editwo.Items = await _itemRepo.GetAll().Where(x=>x.LocationId==temp.LocationId).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
@@ -379,9 +376,10 @@ namespace BusinessLogic.Services
                     }
                 }
                 wo.Description = editWorkOrder.Description;
-                wo.IssueId = editWorkOrder.IssueId;
+                wo.IssueId = editWorkOrder.IssueId!=-1? editWorkOrder.IssueId:(int?)null;
                 wo.ItemId = editWorkOrder.ItemId;
                 wo.DueDate = editWorkOrder.DueDate;
+                wo.CustomIssue = editWorkOrder.CustomIssue;
                 wo.LocationId = editWorkOrder.LocationId;
                 wo.VendorId = editWorkOrder.VendorId;
                 wo.Priority = editWorkOrder.Priority;
@@ -588,7 +586,7 @@ namespace BusinessLogic.Services
             workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExport
             {
                 PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
+                Issue = x.Issue!=null? x.Issue.IssueName:x.CustomIssue,
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
@@ -746,6 +744,11 @@ namespace BusinessLogic.Services
             {
                 query = query.Where(x => (x.AssignedTo != null && x.AssignedTo.UserName.Equals(username)) || (x.AssignedToDept != null && x.AssignedToDeptId == userdept.DepartmentId) || (x.AssignedTo == null && x.AssignedToDept == null && propIds.Contains(x.Property.Id)) || x.CreatedByUserName.Equals(username));
             }
+            if (!String.IsNullOrEmpty(wOFilterModel.TermSearch))
+            {
+                query = query.Include(x => x.Issue).ThenInclude(x => x.Item).Where(x => x.Item.ItemName.Contains(wOFilterModel.TermSearch) || x.Issue.IssueName.Contains(wOFilterModel.TermSearch) || x.Property.PropertyName.Contains(wOFilterModel.TermSearch) || x.Id.Contains(wOFilterModel.TermSearch) || x.Description.Contains(wOFilterModel.TermSearch) || x.Status.StatusDescription.Contains(wOFilterModel.TermSearch) || x.Location.LocationName.Contains(wOFilterModel.TermSearch) || (x.AssignedTo != null && x.AssignedTo.FirstName.Contains(wOFilterModel.TermSearch) || x.AssignedTo.LastName.Contains(wOFilterModel.TermSearch)) ||
+                  (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.Contains(wOFilterModel.TermSearch)));
+            }
             return query;
         }
 
@@ -788,7 +791,7 @@ namespace BusinessLogic.Services
             {
                 RequestedBy = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value,
                 PropertyId = createWO.PropertyId,
-                IssueId = createWO.IssueId,
+                IssueId = createWO.IssueId !=-1 ? createWO.IssueId : (int?)null,
                 ItemId = createWO.ItemId,
                 Description = createWO.Description,
                 DueAfterDays = createWO.DueAfterDays,
@@ -858,7 +861,8 @@ namespace BusinessLogic.Services
             editwo.PropertyName = temp.Property.PropertyName;
             editwo.Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
             editwo.Description = temp.Description;
-            editwo.IssueId = temp.IssueId;
+            editwo.IssueId = temp.IssueId.HasValue? temp.IssueId.Value:-1;
+            editwo.CustomIssue = temp.CustomIssue;
             editwo.RecurringEndDate = temp.RecurringEndDate;
             editwo.RecurringStartDate = temp.RecurringStartDate;
             editwo.EndAfterCount = temp.EndAfterCount;
@@ -877,7 +881,7 @@ namespace BusinessLogic.Services
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
-            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
+            editwo.Items = await _itemRepo.GetAll().Where(x=>x.LocationId==temp.LocationId).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
@@ -938,8 +942,9 @@ namespace BusinessLogic.Services
                     }
                 }
                 wo.Description = editWorkOrder.Description;
-                wo.IssueId = editWorkOrder.IssueId;
+                wo.IssueId = editWorkOrder.IssueId!=-1? editWorkOrder.IssueId:(int?)null;
                 wo.ItemId = editWorkOrder.ItemId;
+                wo.CustomIssue = editWorkOrder.CustomIssue;
                 wo.DueAfterDays = editWorkOrder.DueAfterDays;
                 wo.LocationId = editWorkOrder.LocationId;
                 wo.VendorId = editWorkOrder.VendorId;
@@ -1024,11 +1029,12 @@ namespace BusinessLogic.Services
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
           
-            var temp = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new
+             recWorkOrder = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
                 DueAfterDays = "After " + x.DueAfterDays + " Days",
                 Description = x.Description,
                 Id = x.Id,
+                Property = new SelectItem { Id = x.Property.Id, PropertyName = x.Property.PropertyName },
                 ScheduleAt = !string.IsNullOrEmpty(x.CronExpression) ? new ExpressionDescriptor(x.CronExpression, new Options
                 {
                     DayOfWeekStartIndexZero = true,
@@ -1036,35 +1042,8 @@ namespace BusinessLogic.Services
                 }).GetDescription(DescriptionTypeEnum.FULL) : null,
                 Status = x.Status.StatusDescription,
                 AssignedTo = x.AssignedTo != null ? x.AssignedTo.UserName + "(" + x.AssignedTo.FirstName + " " + x.AssignedTo.LastName + ")" : x.AssignedToDept != null ? x.AssignedToDept.DepartmentName : "Anyone",
-                Property = new SelectItem { Id = x.PropertyId, PropertyName = x.Property.PropertyName },
-                Issue = x.Issue.IssueName,
-                StatusDescription = x.Status.StatusDescription,
-                Item = x.Item.ItemName,
-                CreatedTime = x.CreatedTime,
-                UpdatedTime = x.UpdatedTime,
-                Requestedby = x.RequestedBy,
-                PropId = x.PropertyId,
-                Priority = x.Priority,
-                UpdatedBy = x.UpdatedByUserName,
-                Location = x.Location.LocationName,
-                SubLocation = x.SubLocation.AreaName,
             }).AsNoTracking().ToListAsync();
             wOFilterDTO.TermSearch = wOFilterDTO.TermSearch == null ? "" : wOFilterDTO.TermSearch;
-
-            recWorkOrder = temp.Where(x => (x.DueAfterDays +
-                x.Description +
-                  x.Id +
-                  x.AssignedTo + x.Property.PropertyName + x.Issue + x.Item + x.Location + x.SubLocation).Contains(wOFilterDTO.TermSearch, StringComparison.OrdinalIgnoreCase)
-                ).Select(x => new RecurringWOs
-                {
-                    DueAfterDays =x.DueAfterDays,
-                    Description = x.Description,
-                    Id = x.Id,
-                    Property= x.Property,
-                    ScheduleAt = x.ScheduleAt,
-                    Status =x.Status,
-                    AssignedTo = x.AssignedTo
-                }).ToList();
 
             Pagination<List<RecurringWOs>> pagination = new Pagination<List<RecurringWOs>>
             {
@@ -1112,7 +1091,7 @@ namespace BusinessLogic.Services
                              WorkOrderDetail
             {
                 PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
+                Issue = x.Issue!=null?x.Issue.IssueName:x.CustomIssue,
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
@@ -1165,7 +1144,7 @@ namespace BusinessLogic.Services
             workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExportRecurring
             {
                 PropertyName = x.Property.PropertyName,
-                Issue = x.Issue.IssueName,
+                Issue = x.Issue!=null?x.Issue.IssueName:x.CustomIssue,
                 StatusDescription = x.Status.StatusDescription,
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
@@ -1245,6 +1224,17 @@ namespace BusinessLogic.Services
               Id=x.Id,
               PropertyName=x.IssueName
             }).AsNoTracking().ToListAsync();
+
+            return res;
+        }
+
+        public async Task<List<SelectItem>> GetItem(long id)
+        {
+            var res = await _itemRepo.Get(x => x.LocationId == id).Select(x => new SelectItem
+            {
+                Id=x.Id,
+                PropertyName=x.ItemName
+            }).ToListAsync();
 
             return res;
         }
