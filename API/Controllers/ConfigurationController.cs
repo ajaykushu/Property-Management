@@ -16,6 +16,7 @@ namespace API.Controllers
 
         public ConfigurationController(IConfigBL configService)
         {
+
             _configService = configService;
         }
         /// <summary>
