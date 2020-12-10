@@ -125,8 +125,8 @@
 
                     if (ResponseModel.CurrentPage == i)
                     {
-                        <li class="page-item active" disabled>
-                            <a class="page-link"  asp-action="Index">@(i + 1) <span class="sr-only">(current)</span></a>
+                        <li class="page-item active disabled" >
+                            <a class="page-link"  >@(i + 1) <span class="sr-only">(current)</span></a>
                         </li>
                         current = i;
                     }
