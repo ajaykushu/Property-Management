@@ -1,6 +1,6 @@
 ﻿@model WOFilterModel
 @{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
-    <form class="form">
+    <form class="form" style="margin-bottom:0px;">
         <partial name="~/Views/WorkOrder/_filter.cshtml" model="Model" />
         <hr />
         @{ var param = Model.GetType()
