@@ -62,14 +62,14 @@
 
                         if (ResponseModel.CurrentPage == i)
                         {
-                            <li class="page-item active" disabled>
+                            <li class="page-item active" >
                                 <a class="page-link "  >@(i + 1) <span class="sr-only">(current)</span></a>
                             </li>
                             current = i;
                         }
                         else
                         {
-                            <li class="page-item">
+                            <li class="page-item ">
                                 @{ Model.PageNumber = i;}
                                 @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
                             </li>
