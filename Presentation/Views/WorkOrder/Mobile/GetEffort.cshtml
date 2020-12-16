@@ -1,0 +1,64 @@
+﻿@if (ViewBag.type == 2)
+{
+
+    ViewData["Title"] = "WO Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@model Presentation.ViewModels.EffortPagination
+    <header>
+        <nav class="navbar bg-success mb-3 fixed-top">
+            <div class="d-inline-flex w-100">
+                <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <div class="container-block justify-content-center">
+                    <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Effort</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+<div>
+
+    <hr />
+    
+    <table class="table table-responsive-sm mform">
+        <thead>
+            <tr>
+                <th>
+                    Day of Week
+
+                </th>
+                <th>
+                    BO Tax
+                </th>
+                <th>
+                    Repair
+                </th>
+                <th>
+                    TotalForDay
+                </th>
+            </tr>
+            </thead>
+        <tbody>
+
+            @{ if (Model != null)
+                {
+                    foreach (var item in Model.EffortDTOs)
+                    {
+                        <tr>
+                            <td>
+                                <h4>@item.DateTime.DayOfWeek</h4>
+                                <span> @item.BOTax</span>
+                                <span> @item.Repair</span>
+                                <span> @item.TotalForDay</span>
+                            </td>
+                            
+                            
+                            
+                        </tr>
+                        }
+                    }
+                }
+                    </tbody>
+    </table>
+</div>
+

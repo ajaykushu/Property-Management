@@ -244,7 +244,12 @@ namespace DataAccessLayer.Repository
                    {
                        Id = 21,
                        MenuName = "All_WO"
-                   }); 
+                   }, new Menu()
+                   {
+                       Id = 22,
+                       MenuName = "Effort"
+                   }
+                   ); 
 
 
             builder.Entity<RoleMenuMap>().HasData(
@@ -265,7 +270,11 @@ namespace DataAccessLayer.Repository
                 new RoleMenuMap { Id = 15, MenuId = 15, RoleId = 1 },
                 new RoleMenuMap { Id = 16, MenuId = 16, RoleId = 1 },
                 new RoleMenuMap { Id = 17, MenuId = 17, RoleId = 1 },
-                new RoleMenuMap { Id = 18, MenuId = 18, RoleId = 1 }
+                new RoleMenuMap { Id = 18, MenuId = 18, RoleId = 1 },
+                new RoleMenuMap { Id = 19, MenuId = 19, RoleId = 1 },
+                new RoleMenuMap { Id = 20, MenuId = 20, RoleId = 1 },
+                new RoleMenuMap { Id = 21, MenuId = 21, RoleId = 1 },
+                new RoleMenuMap { Id = 22, MenuId = 22, RoleId = 1 }
                 );
         }
 

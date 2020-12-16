@@ -277,5 +277,24 @@ namespace Presentation.Controllers
             }
             return Ok(result);
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetPropertyData(long id)
+        {
+            string result = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getpropertydata", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    result = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception)
+            {
+            }
+            return Ok(result);
+        }
+
+
     }
 }

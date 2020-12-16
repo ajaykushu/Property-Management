@@ -1,5 +1,6 @@
 ﻿using DataTransferObjects.ResponseModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Models;
 using Models.ResponseModels;
 using Models.WorkOrder.RequestModels;
@@ -28,7 +29,7 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> PostComment(PostCommentDTO post);
 
-        Task<bool> WorkOrderStatusChange(string Id, int statusId, string comment);
+        Task<bool> WorkOrderStatusChange(WorkOrderDetail workOrderDetail, IList<IFormFile> files);
 
         Task<List<SelectItem>> GetLocation(long id);
 

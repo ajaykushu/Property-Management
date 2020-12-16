@@ -53,6 +53,23 @@
                             </div>
                         </div>
                     </td>
+                    </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label asp-for="Items"></label>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="Items" class="form-control form-control-sm custom-input"></textarea>
+                                    <span class="text-danger">Enter , speparated Items</span><br />
+                                                                                             <span class="text-info">Items will come prepopulated if available to corresponding location</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+</tr>
                 <tr>
                     <td>
                         <input asp-for="PropertyId" hidden>
@@ -69,21 +86,17 @@
 <script>
 
     $('#LocationId').change(function () {
-         $.get('@Url.Action("GetSubLocation","Property")' + "?id=" + $(this).val(),
+          $.get('@Url.Action("GetPropertyData","Property")' + "?id=" + $(this).val(),
                 function (data) {
                     if (data != null || data != undefined) {
-                        var string = "";
-                        for (var i = 0; i < data.length; i++){
-                            if (i == data.length-1)
-                                string = string + data[i].propertyName;
-                            else
-                            string = string + data[i].propertyName+',';
-                        }
-                         $("#SubLocation").val(string)
+                        var res = data.split('@@');
+                        
+                        $("#SubLocation").val(res[0])
+                        $("#Items").val(res[1])
                     }
                 });
     })
-    $("#SubLocation").change(function (e) {
+    $("#SubLocation #Items").change(function (e) {
         if ($(this).val().indexOf(',') == $(this).val().length - 1) {
             alert("Please remove ',' from the end of the Sub-Locations");
             $("input[type='submit']").prop("disabled", true);

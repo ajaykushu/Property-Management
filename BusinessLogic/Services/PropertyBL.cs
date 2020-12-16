@@ -23,10 +23,11 @@ namespace BusinessLogic.Services
         private readonly IRepo<UserProperty> _userProperty;
         private readonly IRepo<Location> _loc;
         private readonly IRepo<SubLocation> _subloaction;
+        private readonly IRepo<Item> _item;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly INotifier _notifier;
 
-        public PropertyBL(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor, INotifier notifier)
+        public PropertyBL(IRepo<Property> property, IRepo<PropertyType> proptype, IRepo<Location> loc, IRepo<SubLocation> subloaction, IRepo<UserProperty> userProperty, IHttpContextAccessor httpContextAccessor, INotifier notifier, IRepo<Item> item)
         {
             _property = property;
             _proptype = proptype;
@@ -35,6 +36,7 @@ namespace BusinessLogic.Services
             _userProperty = userProperty;
             _httpContextAccessor = httpContextAccessor;
             _notifier = notifier;
+            _item = item;
         }
 
         public PropertyOperationDTO GetPropertyType()
@@ -240,7 +242,9 @@ namespace BusinessLogic.Services
             }
 
             var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
+           
             HashSet<string> areas = null;
+            HashSet<string> items = null;
             if (!string.IsNullOrWhiteSpace(propertyConfig.SubLocation))
             {
                 if (propertyConfig.SubLocation.Contains(','))
@@ -250,6 +254,18 @@ namespace BusinessLogic.Services
                     areas = new HashSet<string>
                     {
                         propertyConfig.SubLocation
+                    };
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(propertyConfig.Items))
+            {
+                if (propertyConfig.Items.Contains(','))
+                    items = propertyConfig.Items.Split(',').ToHashSet();
+                else
+                {
+                    items = new HashSet<string>
+                    {
+                        propertyConfig.Items
                     };
                 }
             }
@@ -327,6 +343,51 @@ namespace BusinessLogic.Services
                             }
                         }
                     }
+                    location.Items = await _item.Get(x => x.LocationId == propertyConfig.LocationId).ToListAsync();
+                    //itms
+                    if (location.Items == null)
+                    {
+                        location.Items = new List<Item>();
+                        if (items != null)
+                        {
+                            foreach (var item in items)
+                            {
+                                location.Items.Add(new Item
+                                {
+                                    ItemName = item
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        
+                        for (int i = 0; i < location.Items.Count;)
+                        {
+                            if (!items.Contains(location.Items.ElementAt(i).ItemName))
+                            {
+                                if (location.Items.ElementAt(i).WorkOrders.Count == 0)
+                                    location.Items.Remove(location.Items.ElementAt(i));
+                                else
+                                    throw new BadRequestException(location.Items.ElementAt(i).ItemName + " is assigned to workorder Ids: " + string.Join(",", location.Items.ElementAt(i).WorkOrders.Select(x => x.Id).ToList()));
+                            }
+                            else
+                            {
+                                items.Remove(location.Items.ElementAt(i).ItemName);
+                                i++;
+                            }
+                        }
+                        if (items != null)
+                        {
+                            foreach (var item in items)
+                            {
+                                location.Items.Add(new Item
+                                {
+                                    ItemName = item
+                                });
+                            }
+                        }
+                    }
                 }
             }
             var status = await _property.Update(prop);
@@ -335,11 +396,7 @@ namespace BusinessLogic.Services
             return false;
         }
 
-        public async Task<string> GetArea(int id)
-        {
-            var res = await _subloaction.Get(x => x.LocationId == id).Select(x => x.AreaName).ToListAsync();
-            return string.Join(',', res);
-        }
+       
 
         public async Task<List<SelectItem>> GetSubLocation(long id)
         {
@@ -349,6 +406,13 @@ namespace BusinessLogic.Services
                 PropertyName = x.AreaName
             }).ToListAsync();
             return res;
+        }
+
+        public async Task<string> GetPropertyData(long id)
+        {
+            var res = await _subloaction.Get(x => x.LocationId == id).Select(x => x.AreaName).ToListAsync();
+            var item = await _item.Get(x => x.LocationId == id).Select(x => x.ItemName).ToListAsync();
+            return string.Join(',', res)+'@'+ string.Join(',', item);
         }
     }
 }

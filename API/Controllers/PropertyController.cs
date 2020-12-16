@@ -110,5 +110,15 @@ namespace API.Controllers
             List<SelectItem> prop = await _propertyService.GetSubLocation(id);
             return Ok(prop);
         }
+
+        [HttpGet]
+        [Route("getpropertydata")]
+        [FeatureBasedAuthorization(MenuEnum.Create_WO)]
+        public async Task<ActionResult<SelectItem>> GetPropertyData(long id)
+        {
+            string prop = await _propertyService.GetPropertyData(id);
+            return Ok(prop);
+        }
+
     }
 }

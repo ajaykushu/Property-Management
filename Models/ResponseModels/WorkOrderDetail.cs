@@ -30,5 +30,9 @@ namespace Models.ResponseModels
         public string CronExpression { get; set; }
         public DateTime? RecurringStartDate { get; set; }
         public string ParentWOId { get; set; }
+        public string FilesRemoved { get; set; }
+        public int StatusId { get; set; }
+       // public IList<IFormFile> File { get; set; }
+        public string StatusChangeComment { get; set; }
     }
 }

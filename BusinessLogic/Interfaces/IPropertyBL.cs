@@ -29,5 +29,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> SavePropertyConfig(PropertyConfigDTO propertyConfig);
 
         Task<List<SelectItem>> GetSubLocation(long id);
+        Task<string> GetPropertyData(long id);
     }
 }

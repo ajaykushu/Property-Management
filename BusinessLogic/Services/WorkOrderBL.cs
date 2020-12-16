@@ -142,6 +142,7 @@ namespace BusinessLogic.Services
                 Item = x.Item.ItemName,
                 CreatedTime = x.CreatedTime,
                 ParentWOId = x.ParentWoId,
+                StatusId=x.StatusId,
                 Vendor = x.Vendor != null ? x.Vendor.VendorName : null,
                 DueDate = x.DueDate.ToString("dd-MMM-yyyy"),
                 UpdatedTime = x.UpdatedTime,
@@ -524,10 +525,10 @@ namespace BusinessLogic.Services
             return status;
         }
 
-        public async Task<bool> WorkOrderStatusChange(string id, int statusId, string comment)
+        public async Task<bool> WorkOrderStatusChange(WorkOrderDetail workOrderDetail, IList<IFormFile> files)
         {
-            var wo = await _workOrder.Get(x => x.Id.Equals(id)).Include(x => x.Status).FirstOrDefaultAsync();
-            var status = await _status.Get(x => x.Id == statusId).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(workOrderDetail.Id)).Include(x => x.Status).FirstOrDefaultAsync();
+            var status = await _status.Get(x => x.Id == workOrderDetail.StatusId).FirstOrDefaultAsync();
             if (status != null)
             {
 
@@ -535,13 +536,27 @@ namespace BusinessLogic.Services
                 History history = new History();
                 history.PropertyName = "Status";
                 history.Entity = "WorkOrder";
-                history.Comment = comment;
+                history.Comment = workOrderDetail.StatusChangeComment;
                 history.OldValue = wo.Status.StatusDescription;
                 history.NewValue = status.StatusDescription;
                 history.RowId = wo.Id;
                 #endregion
+                foreach (var item in files)
+                {
+                    string path = await _imageuploadinfile.UploadAsync(item);
+                    if (path != null)
+                    {
+                        if (wo.WOAttachments == null)
+                            wo.WOAttachments = new List<WOAttachments>();
+                        wo.WOAttachments.Add(new WOAttachments
+                        {
+                            FileName = item.FileName,
+                            FilePath = path
+                        });
+                    }
+                }
 
-                wo.StatusId = statusId;
+                wo.StatusId = workOrderDetail.StatusId;
                 if(status.StatusCode=="COMP" || status.StatusCode == "COBQ" || status.StatusCode == "CONI")
                     wo.IsActive = false;
                 else
@@ -551,6 +566,18 @@ namespace BusinessLogic.Services
                 await _history.Add(history);
                 if (updatestatus > 0)
                 {
+                    if (!string.IsNullOrWhiteSpace(workOrderDetail.FilesRemoved))
+                    {
+                        var remove = workOrderDetail.FilesRemoved.Contains(',') ? workOrderDetail.FilesRemoved.Split(",") : new String[] { workOrderDetail.FilesRemoved };
+                        foreach (var item in remove)
+                        {
+                            var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
+                            _imageuploadinfile.Delete(tempurl);
+                            var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
+                            wo.WOAttachments.Remove(woAttch);
+                        }
+                    }
+
                     var users = await GetUsersToSendNotification(wo);
                     await _notifier.CreateNotification("Work Order Status Changed for WOId " + wo.Id, users, wo.Id, "WE");
 

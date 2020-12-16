@@ -1,42 +1,52 @@
-﻿@model Presentation.ViewModels.EffortPagination
+﻿@if (ViewBag.type == 2)
+{
+
+    ViewData["Title"] = "WO Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@model Presentation.ViewModels.EffortPagination
 
 <div>
-    
+
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TotalEffortOfWeek)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TotalEffortOfWeek)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TotalBOTaxEffortOfWeek)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TotalBOTaxEffortOfWeek)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TotalRepairEffortOfWeek)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TotalRepairEffortOfWeek)
         </dd>
     </dl>
-    <table class="table table-responsive-sm" >
+    <table class="table table-responsive-sm">
         <tbody>
             <tr>
-                @{foreach (var item in Model.EffortDTOs)
-                    {                   
-                                <td>
-                                    <h4>@item.DateTime.DayOfWeek</h4>
-                                    <span> @item.BOTax</span>
-                                    <span> @item.Repair</span>
-                                    <span> @item.TotalForDay</span>
-                                </td>
-                     }
-                   }
-             </tr>
+                @{ if (Model != null)
+                    {
+                        foreach (var item in Model.EffortDTOs)
+                        {
+                        <td>
+                            <h4>@item.DateTime.DayOfWeek</h4>
+                            <span> @item.BOTax</span>
+                            <span> @item.Repair</span>
+                            <span> @item.TotalForDay</span>
+                        </td>
+                            }
+                        }
+                    }
+            </tr>
         </tbody>
     </table>
 </div>

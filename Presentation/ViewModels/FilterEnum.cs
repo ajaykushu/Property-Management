@@ -50,6 +50,7 @@ namespace Presentation.ViewModels
         
         WO_Operation = 18,
 
-        Recurring_WO=19
+        Recurring_WO=19,
+        Effort=21,
     }
 }

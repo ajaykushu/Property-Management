@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using DataEntity;
-using Models.RequestModels;
 
 namespace Utilities
 {

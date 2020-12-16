@@ -168,27 +168,81 @@ else
                                 }
                             </div>
                         </div>
-                        @if (!Model.Recurring)
-                        {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label>Update Status</label>
-                                </div>
-                                <div class="col">
-                                    <form asp-action="WorkOrderStatusChange">
-                                        <select class="form-control form-control-sm custom-input" name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
+                        <form asp-action="WorkOrderStatusChange" id="EditWO" asp-controller="WorkOrder">
+                            @if (!Model.Recurring)
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label>Update Status</label>
+                                    </div>
+                                    <div class="col">
+
+                                        <select class="form-control form-control-sm custom-input" asp-for="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
                                             <option value="">Select Status</option>
                                         </select>
                                         <div class="form-group">
                                             <label>Add Status Description</label>
-                                            <textarea class="form-control custom-input top-buffer" name="Comment"></textarea>
+                                            <textarea class="form-control custom-input top-buffer" asp-for="StatusChangeComment"></textarea>
                                         </div>
-                                        <input asp-for="Id" hidden>
-                                        <input type="submit" value="Update Status" class="btn btn-sm btn-primary">
-                                    </form>
+                                        <input asp-for="Id">
+
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.Attachment != null)
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="Attachment"></label>
+                                    </div>
+                                    @{var list = new List<string> { "jpeg", "png", "jpg" }; }
+                                    @foreach (var file in Model.Attachment)
+                                    {
+
+                                        @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
+                                        {
+                                            <div class="col">
+                                                <div class=" photo_disp" style="display:block">
+                                                    <a href="@file.Value">
+                                                        <img src='@if (string.IsNullOrEmpty(file.Value))
+                                            { <text>/NA.jpg</text>}
+                                            else
+                                            { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
+                                        </a>
+                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col">
+                                    <a href="@file.Value">@file.Key</a>
+                                    <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                </div>
+                            }
+                                    }
+
+                                </div>
+                            }
+                            <div class="row top-buffer mt-5">
+                                <div class="col-md-3">
+                                    <label for="File">Add Attachment</label>
+                                </div>
+                                <div class="col">
+                                    <div class="cont">
+                                        <label class="browsebutton">Add File</label>
+                                        <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                    </div>
+                                    <div id="file_selected">
+                                    </div>
+                                    <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
                                 </div>
                             </div>
-                        }
+                            <input asp-for="Id" hidden>
+                            <input type="text" asp-for="FilesRemoved" hidden>
+
+                            <input type="submit" value="Update Status" class="btn btn-sm btn-primary">
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -249,20 +303,7 @@ else
                                 <span class="value">@Html.DisplayFor(x => x.DueDate)</span>
                             </div>
                         </div>
-                        @if (Model.Attachment != null)
-                        {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="Attachment"></label>
-                                </div>
-                                @foreach (var file in Model.Attachment)
-                                {
-                                    <div class="col">
-                                        <a href="@file.Value" >@file.Key</a>
-                                    </div>
-                                }
-                            </div>
-                        }
+                       
                     </div>
                 </td>
             </tr>
@@ -462,7 +503,7 @@ new ViewDataDictionary(ViewData)
     }
 
     $('#AddEffort').on('click', function () {
-        $.get('@Url.Action("AddEffortView")', function (res) {
+        $.get('@Url.Action("AddEffortView")?id='@Model.Id+'&type=1', function (res) {
             $('#spin').hide();
         $('.modal-body').html(res);
     });

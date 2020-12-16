@@ -617,3 +617,13 @@ $('.closefilter').click(function () {
     $('.filter_check').prop("checked", false);
     $('.wofilter').hide(100);
 });
+
+function AddItem(e) {
+    var val = $('#FilesRemoved').val();
+    if (val == "" || val == undefined)
+        $('#FilesRemoved').val(e.target.name)
+    else
+        $('#FilesRemoved').val(val + ',' + e.target.name)
+    e.target.remove();
+
+}

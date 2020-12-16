@@ -21,12 +21,12 @@ namespace Presentation.ViewModels
         {
             get; set;
         }
-        public DateTime LastDay
+        public DateTime? LastDay
         {
             get; set;
         }
 
-        public DateTime FirstDay { get; set; }
+        public DateTime? FirstDay { get; set; }
 
 
     }

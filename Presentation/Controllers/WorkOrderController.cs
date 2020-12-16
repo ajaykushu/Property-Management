@@ -396,24 +396,23 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> WorkOrderStatusChange(string id, int statusId, string comment)
+        public async Task<IActionResult> WorkOrderStatusChange(WorkOrderDetail workOrderDetail)
         {
             try
             {
-                var urlpayload = string.Concat("?id=", id, "&statusId=", statusId, "&comment=", comment);
                 _apiRoute.Value.Routes.TryGetValue("workorderstatuschange", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + urlpayload, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path ,workOrderDetail, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                        TempData["Success"] = "Status Changed Sucessfully";
+                       return Ok("Status Changed Sucessfully");
                 }
             }
             catch (Exception)
             {
             }
-            return RedirectToAction("GetWODetail", new { id });
+            return BadRequest("Some Error Occured");
         }
 
         [HttpGet]
@@ -639,13 +638,14 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetEffort(string id)
+        public async Task<IActionResult> GetEffort(string id,int type=2)
         {
+            ViewBag.type = type;
             EffortPagination data = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("geteffort", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this,token:_token);
                 if (response.IsSuccessStatusCode)
                 {
                      data = JsonConvert.DeserializeObject<EffortPagination>(await response.Content.ReadAsStringAsync());
@@ -653,6 +653,12 @@ namespace Presentation.Controllers
             }
             catch (Exception)
             {
+            }
+            if (type == 2)
+            {
+                if (_detection.Device.Type == DeviceType.Mobile)
+                    return View("~/Views/WorkOrder/Mobile/GetEffort.cshtml",data);
+                return View(data);
             }
             return PartialView(data);
         }
@@ -748,6 +754,9 @@ namespace Presentation.Controllers
                 return View("~/Views/WorkOrder/Mobile/Index.cshtml", model);
             return View("~/Views/WorkOrder/Index.cshtml", model);
         }
+
+
+      
 
     }
 }

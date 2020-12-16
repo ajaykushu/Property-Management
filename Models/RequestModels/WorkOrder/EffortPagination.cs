@@ -23,13 +23,19 @@ namespace Models.WorkOrder.RequestModels
         {
             get { return this.EffortDTOs.Sum(x => x.Repair); }
         }
-        public DateTime LastDay { get {
-                return this.EffortDTOs.Last().DateTime;
+        public DateTime? LastDay { get {
+                if (this.EffortDTOs != null && this.EffortDTOs.Any())
+                    return this.EffortDTOs.Last().DateTime;
+                else
+                    return null;
             }
         }
 
-        public DateTime FirstDay { get {
-                return this.EffortDTOs.First().DateTime;
+        public DateTime? FirstDay { get {
+                if (this.EffortDTOs != null && this.EffortDTOs.Any())
+                    return this.EffortDTOs.First().DateTime;
+                else
+                    return null;
             } }
 
 

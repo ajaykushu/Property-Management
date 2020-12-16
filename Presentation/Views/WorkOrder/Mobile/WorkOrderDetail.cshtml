@@ -101,17 +101,72 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="flex-sm-row top-buffer">
-                                <form asp-action="WorkOrderStatusChange" class="w-100">
-                                    <select class="form-control form-control-lg  mobile-input " name="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
-                                        <option value="">Select Status</option>
-                                    </select>
-                                    <div class="form-group top-buffer">
-                                        <textarea class="form-control form-control  top-buffer mobile-input border-top-0 border-left-0 border-right-0" name="Comment" placeholder="Add Status Description"></textarea>
+                            <div class="flex-sm-row">
+
+                                 <form asp-action="WorkOrderStatusChange" id="EditWO" asp-controller="WorkOrder">
+                            @if (!Model.Recurring)
+                            {
+                                <div style="display:grid">
+
+                                        <select class="form-control form-control" asp-for="StatusId"  asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
+                                            <option value="">Select Status</option>
+                                        </select>
+                                        <div class="form-group top-buffer">
+                                            <label>Add Status Description</label>
+                                            <textarea class="form-control" asp-for="StatusChangeComment"></textarea>
+                                        </div>
+                                        <input asp-for="Id" hidden>
+
+                                    
+                                </div>
+                            }
+                            @if (Model.Attachment != null)
+                            {
+                                <div class=" top-buffer">
+                                    @{var list = new List<string> { "jpeg", "png", "jpg" }; }
+                                    @foreach (var file in Model.Attachment)
+                                    {
+
+                                        @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
+                                        {
+                                            <div>
+                                                <div class=" photo_disp" style="display:block">
+                                                    <a href="@file.Value">
+                                                        <img src='@if (string.IsNullOrEmpty(file.Value))
+                                            { <text>/NA.jpg</text>}
+                                            else
+                                            { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
+                                        </a>
+                                           <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                          </div>
+                                         </div>
+                                         <br/>
+                            }
+                            else
+                            {
+                                <div class="pt-2">
+                                    <a href="@file.Value">@file.Key</a>
+                                    <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                </div>
+                               
+                              
+                            }
+                                    }
+
+                                </div>
+                            }
+                            <div class=" top-buffer mt-5">
+                                    <div class="cont" >
+                                        <label  class="browsebutton">Add Photo</label>
+                                        <input  asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
-                                    <input asp-for="Id" hidden>
-                                    <input type="submit" value="Update Status" class="btn w-100 btn btn-success">
-                                </form>
+                                    <div id="file_selected">
+                                    </div>
+                                    <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
+                                </div>
+                            <input type="text" asp-for="FilesRemoved" hidden>
+                            <input type="submit" value="Update Status" class="btn btn btn-primary">
+                        </form>
                             </div>
                         </td>
                     </tr>
@@ -164,20 +219,7 @@
                             </div>
 
                         </div>
-                        @if (Model.Attachment != null)
-                        {
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label asp-for="Attachment"></label>
-                                </div>
-                                @foreach (var file in Model.Attachment)
-                                {
-                                    <div class="col">
-                                        <a href="@file.Value" >@file.Key</a>
-                                    </div>
-                                }
-                            </div>
-                        }
+                      
 
                     </td>
                 </tr>

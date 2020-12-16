@@ -18,10 +18,12 @@ namespace API.Controllers
     public class WorkOrderController : ControllerBase
     {
         private readonly IWorkOrderBL _workOrderService;
+        private readonly IRecurringBL _recurringBL;
 
-        public WorkOrderController(IWorkOrderBL workOrderService)
+        public WorkOrderController(IWorkOrderBL workOrderService, IRecurringBL recurringBL)
         {
             _workOrderService = workOrderService;
+            _recurringBL = recurringBL;
         }
 
         [HttpGet]
@@ -142,12 +144,17 @@ namespace API.Controllers
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("workorderstatuschange")]
         [FeatureBasedAuthorization(MenuEnum.WO_Operation)]
-        public async Task<ActionResult<bool>> WorkOrderStatusChange(string id, int statusId, string comment)
+        public async Task<ActionResult<bool>> WorkOrderStatusChange([FromForm] WorkOrderDetail workOrderDetail,IList<IFormFile> File)
         {
-            bool res = await _workOrderService.WorkOrderStatusChange(id, statusId, comment);
+            bool res = false;
+            if (!workOrderDetail.Id.Contains("RWO",comparisonType:StringComparison.InvariantCultureIgnoreCase)) {
+                 res = await _workOrderService.WorkOrderStatusChange(workOrderDetail, File);
+            }
+            else
+                 res = await _recurringBL.WorkOrderStatusChange(workOrderDetail, File);
             return Ok(res);
         }
         

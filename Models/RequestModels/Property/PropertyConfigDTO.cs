@@ -9,5 +9,6 @@ namespace Models.Property.RequestModels
         public int? LocationId { get; set; }
         public string NewLocation { get; set; }
         public string SubLocation { set; get; }
+        public string Items { get; set; }
     }
 }

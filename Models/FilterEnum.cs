@@ -28,6 +28,7 @@
         Assign_To_User = 17,
         WO_Operation = 18,
         Recurring_WO=19,
-        Completed_WO=20
+        Completed_WO=20,
+        Effort=21,
     }
 }

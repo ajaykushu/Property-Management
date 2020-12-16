@@ -1,4 +1,5 @@
-﻿using Presentation.Utility;
+﻿using Microsoft.AspNetCore.Http;
+using Presentation.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,6 +41,7 @@ namespace Presentation.ViewModels
 
         [DisplayName("Updated Time")]
         public DateTime UpdatedTime { get; set; }
+      
 
         public List<KeyValuePair<string, string>> Attachment { get; set; }
 
@@ -60,6 +62,10 @@ namespace Presentation.ViewModels
         public string CronExpression { get; set; }
         public DateTime? RecurringStartDate { get; set; }
         public string ParentWOId { get; set; }
-       
+        public string FilesRemoved { get; set; }
+        public int StatusId { get; set; }
+        public IList<IFormFile> File { get; set; }
+        public string StatusChangeComment { get; set; }
+
     }
 }
