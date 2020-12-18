@@ -130,7 +130,7 @@
                                         @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
                                         {
                                             <div>
-                                                <div class=" photo_disp" style="display:block">
+                                                <div class=" photo_disp" style="display:block;margin-bottom: 15px;">
                                                     <a href="@file.Value">
                                                         <img src='@if (string.IsNullOrEmpty(file.Value))
                                             { <text>/NA.jpg</text>}
@@ -165,7 +165,7 @@
                                     <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
                                 </div>
                             <input type="text" asp-for="FilesRemoved" hidden>
-                            <input type="submit" value="Update Status" class="btn btn btn-primary">
+                            <input type="submit" value="Update" class="btn btn btn-primary">
                         </form>
                             </div>
                         </td>

@@ -527,7 +527,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> WorkOrderStatusChange(WorkOrderDetail workOrderDetail, IList<IFormFile> files)
         {
-            var wo = await _workOrder.Get(x => x.Id.Equals(workOrderDetail.Id)).Include(x => x.Status).FirstOrDefaultAsync();
+            var wo = await _workOrder.Get(x => x.Id.Equals(workOrderDetail.Id)).Include(x => x.Status).Include(x=>x.WOAttachments).FirstOrDefaultAsync();
             var status = await _status.Get(x => x.Id == workOrderDetail.StatusId).FirstOrDefaultAsync();
             if (status != null)
             {
