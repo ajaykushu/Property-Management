@@ -123,35 +123,39 @@
                             @if (Model.Attachment != null)
                             {
                                 <div class=" top-buffer">
-                                    @{var list = new List<string> { "jpeg", "png", "jpg" }; }
-                                    @foreach (var file in Model.Attachment)
-                                    {
-
-                                        @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
+                                    <div class="customdisp">
+                                        @{var list = new List<string> { "jpeg", "png", "jpg" }; }
+                                        @foreach (var file in Model.Attachment)
                                         {
-                                            <div>
-                                                <div class=" photo_disp" style="display:block;margin-bottom: 15px;">
+
+                                            @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
+                                            {
+
+                                                <div class=" photo_disp" style="display:block;">
                                                     <a href="@file.Value">
                                                         <img src='@if (string.IsNullOrEmpty(file.Value))
-                                            { <text>/NA.jpg</text>}
+                                            { <text>/api/NA.jpg</text>}
                                             else
                                             { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
                                         </a>
-                                           <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                          </div>
-                                         </div>
-                                         <br/>
-                            }
-                            else
-                            {
-                                <div class="pt-2">
-                                    <a href="@file.Value">@file.Key</a>
-                                    <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                </div>
-                               
-                              
-                            }
+                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                    </div>
+
+                                    <br />
+                                }
+                                else
+                                {
+                                    <div class=" photo_disp" style="display:block;">
+                                        <a href="@file.Value">
+                                            <img src='/api/File.jpg' width="200" height="150" />@file.Key
+                                        </a>
+                                            <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                    </div>
+
+
                                     }
+                                    }
+                                    </div>
 
                                 </div>
                             }
@@ -196,8 +200,15 @@
                         <div class="row ">
                             <div class="col d-inline">
                                 <label asp-for="Requestedby"></label>
-                                <span class="value"> @Html.DisplayFor(x => x.Requestedby)</span>
-                            </div>
+                                @if (!string.IsNullOrEmpty(Model.ParentWOId))
+                                {
+                                    <a asp-action="GetWODetail" asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2">@Model.Requestedby</a>
+                                }
+                                else
+                                {
+                                    <span class="value"> @Html.DisplayFor(x => x.Requestedby)</span>
+                                }
+                                </div>
                         </div>
                         <div class="row ">
                             <div class="col">
@@ -415,7 +426,15 @@
      alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
     </script>
 }
-
+<style>
+    .customdisp {
+        display: flex;
+        flex-flow: inherit;
+        flex-flow: wrap;
+        column-gap: 14px;
+        row-gap: 42px;
+    }
+</style>
 <script>
      var workorderId = '@Model.Id';
     $(document).ready(function () {

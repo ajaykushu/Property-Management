@@ -93,10 +93,12 @@ namespace BusinessLogic.Services
                 if (!string.IsNullOrWhiteSpace(workOrderDetail.FilesRemoved))
                     {
                         var remove = workOrderDetail.FilesRemoved.Contains(',') ? workOrderDetail.FilesRemoved.Split(",") : new String[] { workOrderDetail.FilesRemoved };
-                        foreach (var item in remove)
+                   
+                    foreach (var item in remove)
                         {
-                            var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
-                            _imageuploadinfile.Delete(tempurl);
+                        var path = item.Contains("/api") ? "/api/" : "/";
+                        var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + path, "");
+                        _imageuploadinfile.Delete(tempurl);
                             var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
                             wo.WOAttachments.Remove(woAttch);
                         }

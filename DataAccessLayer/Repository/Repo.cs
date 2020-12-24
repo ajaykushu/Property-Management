@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,11 @@ namespace DataAccessLayer.Repository
             return this.context.SaveChangesAsync();
         }
 
+        public EntityEntry ExplicitLoad(object entity)
+        {
+            return this.context.Entry(entity);
+        }
+
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
         {
             IQueryable<TEntity> query = context.Set<TEntity>().Where(predicate);
@@ -51,8 +57,6 @@ namespace DataAccessLayer.Repository
         public async Task<int> Update(TEntity entity)
         {
             var entityreturned = context.Update<TEntity>(entity);
-            var attached = context.Attach<TEntity>(entity: entity);
-            attached.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             return await context.SaveChangesAsync();
         }
 

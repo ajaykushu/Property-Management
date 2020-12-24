@@ -191,38 +191,44 @@ else
                             }
                             @if (Model.Attachment != null)
                             {
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Attachment"></label>
-                                    </div>
-                                    @{var list = new List<string> { "jpeg", "png", "jpg" }; }
-                                    @foreach (var file in Model.Attachment)
+                        <div class="row top-buffer">
+                            <div class="col-md-3">
+                                <label asp-for="Attachment"></label>
+                            </div>
+                            <div class="col-md-9 customdisp">
+                                @{var list = new List<string> { "jpeg", "png", "jpg" }; }
+                                @foreach (var file in Model.Attachment)
+                                {
+
+                                    @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
                                     {
 
-                                        @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
-                                        {
-                                            <div class="col">
-                                                <div class=" photo_disp" style="display:block">
-                                                    <a href="@file.Value">
-                                                        <img src='@if (string.IsNullOrEmpty(file.Value))
-                                            { <text>/NA.jpg</text>}
+                                        <div class=" photo_disp" style="display:block">
+                                            <a href="@file.Value">
+                                                <img src='@if (string.IsNullOrEmpty(file.Value))
+                                            { <text>/api/NA.jpg</text>}
                                             else
                                             { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
                                         </a>
                                         <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col">
-                                    <a href="@file.Value">@file.Key</a>
-                                    <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                </div>
-                            }
-                                    }
 
-                                </div>
+                                }
+                                else
+                                {
+                                    <div class=" photo_disp" style="display:block">
+                                        <a href="@file.Value">
+                                            <img src="/api/File.jpg" width="200" height="150" aria-hidden="true">
+                                           
+                                            @file.Key
+                                        </a>
+                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
+                                    </div>
+                                }
+                                }
+                            </div>
+
+                            </div>
                             }
                             <div class="row top-buffer mt-5">
                                 <div class="col-md-3">
@@ -273,11 +279,20 @@ else
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
-                                <label asp-for="Requestedby"></label>
+                              
+                                    <label asp-for="Requestedby"></label>
+                                
                             </div>
                             <div class="col">
-                                <span class="value">@Html.DisplayFor(x => x.Requestedby)</span>
-                            </div>
+                                @if (!string.IsNullOrEmpty(Model.ParentWOId))
+                                {
+                                    <a asp-action="GetWODetail" asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2">@Model.Requestedby</a>
+                                }
+                                else
+                                {
+                                    <span class="value">@Html.DisplayFor(x => x.Requestedby)</span>
+                                }
+                                </div>
                         </div>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -437,6 +452,13 @@ new ViewDataDictionary(ViewData)
         border: 1px solid grey;
         padding: 4px;
         border-radius: 50%;
+    }
+    .customdisp {
+        display: flex;
+        flex-flow: inherit;
+        flex-flow: wrap;
+        column-gap: 14px;
+        row-gap: 42px;
     }
 </style>
 

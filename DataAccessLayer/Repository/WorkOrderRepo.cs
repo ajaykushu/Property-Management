@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataEntity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Models.ResponseModels;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace DataAccessLayer.Repository
         }
 
         public Task<int> Delete(WorkOrder entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public EntityEntry ExplicitLoad(object entity)
         {
             throw new NotImplementedException();
         }

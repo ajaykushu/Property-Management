@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Repository;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace DataAccessLayer.Interfaces
         Task<int> Add(TEntity entity);
 
         Task<int> BulkInsert(List<TEntity> entities);
-      
+        EntityEntry ExplicitLoad(object entity);
+
+
     }
 }

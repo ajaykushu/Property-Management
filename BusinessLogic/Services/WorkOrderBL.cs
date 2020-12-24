@@ -417,7 +417,8 @@ namespace BusinessLogic.Services
                     var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
                     foreach (var item in remove)
                     {
-                        var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
+                        var path = item.Contains("/api") ? "/api/" : "/";
+                        var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + path, "");
                         _imageuploadinfile.Delete(tempurl);
                         var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
                         wo.WOAttachments.Remove(woAttch);
@@ -571,7 +572,8 @@ namespace BusinessLogic.Services
                         var remove = workOrderDetail.FilesRemoved.Contains(',') ? workOrderDetail.FilesRemoved.Split(",") : new String[] { workOrderDetail.FilesRemoved };
                         foreach (var item in remove)
                         {
-                            var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
+                            var path = item.Contains("/api") ? "/api/" : "/";
+                            var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value +path, "");
                             _imageuploadinfile.Delete(tempurl);
                             var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
                             wo.WOAttachments.Remove(woAttch);
@@ -1013,7 +1015,8 @@ namespace BusinessLogic.Services
                 var remove = editWorkOrder.FilesRemoved.Contains(',') ? editWorkOrder.FilesRemoved.Split(",") : new String[] { editWorkOrder.FilesRemoved };
                 foreach (var item in remove)
                 {
-                    var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + "/", "");
+                    string path = item.Contains("/api") ? "/api" : "/";
+                    var tempurl = item.Replace(_scheme + _httpContextAccessor.HttpContext.Request.Host.Value + path, "");
                     _imageuploadinfile.Delete(tempurl);
                     var woAttch = wo.WOAttachments.Where(x => x.FilePath.Equals(tempurl)).FirstOrDefault();
                     wo.WOAttachments.Remove(woAttch);

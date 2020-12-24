@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Hangfire;
 using System;
+using System.Collections.Generic;
 
 namespace Utilities
 {
@@ -46,7 +47,7 @@ namespace Utilities
                     AssignedToId = obj.AssignedToId,
                     AssignedToDeptId = obj.AssignedToDeptId,
                     VendorId = obj.VendorId,
-                    WOAttachments = obj.WOAttachments,
+                    //WOAttachments = obj.WOAttachments,
                     UpdatedByUserName = "System",
                     DueDate = DateTime.Now.AddDays(obj.DueAfterDays),
                     CreatedTime = DateTime.Now,
@@ -59,10 +60,19 @@ namespace Utilities
                     PropertyId = obj.PropertyId,
                     Priority = obj.Priority,
                     CreatedByUserName = "System",
-                    RequestedBy = "Recurring"+obj.Id,
+                    RequestedBy = obj.Id,
                     StatusId = obj.StatusId
 
                 };
+                if (obj.WOAttachments != null)
+                {
+                    workOrder.WOAttachments = new List<WOAttachments>();
+                    foreach (var item in obj.WOAttachments)
+                    {
+                        item.Key = 0;
+                        workOrder.WOAttachments.Add(item);
+                    }
+                }
 
 
          

@@ -21,6 +21,7 @@ namespace API
 
         public Task Invoke(HttpContext httpContext)
         {
+            
             var contextFeature = httpContext.Features.Get<IExceptionHandlerFeature>();
             if (contextFeature != null)
             {

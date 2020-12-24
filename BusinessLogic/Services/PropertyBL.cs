@@ -236,13 +236,15 @@ namespace BusinessLogic.Services
 
         public async Task<bool> SavePropertyConfig(PropertyConfigDTO propertyConfig)
         {
+            Location location = null;
             if (string.IsNullOrWhiteSpace(propertyConfig.NewLocation) && !propertyConfig.LocationId.HasValue)
             {
                 throw new BadRequestException("Choose Location or Enter New Location");
             }
 
-            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
-           
+            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).Include(x=>x.Locations).ThenInclude(x=>x.Items).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
+
+            
             HashSet<string> areas = null;
             HashSet<string> items = null;
             if (!string.IsNullOrWhiteSpace(propertyConfig.SubLocation))
@@ -279,7 +281,7 @@ namespace BusinessLogic.Services
                         throw new BadRequestException(propertyConfig.NewLocation + " location aready there");
                 }
 
-                var location = new Location
+                 location = new Location
                 {
                     LocationName = propertyConfig.NewLocation,
                     SubLocations = new List<SubLocation>()
@@ -298,7 +300,8 @@ namespace BusinessLogic.Services
             }
             else if (propertyConfig.LocationId.HasValue)
             {
-                var location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault();
+                 location = prop.Locations.Where(x => x.Id == propertyConfig.LocationId).FirstOrDefault();
+
                 if (location != null)
                 {
                     if (location.SubLocations == null)
@@ -306,13 +309,15 @@ namespace BusinessLogic.Services
                         location.SubLocations = new List<SubLocation>();
                         if (areas != null)
                         {
-                            foreach (var item in areas)
+                            foreach (var area in areas)
                             {
                                 location.SubLocations.Add(new SubLocation
                                 {
-                                    AreaName = item
+                                    AreaName = area
                                 });
+
                             }
+
                         }
                     }
                     else
@@ -343,10 +348,10 @@ namespace BusinessLogic.Services
                             }
                         }
                     }
-                    location.Items = await _item.Get(x => x.LocationId == propertyConfig.LocationId).ToListAsync();
-                    //itms
-                    if (location.Items == null)
-                    {
+                }
+                //itms
+                if (location.Items == null)
+                    { 
                         location.Items = new List<Item>();
                         if (items != null)
                         {
@@ -388,11 +393,29 @@ namespace BusinessLogic.Services
                             }
                         }
                     }
-                }
+                
             }
             var status = await _property.Update(prop);
             if (status > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
+                {
+                    List<Item> item1 = new List<Item>();
+                    if (items != null)
+                    {
+                        foreach (var item in items)
+                        {
+                            item1.Add(new Item
+                            {
+                                ItemName = item,
+                                LocationId = location.Id
+                            });
+                        }
+                        await _item.BulkInsert(item1);
+                    }
+                }
                 return true;
+            }
             return false;
         }
 
