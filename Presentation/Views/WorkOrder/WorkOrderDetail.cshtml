@@ -206,7 +206,7 @@ else
                                         <div class=" photo_disp" style="display:block">
                                             <a href="@file.Value">
                                                 <img src='@if (string.IsNullOrEmpty(file.Value))
-                                            { <text>/api/NA.jpg</text>}
+                                            { <text>/NA.jpg</text>}
                                             else
                                             { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
                                         </a>
@@ -218,7 +218,7 @@ else
                                 {
                                     <div class=" photo_disp" style="display:block">
                                         <a href="@file.Value">
-                                            <img src="/api/File.jpg" width="200" height="150" aria-hidden="true">
+                                            <img src="/File.jpg" width="200" height="150" aria-hidden="true">
                                            
                                             @file.Key
                                         </a>
@@ -455,10 +455,9 @@ new ViewDataDictionary(ViewData)
     }
     .customdisp {
         display: flex;
-        flex-flow: inherit;
         flex-flow: wrap;
         column-gap: 14px;
-        row-gap: 42px;
+        row-gap: 82px;
     }
 </style>
 
