@@ -28,14 +28,7 @@ else
             <span>Work Order Detail</span>
 
         }
-        if (string.IsNullOrEmpty(Model.ParentWOId))
-        {
-            <span class="fa-pull-right pr-2">@Model.Id</span>
-        }
-        else
-        {
-            <span class="fa-pull-right pr-2"><a asp-action="GetWODetail"asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2" >@Model.Id</a></span>
-        }
+        <span class="fa-pull-right pr-2">@Model.Id</span>
     }
 
 
@@ -44,8 +37,7 @@ else
 {
 <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
     <div class="justify-content-lg-start col-md-6">
-        <input type="button" value="Enter Hours" class="btn btn-primary" id='AddEffort' data-toggle="modal" data-target="#timesheet" />
-        <input type="button" value="Show Hours" class="btn btn-info" />
+        <input type="button" value="Enter/Show Hours" class="btn btn-primary" id='AddEffort' data-toggle="modal" data-target="#timesheet" />
     </div>
 </div>
 }
@@ -425,15 +417,12 @@ new ViewDataDictionary(ViewData)
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="overflow:scroll">
+            <div class="modal-body" >
                 <div class="spinner-border text-primary" role="status" id="spin">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="submit" class="btn btn-primary">Save changes</button>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -483,58 +472,17 @@ new ViewDataDictionary(ViewData)
 
 
     });
-    function test(e) {
-        var res = e.target.value + String.fromCharCode(e.charCode);
-
-        if (res > 24) {
-            e.target.value = 24;
-            return false;
-        }
-    }
-
-    function total(e) {
-        //group checking <24
-
-        $('.group').each(function (x) {
-            //input
-
-            var immedatesum = 0;
-            var inputhtml = $('.group')[x].children;
-            var input = [...inputhtml];
-            for (var y = 0; y < input.length;y++) {
-                if(input[y].type=='number')
-                immedatesum += parseInt(input[y].value);
-            }
-            if (immedatesum > 24) {
-                alert("you entered are more then 24 hr/day");
-                for (var y = 0; y < input.length;y++){
-                    if (input[y].type == 'number')
-                        input[y].value=0;
-            }
-            }
-        });
-
-
-        var sum = 0;
-        $('.day').each(function (x) {
-            sum += parseInt($('.day')[x].value);
-        });
-
-        $('.total').val(sum);
-    }
-
+    
     $('#AddEffort').on('click', function () {
-        $.get('@Url.Action("AddEffortView")?id='@Model.Id+'&type=1', function (res) {
+         $('.modal-body').html("");
+         $('#spin').show();
+        $.get('@Url.Action("AddEffort")?id=@Model.Id', function (res) {
             $('#spin').hide();
         $('.modal-body').html(res);
     });
     });
 
-    $('#submit').click(function (e) {
-         $('#effortform').click();
-
-
-    })
+    
 
 
 

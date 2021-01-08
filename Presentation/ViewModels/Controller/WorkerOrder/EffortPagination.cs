@@ -9,24 +9,10 @@ namespace Presentation.ViewModels
     public class EffortPagination
     {
         public List<EffortDTO> EffortDTOs { get; set; }
-        public int TotalEffortOfWeek {
-            get; set;
-        }
-
-        public int TotalBOTaxEffortOfWeek
-        {
-            get;set;
-        }
-        public int TotalRepairEffortOfWeek
-        {
-            get; set;
-        }
-        public DateTime? LastDay
-        {
-            get; set;
-        }
-
-        public DateTime? FirstDay { get; set; }
+        
+        public DateTime IncidentCreatedDate { get; set; }
+        public DateTime LastEffortFilledDate { get; set; }
+        public int TotalEffort { get; set; }
 
 
     }

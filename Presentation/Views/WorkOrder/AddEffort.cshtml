@@ -1,0 +1,105 @@
+﻿@model EffortPagination
+@{
+    
+    var date = Model.EffortDTOs.OrderBy(x => x.DateTime).Select(x=>x.DateTime).First();
+    var end = Model.EffortDTOs.OrderBy(x => x.DateTime).Select(x=>x.DateTime).Last();
+
+    IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+    {
+        for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+            yield return day;
+    }
+    int i = 0;
+}
+    <form id="effortform" asp-action="AddEffort">
+        <input hidden name="Id" id="Id" value="@ViewBag.id" />
+        <table class="table table-responsive-md" style="overflow:scroll;display: grid;
+}">
+            <thead>
+
+                <tr>
+                    @foreach (DateTime day in EachDay(date, end))
+                    {
+                        <th class="group">
+                            @day.DayOfWeek.ToString()
+                        </th>
+                    }
+
+                    <th>
+                        Total Hours
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    @foreach (var item in Model.EffortDTOs)
+                    {
+                        <td class="group">
+                            <label>Repair</label>
+                            <input type="DateTime" name="EffortDTOs[@i].DateTime" hidden value="@item.DateTime.Date" />
+                            <input id="Effort" name="EffortDTOs[@i].Effort" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Effort" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
+                        </td>
+                        i++;
+                    }
+
+
+                    <td>
+                        <input class="form-control total mt-4 " readonly value="@Model.TotalEffort" name="Weeektotal" id="Weeektotal" value="0" type="number" min="1">
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="modal-footer">
+            <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
+        </div>
+    </form>
+
+<script type="text/javascript">
+    $('#effortform').submit(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        var formdata = $(this).serialize();
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: formdata,
+            success: function (data) {
+                var insertedID = data;
+                if (insertedID.toString() == 'true') {
+                    alert("saved");
+                    $('#close').click();
+                } else {
+                    console.log('fail');
+                }
+            }
+        });
+
+        console.log(formdata);
+    });
+
+    function test(e) {
+        var res = e.target.value + String.fromCharCode(e.charCode);
+
+        if (res > 24) {
+            e.target.value = 24;
+            return false;
+        }
+    }
+
+    function total(e) {
+        //group checking <24
+        var sum = 0;
+        $('.day').each(function (x) {
+            sum += parseInt($('.day')[x].value);
+        });
+
+        $('.total').val(sum);
+    }
+
+</script>

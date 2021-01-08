@@ -638,14 +638,14 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetEffort(string id,int type=2)
+        public async Task<IActionResult> GetEffort(int type=2)
         {
             ViewBag.type = type;
             EffortPagination data = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("geteffort", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id, this,token:_token);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path , this,token:_token);
                 if (response.IsSuccessStatusCode)
                 {
                      data = JsonConvert.DeserializeObject<EffortPagination>(await response.Content.ReadAsStringAsync());
@@ -724,10 +724,45 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> AddEffortView()
+        public async Task<IActionResult> AddEffort(string Id)
         {
-            
-            return PartialView();
+            ViewBag.id = Id;
+            EffortPagination eff = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("geteffort", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?id="+Id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                     eff = JsonConvert.DeserializeObject<EffortPagination>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return PartialView(eff);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddEffort(EffortPagination effortDTO,string id)
+        {
+
+            Boolean eff = false;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("addeffort", out string path);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id,effortDTO, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    eff = JsonConvert.DeserializeObject<Boolean>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return Ok(eff);
         }
 
         [HttpGet]

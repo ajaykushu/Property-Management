@@ -1200,23 +1200,26 @@ namespace BusinessLogic.Services
             return workOrders;
         }
 
-        public async Task<bool> AddEffort(List<EffortDTO> effortDTOs, string id)
+        public async Task<bool> AddEffort(EffortPagination effortDTOs, string id)
+
         {   //add effort
             if (effortDTOs != null)//post request fired we have  to add the effort
             {
-                var datelist = await _effort.Get(x => x.WOId == id).Select(x => x.Date).ToListAsync();
-                var TobeAddedlist = effortDTOs.Where(x => !datelist.Contains(x.DateTime)).ToList();
                 List<Effort> effort = new List<Effort>();
-                foreach (var item in TobeAddedlist)
+                foreach (var item in effortDTOs.EffortDTOs)
                 {
-                    Effort ef = new Effort
+                    if (!item.Iseditable && item.Effort!=0)
                     {
-                        Repair = item.Repair,
-                        TaxBO = item.BOTax,
-                        WOId = id,
-                        Date = item.DateTime
-                    };
-                    effort.Add(ef);
+                        Effort ef = new Effort
+                        {
+                            Repair = item.Effort,
+                            WOId = id,
+                            Date = item.DateTime,
+                            UserId = userId
+                        };
+                        effort.Add(ef);
+                    }
+                    
                 }
                var status= await _effort.BulkInsert(effort);
                 if (status >= 1)
@@ -1230,20 +1233,55 @@ namespace BusinessLogic.Services
 
         public async Task<EffortPagination> GetEffort(string id)
         {
-            var start = DateTime.Now.Date.AddDays(-1 * (int)DateTime.Now.DayOfWeek);
-            var end = start.AddDays(7);
+            var wo = await _workOrder.Get(x => x.Id == id).Include(x => x.Efforts).FirstOrDefaultAsync();
+            var lastfilled = wo.Efforts.OrderByDescending(x => x.Date).Select(x=>x.Date).FirstOrDefault();
+            List<EffortDTO> effort = new List<EffortDTO>();
+            if ((wo.Efforts == null || (wo.Efforts != null && wo.Efforts.Count%7 == 0) && wo.IsActive))
+            {   //requested page is next page
+                var date = wo.CreatedTime;
+                var enddate = date.AddDays(7);
+                foreach (DateTime day in EachDay(date, enddate))
+                {
+                    effort.Add(new EffortDTO
+                    {
+                        DateTime = day,
+                        Effort = 0,
+                        Iseditable = true
 
-            var wo = await _effort.Get(x => x.WOId == id).Where(x => x.Date >= start && x.Date <= end).Select(x => new EffortDTO
+                    });
+                }
+            
+            }
+            else if (wo.Efforts.Count < 7)
             {
-                BOTax = x.TaxBO,
-                Repair = x.Repair,
-                DateTime = x.Date
-            }).AsNoTracking().ToListAsync();
-           
+                foreach(var eff in wo.Efforts)
+                {
+                    effort.Add(new EffortDTO
+                    {
+                        DateTime = eff.Date,
+                        Effort = eff.Repair,
+                        Iseditable = false
 
+                    });
+                }
+                var date = lastfilled.AddDays(1);
+                var enddate = date.AddDays(7- (wo.Efforts.Count+1));
+                foreach (DateTime day in EachDay(date, enddate))
+                {
+                    effort.Add(new EffortDTO
+                    {
+                        DateTime = day,
+                        Effort = 0,
+                        Iseditable = true
+
+                    });
+                }
+            }
+          
             return new EffortPagination
-            {
-                EffortDTOs = wo
+            {   Lastday=wo.CreatedTime,
+                EffortDTOs = effort
+                
             };
         }
 
@@ -1267,6 +1305,11 @@ namespace BusinessLogic.Services
             }).ToListAsync();
 
             return res;
+        }
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
         }
     }
 }

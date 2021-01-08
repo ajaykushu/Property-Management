@@ -213,9 +213,9 @@ namespace API.Controllers
        
         [HttpPost]
         [Route("addeffort")]
-        public async Task<ActionResult<bool>> AddEffort(List<EffortDTO> effortDTOs, string id)
+        public async Task<ActionResult<bool>> AddEffort(EffortPagination effortDTOs, string Id)
         {
-            bool res = await _workOrderService.AddEffort(effortDTOs,id);
+            bool res = await _workOrderService.AddEffort(effortDTOs,Id);
             return Ok(res);
         }
         [HttpGet]

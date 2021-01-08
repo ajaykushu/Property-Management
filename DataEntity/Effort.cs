@@ -12,10 +12,13 @@ namespace DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public DateTime Date { get; set; }
-        public int TaxBO { get; set; }
         public int Repair { get; set; }
         [ForeignKey("WorkOrder")]
         public string WOId { get; set; }
         public WorkOrder WorkOrder {get;set;}
+        [ForeignKey("User")]
+        public long UserId { get; set; }
+        public ApplicationUser User { get; set; }
+
     }
 }
