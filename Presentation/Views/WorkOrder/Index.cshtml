@@ -1,12 +1,14 @@
 ﻿@model WOFilterModel
-@{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; }
-    <form class="form" style="margin-bottom:0px;">
-        <partial name="~/Views/WorkOrder/_filter.cshtml" model="Model" />
-        <hr />
-        @{ var param = Model.GetType()
-                 .GetProperties()
-                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
-        }
+@{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; 
+    
+}
+<form class="form" style="margin-bottom:0px;">
+    <partial name="~/Views/WorkOrder/_filter.cshtml" model="Model" />
+    <hr />
+    @{ var param = Model.GetType()
+              .GetProperties()
+              .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
+    }
     <div class="workordertitle">
         @if (Model.isGeneralSearch)
         {
@@ -34,9 +36,9 @@
             </div>
         </div>
     </div>
-    </form>
-    @if (ResponseModel != null && ResponseModel.Payload.All(x => x.IsActive))
-    {
+</form>
+@if (ResponseModel != null && !Model.isGeneralSearch && ResponseModel.Payload.All(x => x.IsActive))
+{  
         <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
             <div class="justify-content-lg-start col-md-6">
                 <strong>To Do List</strong>
@@ -46,132 +48,133 @@
             </div>
 
         </div>
-    }
+
+}
 
 
-    @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
-    {
-        <table class="table table-striped wordorderdetail table_container table-responsive-lg">
-            <thead>
+@if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
+{
+    <table class="table table-striped wordorderdetail table_container table-responsive-lg">
+        <thead>
+            <tr>
+                <th>
+                    WO#
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Assigned To
+                </th>
+                <th>
+                    Property
+                </th>
+                <th>
+                    Due Date
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in ResponseModel.Payload)
+            {
                 <tr>
-                    <th>
-                        WO#
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Assigned To
-                    </th>
-                    <th>
-                        Property
-                    </th>
-                    <th>
-                        Due Date
-                    </th>
-                    <th>
+                    <td>
+                        <span><strong class="@if (item.ParentId!=null) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
+                    </td>
 
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+                    <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
+                    <td><span class="text-success"><strong>@item.AssignedTo</strong></span></td>
+                    <td>
+                        <span class="text-dark">
+                            @if (item.Property != null)
+                            {@item.Property.PropertyName}
+                        </span>
+                    </td>
+                    <td>@item.DueDate</td>
+                    <td style="width:180px;">
+                        <div class="form-inline">
+                            @{
 
-                @foreach (var item in ResponseModel.Payload)
-                {
-                    <tr>
-                        <td>
-                            <span><strong class="@if (item.ParentId!=null) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
-                        </td>
-
-                        <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
-                        <td><span class="text-success"><strong>@item.AssignedTo</strong></span></td>
-                        <td>
-                            <span class="text-dark">
-                                @if (item.Property != null)
-                                {@item.Property.PropertyName}
-                            </span>
-                        </td>
-                        <td>@item.DueDate</td>
-                        <td style="width:180px;">
-                            <div class="form-inline">
-                                @{
-
-                                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                                    keyValuePairs.Add("id", item.Id + "");
-                                    if (item.IsActive)
-                                    {
-                                        <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
-                                    }
-                                      <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                                keyValuePairs.Add("id", item.Id + "");
+                                if (item.IsActive)
+                                {
+                                    <auth-link bclass="btn btn-sm btn-primary mr-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='<i class="fa fa-pencil-alt"></i>&nbsp;Edit'></auth-link>
                                 }
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                                <auth-link bclass="btn btn-sm btn-info" feature=@MenuEnum.GetWO_Detail routedata=@keyValuePairs action="GetWODetail" controller="WorkOrder" content='<i class="fa fa-info"></i>&nbsp;Detail'></auth-link>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
 
-        </table>
-        <hr />
-        <nav>
-            <ul class="pagination">
-                @{ int current = 0;}
-                <li class="page-item @if (ResponseModel.CurrentPage == 0)
+    </table>
+    <hr />
+    <nav>
+        <ul class="pagination">
+            @{ int current = 0;}
+            <li class="page-item @if (ResponseModel.CurrentPage == 0)
                     {<text>disabled</text> }">
-                    @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
-                </li>
+                @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
+            </li>
 
-                @for (int i = 0; i < ResponseModel.PageCount; i++)
+            @for (int i = 0; i < ResponseModel.PageCount; i++)
+            {
+
+                if (ResponseModel.CurrentPage == i)
                 {
-
-                    if (ResponseModel.CurrentPage == i)
-                    {
-                        <li class="page-item active" >
-                            <a class="page-link"  >@(i + 1) <span class="sr-only">(current)</span></a>
-                        </li>
-                        current = i;
-                    }
-                    else
-                    {
-                        <li class="page-item">
-                            @{ Model.PageNumber = i;}
-                            @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                        </li>
-                    }
+                    <li class="page-item active">
+                        <a class="page-link">@(i + 1) <span class="sr-only">(current)</span></a>
+                    </li>
+                    current = i;
                 }
-                @{ Model.PageNumber = current + 1;}
-                <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
+                else
+                {
+                    <li class="page-item">
+                        @{ Model.PageNumber = i;}
+                        @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                    </li>
+                }
+            }
+            @{ Model.PageNumber = current + 1;}
+            <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
                     {<text>disabled</text> }">
-                    @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
-                </li>
-            </ul>
-        </nav>
-    }
-    else
-    {
-        <span>No Record found</span>
-    }
+                @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+            </li>
+        </ul>
+    </nav>
+}
+else
+{
+<span>No records found.</span>
+}
 
 
-    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-    {
-        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
-
-        <script>
-        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-        </script>
-    }
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
     <script>
-
-
-        $('#Export').change(function () {
-            $('input[type="submit"]').click();
-        })
-
-
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
     </script>
-    <style>
-        .dropup .dropdown-item {
-            color: black;
-        }
-    </style>
+}
+
+<script>
+
+
+    $('#Export').change(function () {
+        $('input[type="submit"]').click();
+    })
+
+
+</script>
+<style>
+    .dropup .dropdown-item {
+        color: black;
+    }
+</style>

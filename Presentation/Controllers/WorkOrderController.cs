@@ -406,7 +406,7 @@ namespace Presentation.Controllers
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                       return Ok("Status Changed Sucessfully");
+                       return Ok("Saved Successfully");
                 }
             }
             catch (Exception)

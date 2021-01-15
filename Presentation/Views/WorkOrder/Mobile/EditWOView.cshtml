@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "Edit Recurring WorkOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var bottom = "0";
+    var height="92%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "90%";
+        bottom = "2%";
+    }
 }
 @if (Model != null)
 {
@@ -16,7 +24,7 @@
         </nav>
     </header>
     
-    <form class="mform" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
+    <form class="mform" style="height: @height ;bottom:@bottom" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
         @if (Model == null)
         {
             <p>No Record Found</p>
@@ -26,7 +34,7 @@
             <table class="table table-striped">
                 <tbody>
                     <tr></tr>
-                    <tr><th class="text-center" >@Model.Id</th></tr>
+                    <tr><th class="text-center">@Model.Id</th></tr>
                     <tr>
                         <th>
                             Location
@@ -91,10 +99,10 @@
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
                             }
-                        <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
-                            <textarea class="form-control" placeholder="write your own issue" asp-for="CustomIssue"></textarea>
-                            <span class="text-danger">Please enter issue</span>
-                        </div>
+                            <div class="row top-buffer padding CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                                <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters" asp-for="CustomIssue"></textarea>
+                                <span class="text-danger">Please enter issue</span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -220,7 +228,7 @@
                                     @foreach (var item in Model.FileAvailable)
                                     {
                                         <div class="col">
-                                            <a href="@item.Value" >@item.Key</a>
+                                            <a href="@item.Value">@item.Key</a>
                                             <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
                                         </div>
                                     }
@@ -234,7 +242,7 @@
                                 <div class="col">
                                     <div class="cont" style="width:100%">
                                         <label style="width:100%" class="browsebutton">Add Photo</label>
-                                        <input  style="width:100%" asp-for="File"  accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                        <input style="width:100%" asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
                                     <div id="file_selected">
                                     </div>
@@ -245,9 +253,9 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="bottom-stick" style="background-color:white">
-                <input asp-for="Id" hidden>
-                <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn w-100  btn-success submit">Save Changes</button>
+            <input asp-for="Id" hidden>
+            <div class="bottom-stick" style="padding:5px;padding:5px;bottom:@bottom" >
+                <button type="submit" data-toggle="modal" style="margin-left: 24%;" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Save Changes</button>
                 @*passing data to controller*@
             </div>
         }

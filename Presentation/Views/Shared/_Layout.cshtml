@@ -23,7 +23,7 @@
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
 </head>
-<body>
+<body >
     @if (device.Device.Type != DeviceType.Mobile)
     {
         <header>
@@ -47,7 +47,7 @@
                                 </li>
                                 <li>
 
-                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@Regex.Replace(path,"(.jpg)",".png")</text> }' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
 
 
                                 </li>
@@ -116,7 +116,11 @@
 
     </script>
     @RenderSection("Scripts", required: false)
-</body>
+    <div class="image-modal" style="z-index: 9999">
+        <a href="javascript:CloseImageDisplayModal()" class="image-modal-close" tooltip="Close"><i class="fa fa-times fa-3x mr-2 mt-2"></i></a>
+        <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png" class="image-size"   />
+    </div>
+</body >
 </html>
 @if(device.Device.Type != DeviceType.Mobile && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated){
 <script>

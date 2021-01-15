@@ -188,36 +188,7 @@ else
                                 <label asp-for="Attachment"></label>
                             </div>
                             <div class="col-md-9 customdisp">
-                                @{var list = new List<string> { "jpeg", "png", "jpg" }; }
-                                @foreach (var file in Model.Attachment)
-                                {
-
-                                    @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
-                                    {
-
-                                        <div class=" photo_disp" style="display:block">
-                                            <a href="@file.Value">
-                                                <img src='@if (string.IsNullOrEmpty(file.Value))
-                                            { <text>/NA.jpg</text>}
-                                            else
-                                            { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
-                                        </a>
-                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                    </div>
-
-                                }
-                                else
-                                {
-                                    <div class=" photo_disp" style="display:block">
-                                        <a href="@file.Value">
-                                            <img src="/File.jpg" width="200" height="150" aria-hidden="true">
-                                           
-                                            @file.Key
-                                        </a>
-                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                    </div>
-                                }
-                                }
+                               <custimage   images="Model.Attachment"></custimage> 
                             </div>
 
                             </div>

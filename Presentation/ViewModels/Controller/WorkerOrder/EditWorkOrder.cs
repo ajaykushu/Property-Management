@@ -66,6 +66,7 @@ namespace Presentation.ViewModels
 
         public List<SelectItem> Sections { get; set; }
         public IList<IFormFile> File { get; set; }
+        [StringLength(100, ErrorMessage = "Limit to 100 characters")]
         public string  CustomIssue { get; set; }
     }
 }

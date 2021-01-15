@@ -4,7 +4,14 @@
 }
 @model WOFilterModel
 @{ var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>;
-
+    var bottom = "0";
+    var height="92%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "88%";
+        bottom = "2%";
+    }
     }
 @{ var param = Model.GetType()
            .GetProperties()
@@ -31,7 +38,7 @@
     </nav>
 </header>
 
-<form class="mform">
+<form class="mform" style="height:@height">
     <partial name="~/Views/WorkOrder/Mobile/_filter.cshtml" model="Model" />
     <div class="container">
         @if (ResponseModel != null && ResponseModel.Payload != null)
@@ -90,8 +97,8 @@
         }
     </div>
 </form>
-<br/>
-<div class="bottom-stick">
+
+<div class="bottom-stick" style="bottom:@bottom">
     <a  onClick="location.href=location.href"  class="nav-link" style="color:#fdfdfdf2;padding-left: 24px"><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></a>
     <div class="container-block">
         <a asp-action="CreateWorkOrderView" class="nav-link float-right" style="color:#fdfdfdf2"><i class="fa fa-plus fa-3x"></i></a>

@@ -62,7 +62,7 @@ namespace Presentation.ViewModels
         [Required]
         [Range(0, 3)]
         public int Priority { get; set; }
-
+        [StringLength(100, ErrorMessage ="Limit to 100 characters")]
         public string CustomIssue { get; set; }
        
     }

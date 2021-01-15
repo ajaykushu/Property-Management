@@ -33,124 +33,108 @@
         margin-top: 10%;
     }
 </style>
-@{ 
-    var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
-    var id=HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
-    var obj=ObjectByteConverter.Deserialize<SessionStore>(sessionStorage.Get(id));
-    var ret = obj.MenuView.SelectMany(x => x.Value).OrderBy(x=>x.SubMenuName).ToList();
-    ret.RemoveAt(0);
-    var findinndex = ret.FindIndex(x => x.Action == "CreateWorkOrderView");
-    var temp = ret[0];
-    ret[0] = ret[findinndex];
-    ret[findinndex] = temp;
-    var isvisible = false;
+@{
+        var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
+        var id = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+        var obj = ObjectByteConverter.Deserialize<SessionStore>(sessionStorage.Get(id));
+        var ret = obj.MenuView.SelectMany(x => x.Value).OrderBy(x => x.SubMenuName).ToList();
+        ret.RemoveAt(0);
+        var findinndex = ret.FindIndex(x => x.Action == "CreateWorkOrderView");
+        var temp = ret[0];
+        ret[0] = ret[findinndex];
+        ret[findinndex] = temp;
 
-}
-<header>
-    <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">My Property</a>
-            <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
+        path = string.IsNullOrWhiteSpace(path) ? "/NA.jpg" : Regex.Replace(path, "(.jpg)", ".png");
+        var url = Url.Action("UserDetailView", "User", new { Id = id });
 
-                @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-                {
-                <li class="nav-item active">
-                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><u>Logout</u></a>
-                </li>
-                }
-                else
-                {
-                <li class="nav-item">
-                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="Index"><i class="fa fa-sign-in-alt fa-1x"></i></a>
-                </li>
-                }
-            </ul>
-        </div>
-    </nav>
-</header>
-<div class="mwrapper">
-    @for (int i = 0; i < ret.Count; i = i + 2)
-    {
-        <div class="row">
-        <div class="col">
-            <div class="menu">
-                <a asp-action="@ret[i].Action" asp-controller="@ret[i].Controller">
-                    <div class="item">
-                        <span><i class="@ret[i].Class fa-7x" aria-hidden="true"></i></span>
-                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">@ret[i].SubMenuName</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        @if (i + 1 < ret.Count)
-        {
-            <div class="col">
-                <div class="menu">
-                    <a asp-action="@ret[i + 1].Action" asp-controller="@ret[i + 1].Controller">
-                        <div class="item">
-                            <span><i class="@ret[i + 1].Class fa-7x" aria-hidden="true"></i></span>
-                            <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">@ret[i + 1].SubMenuName</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            }
-            else
-            {
-                isvisible = true;
+        ret.Insert(1, new MenuProperty());
 
-            <div class="col">
-                <div class="menu">
-                    <div class="item">
-                        <a href="@Url.Action("UserDetailView", "User", new { Id = id })">
-                            <img src='@if (string.IsNullOrEmpty(path))
-                        { <text>/NA.jpg</text>}
-                        else
-                        { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" />
-                        </a>
-                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Profile</span>
-                    </div>
-                   
-
-                </div>
-            </div>
-        }
-    </div>
     }
+    <header>
+        <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">My Property</a>
+                <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
 
-    <div class="row" @if (isvisible) { <text>hidden</text>}>
-        <div class="col">
-                <div class="menu">
-                    <div class="item">
-                        <a href="@Url.Action("UserDetailView", "User", new { Id =id })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path</text> }' width="100" height="100" alt="Pet Image" class="avtaar" /></a>
-                        <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">Profile</span>
+                    @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item active">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><u>Logout</u></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="Index"><i class="fa fa-sign-in-alt fa-1x"></i></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="mwrapper">
+        @for (int i = 0; i < ret.Count; i = i + 2)
+        {
+            
+            <div class="row">
+                <div class="col">
+                    <div class="menu">
+                        <a asp-action="@ret[i].Action" asp-controller="@ret[i].Controller">
+                            <div class="item">
+                                <span><i class="@ret[i].Class fa-7x" aria-hidden="true"></i></span>
+                                <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">@ret[i].SubMenuName</span>
+                            </div>
+                        </a>
+                    </div>
+                  </div>
+                @if (i == 0) {
+            <div class='col'>
+                <div class='menu'>
+                    <div class='item'>
+                        <a href='@url'>
+                            <img src='@path' width='100' height='100' alt='Pet Image' class='avtaar' />
+                        </a>
+                        <span style='font-family: Georgia, ' Times New Roman', Times, serif; color: grey'>Profile</span>
                     </div>
                 </div>
+            </div>
+                }
+                @if (i!=0 && i + 1 < ret.Count)
+                {
+                    <div class="col">
+                        <div class="menu">
+                            <a asp-action="@ret[i + 1].Action" asp-controller="@ret[i + 1].Controller">
+                                <div class="item">
+                                    <span><i class="@ret[i + 1].Class fa-7x" aria-hidden="true"></i></span>
+                                    <span style="font-family: Georgia, 'Times New Roman', Times, serif; color: grey">@ret[i + 1].SubMenuName</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
 
-        </div>
+            </div>
+            
+        }
+
     </div>
 
-</div>
-
-<script>
+    <script>
     $('#notification_count').ready(function () {
             $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
             $("#notification_count").html('<strong>'+data+'</strong>');
             })
     })
 
-</script>
+    </script>
 
-<style>
-    .row {
-  display: flex; /* equal height of the children */
-}
+    <style>
+        .row {
+            display: flex; /* equal height of the children */
+        }
 
-.col {
-  flex: 1; /* additionally, equal width */
-  
-  padding: 1em;
-  
-}
-
-</style>
+        .col {
+            flex: 1; /* additionally, equal width */
+            padding: 1em;
+        }
+    </style>

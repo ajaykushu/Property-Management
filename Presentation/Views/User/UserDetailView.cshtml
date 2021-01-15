@@ -3,9 +3,12 @@
        ViewData["Title"] = "User Detail View";
        Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+    <div>
+        @Html.ActionLink("Edit", "EditUserView", new { id = Model.Id }) |
+        <a href="javascript:history.back()">Back to List</a>
+    </div>
 <div>
-    <hr />
+   
     <div class="workordertitle">
         User Detail
     </div>
@@ -74,14 +77,14 @@
                         </div>
                         @if (Model.PhotoPath != null)
                             {
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label for="photo">Photo</label>
-                            </div>
-                            <div class=" photo_disp" style="display:block">
-                                <img src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Model.PhotoPath</text> }' area-hidden="true" width="200" height="150" />
-                            </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label for="photo">Photo</label>
                         </div>
+                        <div class=" photo_disp" style="display:block">
+                            <span class="OpenImageDisplayModal">   <img src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Regex.Replace(Model.PhotoPath,"(.jpg)",".png")</text> }' area-hidden="true" width="200" height="150" /></span>
+                        </div>
+                    </div>
                             }
                     </div>
                 </td>
@@ -188,10 +191,7 @@
 
     }
 </div>
-<div>
-    @Html.ActionLink("Edit", "EditUserView", new { id = Model.Id }) |
-    <a href="javascript:history.back()">Back to List</a>
-</div>
+
 <style>
     .myview .card {
         width: 200px;

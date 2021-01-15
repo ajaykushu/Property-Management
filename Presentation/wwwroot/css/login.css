@@ -730,9 +730,10 @@ label {
 }
 /*mobile*/
 .mform {
-    margin-top: 68px;
+    margin-top: 16%;
     display: block;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 /*workorder detail*/
 .status {
@@ -756,7 +757,7 @@ label {
     bottom: 0;
     width: 100%;
     position: fixed;
-    height: 60px;
+    height: 9%;
     z-index: 9999;
     display:inline-flex;
     background-color: grey;
@@ -778,12 +779,13 @@ label {
 }
 
 .comment-stick {
-    display: flex;
-    bottom: 60px;
+    display: inline-table;
     width: 100%;
     position: fixed;
+    bottom: 7%;
     height: auto;
-    z-index: 999;
+    padding: 10px;
+    z-index: 9999;
     background-color: lightgray;
 }
 
@@ -827,8 +829,8 @@ label {
 
 .mwofilter {
     width: 75%;
-    z-index: 1029;
-    position: absolute;
+    z-index: 9999;
+    position: fixed;
 }
 
 .DueDateMobile {
@@ -861,4 +863,24 @@ label {
     display: inline-block;
     word-break: break-word;
     padding-top: 0px;
+}
+
+.image-modal {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    top: 0;
+    background: black;
+    display:none;
+}
+.image-modal-close {
+    float: right;
+    cursor: pointer;
+    color: white;
+}
+.image-size {
+    width: 100%;
+    height: 85vh;
+    padding: 13px;
 }

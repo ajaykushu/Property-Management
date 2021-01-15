@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "Create Recurring WorkOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var bottom = "0";
+    var height="92%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "90%";
+        bottom = "2%";
+    }
 }
 @if (Model != null)
 {
@@ -16,7 +24,7 @@
         </nav>
     </header>
 
-    <form class="mform" id="wocreaterecurring" asp-action="CreateWORecurring" asp-controller="WorkOrder">
+    <form class="mform" style="height: @height ;bottom:@bottom" id="wocreaterecurring" asp-action="CreateWORecurring" asp-controller="WorkOrder">
         @if (Model == null)
         {
             <p>No Record Found</p>
@@ -103,7 +111,7 @@
                                 <span asp-validation-for="IssueId" class="text-danger"></span>
                             </div>
                             <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
-                                <textarea class="form-control" placeholder="write your own issue" asp-for="CustomIssue"></textarea>
+                                <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters" asp-for="CustomIssue"></textarea>
                                 <span class="text-danger">Please enter issue</span>
                             </div>
 
@@ -214,8 +222,8 @@
                 </tbody>
             </table>
             <hr />
-            <div class="bottom-stick" style="padding:5px;">
-                <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn w-50 float-right btn-success submit">Create</button>
+            <div class="bottom-stick" style="padding:5px;padding:5px;bottom:@bottom">
+                <button type="submit" data-toggle="modal" style="margin-left: 24%;" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Create</button>
                 @*<input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">*@
             </div>
         }

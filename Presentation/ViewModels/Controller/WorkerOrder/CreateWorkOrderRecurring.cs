@@ -63,6 +63,7 @@ namespace Presentation.ViewModels
         public DateTime? RecurringEndDate { get; set; }
         public int? EndAfterCount { get; set; }
         public DateTime? RecurringStartDate { get; set; }
+        [StringLength(100, ErrorMessage = "Limit to 100 characters")]
         public string CustomIssue { get; set; }
     }
 }

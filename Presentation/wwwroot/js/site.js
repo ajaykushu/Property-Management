@@ -627,3 +627,15 @@ function AddItem(e) {
     e.target.remove();
 
 }
+
+$('.OpenImageDisplayModal').on('click', function (e) {
+    e.preventDefault();
+    $('.image-modal').show();
+    var url = e.target.src.replace('.png', '.jpg');
+    $('.image-size').prop("src", url);
+});
+
+function CloseImageDisplayModal() {
+    $('.image-size').prop("src", "");
+    $('.image-modal').hide();
+}

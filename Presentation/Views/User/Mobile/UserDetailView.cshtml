@@ -7,7 +7,7 @@
 <header>
     <nav class="navbar bg-success mb-3 fixed-top">
         <div class="d-inline-flex w-100">
-            <a style="color:white" href="javascript:history.back()"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+            <a style="color:white;margin-top: 9px;" href="javascript:history.back()"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
             <div class="container-block justify-content-center">
                 <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">User Detail</span>
             </div>
@@ -86,8 +86,8 @@
                                 <label for="photo">Photo</label>
                             </div>
                             <div class="photo_disp" style="display:block">
-                                <img src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Model.PhotoPath</text> }' width="200" height="150" alt="Pet Image" />
-                            </div>
+                                <span class="OpenImageDisplayModal">  <img src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Regex.Replace(Model.PhotoPath,"(.jpg)",".png")</text> }' width="200" height="150" alt="Pet Image" /></span>
+</div>
                         </div>
                             }
                     </div>

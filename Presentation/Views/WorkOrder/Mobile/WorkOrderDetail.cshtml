@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "WO Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var bottom = "0";
+    var height="82%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "81%";
+        bottom = "2%";
+    }
 }
 
 
@@ -22,7 +30,7 @@
             </div>
         </nav>
     </header>
-    <div class="mform">
+    <div class="mform" style="height: @height ;bottom:@bottom">
 
         <table class="table border-0 table-striped ">
             <thead>
@@ -94,74 +102,45 @@
                         <td>
                             <div class="flex-sm-row">
 
-                                 <form asp-action="WorkOrderStatusChange" id="EditWO" asp-controller="WorkOrder">
-                            @if (!Model.Recurring)
-                            {
-                                <div style="display:grid">
+                                <form asp-action="WorkOrderStatusChange" id="EditWO" asp-controller="WorkOrder">
+                                    @if (!Model.Recurring)
+                                    {
+                                        <div style="display:grid">
 
-                                        <select class="form-control form-control" asp-for="StatusId"  asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
-                                            <option value="">Select Status</option>
-                                        </select>
-                                        <div class="form-group top-buffer">
-                                            <label>Add Status Description</label>
-                                            <textarea class="form-control" asp-for="StatusChangeComment"></textarea>
+                                            <select class="form-control form-control" asp-for="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
+                                                <option value="">Select Status</option>
+                                            </select>
+                                            <div class="form-group top-buffer">
+                                                <label>Add Status Description</label>
+                                                <textarea class="form-control" asp-for="StatusChangeComment"></textarea>
+                                            </div>
+                                            <input asp-for="Id" hidden>
+
+
                                         </div>
-                                        <input asp-for="Id" hidden>
-
-                                    
-                                </div>
-                            }
-                            @if (Model.Attachment != null)
-                            {
-                                <div class=" top-buffer">
-                                    <div class="customdisp">
-                                        @{var list = new List<string> { "jpeg", "png", "jpg" }; }
-                                        @foreach (var file in Model.Attachment)
-                                        {
-
-                                            @if (list.Where(x => file.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
-                                            {
-
-                                                <div class=" photo_disp" style="display:block;">
-                                                    <a href="@file.Value">
-                                                        <img src='@if (string.IsNullOrEmpty(file.Value))
-                                            { <text>/NA.jpg</text>}
-                                            else
-                                            { <text>@file.Value</text> }' area-hidden="true" width="200" height="150" />@file.Key
-                                        </a>
-                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                    </div>
-
-                                    <br />
-                                }
-                                else
-                                {
-                                    <div class=" photo_disp" style="display:block;">
-                                        <a href="@file.Value">
-                                            <img src='/File.jpg' width="200" height="150" />@file.Key
-                                        </a>
-                                            <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@file.Value" value="Delete">
-                                    </div>
-
-
                                     }
-                                    }
-                                    </div>
+                                    @if (Model.Attachment != null)
+                                    {
+                                        <div class="top-buffer">
+                                            <div class="customdisp">
+                                                <custimage images="Model.Attachment"></custimage>
+                                            </div>
 
-                                </div>
-                            }
-                            <div class=" top-buffer mt-5">
-                                    <div class="cont" >
-                                        <label  class="browsebutton">Add Photo</label>
-                                        <input  asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                        </div>
+                                    }
+                                    <div class=" top-buffer mt-5">
+                                        <div class="cont">
+                                            <label class="browsebutton">Add Photo</label>
+                                            <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                        </div>
+                                        <div id="file_selected">
+                                        </div>
+                                        <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
                                     </div>
-                                    <div id="file_selected">
-                                    </div>
-                                    <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                </div>
-                            <input type="text" asp-for="FilesRemoved" hidden>
-                            <input type="submit" value="Update" class="btn btn btn-primary">
-                        </form>
+                                    <input type="text" asp-for="FilesRemoved" hidden>
+                                    <input type="submit" hidden value="Update" id="dohidden" class="btn btn btn-primary ">
+                                    <button type="reset" hidden id="dohiddenreset" class="btn btn btn-primary "></button>
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -359,14 +338,7 @@
                         </td>
                     </tr>
                 }
-                <tr>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                    </td>
-                </tr>
+                
             </tbody>
         </table>
 
@@ -392,17 +364,26 @@
             <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">
         </div>
     </div>
-    <div class="comment-stick">
-        <form class="comment-grp w-100 d-inline-flex" id="commentform" asp-action='PostComment' method='post'>
-            <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
-            <input type="text" id='Comment' name='Comment' class="form-control form-control-lg" placeholder="write a note or comment">
-            &nbsp;<input type="submit" class="btn btn-primary" value="Post">
-        </form>
-    </div>
-    <div class="bottom-stick">
-        <div class="nav-link d-inline-flex flex-row">
-            &nbsp;<input type="button" class=" btn btn-info btn-sm" value="Complete" style="color:lightgray">
-            &nbsp;<input type="button" class="btn btn-primary btn-sm" value="Resume" style="color:lightgray">
+    
+    <form class="comment-stick w-100 form-inline" id="commentform" asp-action='PostComment' method='post'>
+        <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
+        <table width="100%">
+            <tr width="90%">
+                <td>
+                    <input type="text" id='Comment' name='Comment' class="form-control form-control-lg w-100" placeholder="write a note or comment">
+                </td>
+            <td width="10%">
+                <button type="submit" class="btn btn-lg btn-primary">Post</button>
+            </td>
+            </tr>
+        </table>
+        
+    </form>
+    
+    <div class="bottom-stick" style="bottom:@bottom">
+        <div class="nav-link d-inline-flex flex-row" style="grid-gap: 6px">
+            <input type="button" class="btn w-50 btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white">
+            <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn w-50 btn-danger submit" value="Cancel" style="color:white">
         </div>
         <div class="container-block">
             <a href="#" class="nav-link edit-link float-right" style="color:lightgray"><i class="fa fa-pencil-alt fa-3x"></i></a>
