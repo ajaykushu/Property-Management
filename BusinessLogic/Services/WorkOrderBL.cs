@@ -1264,7 +1264,7 @@ namespace BusinessLogic.Services
                 }
             
             }
-            else if (wo.Efforts.Count < 7)
+            else if (wo.Efforts.Count%7!=0)
             {
                 foreach(var eff in wo.Efforts)
                 {
@@ -1277,7 +1277,7 @@ namespace BusinessLogic.Services
                     });
                 }
                 var date = lastfilled.AddDays(1);
-                var enddate = date.AddDays(7- (wo.Efforts.Count+1));
+                var enddate = date.AddDays(Math.Abs(7-(wo.Efforts.Count+1)));
                 foreach (DateTime day in EachDay(date, enddate))
                 {
                     effort.Add(new EffortDTO
