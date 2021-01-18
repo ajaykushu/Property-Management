@@ -21,9 +21,10 @@
     <link rel="stylesheet" href="~/css/fontawesome.min.css?v=1234" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/browser-image-compression@1.0.13/dist/browser-image-compression.js"></script>
     <partial name="_ValidationScriptsPartial" />
 </head>
-<body >
+<body>
     @if (device.Device.Type != DeviceType.Mobile)
     {
         <header>
@@ -40,8 +41,8 @@
                             @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                             {
                                 userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
-                     var obj =ObjectByteConverter.Deserialize<SessionStore>( await sessionStorage.GetAsync(userId));
-                    var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
+                                var obj = ObjectByteConverter.Deserialize<SessionStore>(await sessionStorage.GetAsync(userId));
+                                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
                                 <li class="nav-item dropdown ">
                                     <partial name="MenuView" for=@obj.MenuView />
                                 </li>
@@ -108,8 +109,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script src="~/js/all.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/sw.js">
@@ -118,9 +121,9 @@
     @RenderSection("Scripts", required: false)
     <div class="image-modal" style="z-index: 9999">
         <a href="javascript:CloseImageDisplayModal()" class="image-modal-close" tooltip="Close"><i class="fa fa-times fa-3x mr-2 mt-2"></i></a>
-        <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png" class="image-size"   />
+        <img src="" class="image-size" />
     </div>
-</body >
+</body>
 </html>
 @if(device.Device.Type != DeviceType.Mobile && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated){
 <script>

@@ -1,6 +1,7 @@
 ﻿using DataTransferObjects.ResponseModels;
 using Models;
 using Models.ResponseModels;
+using Models.ResponseModels.User;
 using Models.User.RequestModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,5 +36,6 @@ namespace BusinessLogic.Interfaces
 
         Task<bool> MarkAsRead(int id);
         Task<List<UserList>> GetUserEmail();
+        Task<List<TimeSheet>> GetTimeSheet();
     }
 }

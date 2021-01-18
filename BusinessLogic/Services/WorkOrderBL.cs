@@ -268,7 +268,7 @@ namespace BusinessLogic.Services
             else
                 count = query.Count();
 
-            workOrderAssigned = await query.OrderBy(x => x.Priority).Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
+            workOrderAssigned = await query.Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
                 {
                     DueDate = x.DueDate.ToString("dd-MMM-yy"),
                     Description = x.Description,
@@ -710,6 +710,12 @@ namespace BusinessLogic.Services
                 query=query.Include(x => x.Issue).ThenInclude(x => x.Item).Where(x => x.Item.ItemName.Contains(wOFilterModel.TermSearch) || x.Issue.IssueName.Contains(wOFilterModel.TermSearch) || x.Property.PropertyName.Contains(wOFilterModel.TermSearch) || x.Id.Contains(wOFilterModel.TermSearch) || x.Description.Contains(wOFilterModel.TermSearch) || x.Status.StatusDescription.Contains(wOFilterModel.TermSearch) || x.Location.LocationName.Contains(wOFilterModel.TermSearch)|| (x.AssignedTo != null && x.AssignedTo.FirstName.Contains(wOFilterModel.TermSearch)|| x.AssignedTo.LastName.Contains(wOFilterModel.TermSearch)) ||
                 (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.Contains(wOFilterModel.TermSearch)));
             }
+            if (wOFilterModel.SortedByDate)
+            {
+                query = query.OrderBy(x => x.CreatedTime);
+            }
+            else
+                query = query.OrderBy(x => x.Priority);
             return query;
         }
         private async Task<IQueryable<RecurringWO>> FilterWO(WOFilterDTO wOFilterModel, IQueryable<RecurringWO> query)
@@ -778,6 +784,12 @@ namespace BusinessLogic.Services
                 query = query.Include(x => x.Issue).ThenInclude(x => x.Item).Where(x => x.Item.ItemName.Contains(wOFilterModel.TermSearch) || x.Issue.IssueName.Contains(wOFilterModel.TermSearch) || x.Property.PropertyName.Contains(wOFilterModel.TermSearch) || x.Id.Contains(wOFilterModel.TermSearch) || x.Description.Contains(wOFilterModel.TermSearch) || x.Status.StatusDescription.Contains(wOFilterModel.TermSearch) || x.Location.LocationName.Contains(wOFilterModel.TermSearch) || (x.AssignedTo != null && x.AssignedTo.FirstName.Contains(wOFilterModel.TermSearch) || x.AssignedTo.LastName.Contains(wOFilterModel.TermSearch)) ||
                   (x.AssignedToDept != null && x.AssignedToDept.DepartmentName.Contains(wOFilterModel.TermSearch)));
             }
+            if (wOFilterModel.SortedByDate)
+            {
+               query= query.OrderBy(x => x.CreatedTime);
+            }
+            else
+                query = query.OrderBy(x => x.Priority);
             return query;
         }
 
@@ -1059,7 +1071,7 @@ namespace BusinessLogic.Services
             List<RecurringWOs> recWorkOrder = null;
             var count = query.Count();
           
-             recWorkOrder = await query.OrderBy(x => x.Priority).Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
+             recWorkOrder = await query.Skip(wOFilterDTO.PageNumber * iteminpage).Take(iteminpage).Select(x => new RecurringWOs
             {
                 DueAfterDays = "After " + x.DueAfterDays + " Days",
                 Description = x.Description,

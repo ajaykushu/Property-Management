@@ -28,5 +28,6 @@ namespace Presentation.ViewModels
         public bool IsCurrent { get;set; }
         public bool? IsActive { get; set; }
         public bool isGeneralSearch { set; get; }
+        public bool SortedByDate { get; set; }//
     }
 }

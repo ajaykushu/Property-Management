@@ -1,44 +1,51 @@
 ﻿@model WOFilterModel
-@{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>; 
-    
+@{var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>;
+
 }
 <form class="form" style="margin-bottom:0px;">
     <partial name="~/Views/WorkOrder/_filter.cshtml" model="Model" />
     <hr />
     @{ var param = Model.GetType()
-              .GetProperties()
-              .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
+ .GetProperties()
+ .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
     }
-    <div class="workordertitle">
-        @if (Model.isGeneralSearch)
-        {
-            <span>Work Orders</span>
-        }
-        else if (ResponseModel != null && ResponseModel.Payload.All(x => x.IsActive))
-        {
-            <span>Active Work Orders</span>
-        }
-        else
-        {
-            <span> Completed Work Orders</span>
-        }
-        <div class="Filter_con float-right">
-            <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
-            <i class="fa fa-filter"></i>
+<div class="workordertitle">
+    @if (Model.isGeneralSearch)
+    {
+        <span>Work Orders</span>
+    }
+    else if (ResponseModel != null && ResponseModel.Payload.All(x => x.IsActive))
+    {
+        <span>Active Work Orders</span>
+    }
+    else
+    {
+        <span> Completed Work Orders</span>
+    }
+   
+    <div class="Filter_con float-right" style="padding-right:5px;">
+        <div class="d-inline custom-control custom-switch" style="bottom:4px">
+            <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-on="Sort by Highest Priority" data-off="Sort by Most Recently Created" data-onstyle="warning" data-offstyle="info" id="sortbydate">
         </div>
 
-        <div class=" float-right btn-group dropup">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownExportLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
+        <div class="d-inline dropup ml-1">
+            <a class=" dropdown-toggle" id="navbarDropdownExportLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
             <div class="dropdown-menu">
                 <a name="exportlink" asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
                 <a name="exportlink" asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
 
             </div>
         </div>
+        <div class="d-inline">
+            <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
+            <i class="fa fa-filter"></i>
+        </div>
     </div>
+
+</div>
 </form>
 @if (ResponseModel != null && !Model.isGeneralSearch && ResponseModel.Payload.All(x => x.IsActive))
-{  
+{
         <div class="d-inline-flex w-100 pt-1 pb-1" style="border-left: 3px solid #d3d3d3;border-right: 3px solid #d3d3d3;">
             <div class="justify-content-lg-start col-md-6">
                 <strong>To Do List</strong>
@@ -83,7 +90,10 @@
             {
                 <tr>
                     <td>
-                        <span><strong class="@if (item.ParentId!=null) {<text>green</text>} else {<text>orange</text>}">@item.Id</strong></span>
+                        <span><strong class="@if (item.ParentId != null)
+                        {<text>green</text>}
+                        else
+                        {<text>orange</text>}">@item.Id</strong></span>
                     </td>
 
                     <td><span class="value" style="min-width:100px;text-align:center">@item.Description</span></td>
@@ -110,7 +120,7 @@
                         </div>
                     </td>
                 </tr>
-            }
+                                }
         </tbody>
 
     </table>
@@ -119,7 +129,7 @@
         <ul class="pagination">
             @{ int current = 0;}
             <li class="page-item @if (ResponseModel.CurrentPage == 0)
-                    {<text>disabled</text> }">
+            {<text>disabled</text> }">
                 @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
             </li>
 
@@ -139,11 +149,11 @@
                         @{ Model.PageNumber = i;}
                         @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
                     </li>
-                }
-            }
+                                }
+                            }
             @{ Model.PageNumber = current + 1;}
             <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount)
-                    {<text>disabled</text> }">
+            {<text>disabled</text> }">
                 @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
             </li>
         </ul>
@@ -170,11 +180,23 @@ else
     $('#Export').change(function () {
         $('input[type="submit"]').click();
     })
-
+    function SubmitFn() {
+        console.log("hello");
+        $('#filter').click();
+    }
 
 </script>
 <style>
     .dropup .dropdown-item {
         color: black;
     }
+    .toggle.btn.btn-xs.btn-info.off{
+    width: 220.125px !important;
+    height: 20.8056px !important;
+}
+    .toggle.btn.btn-xs.btn-warning{
+    width: 220.125px !important;
+    height: 20.8056px !important;
+}
 </style>
+

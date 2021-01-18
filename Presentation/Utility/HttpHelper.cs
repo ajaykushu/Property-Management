@@ -80,6 +80,7 @@ namespace Presentation.Utility
                         var file = item.GetValue(data) as IFormFile;
                         BinaryReader reader = new BinaryReader(file.OpenReadStream());
                         var imagebytes = reader.ReadBytes((int)file.Length);
+
                         multiContent.Add(new ByteArrayContent(imagebytes), "File", file.FileName);
                     }
                     else

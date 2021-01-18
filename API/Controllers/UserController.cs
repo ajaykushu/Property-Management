@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Utilities;
 using Utilities.Interface;
 using DataTransferObjects.ResponseModels;
+using Models.ResponseModels.User;
 
 namespace API.Controllers
 {
@@ -153,5 +154,14 @@ namespace API.Controllers
             var res = await _userService.GetUserEmail();
             return Ok(res);
         }
+
+        [HttpGet]
+        [Route("gettimesheet")]
+        public async Task<ActionResult<List<TimeSheet>>> GetTimeSheet()
+        {
+            List<TimeSheet> res = await _userService.GetTimeSheet();
+            return Ok(res);
+        }
+
     }
 }

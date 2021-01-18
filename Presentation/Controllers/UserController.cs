@@ -27,7 +27,7 @@ namespace Presentation.Controllers
         private readonly string _token;
         private readonly IDetection _detection;
 
-        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails,IDistributedCache _session, IHttpContextAccessor httpContextAccessor, IDetection detection)
+        public UserController(IHttpClientHelper httpClientHelper, IOptions<RouteConstModel> apiRoute, IOptions<MenuMapperModel> menuDetails, IDistributedCache _session, IHttpContextAccessor httpContextAccessor, IDetection detection)
         {
             _httpClientHelper = httpClientHelper;
             _apiRoute = apiRoute;
@@ -303,6 +303,27 @@ namespace Presentation.Controllers
             }
             catch (Exception) { }
             return Json(true);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetTimeSheet()
+        {   List<TimeSheet> res= null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("gettimesheet", out var path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token);
+                if (response.IsSuccessStatusCode)
+                {
+                    res = JsonConvert.DeserializeObject<List<TimeSheet>>(await response.Content.ReadAsStringAsync());
+                  
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return View(res); ;
         }
     }
 }

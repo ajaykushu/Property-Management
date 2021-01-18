@@ -57,10 +57,11 @@ namespace Utilities
                     if (!Directory.Exists("ImageFileStore"))
                         Directory.CreateDirectory("ImageFileStore");
 
-                    path = path + id + file.FileName;
+                    path = path + id+ file.FileName;
                     if (imageTypes.Contains(type))
                     {
-                        var tempath = Path.GetDirectoryName(path)+'/'+Path.GetFileNameWithoutExtension(path);
+                        
+                        var tempath = Path.Combine(Path.GetDirectoryName(path),Path.GetFileNameWithoutExtension(path));
                         //saving main image
                         Image b = Bitmap.FromStream(file.OpenReadStream());
                         var resized = new Bitmap(200, 150);
@@ -81,15 +82,16 @@ namespace Utilities
                     }
                     else
                     {
-
+                        
                         using (FileStream filestream = File.Create(path))
                         {
                             await file.CopyToAsync(filestream);
                             filestream.Flush();
                         }
+                        return path;
                     }
                     
-                    return path;
+                    
                 }
                 catch (Exception ex)
                 {

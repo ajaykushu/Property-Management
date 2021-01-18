@@ -4,11 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var bottom = "0";
     var height="82%";
+    var bottomforomment="7%";
     var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
     if (context.Contains("iPhone"))
     {
         height = "81%";
         bottom = "2%";
+        bottomforomment = "9%";
     }
 }
 
@@ -365,7 +367,7 @@
         </div>
     </div>
     
-    <form class="comment-stick w-100 form-inline" id="commentform" asp-action='PostComment' method='post'>
+    <form class="comment-stick w-100 form-inline" style="bottom:@bottomforomment" id="commentform" asp-action='PostComment' method='post'>
         <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
         <table width="100%">
             <tr width="90%">

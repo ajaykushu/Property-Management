@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Models;
 using Models.ResponseModels;
+using Models.ResponseModels.User;
 using Models.User.RequestModels;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,10 @@ namespace BusinessLogic.Services
         private readonly IDistributedCache _cache;
         private readonly string _scheme;
         private readonly long userId;
+        private readonly IRepo<Effort> _effort;
 
         public UserBL(UserManager<ApplicationUser> userManager,
-              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, IDistributedCache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification)
+              RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, IDistributedCache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification, IRepo<Effort> effort)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -53,6 +55,7 @@ namespace BusinessLogic.Services
             if (sid != null)
                 userId = Convert.ToInt64(sid);
             _userNotification = userNotification;
+            _effort = effort;
         }
 
         public async Task<bool> RegisterUser(RegisterUserDTO model)
@@ -454,6 +457,56 @@ namespace BusinessLogic.Services
         {
            var res= await _userManager.Users.Select(x => new UserList {  Email = x.Email,  DisplayName = x.FirstName + " " + x.LastName }).AsNoTracking().ToListAsync();
             return res;
+        }
+
+        public async Task<List<TimeSheet>> GetTimeSheet()
+        {
+
+            var query = _effort.GetAll() ;
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+                var userIds = await _userProperty.GetAll().Where(x => propIds.Contains(x.PropertyId)).AsNoTracking().Select(x => x.ApplicationUserId).ToListAsync();
+                query=query.Where(x => userIds.Contains(x.UserId));
+            }
+            if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                query=query.Where(x => x.UserId == userId);
+            }
+            var res = await query.Include(x => x.User).ToListAsync();
+            //dynamic grp = null;
+            List<TimeSheet> sh = new List<TimeSheet>();
+            if (!_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                var grp = res.GroupBy(x => new { x.WOId, x.UserId });
+                foreach (var item in grp)
+                {
+                    var x = new TimeSheet();
+                    x.WoId = item.Key.WOId;
+                    x.UserName = item.Select(x => String.Concat(x.User.FirstName," ",x.User.LastName)).First();
+                    x.Updated = item.Select(x => x.UpdatedTime.ToString("dd-MMM-yyyy")).First();
+                    x.TotalHours = item.Sum(x => x.Repair).ToString();
+                    x.Id = item.Select(x => x.Id).First().ToString();
+                    sh.Add(x);
+                }
+            }
+            else
+            {
+                var grp = res.GroupBy(x => x.WOId);
+                foreach (var item in grp)
+                {
+                    var x = new TimeSheet();
+                    x.WoId = item.Key;
+                    x.Updated = item.Select(x => x.UpdatedTime.ToString("dd-MMM-yyyy")).First();
+                    x.TotalHours = item.Sum(x => x.Repair).ToString();
+                    x.Id = item.Select(x => x.Id).First().ToString();
+                    sh.Add(x);
+                }
+            }
+            
+
+             
+            return sh;
         }
     }
 }

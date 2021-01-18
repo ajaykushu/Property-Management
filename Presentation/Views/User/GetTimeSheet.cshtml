@@ -1,0 +1,20 @@
+﻿@model List<TimeSheet>
+@{
+    ViewData["Title"] = "Time Sheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var op = new List<Operation>();
+    op.Add(new Operation { Name = "Detail", Url = Url.Action("EditWOView"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-info ml-1" });
+
+}
+@Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped wordorderdetail table_container table-responsive-lg", "", "", true, op)
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}

@@ -4,5 +4,7 @@ namespace Presentation.Utility
 {
     public class SkipPropertyAttribute : Attribute
     {
+        
+       
     }
 }
