@@ -40,7 +40,7 @@ namespace Presentation.Utility.CustomTagHelpers.TagHelpers
                             sb.AppendFormat(@"<img src='/NA.jpg' width='200' height='150'>");
                         }
                         else{
-                            var thumb = Regex.Replace(item.Value, @"[.][a-z]{3,4}\b", ".png");
+                            var thumb = item.Value.Replace(".jpg",".png");
                              sb.AppendFormat(@"<img src='{0}' width='200' height='150'>", thumb);
                         }
                         sb.AppendFormat(@"{0}</span>

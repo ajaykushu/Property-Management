@@ -124,9 +124,7 @@
                                     @if (Model.Attachment != null)
                                     {
                                         <div class="top-buffer">
-                                            <div class="customdisp">
-                                                <custimage images="Model.Attachment"></custimage>
-                                            </div>
+                                            @Html.DisplayImage(Model.Attachment);
 
                                         </div>
                                     }
@@ -383,9 +381,9 @@
     </form>
     
     <div class="bottom-stick" style="bottom:@bottom">
-        <div class="nav-link d-inline-flex flex-row" style="grid-gap: 6px">
-            <input type="button" class="btn w-50 btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white">
-            <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn w-50 btn-danger submit" value="Cancel" style="color:white">
+        <div class="nav-link d-inline-flex flex-row ml-2" >
+            <input type="button" class="btn  btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white;width: 75px;">
+            <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
         </div>
         <div class="container-block">
             <a href="#" class="nav-link edit-link float-right" style="color:lightgray"><i class="fa fa-pencil-alt fa-3x"></i></a>
@@ -404,8 +402,6 @@
     .customdisp {
         display: flex;
         flex-flow: wrap;
-        column-gap: 14px;
-        row-gap: 82px;
     }
 </style>
 <script>

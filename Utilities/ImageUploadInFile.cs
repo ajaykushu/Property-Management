@@ -61,7 +61,7 @@ namespace Utilities
                     if (imageTypes.Contains(type))
                     {
                         
-                        var tempath = Path.Combine(Path.GetDirectoryName(path),Path.GetFileNameWithoutExtension(path));
+                        var tempath = Path.GetDirectoryName(path)+"/"+Path.GetFileNameWithoutExtension(path);
                         //saving main image
                         Image b = Bitmap.FromStream(file.OpenReadStream());
                         var resized = new Bitmap(200, 150);

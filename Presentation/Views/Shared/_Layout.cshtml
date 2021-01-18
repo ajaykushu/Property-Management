@@ -48,7 +48,7 @@
                                 </li>
                                 <li>
 
-                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@Regex.Replace(path,"(.jpg)",".png")</text> }' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path.Replace(".jpg",".png")</text> }' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
 
 
                                 </li>

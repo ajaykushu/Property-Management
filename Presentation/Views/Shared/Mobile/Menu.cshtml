@@ -44,7 +44,7 @@
         ret[0] = ret[findinndex];
         ret[findinndex] = temp;
 
-        path = string.IsNullOrWhiteSpace(path) ? "/NA.jpg" : Regex.Replace(path, "(.jpg)", ".png");
+        path = string.IsNullOrWhiteSpace(path) ? "/NA.jpg" : path.Replace(".jpg", ".png");
         var url = Url.Action("UserDetailView", "User", new { Id = id });
 
         ret.Insert(1, new MenuProperty());

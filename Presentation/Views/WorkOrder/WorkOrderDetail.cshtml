@@ -188,7 +188,7 @@ else
                                 <label asp-for="Attachment"></label>
                             </div>
                             <div class="col-md-9 customdisp">
-                               <custimage   images="Model.Attachment"></custimage> 
+                                @Html.DisplayImage(Model.Attachment)
                             </div>
 
                             </div>
@@ -416,8 +416,7 @@ new ViewDataDictionary(ViewData)
     .customdisp {
         display: flex;
         flex-flow: wrap;
-        column-gap: 14px;
-        row-gap: 82px;
+        
     }
 </style>
 
