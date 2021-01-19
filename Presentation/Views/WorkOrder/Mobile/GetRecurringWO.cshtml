@@ -5,7 +5,14 @@
 }
 @model WOFilterModel
 @{ var ResponseModel = ViewBag.Response as Pagination<List<RecurringWOs>>;
-
+    var bottom = "0";
+    var height="88%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "85%";
+        bottom = "2%";
+    }
 }
 @{ var param = Model.GetType()
             .GetProperties()
@@ -35,7 +42,7 @@
     </nav>
 </header>
 
-<form class="mform">
+<form class="mform" style="height:@height">
     <div class="card mwofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
@@ -149,8 +156,8 @@
         }
     </div>
 </form>
-
-<div class="bottom-stick">
+<hr/>
+<div class="bottom-stick" style="bottom:@bottom">
      <a  onClick="location.href=location.href" class="nav-link" style="color:#fdfdfdf2"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i></a>
     <div class="container-block justify-content-end">
         <a asp-action="CreateWorkOrderRecurringView" class="nav-link" style="color:#fdfdfdf2"><i class="fa fa-plus fa-2x"></i></a>

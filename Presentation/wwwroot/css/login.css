@@ -284,15 +284,15 @@ th {
 }
 
 @media only screen and (max-width: 580px) {
-    .usersview, .notificationview, .wordorderdetail, .usersview tbody, .notificationview tbody, .wordorderdetail tbody, .usersview th, .notificationview th, .wordorderdetail th, .usersview td,  .notificationview td, .wordorderdetail td, .usersview tr,  .notificationview tr, .wordorderdetail tr {
+    .usersview, .notificationview, .wordorderdetail, .dynamicTable, .usersview tbody, .notificationview tbody, .wordorderdetail tbody, .dynamicTable tbody, .usersview th, .notificationview th, .wordorderdetail th, .dynamicTable th, .usersview td, .notificationview td, .wordorderdetail td, .dynamicTable td, .usersview tr, .notificationview tr, .wordorderdetail tr, .dynamicTable tr {
         display: block;
     }
 
-        .usersview thead, .wordorderdetail thead, .notificationview thead{
+        .usersview thead, .wordorderdetail thead, .notificationview thead, .dynamicTable thead{
             display: none;
         }
 
-        .usersview th, .wordorderdetail th, .notificationview th {
+        .usersview th, .wordorderdetail th, .notificationview th, .dynamicTable th {
             border: none !important;
             text-align: center;
         }
@@ -301,11 +301,11 @@ th {
         text-align: inherit;
     }
 
-    .usersview tbody td, .wordorderdetail tbody td, .notificationview td {
+    .usersview tbody td, .wordorderdetail tbody td, .notificationview tbody td, .dynamicTable tbody td {
         text-wrap: normal !important;
     }
 
-        .usersview td:before, .wordorderdetail td:before, .notificationview td:before {
+        .usersview td:before, .wordorderdetail td:before, .notificationview td:before, .dynamicTable td:before {
             white-space: nowrap;
             display: table-cell;
             color: black;

@@ -5,11 +5,11 @@
 @model WOFilterModel
 @{ var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>;
     var bottom = "0";
-    var height="92%";
+    var height="88%";
     var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
     if (context.Contains("iPhone"))
     {
-        height = "88%";
+        height = "85%";
         bottom = "2%";
     }
     }
@@ -97,7 +97,7 @@
         }
     </div>
 </form>
-
+<hr/>
 <div class="bottom-stick" style="bottom:@bottom">
     <a  onClick="location.href=location.href"  class="nav-link" style="color:#fdfdfdf2;padding-left: 24px"><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></a>
     <div class="container-block">

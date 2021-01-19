@@ -9,7 +9,10 @@
     op.Add(new Operation { Name = "Detail", Url = Url.Action("EditWOView"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-info ml-1" });
 
 }
-@Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped wordorderdetail table_container table-responsive-lg", "", "", true, op)
+@Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
+<div>
+    <a href="javascript:history.back()">Back to List</a>
+</div>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";

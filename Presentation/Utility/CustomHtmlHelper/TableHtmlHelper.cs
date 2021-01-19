@@ -36,7 +36,13 @@ namespace Presentation.Utility.CustomHtmlHelper
        /// </param>
        /// <returns></returns>
         public static IHtmlContent BuildTable<T>(this IHtmlHelper htmlHelper,List<T> data,string title,string titleclass,string tableclass,string bodyclass,string headclass,bool isOperation,List<Operation> operations)
-        {
+        {   //for style addition
+            int i = 1;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<style>@media only screen and (max-width: 580px) {");
+            
+
             var div = new TagBuilder("div");
             div.AddCssClass(titleclass);
             div.InnerHtml.Append(title);
@@ -44,7 +50,6 @@ namespace Presentation.Utility.CustomHtmlHelper
             var span = new TagBuilder("span");
             if (data != null && data.Count > 0)
             {
-
                 var thead = new TagBuilder("thead");
                 thead.AddCssClass(headclass);
                 var tr = new TagBuilder("tr");
@@ -60,10 +65,15 @@ namespace Presentation.Utility.CustomHtmlHelper
                         string displayName = attribute != null ? attribute.DisplayName : prop.Name;
                         th.InnerHtml.Append(displayName);
                         tr.InnerHtml.AppendHtml(th);
+                        //adding css for mobile view
+
+                        sb.Append(".dynamicTable td:nth-of-type(" + i + "):before {content:\"" + displayName + "\"}"); 
+                        i++;
                     }
 
 
                 });
+                sb.Append("}</style>");
                 if (isOperation)
                 {
                     var newth = new TagBuilder("th");
@@ -131,14 +141,18 @@ namespace Presentation.Utility.CustomHtmlHelper
                 span.InnerHtml.AppendHtml("<strong>No Record Found</strong>");
             }
             var result = "";
+            
+
             using (var writer = new StringWriter())
             {
                 
                     div.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
                     table.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
                     span.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
+                    
                 result = writer.ToString();
             }
+            result += sb.ToString();
             return new HtmlString(result);
         }
          
