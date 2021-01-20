@@ -111,7 +111,7 @@
                                 <span asp-validation-for="IssueId" class="text-danger"></span>
                             </div>
                             <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
-                                <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters" asp-for="CustomIssue"></textarea>
+                                <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
                                 <span class="text-danger">Please enter issue</span>
                             </div>
 
