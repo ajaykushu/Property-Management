@@ -37,5 +37,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> MarkAsRead(int id);
         Task<List<UserList>> GetUserEmail();
         Task<List<TimeSheet>> GetTimeSheet();
+        Task<List<TimesheetBreakDown>> GetTimeSheet(string id);
     }
 }

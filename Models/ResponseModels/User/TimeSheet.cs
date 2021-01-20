@@ -10,9 +10,6 @@ namespace Models.ResponseModels.User
 {
     public class TimeSheet
     {
-        [Key]
-        [DisplayName("#")]
-        public string Id { get; set; }
         
         [DisplayName("WOId")]
         public string WoId { get; set; }

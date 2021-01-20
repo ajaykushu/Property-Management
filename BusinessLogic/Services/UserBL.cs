@@ -486,7 +486,6 @@ namespace BusinessLogic.Services
                     x.UserName = item.Select(x => String.Concat(x.User.FirstName," ",x.User.LastName)).First();
                     x.Updated = item.Select(x => x.UpdatedTime.ToString("dd-MMM-yyyy")).First();
                     x.TotalHours = item.Sum(x => x.Repair).ToString();
-                    x.Id = item.Select(x => x.Id).First().ToString();
                     sh.Add(x);
                 }
             }
@@ -499,7 +498,6 @@ namespace BusinessLogic.Services
                     x.WoId = item.Key;
                     x.Updated = item.Select(x => x.UpdatedTime.ToString("dd-MMM-yyyy")).First();
                     x.TotalHours = item.Sum(x => x.Repair).ToString();
-                    x.Id = item.Select(x => x.Id).First().ToString();
                     sh.Add(x);
                 }
             }
@@ -507,6 +505,32 @@ namespace BusinessLogic.Services
 
              
             return sh;
+        }
+
+        public async Task<List<TimesheetBreakDown>> GetTimeSheet(string id)
+        {
+           var query= _effort.GetAll().Include(x => x.User).Where(x => x.WOId == id);
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
+                var userIds = await _userProperty.GetAll().Where(x => propIds.Contains(x.PropertyId)).AsNoTracking().Select(x => x.ApplicationUserId).ToListAsync();
+                query = query.Where(x => userIds.Contains(x.UserId));
+            }
+            if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                query = query.Where(x => x.UserId == userId);
+            }
+            return await query.Select(x => new TimesheetBreakDown
+            {
+                Holiday = "",
+                Repair = x.Repair.ToString(),
+                Date = x.Date.ToString("dd-MMM-yyyy"),
+                Service = "",
+                Updated = x.UpdatedTime.ToString("dd-MMM-yyyy"),
+                UserName = x.User.FirstName + " " + x.User.LastName,
+                Vacation = "",
+                WoId = x.WOId.ToString()
+            }).ToListAsync();
         }
     }
 }

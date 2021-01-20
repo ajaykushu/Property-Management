@@ -162,6 +162,13 @@ namespace API.Controllers
             List<TimeSheet> res = await _userService.GetTimeSheet();
             return Ok(res);
         }
+        [HttpGet]
+        [Route("gettimesheet/{id}")]
+        public async Task<ActionResult<List<TimeSheet>>> GetTimeSheet(string id)
+        {
+            var res = await _userService.GetTimeSheet( id);
+            return Ok(res);
+        }
 
     }
 }

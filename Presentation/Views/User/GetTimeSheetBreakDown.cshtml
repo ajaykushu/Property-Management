@@ -1,13 +1,13 @@
 ﻿@inject IDeviceResolver device
-@model List<TimeSheet>
+@model List<TimesheetBreakDown>
 @{
-    ViewData["Title"] = "Time Sheet";
+    ViewData["Title"] = "Time Sheet Break Down";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
     var op = new List<Operation>();
-    op.Add(new Operation { Name = "Detail", Url = Url.Action("GetTimeSheetBreakDown"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-info ml-1" });
+    op.Add(new Operation { Name = "Edit", Url = Url.Action("GetTimeSheetBreakDown"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-pencil-alt ml-1" });
 
 }
 @if (device.Device.Type == DeviceType.Mobile)
@@ -19,7 +19,7 @@
                 <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
                 <div class="container-block justify-content-center">
                     <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">
-                        Time Sheet
+                        Time Sheet Break Down
                     </span>
                 </div>
             </div>
@@ -32,7 +32,7 @@ else
         <a href="javascript:history.back()">Back</a>
     </div>
 }
-<div @if (device.Device.Type == DeviceType.Mobile) {<text>style="margin-top:67px"</text>}>
+<div @if (device.Device.Type == DeviceType.Mobile) { <text> style="margin-top:67px" </text> }>
     @Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
 </div>
 

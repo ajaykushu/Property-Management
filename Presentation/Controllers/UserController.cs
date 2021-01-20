@@ -325,5 +325,26 @@ namespace Presentation.Controllers
             }
             return View(res); ;
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetTimeSheetBreakDown(string id)
+        {
+            List<TimesheetBreakDown> res = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("gettimesheet", out var path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"/"+id, this, _token);
+                if (response.IsSuccessStatusCode)
+                {
+                    res = JsonConvert.DeserializeObject<List<TimesheetBreakDown>>(await response.Content.ReadAsStringAsync());
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View(res); ;
+        }
     }
 }
