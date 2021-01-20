@@ -612,7 +612,7 @@ namespace BusinessLogic.Services
              count = query.Where(x => x.IsActive == wOFilterModel.IsActive).Count();
             else
                 count = query.Count();
-            workOrders = await query.OrderBy(x => x.Priority).Select(x => new AllWOExport
+            workOrders = await query.Select(x => new AllWOExport
             {
                 PropertyName = x.Property.PropertyName,
                 Issue = x.Issue!=null? x.Issue.IssueName:x.CustomIssue,
@@ -712,7 +712,7 @@ namespace BusinessLogic.Services
             }
             if (wOFilterModel.SortedByDate)
             {
-                query = query.OrderBy(x => x.CreatedTime);
+                query = query.OrderByDescending(x => x.CreatedTime);
             }
             else
                 query = query.OrderBy(x => x.Priority);
@@ -786,7 +786,7 @@ namespace BusinessLogic.Services
             }
             if (wOFilterModel.SortedByDate)
             {
-               query= query.OrderBy(x => x.CreatedTime);
+               query= query.OrderByDescending(x => x.CreatedTime);
             }
             else
                 query = query.OrderBy(x => x.Priority);

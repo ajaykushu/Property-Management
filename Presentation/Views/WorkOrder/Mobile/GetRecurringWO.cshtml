@@ -43,6 +43,9 @@
 </header>
 
 <form class="mform" style="height:@height">
+    <div class="d-inline custom-control custom-switch" style="bottom:4px;left:15px">
+        <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-on="Sort by Highest Priority" data-off="Sort by Most Recently Created" data-onstyle="warning" data-offstyle="info" id="sortbydate">
+    </div>
     <div class="card mwofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
         <div class="card-body">
             <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
@@ -91,21 +94,21 @@
     </div>
     <div class="container">
         @*<div class="d-inline-flex due-date w-100 justify-content-center ">
-            <span class="datedec" style="padding-left:15px;"><i class="fa fa-chevron-left fa-1x"></i></span>
-            <div class="date-con" style="padding-left:15px;">
-                <span class="fa fa-calendar fa-1x"></span>
-                <input asp-for="DueDate" class="DueDateMobile">
-            </div>
-            <label class="DueDatelabel" style="padding-left:15px;">Due Date</label>
-            <span class="dateinc" style="padding-left:15px;"><i class="fa fa-chevron-right fa-1x"></i></span>
-        </div>*@
+                <span class="datedec" style="padding-left:15px;"><i class="fa fa-chevron-left fa-1x"></i></span>
+                <div class="date-con" style="padding-left:15px;">
+                    <span class="fa fa-calendar fa-1x"></span>
+                    <input asp-for="DueDate" class="DueDateMobile">
+                </div>
+                <label class="DueDatelabel" style="padding-left:15px;">Due Date</label>
+                <span class="dateinc" style="padding-left:15px;"><i class="fa fa-chevron-right fa-1x"></i></span>
+            </div>*@
         @if (ResponseModel != null && ResponseModel.Payload != null)
         {
             <table class="table border-0 mt-3" style="table-layout:fixed;">
                 <tbody>
                     @foreach (var item in ResponseModel.Payload)
                     {
-                       
+
                         <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id,type=2})'">
                             <td style="padding-top:20px;padding-bottom:20px;">
                                 <span style="word-wrap:break-word;font-size:15px">@item.Description</span>
@@ -128,8 +131,8 @@
 
                         if (ResponseModel.CurrentPage == i)
                         {
-                            <li class="page-item active" >
-                                <a class="page-link " >@(i + 1) <span class="sr-only">(current)</span></a>
+                            <li class="page-item active">
+                                <a class="page-link ">@(i + 1) <span class="sr-only">(current)</span></a>
                             </li>
                             current = i;
                         }
@@ -171,3 +174,14 @@
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
     </script>
 }
+<style>
+    .toggle.btn.btn-xs.btn-info.off {
+        width: 220.125px !important;
+        height: 20.8056px !important;
+    }
+
+    .toggle.btn.btn-xs.btn-warning {
+        width: 220.125px !important;
+        height: 20.8056px !important;
+    }
+</style>
