@@ -99,6 +99,10 @@ namespace Presentation.Controllers
 
                     await SetCookieAuth(tokenResponse);
                     Dictionary<string, List<MenuProperty>> menuView = new Dictionary<string, List<MenuProperty>>();
+                    if (tokenResponse.IsEffortVisible)
+                    {
+                        tokenResponse.MenuItems.Add("Effort");
+                    }
                     MakeDictionaryFormenuView(tokenResponse.MenuItems, menuView);
 
                     //required things should be added in the server side session
@@ -145,7 +149,6 @@ namespace Presentation.Controllers
             identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "Cookies"));
             identity.AddClaim(new Claim(ClaimTypes.Role, tokenResponse.Roles.FirstOrDefault()));
             identity.AddClaim(new Claim(ClaimTypes.Sid, tokenResponse.UId + ""));
-            identity.AddClaim(new Claim("IsEffortVisible", tokenResponse.IsEffortVisible + ""));
             identity.AddClaim(new Claim(ClaimTypes.IsPersistent, "true"));
             identity.AddClaim(new Claim("ImageUrl", tokenResponse.PhotoPath));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, tokenResponse.FullName));
@@ -157,6 +160,7 @@ namespace Presentation.Controllers
                 AllowRefresh = true,
                 IssuedUtc = DateTime.Now,
             });
+            
         }
 
         private void MakeDictionaryFormenuView(HashSet<string> menuItems, Dictionary<string, List<MenuProperty>> menuView)

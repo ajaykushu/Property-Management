@@ -233,12 +233,14 @@ $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             disablespinner();
+            $('.progress').hide()
             $("form :input").prop("disabled", false);
             alertify.alert('Info', '<p>' + res + '</p>', function () {
             $("input[type=reset]").click();
             });
         }, function (res) {
-            disablespinner();
+                disablespinner();
+                $('.progress').hide()
             $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
                 var data = res.responseText.split('@');
@@ -268,12 +270,14 @@ $('#edituser, #editwo, #editworecurring').submit(function (e) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             disablespinner();
+            $('.progress').hide()
             $("form :input").prop("disabled", false);
             alertify.alert('Info', '<p>' + res + '</p>', function () {
                 location.reload();
             });
         }, function (res) {
-            disablespinner();
+                disablespinner();
+                $('.progress').hide()
             $("input[type=password]").val("");
             $("form :input").prop("disabled", false);
             alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
@@ -291,39 +295,6 @@ $('#Role').change(function () {
         $('.mainprop').prop("hidden", false);
 });
 
-/*index*/
-/* regarding mobile view*/
-//$("#DueDate").change(function () {
-//    $('.DueDatelabel').text($(this).val());
-//    $('.mform').submit();
-//})
-//$('.datedec').click(function () {
-//    var val = $("#DueDate").val();
-//    if (val == "NaN-NaN-NaN" || val == undefined || val == '')
-//        val = new Date();
-//    else
-//        val = new Date(val);
-//    val.setDate(val.getDate() - 1);
-//    var datestring = ConvertDatetoString(val);
-//    $("#DueDate").val(datestring);
-//    $('.DueDatelabel').text(datestring);
-//    $('.mform').submit();
-//});
-//if ($(".DueDateMobile").length) {
-//    $(".DueDateMobile").datepicker();
-//}
-//$('.dateinc').click(function () {
-//    var val = $("#DueDate").val();
-//    if (val == "NaN-NaN-NaN" || val == undefined|| val=='')
-//        val = new Date();
-//    else
-//        val = new Date(val);
-//    val.setDate(val.getDate() + 1);
-//    var datestring = ConvertDatetoString(val);
-//    $("#DueDate").val(datestring);
-//    $('.DueDatelabel').text(datestring);
-//    $('.mform').submit();
-//});
 
 $('.filter_check').click(function () {
     if ($(this).prop("checked") == true) {
