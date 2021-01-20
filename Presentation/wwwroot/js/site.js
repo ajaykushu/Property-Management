@@ -210,12 +210,16 @@ if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
 
 
 var msg = null
-function enablespiner(text ="Processing") {
-    msg = alertify.message("<div class='progress' style='margin-bottom:10px;display:none'><div class='progress-bar' style='width:0%' role='progressbar' aria-valuemin='0' aria-valuemax='100'></div></div>" +
-        "<div style='display:-webkit-box'>"+text+"&nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
+function enablespiner(text = "Processing") {
+    if ($('.progress').length == 0) {
+        msg = alertify.message("<div class='progress' style='margin-bottom:10px;display:none'><div class='progress-bar' style='width:0%' role='progressbar' aria-valuemin='0' aria-valuemax='100'></div></div>" +
+            "<div style='display:-webkit-box'>" + text + "&nbsp;<i style = 'display:block;' class= 'fas fa-circle-notch fa-2x fa-spin' ></i></div>", 0);
+    }
 }
 function disablespinner() {
-    msg.dismiss();
+    if ($('.progress').length != 0)
+        msg.dismiss();
+
 }
 
 $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
@@ -233,14 +237,14 @@ $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             disablespinner();
-            $('.progress').hide()
+            
             $("form :input").prop("disabled", false);
             alertify.alert('Info', '<p>' + res + '</p>', function () {
             $("input[type=reset]").click();
             });
         }, function (res) {
                 disablespinner();
-                $('.progress').hide()
+                
             $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
                 var data = res.responseText.split('@');
@@ -270,14 +274,14 @@ $('#edituser, #editwo, #editworecurring').submit(function (e) {
         $("form :input").prop("disabled", true);
         RESTCALL(url, formData, 'POST', false, false, function (res) {
             disablespinner();
-            $('.progress').hide()
+            
             $("form :input").prop("disabled", false);
             alertify.alert('Info', '<p>' + res + '</p>', function () {
                 location.reload();
             });
         }, function (res) {
                 disablespinner();
-                $('.progress').hide()
+               
             $("input[type=password]").val("");
             $("form :input").prop("disabled", false);
             alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
