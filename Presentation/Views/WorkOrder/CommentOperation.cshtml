@@ -78,50 +78,56 @@
     }
 </style>
 
-    <script>
-
+<script type="text/javascript">
+       @if (device.Device.Type != DeviceType.Mobile)
+       {
+           <text>var value = 0;</text>
+       }
+       else {
+          <text> var value = 1;</text>
+       }
     $('.reply,#addcomment').click(function (e) {
-        e.preventDefault();
-        var con = $(this).closest('div.mycon');
-        var parent = $(this).closest('div.parent');
-        if ($('#Comment').length==0) {
-            con.append(
-                "<div class='card reply popup top-buffer' style='margin-left:24px'>" +
-                "<div class='card-body'>" +
-                "<textarea id='Comment' name='Comment' class='note' required></textarea>" +
-                "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
-                "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
-                "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).val() + "'hidden required>" +
-                "<button  class='btn btn-outline-primary btn-sm top-buffer'>Post</button>" +
-                 "<input type='button' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
-                "</div>" +
-                "</div>"
-            )
-        }
-    });
+           e.preventDefault();
+           var con = $(this).closest('div.mycon');
+           var parent = $(this).closest('div.parent');
+           if ($('#Comment').length==value) {
+               con.append(
+                   "<div class='card reply popup top-buffer' style='margin-left:24px'>" +
+                   "<div class='card-body'>" +
+                   "<textarea id='Comment' name='Comment' class='note' required></textarea>" +
+                   "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
+                   "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
+                   "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).val() + "'hidden required>" +
+                   "<button  class='btn btn-outline-primary btn-sm top-buffer'>Post</button>" +
+                    "<input type='button' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
+                   "</div>" +
+                   "</div>"
+               )
+           }
+       });
 
-        var currentpage = @Model?.CurrentPage;
-        var pagecount = @Model?.PageCount;
-        var workorderId = '@ViewData["workOrderId"]';
+       var currentpage = @Model?.CurrentPage;
+       var pagecount = @Model?.PageCount;
+       var workorderId = '@ViewData["workOrderId"]';
 
-    jQuery(function($) {
+       jQuery(function($) {
         $('.mycontainer').on('scroll', function () {
-            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                if (currentpage < pagecount) {
-                    currentpage++;
+               if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                   if (currentpage < pagecount) {
+                       currentpage++;
                 $.get('@Url.Action("GetComment","WorkOrder")' + '?requestedPage=' + currentpage + '&workorderId=' + workorderId,
                     function (data) {
-                        if (data != null || data != undefined) {
+                           if (data != null || data != undefined) {
                             $('.commentsection').append(data);
-                        }
-                    });
+                           }
+                       });
 
-                }
+                   }
 
-            }
-        })
+               }
+           })
     });
-        function closePopUp() {
+       function closePopUp() {
             $('.popup').remove();
-        }
-    </script>
+       }
+</script>
