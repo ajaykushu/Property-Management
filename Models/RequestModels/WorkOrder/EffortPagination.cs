@@ -10,9 +10,10 @@ namespace Models.WorkOrder.RequestModels
         public List<EffortDTO> EffortDTOs { get; set; }
 
         public DateTime Lastday { get; set; }
-         
+        public DateTime FistDay { get; set; }
+
         public int TotalEffort { get{
-                return this.EffortDTOs.Sum(x => x.Effort);
+                return this.EffortDTOs.Sum(x => x.Repair+x.Service);
             }
         }
 

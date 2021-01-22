@@ -15,8 +15,6 @@ namespace Models.ResponseModels.User
         public string Date { get; set; }
         public string Repair { get; set; }
         public string Service { get; set; }
-        public string Vacation { get; set; }   
-        public string Holiday { get; set; }
         public string UserName { get; set; }
         public string Updated { get; set; }
     }

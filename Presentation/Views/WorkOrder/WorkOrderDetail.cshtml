@@ -388,12 +388,13 @@ new ViewDataDictionary(ViewData)
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" >
+            <span class="sr-only">Loading...</span>
+            <div class="modal-body">
                 <div class="spinner-border text-primary" role="status" id="spin">
-                    <span class="sr-only">Loading...</span>
+
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -443,7 +444,8 @@ new ViewDataDictionary(ViewData)
 
     });
     
-    $('#AddEffort').on('click', function () {
+    $('#AddEffort').on('click', function (e) {
+         e.preventDefault();
          $('.modal-body').html("");
          $('#spin').show();
         $.get('@Url.Action("AddEffort")?id=@Model.Id', function (res) {
@@ -451,10 +453,5 @@ new ViewDataDictionary(ViewData)
         $('.modal-body').html(res);
     });
     });
-
     
-
-
-
-
 </script>

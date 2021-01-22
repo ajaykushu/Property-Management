@@ -1,8 +1,7 @@
 ﻿@model EffortPagination
 @{
     
-    var date = Model.EffortDTOs.OrderBy(x => x.DateTime).Select(x=>x.DateTime).First();
-    var end = Model.EffortDTOs.OrderBy(x => x.DateTime).Select(x=>x.DateTime).Last();
+    
 
     IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
     {
@@ -13,46 +12,66 @@
 }
     <form id="effortform" asp-action="AddEffort">
         <input hidden name="Id" id="Id" value="@ViewBag.id" />
-        <table class="table table-responsive-md" style="overflow:scroll;display: grid;
-}">
+        <table class="table table-bordered table-responsive-md" style="display: inline-block;
+    overflow: auto;">
             <thead>
 
                 <tr>
-                    @foreach (DateTime day in EachDay(date, end))
+                    @foreach (DateTime day in EachDay(Model.FistDay, Model.Lastday))
                     {
-                        <th class="group">
-                            @day.DayOfWeek.ToString()
+                        <th>
+                            <div style="width:max-content;">
+                                @day.DayOfWeek.ToString()
+                                <br />
+                                @day.Date.ToString("dd-MMM-yy")
+                            </div>
+                        </th>
+
+                    }
+                    @if (Model.EffortDTOs.Count != 0)
+                    {
+                        <th>
+                            Total Hours
                         </th>
                     }
-
-                    <th>
-                        Total Hours
-                    </th>
-                </tr>
+                    </tr>
             </thead>
             <tbody>
                 <tr>
 
                     @foreach (var item in Model.EffortDTOs)
                     {
-                        <td class="group">
-                            <label>Repair</label>
-                            <input type="DateTime" name="EffortDTOs[@i].DateTime" hidden value="@item.DateTime.Date" />
-                            <input id="Effort" name="EffortDTOs[@i].Effort" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Effort" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
-                        </td>
+                    <td class="group">
+                        <label>Repair</label>
+                        <input type="DateTime" name="EffortDTOs[@i].DateTime" hidden value="@item.DateTime.Date"/>
+                        <input id="Effort" name="EffortDTOs[@i].Repair" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Repair" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
+                        <label>Service</label>
+                        <input id="Effort" name="EffortDTOs[@i].Service" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Service" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
+                    </td>
                         i++;
                     }
+                    @if (Model.EffortDTOs.Count == 0)
+                    {
+                        <th>
+                            Out Of Date Range For Effort Addition. 
+                        </th>
 
+                    }
+                    else
+                    {
 
                     <td>
-                        <input class="form-control total mt-4 " readonly value="@Model.TotalEffort" name="Weeektotal" id="Weeektotal" value="0" type="number" min="1">
+                        <input class="form-control total mt-4 " style="width:100px" readonly value="@Model.TotalEffort" name="Weeektotal" id="Weeektotal" value="0" type="number" min="1">
                     </td>
+                    }
 
                 </tr>
 
             </tbody>
         </table>
         <div class="modal-footer">
+            <button type="button" id="prev"  value="true" class="btn btn-info">Previous Week</button>
+            <button type="button"  id="curr" value="false" class="btn btn-info">Current Week</button>
             <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
         </div>
@@ -91,9 +110,16 @@
             return false;
         }
     }
+    
 
     function total(e) {
         //group checking <24
+        var a = parseInt(e.target.closest('td').getElementsByClassName('day')[0].value)
+        var b = parseInt(e.target.closest('td').getElementsByClassName('day')[1].value)
+        if (a + b > 24) {
+            alert("Entered hours is greater than 24");
+            e.target.value='0';
+        }
         var sum = 0;
         $('.day').each(function (x) {
             sum += parseInt($('.day')[x].value);
@@ -102,4 +128,15 @@
         $('.total').val(sum);
     }
 
+    $('#prev,#curr').on('click', function (e) {
+        e.preventDefault();
+         $('.modal-body').html("");
+        $('#spin').show();
+
+        $.get('@Url.Action("AddEffort")?id=@ViewBag.id&prev=' + $(this).val(), function (res) {
+            $('#spin').hide();
+        $('.modal-body').html(res);
+    });
+    });
+    
 </script>

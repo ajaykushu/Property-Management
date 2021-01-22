@@ -522,13 +522,13 @@ namespace BusinessLogic.Services
             }
             return await query.Select(x => new TimesheetBreakDown
             {
-                Holiday = "",
+                
                 Repair = x.Repair.ToString(),
                 Date = x.Date.ToString("dd-MMM-yyyy"),
-                Service = "",
+                Service = x.Service.ToString(),
                 Updated = x.UpdatedTime.ToString("dd-MMM-yyyy"),
                 UserName = x.User.FirstName + " " + x.User.LastName,
-                Vacation = "",
+                
                 WoId = x.WOId.ToString()
             }).ToListAsync();
         }

@@ -724,14 +724,14 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> AddEffort(string Id)
+        public async Task<IActionResult> AddEffort(string Id,bool prev)
         {
             ViewBag.id = Id;
             EffortPagination eff = null;
             try
             {
                 _apiRoute.Value.Routes.TryGetValue("geteffort", out string path);
-                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?id="+Id, this, _token).ConfigureAwait(false);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?id="+Id+"&prev="+prev, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                      eff = JsonConvert.DeserializeObject<EffortPagination>(await response.Content.ReadAsStringAsync());
@@ -747,7 +747,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> AddEffort(EffortPagination effortDTO,string id)
         {
-
+            ViewBag.id = id;
             Boolean eff = false;
             try
             {

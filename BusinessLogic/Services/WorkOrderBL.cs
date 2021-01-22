@@ -1213,27 +1213,54 @@ namespace BusinessLogic.Services
         }
 
         public async Task<bool> AddEffort(EffortPagination effortDTOs, string id)
-
-        {   //add effort
+        {
+            var temp = effortDTOs.EffortDTOs.OrderBy(x => x.DateTime).ToList();
+            var startdate = temp.First().DateTime;
+            var enddate = temp.Last().DateTime;
+            var eff =await  _workOrder.Get(x=>x.Id==id).Include(x=>x.Efforts).FirstOrDefaultAsync();
+            if (eff == null) eff.Efforts = new List<Effort>();
+            //add effort
             if (effortDTOs != null)//post request fired we have  to add the effort
             {
                 List<Effort> effort = new List<Effort>();
                 foreach (var item in effortDTOs.EffortDTOs)
                 {
-                    if (!item.Iseditable && item.Effort!=0)
+                    if (!item.Iseditable && (item.Repair!=0||item.Service!=0))
                     {
-                        Effort ef = new Effort
+
+                        if (eff != null)
                         {
-                            Repair = item.Effort,
-                            WOId = id,
-                            Date = item.DateTime,
-                            UserId = userId
-                        };
-                        effort.Add(ef);
+                            var x = eff.Efforts.Where(x => x.Date == item.DateTime).FirstOrDefault();
+                            if (x != null)
+                            {
+                                x.Repair = item.Repair;
+                                x.Service = item.Service;
+                            }
+                            else
+                                eff.Efforts.Add(new Effort
+                                {
+                                    Repair = item.Repair,
+                                    Service = item.Service,
+                                    WOId = id,
+                                    Date = item.DateTime,
+                                    UserId = userId
+                                });
+                        }
+                        else {
+                            
+                            eff.Efforts.Add(new Effort
+                            {
+                                Repair = item.Repair,
+                                Service = item.Service,
+                                WOId = id,
+                                Date = item.DateTime,
+                                UserId = userId
+                            });
+                        }
                     }
-                    
                 }
-               var status= await _effort.BulkInsert(effort);
+                
+                 var status= await _workOrder.Update(eff);
                 if (status >= 1)
                     return true;
                 
@@ -1243,57 +1270,61 @@ namespace BusinessLogic.Services
            
         }
 
-        public async Task<EffortPagination> GetEffort(string id)
+        public async Task<EffortPagination> GetEffort(string id,bool prev)
         {
-            var wo = await _workOrder.Get(x => x.Id == id).Include(x => x.Efforts).FirstOrDefaultAsync();
-            var lastfilled = wo.Efforts.OrderByDescending(x => x.Date).Select(x=>x.Date).FirstOrDefault();
-            List<EffortDTO> effort = new List<EffortDTO>();
-            if ((wo.Efforts == null || (wo.Efforts != null && wo.Efforts.Count%7 == 0) && wo.IsActive))
-            {   //requested page is next page
-                var date = wo.CreatedTime;
-                var enddate = date.AddDays(7);
-                foreach (DateTime day in EachDay(date, enddate))
-                {
-                    effort.Add(new EffortDTO
-                    {
-                        DateTime = day,
-                        Effort = 0,
-                        Iseditable = true
-
-                    });
-                }
+            var wo = _workOrder.Get(x => x.Id == id).First();
+            var date = DateTime.Now;
+            //no of days in week =7;
+            var currentday = date.DayOfWeek; //sunday=0;
             
-            }
-            else if (wo.Efforts.Count%7!=0)
+            var startdate = date.AddDays(-1*(int)currentday+1);
+            if (wo.CreatedTime > startdate)
+                startdate = wo.CreatedTime;
+            var enddate= date.AddDays(7-(int)currentday);
+            if (prev)
             {
-                foreach(var eff in wo.Efforts)
+                var temp = startdate;
+                startdate = startdate.AddDays(-7);
+                if (wo.CreatedTime > startdate)
+                    startdate = wo.CreatedTime;
+                enddate = temp.AddDays(-1);
+            }
+            var obj= await _effort.GetAll().Where(x => x.Date.Date >= startdate.Date && x.Date.Date <= enddate.Date && x.WOId == id).ToListAsync();
+            var EffortDto = new List<EffortDTO>() ;
+            
+            if (obj == null)
+            {
+               
+                foreach (var datetime in EachDay(startdate, enddate))
                 {
-                    effort.Add(new EffortDTO
-                    {
-                        DateTime = eff.Date,
-                        Effort = eff.Repair,
-                        Iseditable = false
-
-                    });
+                    var effort = new EffortDTO();
+                    effort.Repair = 0;
+                    effort.Service = 0;
+                    effort.DateTime = datetime;
+                    effort.Iseditable = true;
+                    EffortDto.Add(effort);
                 }
-                var date = lastfilled.AddDays(1);
-                var enddate = date.AddDays(Math.Abs(7-(wo.Efforts.Count+1)));
-                foreach (DateTime day in EachDay(date, enddate))
+               
+            }
+            else
+            {
+                foreach (var datetime in EachDay(startdate, enddate))
                 {
-                    effort.Add(new EffortDTO
-                    {
-                        DateTime = day,
-                        Effort = 0,
-                        Iseditable = true
-
-                    });
+                    var effort = new EffortDTO();
+                    var x = obj.Find(x => x.Date == datetime);
+                    effort.Repair =x!=null?x.Repair:0;
+                    effort.Iseditable = true;
+                    effort.DateTime = datetime;
+                    effort.Service = x != null ? x.Service : 0;
+                    EffortDto.Add(effort);
                 }
             }
-          
+
             return new EffortPagination
-            {   Lastday=wo.CreatedTime,
-                EffortDTOs = effort
-                
+            { Lastday = enddate,
+                FistDay = startdate,
+                EffortDTOs = EffortDto
+
             };
         }
 

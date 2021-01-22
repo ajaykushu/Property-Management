@@ -8,7 +8,8 @@ namespace Presentation.ViewModels
     {
 
         public DateTime DateTime { get; set; }
-        public int Effort { get; set; }
+        public int Repair { get; set; }
+        public int Service { get; set; }
         public bool Iseditable { get; set; }
 
         

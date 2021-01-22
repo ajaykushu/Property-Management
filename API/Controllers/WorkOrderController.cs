@@ -220,9 +220,9 @@ namespace API.Controllers
         }
         [HttpGet]
         [Route("geteffort")]
-        public async Task<ActionResult<EffortPagination>> GetEffort(string id)
+        public async Task<ActionResult<EffortPagination>> GetEffort(string id, bool prev)
         {
-            EffortPagination res = await _workOrderService.GetEffort(id);
+            EffortPagination res = await _workOrderService.GetEffort(id, prev);
             return Ok(res);
         }
 

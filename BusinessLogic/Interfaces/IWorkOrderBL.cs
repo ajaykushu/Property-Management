@@ -43,7 +43,7 @@ namespace BusinessLogic.Interfaces
         Task<WorkOrderDetail> GetRecurringWODetail(string rwoId);
         Task<List<AllWOExportRecurring>> WOExportRecurring(WOFilterDTO wOFilterModel);
         Task<bool> AddEffort(EffortPagination effortDTOs, string id);
-        Task<EffortPagination> GetEffort(string id);
+        Task<EffortPagination> GetEffort(string id,bool prev);
         Task<List<SelectItem>> GetIssues( long id);
         Task<List<SelectItem>> GetItem(long id);
     }

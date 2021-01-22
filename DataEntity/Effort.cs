@@ -13,6 +13,8 @@ namespace DataEntity
         public long Id { get; set; }
         public DateTime Date { get; set; }
         public int Repair { get; set; }
+        public int Service { get; set; }
+        
         [ForeignKey("WorkOrder")]
         public string WOId { get; set; }
         public WorkOrder WorkOrder {get;set;}
