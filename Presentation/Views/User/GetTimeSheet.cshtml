@@ -7,7 +7,7 @@
 
 @{
     var op = new List<Operation>();
-    op.Add(new Operation { Name = "Detail", Url = Url.Action("GetTimeSheetBreakDown"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-info ml-1" });
+    op.Add(new Operation { Name = "Detail",IsRedirect=true, Url = Url.Action("GetTimeSheetBreakDown"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-info ml-1" });
 
 }
 @if (device.Device.Type == DeviceType.Mobile)

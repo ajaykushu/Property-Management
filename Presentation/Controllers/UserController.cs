@@ -346,5 +346,30 @@ namespace Presentation.Controllers
             }
             return View(res); ;
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SaveEffort(List<TimesheetBreakDown> TimesheetBreakDown)
+        {
+            bool res = false;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("saveeffort", out var path);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path ,TimesheetBreakDown, this, _token);
+                if (response.IsSuccessStatusCode)
+                {
+                    res = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
+                    if (res)
+                        TempData["Success"] = "Successfully Updated";
+                    else
+                        TempData["Erorr"] = "Update Failed";
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return RedirectToAction("GetTimeSheetBreakDown",new { id = TimesheetBreakDown[0].WoId });
+        }
     }
 }

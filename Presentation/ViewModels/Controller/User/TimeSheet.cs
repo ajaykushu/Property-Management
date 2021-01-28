@@ -17,8 +17,9 @@ namespace Presentation.ViewModels
         
         public string WoId { get; set; }
         [DisplayName("User Name")]
-        
+
         public string UserName { get; set; }
+        
         [DisplayName("Total Effort")]
         public string TotalHours { get; set; }
         [DisplayName("Updated")]

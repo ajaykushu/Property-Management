@@ -55,6 +55,7 @@
                         </div>
                     </td>
                 </tr>
+                
                 <tr>
                     <th>
                         Status Details
@@ -381,10 +382,14 @@
     </form>
     
     <div class="bottom-stick" style="bottom:@bottom">
-        <div class="nav-link d-inline-flex flex-row ml-2" >
+        <div class="nav-link d-inline-flex flex-row ml-2">
             <input type="button" class="btn  btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white;width: 75px;">
             <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
-        </div>
+            @if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
+            {
+                <a asp-action="AddEffort"  asp-route-id="@Model.Id" class="btn  btn-info submit ml-1" style="color:white;width: 75px;font-size:smaller">Add Effort</a>
+            }
+            </div>
         <div class="container-block">
             <a href="#" class="nav-link edit-link float-right" style="color:lightgray"><i class="fa fa-pencil-alt fa-3x"></i></a>
         </div>

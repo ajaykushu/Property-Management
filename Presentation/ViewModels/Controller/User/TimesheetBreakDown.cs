@@ -13,12 +13,16 @@ namespace Presentation.ViewModels
 
         [Key]
         [DisplayName("WO ID")]
+        [ReadOnly(true)]
         public string WoId { get; set; }
+        [ReadOnly(true)]
         public string Date { get; set; }
         public string Repair { get; set; }
         public string Service { get; set; }
+        [ReadOnly(true)]
         [DisplayName("User Name")]
         public string UserName { get; set; }
+        [ReadOnly(true)]
         public string Updated { get; set; }
     }
 }

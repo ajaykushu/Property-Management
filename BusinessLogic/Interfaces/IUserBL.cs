@@ -38,5 +38,6 @@ namespace BusinessLogic.Interfaces
         Task<List<UserList>> GetUserEmail();
         Task<List<TimeSheet>> GetTimeSheet();
         Task<List<TimesheetBreakDown>> GetTimeSheet(string id);
+        Task<bool> SaveEffort(List<TimesheetBreakDown> timesheetBreakDown);
     }
 }

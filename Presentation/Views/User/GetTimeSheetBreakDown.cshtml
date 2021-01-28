@@ -7,9 +7,11 @@
 
 @{
     var op = new List<Operation>();
-    op.Add(new Operation { Name = "Edit", Url = Url.Action("GetTimeSheetBreakDown"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-pencil-alt ml-1" });
+    @if (!HttpContextAccessor.HttpContext.User.IsInRole("User")) {
+            op.Add(new Operation { Name = "Edit", Url = "", IsRedirect = false, buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-pencil-alt ml-1" });
+        }
 
-}
+    }
 @if (device.Device.Type == DeviceType.Mobile)
 {
     <header>
@@ -32,9 +34,13 @@ else
         <a href="javascript:history.back()">Back</a>
     </div>
 }
+<form asp-action="SaveEffort" method="post" asp-controller="User" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded">
 <div @if (device.Device.Type == DeviceType.Mobile) { <text> style="margin-top:67px" </text> }>
     @Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
 </div>
+    <hr />
+    <input type="submit" class="btn btn-success" value="Submit">
+    </form>
 
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {

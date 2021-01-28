@@ -741,6 +741,8 @@ namespace Presentation.Controllers
             {
 
             }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View(eff);
             return PartialView(eff);
         }
         [HttpPost]

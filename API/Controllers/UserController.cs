@@ -170,5 +170,13 @@ namespace API.Controllers
             return Ok(res);
         }
 
+        [HttpPost]
+        [Route("saveeffort")]
+        public async Task<ActionResult<bool>> SaveEffort(List<TimesheetBreakDown> timesheetBreakDown)
+        {
+            bool res = await _userService.SaveEffort(timesheetBreakDown);
+            return Ok(res);
+        }
+
     }
 }

@@ -25,6 +25,7 @@ namespace BusinessLogic.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IRepo<UserNotification> _userNotification;
+        private readonly IRepo<WorkOrder> _wo;
         private readonly IRepo<Languages> _langrepo;
         private readonly IRepo<Property> _property;
         private readonly IRepo<Department> _department;
@@ -37,10 +38,11 @@ namespace BusinessLogic.Services
         private readonly long userId;
         private readonly IRepo<Effort> _effort;
 
-        public UserBL(UserManager<ApplicationUser> userManager,
+        public UserBL(IRepo<WorkOrder> wo,UserManager<ApplicationUser> userManager,
               RoleManager<ApplicationRole> roleManager, IRepo<Languages> langrepo, IRepo<Property> property, IHttpContextAccessor httpContextAccessor, IImageUploadInFile imageUploadInFile, IDistributedCache cache, IRepo<Department> department, IRepo<UserProperty> userProperty, IRepo<Notification> notification, IRepo<UserNotification> userNotification, IRepo<Effort> effort)
         {
             _userManager = userManager;
+            _wo = wo;
             _roleManager = roleManager;
             _langrepo = langrepo;
             _property = property;
@@ -531,6 +533,27 @@ namespace BusinessLogic.Services
                 
                 WoId = x.WOId.ToString()
             }).ToListAsync();
+        }
+
+        public async Task<bool> SaveEffort(List<TimesheetBreakDown> timesheetBreakDown)
+        {
+            if (timesheetBreakDown.Count > 0)
+            {
+                var wo = await _wo.Get(x => x.Id == timesheetBreakDown[0].WoId).Include(x => x.Efforts).FirstOrDefaultAsync();
+                foreach(var item in timesheetBreakDown)
+                {
+                    var effitem=wo.Efforts.Where(x => x.Date.ToString("yyyy-MM-dd") == item.Date).FirstOrDefault();
+                    if (effitem != null && int.TryParse(item.Service, out _) && int.TryParse(item.Repair, out _))
+                    {
+                        effitem.Service = Convert.ToInt32(item.Service);
+                        effitem.Repair = Convert.ToInt32(item.Repair);
+                    }
+                }
+                var res=await _wo.Update(wo);
+                if (res >= 1) return true;
+            }
+           
+                return false;
         }
     }
 }
