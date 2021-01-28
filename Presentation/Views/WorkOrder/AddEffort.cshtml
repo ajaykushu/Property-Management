@@ -82,12 +82,23 @@
 
             </tbody>
         </table>
-        <div class="modal-footer">
-            <button type="button" id="prev" value="true" class="btn btn-info">Previous Week</button>
-            <button type="button" id="curr" value="false" class="btn btn-info">Current Week</button>
-            <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
-        </div>
+<div class="modal-footer">
+    @if (device.Device.Type == DeviceType.Mobile)
+    {
+        <a asp-action="AddEffort"  asp-route-Id="@ViewBag.id" asp-route-prev="true" class="btn btn-info">Previous Week</a>
+        <a asp-action="AddEffort" asp-route-Id="@ViewBag.id" asp-route-prev="false"  class="btn btn-info">Current Week</a>
+    }
+    else
+    {
+        <button type="button" id="prev" value="true" class="btn btn-info">Previous Week</button>
+        <button type="button" id="curr" value="false" class="btn btn-info">Current Week</button>
+    }
+    @if (device.Device.Type != DeviceType.Mobile)
+    {
+        <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    }
+    <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
+</div>
     </form>
 
 <script type="text/javascript">

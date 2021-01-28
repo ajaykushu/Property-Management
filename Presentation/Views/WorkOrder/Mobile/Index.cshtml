@@ -42,7 +42,7 @@
 <form class="mform" style="height:@height">
 
     <partial name="~/Views/WorkOrder/Mobile/_filter.cshtml" model="Model" />
-    <div class="d-inline custom-control custom-switch" style="bottom:4px">
+    <div class="d-inline custom-control custom-switch" style="bottom:6px;top:4px">
         <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-on="Sort by Highest Priority" data-off="Sort by Most Recently Created" data-onstyle="warning" data-offstyle="info" id="sortbydate">
     </div>
     <div class="container">

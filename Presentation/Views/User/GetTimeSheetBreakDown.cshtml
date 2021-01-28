@@ -3,6 +3,16 @@
 @{
     ViewData["Title"] = "Time Sheet Break Down";
     Layout = "~/Views/Shared/_Layout.cshtml";
+     var bottom = "0";
+    var height="82%";
+    var bottomforomment="7%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "81%";
+        bottom = "2%";
+        bottomforomment = "9%";
+    }
 }
 
 @{
@@ -35,11 +45,16 @@ else
     </div>
 }
 <form asp-action="SaveEffort" method="post" asp-controller="User" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded">
-<div @if (device.Device.Type == DeviceType.Mobile) { <text> style="margin-top:67px" </text> }>
-    @Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
-</div>
+    <div @if (device.Device.Type == DeviceType.Mobile) { <text> style="margin-top:67px" </text> }>
+        @Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
+    </div>
     <hr />
-    <input type="submit" class="btn btn-success" value="Submit">
+    @if (!HttpContextAccessor.HttpContext.User.IsInRole("User"))
+    {
+        <div class="bottom-stick" style="bottom:@bottom">
+            <input type="submit" class="btn btn-success" value="Submit" style="color:white;width: 75px;margin: 10px;">
+        </div>
+        }
     </form>
 
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
