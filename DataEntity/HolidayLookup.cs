@@ -11,6 +11,7 @@ namespace DataEntity
         public string Id { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
+        public string Country { get; set; }
         public bool Optional { get; set; }
     }
 }
