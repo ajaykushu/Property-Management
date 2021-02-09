@@ -1277,10 +1277,10 @@ namespace BusinessLogic.Services
             //no of days in week =7;
             var currentday = date.DayOfWeek; //sunday=0;
             
-            var startdate = date.AddDays(-1*(int)currentday+1);
+            var startdate = date.AddDays(-1*(int)currentday);
             if (wo.CreatedTime > startdate)
                 startdate = wo.CreatedTime;
-            var enddate= date.AddDays(7-(int)currentday);
+            var enddate= date.AddDays(7-(int)currentday-1);
             if (prev)
             {
                 var temp = startdate;

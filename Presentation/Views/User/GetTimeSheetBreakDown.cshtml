@@ -51,11 +51,19 @@ else
     <hr />
     @if (!HttpContextAccessor.HttpContext.User.IsInRole("User"))
     {
-        <div class="bottom-stick" style="bottom:@bottom">
-            <input type="submit" class="btn btn-success" value="Submit" style="color:white;width: 75px;margin: 10px;">
-        </div>
+        if (device.Device.Type == DeviceType.Mobile)
+        {
+            <div class="bottom-stick" style="bottom:@bottom">
+                <input type="submit" class="btn btn-success" value="Submit" style="color:white;width: 75px;margin: 10px;">
+            </div>
         }
-    </form>
+        else
+        {
+            <input type="submit" class="btn btn-success" value="Submit" style="color:white;width: 75px;margin: 10px;">
+        }
+
+    }
+</form>
 
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {

@@ -12,6 +12,7 @@ namespace DataEntity
         {
             this.UserProperties = new HashSet<UserProperty>();
             this.WorkOrdersAssigned = new HashSet<WorkOrder>();
+            this.Leaves = new HashSet<Leave>();
         }
         [Column(TypeName = "varchar(50)")]
         public string FirstName { set; get; }
@@ -45,6 +46,7 @@ namespace DataEntity
         public virtual ICollection<UserProperty> UserProperties { set; get; }
         public virtual ICollection<WorkOrder> WorkOrdersAssigned { get; set; }
         public virtual ICollection<Effort> Efforts { get; set; }
+        public virtual ICollection<Leave> Leaves { get; set; }
     }
 
     public class ApplicationUserPhoneValidator : IUserValidator<ApplicationUser>

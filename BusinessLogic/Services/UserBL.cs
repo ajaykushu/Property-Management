@@ -516,11 +516,11 @@ namespace BusinessLogic.Services
             {
                 var propIds = await _userProperty.GetAll().Include(x => x.ApplicationUser).Where(x => x.ApplicationUserId == userId).AsNoTracking().Select(x => x.PropertyId).Distinct().ToListAsync();
                 var userIds = await _userProperty.GetAll().Where(x => propIds.Contains(x.PropertyId)).AsNoTracking().Select(x => x.ApplicationUserId).ToListAsync();
-                query = query.Where(x => userIds.Contains(x.UserId));
+                query = query.Where(x => userIds.Contains(x.UserId)).OrderBy(x => x.Date);
             }
             if (_httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
-                query = query.Where(x => x.UserId == userId);
+                query = query.Where(x => x.UserId == userId && x.Date>=x.Date.AddMonths(-1)).OrderBy(x => x.Date);
             }
             return await query.Select(x => new TimesheetBreakDown
             {
