@@ -44,11 +44,11 @@
     <partial name="~/Views/WorkOrder/Mobile/_filter.cshtml" model="Model" />
     <div class="d-inline custom-control" style="text-align: center;bottom: 16px;">
         <div class="custom-switch" >
-            <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-off="Sort by Highest Priority" data-on="Sorted by New" data-onstyle="warning" data-offstyle="info" id="sortbydate">
+            <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-off="Sorted by Highest Priority" data-on="Sorted by New" data-onstyle="warning" data-offstyle="info" id="sortbydate">
         </div>
     </div>
     <div class="container">
-        @if (ResponseModel != null && ResponseModel.Payload != null)
+        @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
         {
             <table class="table border-0" style="table-layout:fixed;">
                 <tbody>

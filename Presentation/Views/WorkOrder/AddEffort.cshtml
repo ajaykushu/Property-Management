@@ -22,84 +22,84 @@
     </header>
 }
 
-    <form id="effortform" class="@if (device.Device.Type == DeviceType.Mobile) {<text>mform</text>}" asp-action="AddEffort">
-<input hidden name="Id" id="Id" value="@ViewBag.id" />
+<form id="effortform" class="@if (device.Device.Type == DeviceType.Mobile) {<text>mform</text>}" asp-action="AddEffort">
+    <input hidden name="Id" id="Id" value="@ViewBag.id" />
 
-<table class="table table-bordered table-responsive-md" style="display: inline-block;
+    <table class="table table-bordered table-responsive-md test" style="display: inline-block;
     overflow: auto;">
-            <thead>
+        <thead>
 
-                <tr>
-                    @foreach (DateTime day in EachDay(Model.FistDay, Model.Lastday))
-                    {
-                        <th>
-                            <div style="width:max-content;">
-                                @day.DayOfWeek.ToString()
-                                <br />
-                                @day.Date.ToString("dd-MMM-yy")
-                            </div>
-                        </th>
+            <tr>
+                @foreach (DateTime day in EachDay(Model.FistDay, Model.Lastday))
+                {
+                    <th>
+                        <div style="width:max-content;">
+                            @day.DayOfWeek.ToString()
+                            <br />
+                            @day.Date.ToString("dd-MMM-yy")
+                        </div>
+                    </th>
 
-                    }
-                    @if (Model.EffortDTOs.Count != 0)
-                    {
-                        <th>
-                            Total Hours
-                        </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
+                }
+                @if (Model.EffortDTOs.Count != 0)
+                {
+                    <th>
+                        Total Hours
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
 
-                    @foreach (var item in Model.EffortDTOs)
-                    {
-                        <td class="group">
-                            <label>Repair</label>
-                            <input type="DateTime" name="EffortDTOs[@i].DateTime" hidden value="@item.DateTime.Date" />
-                            <input id="Effort" name="EffortDTOs[@i].Repair" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Repair" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
-                            <label>Service</label>
-                            <input id="Effort" name="EffortDTOs[@i].Service" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Service" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
-                        </td>
-                        i++;
-                    }
-                    @if (Model.EffortDTOs.Count == 0)
-                    {
-                        <th>
-                            Out Of Date Range For Effort Addition.
-                        </th>
+                @foreach (var item in Model.EffortDTOs)
+                {
+                    <td class="group">
+                        <label>Repair</label>
+                        <input type="DateTime" name="EffortDTOs[@i].DateTime" hidden value="@item.DateTime.Date" />
+                        <input id="Effort" name="EffortDTOs[@i].Repair" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Repair" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
+                        <label>Service</label>
+                        <input id="Effort" name="EffortDTOs[@i].Service" @if (!item.Iseditable) { <text> readonly</text> } value="@item.Service" class="form-control day " type="number" onclick="total(event);" onkeypress="return event.charCode >= 48 && test(event);" min="0" max="24">
+                    </td>
+                    i++;
+                }
+                @if (Model.EffortDTOs.Count == 0)
+                {
+                    <th>
+                        Out Of Date Range For Effort Addition.
+                    </th>
 
-                    }
-                    else
-                    {
+                }
+                else
+                {
 
-                        <td>
-                            <input class="form-control total mt-4 " style="width:100px" readonly value="@Model.TotalEffort" name="Weeektotal" id="Weeektotal" value="0" type="number" min="1">
-                        </td>
-                    }
+                    <td>
+                        <input class="form-control total mt-4 " style="width:100px" readonly value="@Model.TotalEffort" name="Weeektotal" id="Weeektotal" value="0" type="number" min="1">
+                    </td>
+                }
 
-                </tr>
+            </tr>
 
-            </tbody>
-        </table>
-<div class="modal-footer">
-    @if (device.Device.Type == DeviceType.Mobile)
-    {
-        <a asp-action="AddEffort"  asp-route-Id="@ViewBag.id" asp-route-prev="true" class="btn btn-info">Previous Week</a>
-        <a asp-action="AddEffort" asp-route-Id="@ViewBag.id" asp-route-prev="false"  class="btn btn-info">Current Week</a>
-    }
-    else
-    {
-        <button type="button" id="prev" value="true" class="btn btn-info">Previous Week</button>
-        <button type="button" id="curr" value="false" class="btn btn-info">Current Week</button>
-    }
-    @if (device.Device.Type != DeviceType.Mobile)
-    {
-        <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    }
-    <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
-</div>
-    </form>
+        </tbody>
+    </table>
+    <div class="modal-footer">
+        @if (device.Device.Type == DeviceType.Mobile)
+        {
+            <a asp-action="AddEffort" asp-route-Id="@ViewBag.id" asp-route-prev="true" class="btn btn-info">Previous Week</a>
+            <a asp-action="AddEffort" asp-route-Id="@ViewBag.id" asp-route-prev="false" class="btn btn-info">Current Week</a>
+        }
+        else
+        {
+            <button type="button" id="prev" value="true" class="btn btn-info">Previous Week</button>
+            <button type="button" id="curr" value="false" class="btn btn-info">Current Week</button>
+        }
+        @if (device.Device.Type != DeviceType.Mobile)
+        {
+            <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        }
+        <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
+    </div>
+</form>
 
 <script type="text/javascript">
     $('#effortform').submit(function (e) {
@@ -164,3 +164,45 @@
     });
 
 </script>
+@if (device.Device.Type == DeviceType.Mobile)
+{
+    <style>
+       .table-bordered td, .table-bordered th {
+    border: 5px solid #dee2e6;
+}
+    .test,  .test tbody, .test th,  .test td,.test tr {
+        display: block;
+    }
+
+        .test thead{
+            display: none;
+        }
+
+        .test th{
+            border: none !important;
+            text-align: center;
+        }
+         .test tbody td {
+        text-wrap: normal !important;
+    }
+
+        .test td:before {
+            white-space: nowrap;
+            display: table-cell;
+            color: black;
+            font-weight: bold;
+        }
+        @{ int j = 1;}
+     @foreach (DateTime day in EachDay(Model.FistDay, Model.Lastday))
+     {
+         <text> .test td:nth-of-type(@j):before {
+             content: "@day.DayOfWeek.ToString()-@day.Date.ToString("dd-MMM-yy")"
+            }</text>
+         j++;
+     }
+        .test td:nth-of-type( @j ):before {
+            content: "Total"
+        }
+
+    </style>
+            }
