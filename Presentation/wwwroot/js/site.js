@@ -67,12 +67,12 @@ $('.File').change(function (e) {
         for (var i = 0; i < file.length; i++) {
             //compress file before pushing (image particularly)
             const options = {
-                maxSizeMB: 1,          // (default: Number.POSITIVE_INFINITY)
+                maxSizeMB: 1.6,          // (default: Number.POSITIVE_INFINITY)
                 maxWidthOrHeight: 720,   // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
                 onProgress: Function,       // optional, a function takes one progress argument (percentage from 0 to 100) 
                 useWebWorker: true, 
             }
-            if (file[i].size / 1024 > 1000 && file[i].type.indexOf('image') != -1) {
+            if (file[i].size / 1024 > 3000 && file[i].type.indexOf('image') != -1) {
                 enablespiner("Compressing")
                 imageCompression(file[i], options).then(function (res) {
                     var file = new File([res], res.name);

@@ -42,8 +42,8 @@
 <form class="mform" style="height:@height">
 
     <partial name="~/Views/WorkOrder/Mobile/_filter.cshtml" model="Model" />
-    <div class="d-inline custom-control" style="text-align: center;bottom: 16px;">
-        <div class="custom-switch" >
+    <div class="d-inline custom-control" style="width:100%;bottom: 16px;">
+        <div  style="text-align: center;">
             <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-off="Sorted by Highest Priority" data-on="Sorted by New" data-onstyle="warning" data-offstyle="info" id="sortbydate">
         </div>
     </div>
@@ -105,7 +105,7 @@
     </div>
 </form>
 <hr/>
-<div class="bottom-stick" style="bottom:@bottom">
+<div class="bottom-stick" style="padding-bottom:@bottom">
     <a  onClick="location.href=location.href"  class="nav-link" style="color:#fdfdfdf2;padding-left: 24px"><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></a>
     <div class="container-block">
         <a asp-action="CreateWorkOrderView" class="nav-link float-right" style="color:#fdfdfdf2"><i class="fa fa-plus fa-3x"></i></a>
