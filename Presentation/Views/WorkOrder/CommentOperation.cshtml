@@ -95,16 +95,20 @@
                con.append(
                    "<div class='card reply popup top-buffer' style='margin-left:24px'>" +
                    "<div class='card-body'>" +
-                   "<textarea id='Comment' name='Comment' class='note' required></textarea>" +
+                   "<textarea  id='Comment' name='Comment' class='note' required></textarea>" +
                    "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
                    "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
                    "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).val() + "'hidden required>" +
                    "<button  class='btn btn-outline-primary btn-sm top-buffer'>Post</button>" +
-                    "<input type='button' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
+                   "<input type='button' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
                    "</div>" +
                    "</div>"
-               )
-           }
+               );
+               var x = document.getElementById("Comment");
+               x.scrollIntoView()
+               x.focus();
+        }
+        
        });
 
        var currentpage = @Model?.CurrentPage;

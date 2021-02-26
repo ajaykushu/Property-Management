@@ -22,6 +22,7 @@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/browser-image-compression@1.0.13/dist/browser-image-compression.js"></script>
+   
     <partial name="_ValidationScriptsPartial" />
 </head>
 <body>
@@ -115,13 +116,14 @@
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script src="~/js/all.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script src="~/sw.js">
-
-    </script>
+    <script src="~/sw.js"></script>
     @RenderSection("Scripts", required: false)
     <div class="image-modal" style="z-index: 9999">
+
         <a href="javascript:CloseImageDisplayModal()" class="image-modal-close" tooltip="Close"><i class="fa fa-times fa-3x mr-2 mt-2"></i></a>
-        <img src="" class="image-size" />
+        <div id="dynamic-width">
+                <img src="" class="image-size" />
+        </div>
     </div>
 </body>
 </html>
@@ -132,12 +134,26 @@
             $("#notification_count").html('<strong>' + data + '</strong>');
         })
     });
-
-
-       
+    
+   
 </script>
 }
 <script>
+    //var event = "orientationchange" in window ? "orientationchange" : "resize";
+    window.addEventListener("orientationchange", Set, false)
+    
+    function Set() {
+        
+        if (window.orientation == 90) {
+            $('#dynamic-width').addClass("image-orient");
+
+        }
+        else if (window.orientation == 0)
+            $('#dynamic-width').removeClass("image-orient");
+        
+       
+    }
+    
      alertify.genericDialog || alertify.dialog('genericDialog',function(){
     return {
         main:function(content){
@@ -195,3 +211,31 @@
         }
     });
 </script>
+<style>
+    .image-orient{
+    display: flex;max-height: 100vh;
+    }.zoom {
+			display:inline-block;
+			position: relative;
+		}
+		
+		/* magnifying glass icon */
+		.zoom:after {
+			content:'';
+			display:block; 
+			width:33px; 
+			height:33px; 
+			position:absolute; 
+			top:0;
+			right:0;
+			background:url(icon.png);
+		}
+
+		.zoom img {
+			display: block;
+		}
+
+		.zoom img::selection { background-color: transparent; }
+
+    
+    </style>
