@@ -118,7 +118,7 @@
                         }
                         <div class="row top-buffer padding CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
                             <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
-                           
+
                         </div>
                     </td>
                 </tr>
@@ -271,13 +271,15 @@
             </tbody>
         </table>
         <input asp-for="Id" hidden>
-        <div class="bottom-stick" style="padding:5px;padding:5px;padding-bottom:@bottom">
-            <button type="submit" data-toggle="modal"  data-target=".bd-example-modal-lg" style="margin-left: 24%;" class="btn w-50  btn-success submit">Save Changes</button>
-            <span asp-validation-for="CronExpression"></span>
-            @*passing data to controller*@
+        <div class="bottom-section" style="padding-bottom:@bottom">
+            <div class="bottom-stick" style="padding:5px;padding:5px;">
+                <button type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 24%;" class="btn w-50  btn-success submit">Save Changes</button>
+                <span asp-validation-for="CronExpression"></span>
+                @*passing data to controller*@
+            </div>
         </div>
-    }
-</form>
+            }
+    </form>
 }
 <script>
    

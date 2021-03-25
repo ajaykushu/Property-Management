@@ -19,10 +19,12 @@
     <link rel="manifest" href="~/menifest.json">
     <link rel="stylesheet" href="~/css/site.min.css?v=1234" />
     <link rel="stylesheet" href="~/css/fontawesome.min.css?v=1234" />
+    <link rel="stylesheet" href="~/css/style-new.css" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/browser-image-compression@1.0.13/dist/browser-image-compression.js"></script>
-   
+    <script src="~/js/zooming.min.js"></script>
+
     <partial name="_ValidationScriptsPartial" />
 </head>
 <body>
@@ -118,13 +120,6 @@
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/sw.js"></script>
     @RenderSection("Scripts", required: false)
-    <div class="image-modal" style="z-index: 9999">
-
-        <a href="javascript:CloseImageDisplayModal()" class="image-modal-close" tooltip="Close"><i class="fa fa-times fa-3x mr-2 mt-2"></i></a>
-        <div id="dynamic-width">
-                <img src="" class="image-size" />
-        </div>
-    </div>
 </body>
 </html>
 @if(device.Device.Type != DeviceType.Mobile && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated){
@@ -139,6 +134,25 @@
 </script>
 }
 <script>
+    new Zooming({
+        enableGrab: true,
+        preloadImage: false,
+        closeOnWindowResize: false,
+        bgColor: 'rgb(255, 255, 255)',
+        zIndex: 10000,
+        onBeforeOpen: SetHeight,
+        onClose: SetHeightX,
+        scaleExtra: 1
+    }).listen('img');
+    var height=$('.mform').css("height");
+    function SetHeight() {
+      
+        $('.mform').css("height:0%");
+    }
+    function SetHeightX() {
+         
+        $('.mform').css("height:"+height+"%");
+    }
     //var event = "orientationchange" in window ? "orientationchange" : "resize";
     window.addEventListener("orientationchange", Set, false)
     

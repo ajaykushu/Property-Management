@@ -3,12 +3,12 @@
     ViewData["Title"] = "WO Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var bottom = "0";
-    var height="82%";
+    //var height="82%";
     
     var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
     if (context.Contains("iPhone"))
     {
-        height = "81%";
+       // height = "81%";
         bottom = "2%";
        
     }
@@ -32,7 +32,7 @@
             </div>
         </nav>
     </header>
-    <div class="mform" style="height: @height ;bottom:@bottom">
+    <div class="mform" style="bottom:@bottom">
 
         <table class="table border-0 table-striped ">
             <thead>
@@ -344,54 +344,60 @@
         </table>
 
     </div>
-    <div class="pop-up justify-content-center" style="display:none">
-        <div class="">
-            @{Dictionary<string, string>
-                              keyValuePairs = new Dictionary<string, string>
-                                  ();
-                keyValuePairs.Add("id", Model.Id + "");};
-            <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
-            @if (!Model.StatusDescription.Equals("Complete")) {
-                if (!Model.Recurring)
+    <div style="height: 50px;
+    display: block;
+    width: 100%;"></div>
+    <div class="bottom-section" style="padding-bottom:@bottom">
+        <div class="pop-up justify-content-center" style="display:none">
+            <div class="">
+                @{Dictionary<string, string>
+                                      keyValuePairs = new Dictionary<string, string>
+                                          ();
+                    keyValuePairs.Add("id", Model.Id + "");};
+                <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
+                @if (!Model.StatusDescription.Equals("Complete"))
                 {
-                <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit'></auth-link>
+                    if (!Model.Recurring)
+                    {
+                        <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit'></auth-link>
+                    }
+                    else
+                    {
+                        <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='Edit'></auth-link>
+                    }
                 }
-                else
-                {
-                <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='Edit'></auth-link>
-                }
-            }
 
-            <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">
-        </div>
-    </div>
-    
-    <form class="comment-stick w-100 form-inline" style="bottom:8%" id="commentform" asp-action='PostComment' method='post'>
-        <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
-        <table width="100%">
-            <tr width="90%">
-                <td>
-                    <input type="text" id='Comment' name='Comment' class="form-control form-control-lg w-100" placeholder="write a note or comment">
-                </td>
-            <td width="10%">
-                <button type="submit" class="btn btn-lg btn-primary">Post</button>
-            </td>
-            </tr>
-        </table>
-        
-    </form>
-    
-    <div class="bottom-stick" style="padding-bottom:@bottom">
-        <div class="nav-link d-inline-flex flex-row ml-2">
-            <input type="button" class="btn  btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white;width: 75px;">
-            <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
-            @if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
-            {
-                <a asp-action="AddEffort"  asp-route-id="@Model.Id" class="btn  btn-info submit ml-1" style="color:white;width: 75px;font-size:smaller">Add Effort</a>
-            }
+                <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">
             </div>
-        <div class="container-block">
-            <a href="#" class="nav-link edit-link float-right" style="color:lightgray"><i class="fa fa-pencil-alt fa-3x"></i></a>
+        </div>
+
+        <form class="comment-stick w-100 form-inline" style="margin-block-end:0px;" id="commentform" asp-action='PostComment' method='post'>
+            <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
+            <table width="100%">
+                <tr width="90%">
+                    <td>
+                        <input type="text" id='Comment' name='Comment' class="form-control form-control-lg w-100" placeholder="write a note or comment">
+                    </td>
+                    <td width="10%">
+                        <button type="submit" class="btn btn-lg btn-primary">Post</button>
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+
+        <div class="bottom-stick">
+            <div class="nav-link d-inline-flex flex-row">
+                <input type="button" class="btn  btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white;width: 75px;">
+                <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
+                @if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
+                {
+                    <a asp-action="AddEffort" asp-route-id="@Model.Id" class="btn  btn-info submit ml-1" style="color:white;width: 75px;font-size:smaller">Add Effort</a>
+                }
+            </div>
+            <div class="container-block">
+                <a href="#" class="edit-link float-right" style="color:lightgray;padding-top: 8px;"><i class="fa fa-pencil-alt fa-3x"></i></a>
+            </div>
         </div>
     </div>
 }

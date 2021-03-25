@@ -1,6 +1,6 @@
 ﻿@model Pagination<List<Comment>>
 @inject IDeviceResolver device
-<div class="mycontainer" style="max-height:1600px;overflow-y:scroll;padding:8px;">
+<div class="mycontainer">
     <form asp-action='PostComment' method='post'>
         @if (device.Device.Type != DeviceType.Mobile)
         {

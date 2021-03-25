@@ -754,12 +754,17 @@ label {
 }
 
 .bottom-stick {
+    width: 100%;
+    position: relative;
+    padding: 5px;
+    display: inline-flex;
+    background-color: grey;
+}
+.bottom-section {
     bottom: 0;
     width: 100%;
     position: fixed;
-    height: 10%;
     z-index: 9999;
-    display:inline-flex;
     background-color: grey;
 }
 
@@ -781,11 +786,8 @@ label {
 .comment-stick {
     display: inline-table;
     width: 100%;
-    position: fixed;
-    bottom: 7%;
+    position: relative;
     height: auto;
-    padding: 10px;
-    z-index: 9999;
     background-color: lightgray;
 }
 

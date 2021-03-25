@@ -5,17 +5,17 @@
 @model WOFilterModel
 @{ var ResponseModel = ViewBag.Response as Pagination<List<WorkOrderAssigned>>;
     var bottom = "0";
-    var height="88%";
-    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    var height = "88%";
+    var context = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
     if (context.Contains("iPhone"))
     {
         height = "85%";
         bottom = "2%";
     }
-    }
+}
 @{ var param = Model.GetType()
-           .GetProperties()
-           .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
+            .GetProperties()
+            .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
 }
 
 <header>
@@ -43,7 +43,7 @@
 
     <partial name="~/Views/WorkOrder/Mobile/_filter.cshtml" model="Model" />
     <div class="d-inline custom-control" style="width:100%;bottom: 16px;">
-        <div  style="text-align: center;">
+        <div style="text-align: center;">
             <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-off="Sorted by Highest Priority" data-on="Sorted by New" data-onstyle="warning" data-offstyle="info" id="sortbydate">
         </div>
     </div>
@@ -99,39 +99,44 @@
         }
         else
         {
-    <span>No records found</span>
+            <span>No records found</span>
 
         }
     </div>
 </form>
-<hr/>
-<div class="bottom-stick" style="padding-bottom:@bottom">
-    <a  onClick="location.href=location.href"  class="nav-link" style="color:#fdfdfdf2;padding-left: 24px"><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></a>
-    <div class="container-block">
-        <a asp-action="CreateWorkOrderView" class="nav-link float-right" style="color:#fdfdfdf2"><i class="fa fa-plus fa-3x"></i></a>
+<hr />
+<div class="bottom-section" style="bottom:@bottom">
+    <div class="bottom-stick">
+        <a onClick="location.href=location.href" class="nav-link" style="color:#fdfdfdf2;padding-left: 24px"><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></a>
+        <div class="container-block">
+            <a asp-action="CreateWorkOrderView" class="nav-link float-right" style="color:#fdfdfdf2"><i class="fa fa-plus fa-3x"></i></a>
+        </div>
     </div>
-</div>
-@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
-{
-    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+    </div>
+    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+    {
+        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
-<script>
+        <script>
     alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
-    
-</script>
-}
 
-<script>
-     function SubmitFn() {
-        console.log("hello");
-        $('#filter').click();
+        </script>
     }
-</script>
-<style> .toggle.btn.btn-xs.btn-info.off{
-    width: 220.125px !important;
-    height: 20.8056px !important;
-}
-    .toggle.btn.btn-xs.btn-warning{
-    width: 220.125px !important;
-    height: 20.8056px !important;
-}</style>
+
+    <script>
+        function SubmitFn() {
+            console.log("hello");
+            $('#filter').click();
+        }
+    </script>
+    <style>
+        .toggle.btn.btn-xs.btn-info.off {
+            width: 220.125px !important;
+            height: 20.8056px !important;
+        }
+
+        .toggle.btn.btn-xs.btn-warning {
+            width: 220.125px !important;
+            height: 20.8056px !important;
+        }
+    </style>

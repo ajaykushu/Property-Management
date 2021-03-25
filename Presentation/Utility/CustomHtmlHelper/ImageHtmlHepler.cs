@@ -43,7 +43,7 @@ namespace Presentation.Utility.CustomHtmlHelper
                         img.Attributes.Add("width", "200");
                         img.Attributes.Add("height", "150");
                         img.Attributes.Add("src", thumb);
-                        
+                        img.Attributes.Add("data-original", item.Value);
                         span.InnerHtml.AppendHtml(img);
                         span.InnerHtml.Append(item.Key);
                         var input = new TagBuilder("input");

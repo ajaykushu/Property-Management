@@ -100,7 +100,7 @@
                                     <span asp-validation-for="ItemId" class="text-danger"></span>
                                 </div>
                             }
-                           
+
 
                             <div class="row top-buffer padding">
 
@@ -110,9 +110,9 @@
                                 </select>
                                 <span asp-validation-for="IssueId" class="text-danger"></span>
                             </div>
-                            <div class="row top-buffer padding CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                            <div class="row top-buffer padding CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
                                 <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
-                               
+
                             </div>
 
 
@@ -208,9 +208,9 @@
                                     <label for="File">Attachment</label>
                                 </div>
                                 <div class="col">
-                                    <div class="cont" style="width:100%" >
+                                    <div class="cont" style="width:100%">
                                         <label style="width:100%" class="browsebutton">Add Photo</label>
-                                        <input style="width:100%"  asp-for="File"  accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                        <input style="width:100%" asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                     </div>
                                     <div id="file_selected">
                                     </div>
@@ -222,11 +222,13 @@
                 </tbody>
             </table>
             <hr />
-            <div class="bottom-stick" style="padding:5px;padding:5px;padding-bottom:@bottom">
-                <button type="submit" data-toggle="modal" style="margin-left: 24%;" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Create</button>
-                @*<input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">*@
+            <div class="bottom-section" style="padding-bottom:@bottom">
+                <div class="bottom-stick" style="padding:5px;padding:5px;padding-bottom:@bottom">
+                    <button type="submit" data-toggle="modal" style="margin-left: 24%;" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Create</button>
+                    @*<input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">*@
+                </div>
             </div>
-        }
-        <input asp-for="CronExpression" hidden>
-    </form>
+                }
+                <input asp-for="CronExpression" hidden>
+        </form>
 }
