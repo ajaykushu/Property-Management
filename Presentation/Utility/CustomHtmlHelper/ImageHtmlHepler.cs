@@ -41,6 +41,7 @@ namespace Presentation.Utility.CustomHtmlHelper
                         var img = new TagBuilder("img");
                         img.TagRenderMode = TagRenderMode.SelfClosing;
                         img.Attributes.Add("width", "200");
+                        img.Attributes.Add("id", "zoom-img");
                         img.Attributes.Add("height", "150");
                         img.Attributes.Add("src", thumb);
                         img.Attributes.Add("data-original", item.Value);

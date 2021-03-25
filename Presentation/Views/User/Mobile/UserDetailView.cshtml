@@ -86,7 +86,7 @@
                                 <label for="photo">Photo</label>
                             </div>
                             <div class="photo_disp" style="display:block">
-                                <span class="OpenImageDisplayModal">  <img src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Regex.Replace(Model.PhotoPath,"(.jpg)",".png")</text> }' width="200" height="150" alt="Pet Image" /></span>
+                                <span class="OpenImageDisplayModal">  <img id="zoom-img" data-original="@Model.PhotoPath"  src='@if (string.IsNullOrEmpty(Model.PhotoPath)) { <text>/NA.jpg</text>} else { <text>@Regex.Replace(Model.PhotoPath,"(.jpg)",".png")</text> }' width="200" height="150" alt="Pet Image" /></span>
 </div>
                         </div>
                             }
