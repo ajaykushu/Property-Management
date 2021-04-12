@@ -142,21 +142,25 @@
 </script>
 }
 <script>
-    $('#zoom-img').on('click', function (e) {
+
+
+    $('.zoom-img').on('click', function (e) {
        
         $('.media').prop('src', $(this).attr('data-original'));
-        document.getElementsByTagName('main')[0].hidden = true;
-        $('.image-modal').show();
        
-        
+     //document.getElementsByTagName('main')[0].style.display = 'none';
+        $('.image-modal').show();
 
+        e.preventDefault();
+        e.stopPropagation();
     });
      $('.close').on('click', function (e) {
          e.preventDefault();
           $('.media').prop('src', '');
          $('.image-modal').hide();
          
-         document.getElementsByTagName('main')[0].hidden = false;
+        //document.getElementsByTagName('main')[0].style.display = 'block';
+         //document.getElementsByTagName('main')[0].hidden = false;
         
 
     });
@@ -234,7 +238,7 @@
      color:red;
   }
   
- #container1{ height: 100%; margin: 0 auto 0 auto; max-width: 100%; width: 100%; }
+ #container1{ height: 100%; margin: 0 auto 0 auto; max-width: 100%; width: 100%;z-index:10001; }
 #container1 .zoom{ background-color: #DDD; height: 100%; margin: auto; overflow: hidden; width: 100%; }
 #container1 .zoom .media{ bottom: 0; display: block; left: 0; margin: auto; max-height: 100%; max-width: 100%; position: absolute; right: 0; top: 0; 
   -moz-transform-style: preserve-3d;
