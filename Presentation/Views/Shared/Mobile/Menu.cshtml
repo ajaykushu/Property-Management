@@ -75,7 +75,7 @@
     <div class="mwrapper">
         @for (int i = 0; i < ret.Count; i = i + 2)
         {
-            
+
             <div class="row">
                 <div class="col">
                     <div class="menu">
@@ -86,20 +86,21 @@
                             </div>
                         </a>
                     </div>
-                  </div>
-                @if (i == 0) {
-            <div class='col'>
-                <div class='menu'>
-                    <div class='item'>
-                        <a href='@url'>
-                            <img src='@path' width='100' height='100' alt='Pet Image' class='avtaar' >
-                        </a>
-                        <span style='font-family: Georgia, ' Times New Roman', Times, serif; color: grey'>Profile</span>
-                    </div>
                 </div>
-            </div>
+                @if (i == 0)
+                {
+                    <div class='col'>
+                        <div class='menu'>
+                            <div class='item'>
+                                <a href='@url'>
+                                    <img src='@path' width='100' height='100' alt='Pet Image' class='avtaar'>
+                                </a>
+                                <span style='font-family: Georgia, ' Times New Roman', Times, serif; color: grey'>Profile</span>
+                            </div>
+                        </div>
+                    </div>
                 }
-                @if (i!=0 && i + 1 < ret.Count)
+                @if (i != 0 && i + 1 < ret.Count)
                 {
                     <div class="col">
                         <div class="menu">
@@ -114,27 +115,43 @@
                 }
 
             </div>
-            
+
         }
+        
+        <div class="row">
+            <div class="col">
+                <div class="menu">
+                    <a asp-action="Home" asp-controller="GetAllNotification">
+                        <div class="item">
+                            <span><i class="fa fa-bell fa-7x" aria-hidden="true"></i></span>
+                            <span id="notification_count"style="font-family: Georgia, 'Times New Roman', Times, serif; color: red"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            </div>
+        </div>
 
-    </div>
-
-    <script>
+        <script>
     $('#notification_count').ready(function () {
-            $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
+        $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
+                if (parseInt(data) > 9); {
+                data="9+"
+            }
+            console.log(data);
             $("#notification_count").html('<strong>'+data+'</strong>');
             })
     })
 
-    </script>
+        </script>
 
-    <style>
-        .row {
-            display: flex; /* equal height of the children */
-        }
+        <style>
+            .row {
+                display: flex; /* equal height of the children */
+            }
 
-        .col {
-            flex: 1; /* additionally, equal width */
-            padding: 1em;
-        }
-    </style>
+            .col {
+                flex: 1; /* additionally, equal width */
+                padding: 1em;
+            }
+        </style>

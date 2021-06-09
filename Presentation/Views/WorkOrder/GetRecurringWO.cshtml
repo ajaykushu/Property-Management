@@ -91,15 +91,16 @@
         <div class="Filter_con float-right">
             <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
             <i class="fa fa-filter"></i>
-        </div>
 
-        <div class=" float-right btn-group dropup">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownExportLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
-            <div class="dropdown-menu">
 
-                <a name="exportlink" asp-action="ExportRecurringWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
-                <a name="exportlink" asp-action="ExportRecurringWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
+            <div class="d-inline dropup ml-1">
+                <a class=" dropdown-toggle" id="navbarDropdownExportLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
+                <div class="dropdown-menu">
 
+                    <a name="exportlink" asp-action="ExportRecurringWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
+                    <a name="exportlink" asp-action="ExportRecurringWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
+
+                </div>
             </div>
         </div>
     </div>

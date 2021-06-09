@@ -299,8 +299,10 @@ $('#Role').change(function () {
         $('.mainprop').prop("hidden", false);
 });
 
-
-$('.filter_check').click(function () {
+$(document).ready(function () {
+$('#FilterActive').on('change', function (e) {
+    console.log('called');
+    console.log(e);
     if ($(this).prop("checked") == true) {
         $('.wofilter').show();
         $('.mwofilter').show();
@@ -308,10 +310,12 @@ $('.filter_check').click(function () {
 });
 
 $('.closefilter').click(function () {
-    $('.filter_check').prop("checked", false);
+
+    $('#FilterActive').prop("checked", false);
     $('.wofilter').hide(100);
     $('.mwofilter').hide(100);
 });
+    });
 $('#Export').change(function () {
     $('input[type="submit"]').click();
 })
@@ -600,16 +604,7 @@ $("a[name='exportlink']").click(function () {
  })
 
 
-$('.filter_check').click(function () {
-    if ($(this).prop("checked") == true) {
-        $('.wofilter').show();
-    }
-});
 
-$('.closefilter').click(function () {
-    $('.filter_check').prop("checked", false);
-    $('.wofilter').hide(100);
-});
 
 function AddItem(e) {
     var val = $('#FilesRemoved').val();

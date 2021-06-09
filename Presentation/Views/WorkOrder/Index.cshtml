@@ -23,13 +23,14 @@
         <span> Completed Work Orders</span>
     }
    
-    <div class="Filter_con float-right" style="padding-right:5px;bottom:7px">
+    <div class="Filter_con float-right" style="padding-right:5px;">
         <div class="d-inline custom-control custom-switch">
             <input type="checkbox" asp-for="SortedByDate" onchange="SubmitFn();" data-toggle="toggle" data-size="xs" data-off="Sorted by Highest Priority" data-on="Sorted by New" data-onstyle="warning" data-offstyle="info" id="sortbydate">
         </div>
 
         <div class="d-inline dropup ml-1">
             <a class=" dropdown-toggle" id="navbarDropdownExportLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export"></i></a>
+
             <div class="dropdown-menu">
                 <a name="exportlink" asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="1" download="Wolist">To CSV</a>
                 <a name="exportlink" asp-action="ExportWO" class="dropdown-item" title="Export" asp-all-route-data="@param" asp-route-type="2" download="Wolist">To Excel</a>
@@ -176,12 +177,10 @@ else
 
 <script>
 
-
     $('#Export').change(function () {
         $('input[type="submit"]').click();
     })
     function SubmitFn() {
-        console.log("hello");
         $('#filter').click();
     }
 
