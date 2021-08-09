@@ -61,34 +61,36 @@ $('.Photo').change(function (e) {
 })
 var file = null;
 var selectedFile = [];
-$('.File').change(function (e) {
-    file = e.target.files
-    if (file != undefined) {
-        for (var i = 0; i < file.length; i++) {
-            //compress file before pushing (image particularly)
-            const options = {
-                maxSizeMB: 1.6,          // (default: Number.POSITIVE_INFINITY)
-                maxWidthOrHeight: 720,   // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
-                onProgress: Function,       // optional, a function takes one progress argument (percentage from 0 to 100) 
-                useWebWorker: true, 
+$(document).ready(function () {
+    $('.File').change(function (e) {
+        file = e.target.files
+        if (file != undefined) {
+            for (var i = 0; i < file.length; i++) {
+                //compress file before pushing (image particularly)
+                const options = {
+                    maxSizeMB: 1.6,          // (default: Number.POSITIVE_INFINITY)
+                    maxWidthOrHeight: 720,   // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
+                    onProgress: Function,       // optional, a function takes one progress argument (percentage from 0 to 100) 
+                    useWebWorker: true,
+                }
+                if (file[i].size / 1024 > 3000 && file[i].type.indexOf('image') != -1) {
+                    enablespiner("Compressing")
+                    imageCompression(file[i], options).then(function (res) {
+                        var file = new File([res], res.name);
+                        selectedFile.push(file);
+                        disablespinner();
+                    });
+
+                } else {
+                    selectedFile.push(file[i]);
+                }
+
+                $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'><br/></span>");
             }
-            if (file[i].size / 1024 > 3000 && file[i].type.indexOf('image') != -1) {
-                enablespiner("Compressing")
-                imageCompression(file[i], options).then(function (res) {
-                    var file = new File([res], res.name);
-                    selectedFile.push(file);
-                    disablespinner();
-                });
-                
-            } else {
-                selectedFile.push(file[i]);
-            }
-            
-            $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'><br/></span>");
+            $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
         }
-        $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
-    }
-})
+    })
+});
 function removefile(e) {
     var val = e.target.name.trim();
     if (selectedFile != null) {

@@ -29,7 +29,7 @@
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script src="~/js/all.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+   <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/sw.js"></script>
 </head>
 <body>
@@ -151,22 +151,14 @@
     $('.zoom-img').on('click', function (e) {
        
         $('.media').prop('src', $(this).attr('data-original'));
-       
-     //document.getElementsByTagName('main')[0].style.display = 'none';
         $('.image-modal').show();
-
         e.preventDefault();
         e.stopPropagation();
     });
-     $('.close').on('click', function (e) {
+    $('.close').on('click', function (e) {
+        $('.media').prop('src','');
+        $('.image-modal').hide();
          e.preventDefault();
-          $('.media').prop('src', '');
-         $('.image-modal').hide();
-         
-        //document.getElementsByTagName('main')[0].style.display = 'block';
-         //document.getElementsByTagName('main')[0].hidden = false;
-        
-
     });
     
      alertify.genericDialog || alertify.dialog('genericDialog',function(){

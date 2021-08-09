@@ -318,11 +318,11 @@
                 <tr id="CommentSection">
                     <td>
                         @await Html.PartialAsync("CommentOperation",
-      Model.Comments,
-      new ViewDataDictionary(ViewData)
-                         {
+Model.Comments,
+new ViewDataDictionary(ViewData)
+      {
                         { "workOrderId", Model.Id }
-                         })
+      })
                     </td>
                 </tr>
 
@@ -351,8 +351,8 @@
         <div class="pop-up justify-content-center" style="display:none">
             <div class="">
                 @{Dictionary<string, string>
-                                      keyValuePairs = new Dictionary<string, string>
-                                          ();
+                      keyValuePairs = new Dictionary<string, string>
+                          ();
                     keyValuePairs.Add("id", Model.Id + "");};
                 <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
                 @if (!Model.StatusDescription.Equals("Complete"))
@@ -389,16 +389,15 @@
         <div class="bottom-stick">
             <div class="nav-link d-inline-flex flex-row">
                 <input type="button" class="btn  btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white;width: 75px;">
-                <input type="button" onclick="document.getElementById('dohiddenreset').click();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
+                <input type="button" onclick="cancelFunction();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
                 @if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
                 {
-                    <a asp-action="AddEffort" asp-route-id="@Model.Id" class="btn  btn-info submit ml-1" style="color:white;width: 75px;font-size:smaller">Add Effort</a>
+                    <a asp-action="AddEffort" asp-route-id="@Model.Id" class="btn  btn-info submit ml-1" style="color:white;width: 75px;"> Hours</a>
                 }
+                <auth-link bclass="btn btn-primary ml-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit Issue'></auth-link>
             </div>
-            <div class="container-block">
-                <a href="#" class="edit-link float-right" style="color:lightgray;padding-top: 8px;"><i class="fa fa-pencil-alt fa-3x"></i></a>
+                    
             </div>
-        </div>
     </div>
 }
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
@@ -428,5 +427,9 @@
 
 
     });
+    function cancelFunction() {
+        alertify.confirm('Cancelling will lose any changes, are you sure?', function () { window.history.back();}).set({ title: "Alert" });
+        
 
+    }
 </script>

@@ -406,13 +406,21 @@ namespace Presentation.Controllers
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
-                       return Ok("Saved Successfully");
+                    {
+                        TempData["Success"] = "Saved Successfully";
+                        
+
+                    }else
+                    TempData["Error"] = "Unable to Update";
                 }
             }
             catch (Exception)
             {
+                TempData["Error"] = "Some Error Occurred";
             }
-            return BadRequest("Some Error Occured");
+            
+            return RedirectToAction("GetWODetail", new { id = workOrderDetail.Id });
+            //return BadRequest("Some Error Occured");
         }
 
         [HttpGet]
