@@ -160,7 +160,7 @@ else
                                 }
                             </div>
                         </div>
-                        <form asp-action="WorkOrderStatusChange" id="EditWO" asp-controller="WorkOrder">
+                        <form asp-action="WorkOrderStatusChange"  asp-controller="WorkOrder" id="editwo">
                             @if (!Model.Recurring)
                             {
                                 <div class="row top-buffer">
@@ -210,7 +210,7 @@ else
                             <input asp-for="Id" hidden>
                             <input type="text" asp-for="FilesRemoved" hidden>
 
-                            <input type="submit" value="Update" class="btn btn-sm btn-primary">
+                           <input type="submit"   value="Update" class="btn btn-sm btn-primary">
                         </form>
                     </div>
                 </td>

@@ -223,31 +223,31 @@ function disablespinner() {
         msg.dismiss();
 
 }
+$(document).ready(function () {
+    $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
+        e.preventDefault();
+        if ($(this).is('#wocreaterecurring')) {
+            GenarateCron();
+        }
+        var url = $(this).attr('action');
+        var formData = new FormData(this);
+        for (var i = 0; i < selectedFile.length; i++) {
+            formData.append('File', selectedFile[i]);
+        };
 
-$('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
-    e.preventDefault();
-    if ($(this).is('#wocreaterecurring')) {
-        GenarateCron();
-    }
-    var url = $(this).attr('action');
-    var formData = new FormData(this);
-    for (var i = 0; i < selectedFile.length; i++) {
-        formData.append('File', selectedFile[i]);
-    };
-   
-    if ($(this).valid()) {
-        $("form :input").prop("disabled", true);
-        RESTCALL(url, formData, 'POST', false, false, function (res) {
-            disablespinner();
-            
-            $("form :input").prop("disabled", false);
-            alertify.alert('Info', '<p>' + res + '</p>', function () {
-            $("input[type=reset]").click();
-            });
-        }, function (res) {
+        if ($(this).valid()) {
+            $("form :input").prop("disabled", true);
+            RESTCALL(url, formData, 'POST', false, false, function (res) {
                 disablespinner();
-                
-            $("input[type=password]").val("");
+
+                $("form :input").prop("disabled", false);
+                alertify.alert('Info', '<p>' + res + '</p>', function () {
+                    $("input[type=reset]").click();
+                });
+            }, function (res) {
+                disablespinner();
+
+                $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
                 var data = res.responseText.split('@');
                 if (res.status == 302) {
@@ -255,42 +255,45 @@ $('#adduser, #wocreate, #addprop, #wocreaterecurring').submit(function (e) {
                         window.location.href = data[0];
                     });
                 }
-                   
-                
-        }, "");
-    }
+
+
+            }, "");
+        }
+    });
 });
 
-$('#edituser, #editwo, #editworecurring').submit(function (e) {
-    e.preventDefault();
-    if ($(this).is('#editworecurring')) {
-        GenarateCron();
-    }
-    var url = $(this).attr('action');
-    var formData = new FormData(this);
-    //for multiple files upload
-    for (var i = 0; i < selectedFile.length; i++) {
-        formData.append('File', selectedFile[i]);
-    };
-    if ($(this).valid()) {
-        $("form :input").prop("disabled", true);
-        RESTCALL(url, formData, 'POST', false, false, function (res) {
-            disablespinner();
-            
-            $("form :input").prop("disabled", false);
-            alertify.alert('Info', '<p>' + res + '</p>', function () {
-                location.reload();
-            });
-        }, function (res) {
+$(document).ready(function () {
+    $('#edituser, #editwo, #editworecurring').submit(function (e) {
+        e.preventDefault();
+        if ($(this).is('#editworecurring')) {
+            GenarateCron();
+        }
+        var url = $(this).attr('action');
+        var formData = new FormData(this);
+        //for multiple files upload
+        for (var i = 0; i < selectedFile.length; i++) {
+            formData.append('File', selectedFile[i]);
+        };
+        if ($(this).valid()) {
+            $("form :input").prop("disabled", true);
+            RESTCALL(url, formData, 'POST', false, false, function (res) {
                 disablespinner();
-               
-            $("input[type=password]").val("");
-            $("form :input").prop("disabled", false);
-            alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                location.reload();
-            });
-        }, "");
-    }
+
+                $("form :input").prop("disabled", false);
+                alertify.alert('Info', '<p>' + res + '</p>', function () {
+                    location.reload();
+                });
+            }, function (res) {
+                disablespinner();
+
+                $("input[type=password]").val("");
+                $("form :input").prop("disabled", false);
+                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                    location.reload();
+                });
+            }, "");
+        }
+    });
 });
 
 $('#Role').change(function () {

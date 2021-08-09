@@ -407,19 +407,20 @@ namespace Presentation.Controllers
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                     if (status)
                     {
-                        TempData["Success"] = "Saved Successfully";
-                        
+                        return Ok("Update Successful");
 
-                    }else
-                    TempData["Error"] = "Unable to Update";
+
+                    }
+                    else
+                        return Ok("Update Failed");
                 }
             }
             catch (Exception)
             {
-                TempData["Error"] = "Some Error Occurred";
+                
             }
-            
-            return RedirectToAction("GetWODetail", new { id = workOrderDetail.Id });
+
+            return BadRequest("Some Error Occurred");
             //return BadRequest("Some Error Occured");
         }
 
