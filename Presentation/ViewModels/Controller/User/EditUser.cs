@@ -51,6 +51,7 @@ namespace Presentation.ViewModels
         public string UserName { set; get; }
 
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Password")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Passwords must have at least one digit ('0'-'9')., Passwords must have at least one uppercase ('A'-'Z').,Min length 8 charcters")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]

@@ -226,10 +226,12 @@ namespace BusinessLogic.Services
                 Id = x.Id,
                 PropertyName = x.LocationName
             }).ToListAsync();
+            var prop = await _property.Get(x => x.Id == id).FirstOrDefaultAsync();
             var proprtyconfig = new PropertyConfigDTO
             {
                 Locations = res,
-                PropertyId = id
+                PropertyId = id,
+                Name = prop.PropertyName,
             };
             return proprtyconfig;
         }

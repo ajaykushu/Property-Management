@@ -361,6 +361,7 @@ namespace Presentation.Controllers
                 {
                     comments = JsonConvert.DeserializeObject<List<Comment>>(await response.Content.ReadAsStringAsync());
                 }
+                
             }
             catch (Exception)
             {
@@ -380,18 +381,16 @@ namespace Presentation.Controllers
                 {
                     var status = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                 }
+                else
+                {
+                    return BadRequest("Comment Add Failed");
+                }
             }
             catch (Exception)
             {
             }
-            if (!post.WorkOrderId.Contains("R"))
-            {
-                return Redirect("~/WorkOrder/GetWODetail?id=" + post.WorkOrderId + "#CommentSection");
-            }
-            else
-            {
-                return Redirect("~/WorkOrder/GetWODetail?id=" + post.WorkOrderId + "&type=2#CommentSection");
-            }
+            return RedirectToAction("GetComment",new { workOrderId=post.WorkOrderId});
+             
         }
 
         [HttpPost]

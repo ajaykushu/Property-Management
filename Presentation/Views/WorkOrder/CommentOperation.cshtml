@@ -1,7 +1,7 @@
 ﻿@model Pagination<List<Comment>>
 @inject IDeviceResolver device
 <div class="mycontainer">
-    <form asp-action='PostComment' method='post'>
+    <form asp-action='PostComment' asp-controller="WorkOrder" method='post' id="commentpost" parent=".commentsection">
         @if (device.Device.Type != DeviceType.Mobile)
         {
             <p>

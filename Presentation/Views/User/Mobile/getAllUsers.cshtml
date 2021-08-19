@@ -23,7 +23,7 @@
         <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New' bclass="btn btn-sm btn-success" feature=@MenuEnum.Add_User></auth-link>
     </p>
 
-    <form class="wofilter">
+    <form class="wofilter" id="form1">
         <div class="input-group">
             <div class="cont">
                 <input type="radio" @if (ViewBag.filter == FilterEnum.Email) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.Email' class="selector1" required>
@@ -39,7 +39,7 @@
             </div>
             <input style="margin-right:10px;" class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
             <input style="margin-right:10px;" class="btn btn-sm btn-primary" type="submit" value="Filter">
-           <input style="margin-right:10px;" type="reset" value="Reset" class="btn btn-sm btn-danger">
+           <input style="margin-right:10px;" type="reset" value="Reset" id="dohiddenreset" class="btn btn-sm btn-danger">
         </div>
         <hr />
         <div class="workordertitle">
@@ -170,6 +170,13 @@
 
     <script>
         alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+       
     </script>
 }
 </div>
+<script> 
+    $('#dohiddenreset').click(function () {
+        document.getElementById("search").value = "";
+        $('#form1').submit();
+ })
+    </script>

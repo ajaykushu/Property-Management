@@ -15,6 +15,7 @@
 </header>
 <div class="mform" style="padding-left:5px; padding-right:5px;">
     <hr />
+    <div style="text-align:center;font-weight:bold">@Model.Name</div>
     <form asp-action="PropertyConfig" class="addconfig">
         <table class="table table_container">
             <tbody>
@@ -23,17 +24,17 @@
                         <div class="col">
                             @if (Model.Locations != null && Model.Locations.Any())
                             {
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label for="Locations">Location Available</label>
+                                <div class="row ">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Location Available</label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                            <option value="">Select Location</option>
+                                        </select>
+                                        <span asp-validation-for="LocationId" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
-                                        <option value="">Select Location</option>
-                                    </select>
-                                    <span asp-validation-for="LocationId" class="text-danger"></span>
-                                </div>
-                            </div>
                             }
                             <div class="row top-buffer">
                                 <div class="col-md-3">
@@ -61,7 +62,7 @@
                             </div>
                         </div>
                     </td>
-                    </tr>
+                </tr>
                 <tr>
                     <td>
                         <div class="col">
@@ -78,7 +79,7 @@
                         </div>
                     </td>
                 </tr>
-</tbody>
+            </tbody>
         </table>
         <div class="bottom-stick" style="background-color:white">
             <input asp-for="PropertyId" hidden>

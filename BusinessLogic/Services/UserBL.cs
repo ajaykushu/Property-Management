@@ -76,7 +76,7 @@ namespace BusinessLogic.Services
                 ClockType = "12",
                 LanguageId = model.Language,
                 Suffix = model.Suffix,
-                TimeZone = "India Standard Time",
+                TimeZone = "Pacific Standard Time",
                 OfficeExt = model.OfficeExt ?? null,
                 PhotoPath = filepath,
                 DepartmentId = model.DepartmentId

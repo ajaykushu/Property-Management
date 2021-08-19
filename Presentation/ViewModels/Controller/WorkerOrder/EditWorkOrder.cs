@@ -60,8 +60,7 @@ namespace Presentation.ViewModels
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd/MMM/yyyy}")]
-        [Remote("ValidateDateEqualOrGreater", "Home",
-    ErrorMessage = "Date isn't equal or greater than current date.")]
+        
         public DateTime DueDate { get; set; }
 
         public List<SelectItem> Sections { get; set; }

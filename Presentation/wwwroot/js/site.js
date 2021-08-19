@@ -41,24 +41,28 @@ function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_
     });
 }
 
-$('.select-mul').change(function (e) {
-    $('.select-input').val($(this).val());
+$(document).ready(function () {
+    $('.select-mul').change(function (e) {
+        $('.select-input').val($(this).val());
+    });
 });
 
-$('.Photo').change(function (e) {
-    const file = e.target.files[0]
-    if (file != undefined) {
-        const reader = new FileReader();
-        var src = "";
-        reader.onload = e => {
-            src = e.target.result;
-            $(".photo_disp img").prop("src", src);
-        };
-        reader.readAsDataURL(file);
-        $('.browsebutton')[0].innerText = "Selected";
-        $('.photo_disp').show();
-    }
-})
+$(document).ready(function () {
+    $('.Photo').change(function (e) {
+        const file = e.target.files[0]
+        if (file != undefined) {
+            const reader = new FileReader();
+            var src = "";
+            reader.onload = e => {
+                src = e.target.result;
+                $(".photo_disp img").prop("src", src);
+            };
+            reader.readAsDataURL(file);
+            $('.browsebutton')[0].innerText = "Selected";
+            $('.photo_disp').show();
+        }
+    })
+});
 var file = null;
 var selectedFile = [];
 $(document).ready(function () {
@@ -164,31 +168,37 @@ $('input[type="reset"]').click(function (e) {
 })
 
 var arr = [];
-$('input[name$="SelectedProperty"]').on('change', function () {
-    if ($(this).prop("checked") == true) {
-        var index = arr.lastIndexOf($(this).val());
-        if (index == -1)
-            arr.push($(this).val());
-    }
-    else {
-        var index = arr.lastIndexOf($(this).val());
-        if ($('input[name$="PrimaryProperty"]:checked').val() == $(this).val()) {
-            $('.primary_span').text("");
-            $('input[name$="PrimaryProperty"]:checked').prop("checked", false);
+$(document).ready(function () {
+    $('input[name$="SelectedProperty"]').on('change', function () {
+        if ($(this).prop("checked") == true) {
+            var index = arr.lastIndexOf($(this).val());
+            if (index == -1)
+                arr.push($(this).val());
         }
-        arr.splice(index, 1);
-    }
-    $('.select-input').val(arr);
-})
-$('input[name$="PrimaryProperty"]').on('change', function () {
-    var index = arr.lastIndexOf($(this).val());
-    if (index == -1) {
-        arr.push($(this).val());
-        $(this).closest("div").find('input[type="checkbox"]').prop("checked", true);
+        else {
+            var index = arr.lastIndexOf($(this).val());
+            if ($('input[name$="PrimaryProperty"]:checked').val() == $(this).val()) {
+                $('.primary_span').text("");
+                $('input[name$="PrimaryProperty"]:checked').prop("checked", false);
+            }
+            arr.splice(index, 1);
+        }
         $('.select-input').val(arr);
-    }
-    $('.primary_span').text($(this).val());
+    })
 });
+
+$(document).ready(function () {
+    $('input[name$="PrimaryProperty"]').on('change', function () {
+        var index = arr.lastIndexOf($(this).val());
+        if (index == -1) {
+            arr.push($(this).val());
+            $(this).closest("div").find('input[type="checkbox"]').prop("checked", true);
+            $('.select-input').val(arr);
+        }
+        $('.primary_span').text($(this).val());
+    });
+});
+
 if ($('.select-input').val() != "" && $('.select-input').val() != undefined) {
     var val = $('.select-input').val();
     if (val.indexOf(',') != -1) {
@@ -239,14 +249,12 @@ $(document).ready(function () {
             $("form :input").prop("disabled", true);
             RESTCALL(url, formData, 'POST', false, false, function (res) {
                 disablespinner();
-
                 $("form :input").prop("disabled", false);
                 alertify.alert('Info', '<p>' + res + '</p>', function () {
                     $("input[type=reset]").click();
                 });
             }, function (res) {
                 disablespinner();
-
                 $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
                 var data = res.responseText.split('@');
@@ -258,6 +266,36 @@ $(document).ready(function () {
 
 
             }, "");
+        }
+    });
+});
+
+$(document).ready(function () {
+    $('#commentpost').submit(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        var parentNode = $(this).attr('parent');
+        var formData = new FormData(this);
+        if ($(this).valid()) {
+            $("form :input").prop("disabled", true);
+            RESTCALL(url, formData, 'POST', false, false, function (res) {
+                disablespinner();
+                //if success then response contains html
+                if (res.indexOf('div') != -1) {
+                    //append this in parent
+                    $(parentNode).html(res);
+                    alertify.alert('Info', '<p>Updated Successfully</p>', function () {
+                        
+                    });
+                }
+            }, function (res) {
+                disablespinner();
+                $("form :input").prop("disabled", false);
+                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+
+                });
+            });
+
         }
     });
 });
@@ -285,7 +323,6 @@ $(document).ready(function () {
                 });
             }, function (res) {
                 disablespinner();
-
                 $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
                 alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
@@ -296,12 +333,14 @@ $(document).ready(function () {
     });
 });
 
-$('#Role').change(function () {
-    if ($(this).children("option:selected").val() == "Master Admin") {
-        $('.mainprop').prop("hidden", true);
-    }
-    else
-        $('.mainprop').prop("hidden", false);
+$(document).ready(function () {
+    $('#Role').change(function () {
+        if ($(this).children("option:selected").val() == "Master Admin") {
+            $('.mainprop').prop("hidden", true);
+        }
+        else
+            $('.mainprop').prop("hidden", false);
+    });
 });
 
 $(document).ready(function () {
@@ -320,10 +359,13 @@ $('.closefilter').click(function () {
     $('.wofilter').hide(100);
     $('.mwofilter').hide(100);
 });
-    });
-$('#Export').change(function () {
-    $('input[type="submit"]').click();
-})
+});
+
+$(document).ready(function () {
+    $('#Export').change(function () {
+        $('input[type="submit"]').click();
+    })
+});
 
 /*mobile workorder detail*/
 $('#Cancel').click(function () {
@@ -344,79 +386,86 @@ $(window).on('unload', function () {
     this.disablespinner();
 });
 
-
-$('#LocationId').change(function () {
-    $.get("/Property/GetSubLocation?id=" + $(this).val(),
-        function (data) {
-            $("#SubLocationId").html("<option value=''>Select Sublocation</option>")
-            if (data != null || data != undefined) {
-                for (var i = 0; i < data.length; i++) {
-                    $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                }
-            }
-        });
-    $.get("GetItem?id=" + $(this).val(),
-        function (data) {
-            $("#ItemId").html("<option value=''>Select Item</option>")
-            if (data != null || data != undefined) {
-                for (var i = 0; i < data.length; i++) {
-                    $("#ItemId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                }
-            }
-        });
-});
-$('#ItemId').change(function () {
-    $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
-        function (data) {
-            $("#IssueId").html("<option value=''>Select Issue</option><option value='-1'>Other</option>")
-            if (data != null || data != undefined) {
-                for (var i = 0; i < data.length; i++) {
-                    $("#IssueId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                }
-            }
-        });
-});
-$('#PropertyId').change(function () {
-    $.get("GetLocation?id=" + $(this).val(),
-        function (data) {
-            $("#LocationId").html("<option value=''>Select Location</option>")
-            $("#SubLocationId").html("<option value=''>Select SubLocation</option>")
-            if (data != null || data != undefined) {
-                for (var i = 0; i < data.length; i++) {
-                    $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                }
-            }
-        });
-});
-$('#Category').change(function () {
-    $.get("/WorkOrder/GetDataByCategory?category=" + $(this).val(),
-        function (data) {
-            console.log(data);
-            if (data != null || data != undefined) {
-                $("#OptionId").html("<option value=''>Please Choose Option</option>")
-                for (var prop in data) {
-                    var result = ""
-                    if (prop != "")
-                        result += "<optgroup label='" + prop + "'>";
-                    
-                    for (var i = 0; i < data[prop].length; i++) {
-                        result += '<option value=' + data[prop][i].id + '>' + data[prop][i].propertyName + '</option>';
-                        
+$(document).ready(function () {
+    $('#LocationId').change(function () {
+        $.get("/Property/GetSubLocation?id=" + $(this).val(),
+            function (data) {
+                $("#SubLocationId").html("<option value=''>Select Sublocation</option>")
+                if (data != null || data != undefined) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                     }
-                    if (prop != "")
-                        result += "</optgroup>";
-                    $("#OptionId").append(result);
                 }
-               
-            }
-        });
-    if ($(this).val() == "department" || $(this).val() == "user")
-        $("#OptionId").prop("required", true).prop("hidden", false);
-    else
-        $("#OptionId").removeProp("required").prop("hidden", true);
+            });
+        $.get("GetItem?id=" + $(this).val(),
+            function (data) {
+                $("#ItemId").html("<option value=''>Select Item</option>")
+                if (data != null || data != undefined) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#ItemId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                    }
+                }
+            });
+    });
+});
+$(document).ready(function () {
+    $('#ItemId').change(function () {
+        $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
+            function (data) {
+                $("#IssueId").html("<option value=''>Select Issue</option><option value='-1'>Other</option>")
+                if (data != null || data != undefined) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#IssueId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                    }
+                }
+            });
+    });
+});
+$(document).ready(function () {
+    $('#PropertyId').change(function () {
+        $.get("GetLocation?id=" + $(this).val(),
+            function (data) {
+                $("#LocationId").html("<option value=''>Select Location</option>")
+                $("#SubLocationId").html("<option value=''>Select SubLocation</option>")
+                if (data != null || data != undefined) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#LocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                    }
+                }
+            });
+    });
+});
+$(document).ready(function () {
+    $('#Category').change(function () {
+        $.get("/WorkOrder/GetDataByCategory?category=" + $(this).val(),
+            function (data) {
+                console.log(data);
+                if (data != null || data != undefined) {
+                    $("#OptionId").html("<option value=''>Please Choose Option</option>")
+                    for (var prop in data) {
+                        var result = ""
+                        if (prop != "")
+                            result += "<optgroup label='" + prop + "'>";
+
+                        for (var i = 0; i < data[prop].length; i++) {
+                            result += '<option value=' + data[prop][i].id + '>' + data[prop][i].propertyName + '</option>';
+
+                        }
+                        if (prop != "")
+                            result += "</optgroup>";
+                        $("#OptionId").append(result);
+                    }
+
+                }
+            });
+        if ($(this).val() == "department" || $(this).val() == "user")
+            $("#OptionId").prop("required", true).prop("hidden", false);
+        else
+            $("#OptionId").removeProp("required").prop("hidden", true);
+
+    });
 
 });
-
 $('#history_button').click(function (e) {
     e.preventDefault();
     enablespiner();
@@ -428,9 +477,12 @@ $('#history_button').click(function (e) {
     
     
 })
-$('#type-select').change(function () {
-    EnableReqInput();
-})
+
+$(document).ready(function () {
+    $('#type-select').change(function () {
+        EnableReqInput();
+    })
+});
 $('input[name="sub-radio"]').click(function () {
     EnableReqInput();
 })
@@ -481,8 +533,11 @@ function EnableReqInput () {
     
    
 }
-$('input[name="end-select"]').change(function () {
-    EndInputEnabler();
+
+$(document).ready(function () {
+    $('input[name="end-select"]').change(function () {
+        EndInputEnabler();
+    });
 });
 EndInputEnabler();
 function EndInputEnabler() {
@@ -577,9 +632,10 @@ function GenarateCron() {
     $('#CronExpression').val(cron);
 };
 
-
-$('#RecurringStartDate').on('change', function () {
-    $('#RecurringEndDate').prop('min', $(this).val());
+$(document).ready(function () {
+    $('#RecurringStartDate').on('change', function () {
+        $('#RecurringEndDate').prop('min', $(this).val());
+    });
 });
 var isdownload = false;
 $("a[name='exportlink']").click(function () {
@@ -596,17 +652,18 @@ $("a[name='exportlink']").click(function () {
             //href = href.replace("&IsCurrent=False", "&IsCurrent=true");
         });
 });
-
- $('#IssueId').change(function () {
-     if ($(this).val() == '-1') {
-         $('.CustomIssueDiv').show();
-         $('.CustomIssueDiv').prop("required", 'true');
-     }
-     else {
-         $('.CustomIssueDiv').hide();
-         $('.CustomIssueDiv').removeProp("required");
-     }
- })
+$(document).ready(function () {
+    $('#IssueId').change(function () {
+        if ($(this).val() == '-1') {
+            $('.CustomIssueDiv').show();
+            $('.CustomIssueDiv').prop("required", 'true');
+        }
+        else {
+            $('.CustomIssueDiv').hide();
+            $('.CustomIssueDiv').removeProp("required");
+        }
+    })
+});
 
 
 
