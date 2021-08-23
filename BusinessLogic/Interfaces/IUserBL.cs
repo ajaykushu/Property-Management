@@ -3,6 +3,7 @@ using Models;
 using Models.ResponseModels;
 using Models.ResponseModels.User;
 using Models.User.RequestModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -39,5 +40,6 @@ namespace BusinessLogic.Interfaces
         Task<List<TimeSheet>> GetTimeSheet();
         Task<List<TimesheetBreakDown>> GetTimeSheet(string id);
         Task<bool> SaveEffort(List<TimesheetBreakDown> timesheetBreakDown);
+        Task<bool> ChangeTZ(string timeZone,string id);
     }
 }

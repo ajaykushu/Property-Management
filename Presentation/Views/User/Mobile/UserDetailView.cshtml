@@ -174,19 +174,25 @@
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="TimeZone">Time Zone</label>
-                            </div>
+                            </div> 
                             <div class="col">
-                                <span class="value">@Html.DisplayFor(x => x.TimeZone)</span>
+                                <form asp-action="ChangeTZ" asp-controller="User" id="adduser">
+                                    <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "Id"))">
+                                        <option value="">TimeZone</option>
+                                    </select>
+                                    <input asp-for="UserId" hidden/>
+                                    <input type="submit" class="btn btn-success" value="Change">
+                                </form>
                             </div>
                         </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label for="SMSAlert">SMS Alert</label>
+                        <div class=" row top-buffer">
+                                    <div class="col-md-3">
+                                        <label for="SMSAlert">SMS Alert</label>
+                                    </div>
+                                    <div class="col">
+                                        <span class="value">@Html.DisplayFor(x => x.SMSAlert)</span>
+                                    </div>
                             </div>
-                            <div class="col">
-                                <span class="value">@Html.DisplayFor(x => x.SMSAlert)</span>
-                            </div>
-                        </div>
                     </div>
                 </td>
             </tr>

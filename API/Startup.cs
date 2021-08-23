@@ -58,6 +58,7 @@ namespace API
             {
                 op.User.RequireUniqueEmail = true;
                 op.Password.RequireDigit = true;
+                op.Password.RequireNonAlphanumeric = false;
                 op.Password.RequireUppercase = true;
                 op.Password.RequiredLength = 8;
                 op.Tokens.AuthenticatorIssuer = Configuration.GetSection("token").GetSection("issuer").Value;
@@ -141,4 +142,6 @@ namespace API
            
         }
     }
+
+   
 }

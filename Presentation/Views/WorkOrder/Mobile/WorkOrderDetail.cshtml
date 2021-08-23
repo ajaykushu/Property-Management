@@ -372,7 +372,7 @@ new ViewDataDictionary(ViewData)
             </div>
         </div>
 
-        <form class="comment-stick w-100 form-inline" style="margin-block-end:0px;" id="commentform" asp-action='PostComment' method='post'>
+        <form class="comment-stick w-100 form-inline" style="margin-block-end:0px;" id="commentpost" parent=".commentsection"  asp-action='PostComment' asp-controller="WorkOrder" method='post'>
             <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
             <table width="100%">
                 <tr width="90%">
@@ -380,11 +380,10 @@ new ViewDataDictionary(ViewData)
                         <input type="text" id='Comment' name='Comment' class="form-control form-control-lg w-100" placeholder="write a note or comment">
                     </td>
                     <td width="10%">
-                        <button type="submit" class="btn btn-lg btn-primary">Post</button>
+                        <input type="submit"  id="sub" class="btn btn-lg btn-primary" value="Post">
                     </td>
                 </tr>
             </table>
-
         </form>
 
         <div class="bottom-stick">
@@ -433,4 +432,5 @@ new ViewDataDictionary(ViewData)
         
 
     }
+  
 </script>

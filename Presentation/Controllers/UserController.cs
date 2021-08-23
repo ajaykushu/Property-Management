@@ -371,5 +371,35 @@ namespace Presentation.Controllers
             }
             return RedirectToAction("GetTimeSheetBreakDown",new { id = TimesheetBreakDown[0].WoId });
         }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangeTZ(UserDetail user)
+        {
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("changetz", out string path);
+                var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, user, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                        return Ok("Updated");
+                    else
+                        return Ok("Update Failed");
+                }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return BadRequest(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
+                else
+                    return StatusCode((int)response.StatusCode, StringConstants.Error);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, StringConstants.Error);
+            }
+            return StatusCode(500, StringConstants.Error);
+        
+       
+        }
     }
 }

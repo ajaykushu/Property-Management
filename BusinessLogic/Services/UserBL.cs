@@ -357,10 +357,10 @@ namespace BusinessLogic.Services
                 UserModel = new UserDetailModel
                 {
                     EmailAddress = x.Email,
-                    IsEffortVisible=x.IsEffortVisible,
+                    IsEffortVisible = x.IsEffortVisible,
                     FullName = string.Concat(x.FirstName, " ", x.LastName, " ", x.Suffix ?? ""),
                     Id = x.Id,
-                    PhotoPath = !string.IsNullOrWhiteSpace(x.PhotoPath)?string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.PhotoPath):"",
+                    PhotoPath = !string.IsNullOrWhiteSpace(x.PhotoPath) ? string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.PhotoPath) : "",
                     ListProperties = x.UserProperties.Select(x => new PropertiesModel
                     {
                         Id = x.Property.Id,
@@ -380,7 +380,9 @@ namespace BusinessLogic.Services
                     OfficeExtension = x.OfficeExt,
                     IsActive = x.IsActive,
                     SMSAlert = x.SMSAltert,
-                    TimeZone = x.TimeZone
+                    TimeZone = x.TimeZone,
+                    TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DisplayName }).ToList()
+
                 }
             }).AsNoTracking().FirstOrDefault();
             if (user != null)
@@ -554,6 +556,16 @@ namespace BusinessLogic.Services
             }
            
                 return false;
+        }
+        public async  Task<bool> ChangeTZ(string timeZone,string userId)
+        {
+            var user = await _userManager.FindByNameAsync(userId);
+            user.TimeZone = timeZone;
+            var res=await  _userManager.UpdateAsync(user);
+            if (res.Succeeded)
+                return true;
+            return false;
+
         }
     }
 }

@@ -270,35 +270,44 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $('#commentpost').submit(function (e) {
-        e.preventDefault();
-        var url = $(this).attr('action');
-        var parentNode = $(this).attr('parent');
-        var formData = new FormData(this);
-        if ($(this).valid()) {
-            $("form :input").prop("disabled", true);
-            RESTCALL(url, formData, 'POST', false, false, function (res) {
-                disablespinner();
-                //if success then response contains html
-                if (res.indexOf('div') != -1) {
-                    //append this in parent
-                    $(parentNode).html(res);
-                    alertify.alert('Info', '<p>Updated Successfully</p>', function () {
-                        
-                    });
-                }
-            }, function (res) {
-                disablespinner();
-                $("form :input").prop("disabled", false);
-                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+$(function () {
+    
+    $("#commentpost, #commentpost1 ").submit(function (e) {
+       
+            e.preventDefault();
+            var url = $(this).attr('action');
+            var parentNode = $(this).attr('parent');
+            var formData = new FormData(this);
+            if ($(this).valid()) {
+                $("form :input").prop("disabled", true);
+                RESTCALL(url, formData, 'POST', false, false, function (res) {
+                    disablespinner();
+                    //if success then response contains html
+                    if (res.indexOf('div') != -1) {
+                        //append this in parent
+                        $(parentNode).html(res);
+                        $('#close').click();
+                        $("form :input").prop("disabled", false);
+                        document.getElementById("commentpost").reset();
+                        document.getElementById("commentpost1").reset();
+                        alertify.alert('Info', '<p>Updated Successfully</p>', function () {
 
+                        });
+                    }
+                }, function (res) {
+                    disablespinner();
+                    $("form :input").prop("disabled", false);
+                    alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+
+                    });
                 });
-            });
 
         }
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        });
     });
-});
+
 
 $(document).ready(function () {
     $('#edituser, #editwo, #editworecurring').submit(function (e) {

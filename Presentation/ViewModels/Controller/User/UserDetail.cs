@@ -22,5 +22,6 @@ namespace Presentation.ViewModels
         public bool IsActive { get; set; }
         public string TimeZone { get; set; }
         public string PhotoPath { get; set; }
+        public List<SelectItem> TimeZones { get; set; }
     }
 }

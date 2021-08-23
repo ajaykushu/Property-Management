@@ -178,5 +178,13 @@ namespace API.Controllers
             return Ok(res);
         }
 
+        [HttpPost]
+        [Route("changetz")]
+        public async Task<ActionResult<bool>> ChangeTZ([FromForm] UserDetailModel udm)
+        {
+            bool res = await _userService.ChangeTZ(udm.TimeZone, udm.UserId);
+            return Ok(res);
+        }
+
     }
 }
