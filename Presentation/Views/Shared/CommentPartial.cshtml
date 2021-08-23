@@ -11,7 +11,9 @@
                         <p class="text-success">Comment By-&nbsp; @item.CommentBy</p>
                         <h6 class="card-subtitle"> @item.CommentDate</h6>
                         <p class="card-text"> @item.CommentString</p>
-                        <button value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
+                        <input type="text" class="CommentBy"   value="@item.CommentBy" hidden />
+                        <input type="button" value="Reply" class="btn btn-success btn-sm reply" />
+                        
                     </div>
                 </div>
             </div>
@@ -26,7 +28,8 @@
                                 <p class="text-info">RepliedBy By-&nbsp; @reply.RepliedBy</p>
                                 <h6 class="card-subtitle">@reply.RepliedDate</h6>
                                 <p class="card-text"><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</p>
-                                <button value="@item.CommentBy" class="btn btn-success btn-sm reply"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Reply</button>
+                                <input type="text"  class="CommentBy"  value="@item.CommentBy" hidden/>
+                                <input type="button" value="Reply" class="btn btn-success btn-sm reply"/>
                             </div>
                         </div>
                     </div>

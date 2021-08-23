@@ -1,6 +1,7 @@
 ﻿@model Pagination<List<Comment>>
 @inject IDeviceResolver device
 <div class="mycontainer">
+    <input type="text" id="WorkOrderId" hidden value="@ViewData["workOrderId"]"/>
     <form asp-action='PostComment' asp-controller="WorkOrder" method='post' id="commentpost1" parent=".commentsection">
         @if (device.Device.Type != DeviceType.Mobile)
         {
@@ -22,7 +23,7 @@
                                     <p class="text-success">Comment By-&nbsp; @item.CommentBy</p>
                                     <h6 class="card-subtitle"> @item.CommentDate</h6>
                                     <p class="card-text">@item.CommentString</p>
-                                    <input type="text" id="CommentBy" value="@item.CommentBy" hidden/>
+                                    <input type="text"  class="CommentBy" value="@item.CommentBy" hidden/>
                                     <input type="button" value="Reply" class="btn btn-success btn-sm reply">
                                 </div>
                             </div>
@@ -38,7 +39,7 @@
                                             <p class="text-info">RepliedBy By-&nbsp; @reply.RepliedBy</p>
                                             <h6 class="card-subtitle">@reply.RepliedDate</h6>
                                             <p class="card-text"><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</p>
-                                            <input type="text" id="CommentBy" value="@item.CommentBy" hidden />
+                                            <input type="text"  class="CommentBy" value="@item.CommentBy" hidden />
                                             <input type="button"  value="Reply" class="btn btn-success btn-sm reply">
                                         </div>
                                     </div>
@@ -88,30 +89,7 @@
        else {
           <text> var value = 1;</text>
        }
-    $('.reply,#addcomment').click(function (e) {
-        e.preventDefault();
-        
-           var con = $(this).closest('div.mycon');
-           var parent = $(this).closest('div.parent');
-           if ($('[name="Comment"]').length==value) {
-               con.append(
-                   "<div class='card reply popup top-buffer' style='margin-left:24px'>" +
-                   "<div class='card-body'>" +
-                   "<textarea  id='Comment' name='Comment' class='note' required></textarea>" +
-                   "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
-                   "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + '@ViewData["workOrderId"]' + "'hidden required>" +
-                   "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).siblings('#CommentBy').val() + "'hidden required>" +
-                   "<button type='submit' class='btn btn-outline-primary btn-sm top-buffer'>Post</button>" +
-                   "<input type='button' id='close' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
-                   "</div>" +
-                   "</div>"
-               );
-               var x = document.getElementById("Comment");
-               x.scrollIntoView()
-               x.focus();
-        }
-        
-       });
+   
 
        var currentpage = @Model?.CurrentPage;
        var pagecount = @Model?.PageCount;

@@ -89,7 +89,7 @@ $(document).ready(function () {
                     selectedFile.push(file[i]);
                 }
 
-                $('#file_selected').append("<span class='text-info'>&nbsp;" + file[i].name + "&nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'><br/></span>");
+                $('#file_selected').append("<img src='" + e.target.result + "' width='150' height='250'><span class= 'text-info' >& nbsp;" + file[i].name + " & nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'><br /></span>");
             }
             $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
         }
@@ -286,9 +286,13 @@ $(function () {
                     if (res.indexOf('div') != -1) {
                         //append this in parent
                         $(parentNode).html(res);
+                        bindButtonClick();
                         $('#close').click();
+
                         $("form :input").prop("disabled", false);
-                        document.getElementById("commentpost").reset();
+                        if ($('#commentpost').length!=0)
+                            document.getElementById("commentpost").reset();
+                        if ($('#commentpost1').length!=0)
                         document.getElementById("commentpost1").reset();
                         alertify.alert('Info', '<p>Updated Successfully</p>', function () {
 
@@ -687,5 +691,35 @@ function AddItem(e) {
 
 }
 
+$(function () {
+    bindButtonClick();
+})
+
+
+function bindButtonClick() {
+    $('.reply, #addcomment').on('click', function (e) {
+        e.preventDefault();
+
+        var con = $(this).closest('div.mycon');
+        var parent = $(this).closest('div.parent');
+        if ($('[name="Comment"]').length == value) {
+            con.append(
+                "<div class='card reply popup top-buffer' style='margin-left:24px'>" +
+                "<div class='card-body'>" +
+                "<textarea  id='Comment' name='Comment' class='note' required></textarea>" +
+                "<input type='text' id='ParentId' name='ParentId' value='" + parent.prop('id') + "'hidden required>" +
+                "<input type='text' id='WorkOrderId' name='WorkOrderId' value='" + $('#WorkOrderId').val() + "'hidden required>" +
+                "<input type='text' id='RepliedTo' name='RepliedTo' value='" + $(this).siblings('.CommentBy').val() + "'hidden required>" +
+                "<button type='submit' class='btn btn-outline-primary btn-sm top-buffer'>Post</button>" +
+                "<input type='button' id='close' class='btn btn-outline-danger ml-1 btn-sm top-buffer' value='Close' onclick='closePopUp();;'>" +
+                "</div>" +
+                "</div>"
+            );
+            var x = document.getElementById("Comment");
+            x.scrollIntoView()
+            x.focus();
+        }
+    });
+}
 
 
