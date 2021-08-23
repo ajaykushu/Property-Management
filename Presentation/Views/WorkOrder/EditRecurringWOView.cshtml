@@ -261,11 +261,12 @@
                             <div class="col">
                                 <div class="cont">
                                     <label class="browsebutton">Browse File</label>
-                                    <input asp-for="File"  accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                    <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
                                 </div>
                                 <div id="file_selected">
                                 </div>
                                 <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
+                                <p class="text-danger">Photo uploads are not added until work order is saved.</p>
                             </div>
                         </div>
                     </div>
