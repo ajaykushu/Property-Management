@@ -147,19 +147,23 @@
 }
 <script>
 
+    $(function () {
+        bindZoomImg();
+    });
+  function   bindZoomImg(){
+        $('.zoom-img').on('click', function (e) {
 
-    $('.zoom-img').on('click', function (e) {
-       
-        $('.media').prop('src', $(this).attr('data-original'));
-        $('.image-modal').show();
-        e.preventDefault();
-        e.stopPropagation();
-    });
-    $('.close').on('click', function (e) {
-        $('.media').prop('src','');
-        $('.image-modal').hide();
-         e.preventDefault();
-    });
+            $('.media').prop('src', $(this).attr('data-original'));
+            $('.image-modal').show();
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        $('.close').on('click', function (e) {
+            $('.media').prop('src', '');
+            $('.image-modal').hide();
+            e.preventDefault();
+        });
+    }
     
      alertify.genericDialog || alertify.dialog('genericDialog',function(){
     return {

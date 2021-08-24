@@ -65,8 +65,11 @@ $(document).ready(function () {
 });
 var file = null;
 var selectedFile = [];
+var imgDisphtml = "";
+var parent = "<div class='customdisp attach'>";
 $(document).ready(function () {
     $('.File').change(function (e) {
+       
         file = e.target.files
         if (file != undefined) {
             for (var i = 0; i < file.length; i++) {
@@ -88,9 +91,24 @@ $(document).ready(function () {
                 } else {
                     selectedFile.push(file[i]);
                 }
+                imgDisphtml += "<div class='photo_disp' style='display:inline-table;margin:5px;'><span class='OpenImageDisplayModal' style='word-break: break-word;'>";
+                if (file[i].type.indexOf('image') != -1) {
+                    imgDisphtml += "<img class='zoom-img' data-original='" + URL.createObjectURL(event.target.files[i]) + "' height='150' src='" + URL.createObjectURL(event.target.files[i]) + "' width='200'>";
+                }
+                imgDisphtml += file[i].name + "</span> <input class='btn btn-sm btn-danger mt-1' onclick='removefile(event);' type = 'button' value = 'Delete' ></div>";
 
-                $('#file_selected').append("<img src='" + e.target.result + "' width='150' height='250'><span class= 'text-info' >& nbsp;" + file[i].name + " & nbsp; <input type='button' class='btn btn-sm btn-danger' onclick='removefile(event);' name='" + file[i].name + "' value='Delete'><br /></span>");
             }
+            if (parent != "") {
+                $('#file_selected').append(parent + imgDisphtml);
+            $('#file_selected').append("</div>");
+        }
+            else {
+             $('.attach').append(imgDisphtml);
+            
+            }
+            bindZoomImg();
+        parent = "";
+        imgDisphtml = "";
             $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
         }
     })
