@@ -104,8 +104,7 @@
                             </div>
                         }
 
-                        @if (Model.Issues != null && Model.Issues.Any())
-                        {
+                        
                             <div class="row top-buffer padding">
 
                                 <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
@@ -115,11 +114,12 @@
                                 </select>
                                 <span asp-validation-for="IssueId" class="text-danger"></span>
                             </div>
-                        }
+                        
                         <div class="row top-buffer padding CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
                             <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
 
                         </div>
+                        
                     </td>
                 </tr>
                 <tr>

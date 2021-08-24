@@ -82,8 +82,7 @@
                             </div>
                         }
 
-                        @if (Model.Issues != null && Model.Issues.Any())
-                        {
+                        
                             <div class="row top-buffer">
                                 <div class="col-md-3">
                                     <label asp-for="IssueId"> </label>
@@ -96,16 +95,17 @@
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
                             </div>
-                        }
-                        <div class="row top-buffer CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
-                            <div class="col-md-3">
-                                <label asp-for="CustomIssue">Custom Issue</label>
-                            </div>
-                            <div class="col">
-                                <textarea class="form-control form-control-sm custom-input" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
-                                <span asp-validation-for="CustomIssue" class="text-danger"></span>
-                            </div>
+                        
+                    <div class="row top-buffer CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                        <div class="col-md-3">
+                            <label asp-for="CustomIssue">Custom Issue</label>
                         </div>
+                        <div class="col">
+                            <textarea class="form-control form-control-sm custom-input" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
+                            <span asp-validation-for="CustomIssue" class="text-danger"></span>
+                        </div>
+                        
+                    </div>
                     </div>
                 </td>
             </tr>
