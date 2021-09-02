@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210831114015_CascadeDel")]
+    partial class CascadeDel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "8401ab4d-d2fa-4aaa-bb38-a96696fdf398",
+                            ConcurrencyStamp = "13a620bc-0059-46b2-b57b-17eaba8b48cd",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "baf78605-f1a2-4717-ad28-bbf6449e6a2f",
+                            ConcurrencyStamp = "23dcf7b5-12a3-49fb-a4ef-2aaf0a2862a3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "19fadc33-b8c5-4401-a41b-cc5bc38fcc86",
+                            ConcurrencyStamp = "389e9c13-2ca0-4ba8-b04f-dd347188b827",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -428,9 +430,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -454,7 +453,6 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Active = false,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ItemName = "Tv",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -462,7 +460,6 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 2,
-                            Active = false,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ItemName = "AC",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -551,9 +548,6 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LocationName")
                         .HasColumnType("varchar(50)");

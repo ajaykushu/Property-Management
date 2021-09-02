@@ -23,6 +23,7 @@ using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
+    
     public class LoginController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;

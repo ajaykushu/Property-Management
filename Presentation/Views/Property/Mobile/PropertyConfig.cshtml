@@ -21,6 +21,92 @@
             <tbody>
                 <tr>
                     <td>
+
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                </div><div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" onclick="ShowNewLocation();" type="checkbox" value="true" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            New Location
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @if (Model.Locations != null && Model.Locations.Any())
+                            {
+                                <div class="row top-buffer" id="available-location">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Location Available</label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                            <option value=""> Select Location</option>
+                                        </select>
+                                        <span asp-validation-for="LocationId" class="text-danger"></span>
+                                        <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteProp()"></div>
+
+                                    </div>
+
+                                </div>
+                            }
+
+                            <div class="row top-buffer" id="new-location" style="display:none;">
+                                <div class="col-md-3">
+                                    <label for="NewLocation">New Location</label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="NewLocation" class="form-control form-control-sm custom-input">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label asp-for="SubLocation"></label>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="SubLocation" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
+                                    <span class="text-danger">Enter , speparated Sub Location</span><br />
+                                    <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label>Asset Manager</label>
+                                </div>
+                                <div class="col">
+                                    <a href="/property/AssetManager" target="_blank">Click here</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <input asp-for="PropertyId" hidden>
+                        <input class="btn btn-sm btn-primary" type="submit" value="submit">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        @*<table class="table table_container">
+            <tbody>
+                <tr>
+                    <td>
                         <div class="col">
                             @if (Model.Locations != null && Model.Locations.Any())
                             {
@@ -51,7 +137,7 @@
                     <td>
                         <div class="col">
                             <div class="row ">
-                                <div class="col-md-3">
+                                <div class="col-md-5">
                                     <label asp-for="SubLocation"></label>
                                 </div>
                                 <div class="col">
@@ -63,24 +149,9 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label asp-for="Items"></label>
-                                </div>
-                                <div class="col">
-                                    <textarea asp-for="Items" class="form-control form-control-sm custom-input"></textarea>
-                                    <span class="text-danger">Enter , speparated Items</span><br />
-                                    <span class="text-info">Items will come prepopulated if available to corresponding location</span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+
             </tbody>
-        </table>
+        </table>*@
         <div class="bottom-stick" style="background-color:white">
             <input asp-for="PropertyId" hidden>
             <button type="submit" class="btn w-100  btn-success submit">Save Changes</button>
@@ -94,14 +165,14 @@
          $.get('@Url.Action("GetPropertyData","Property")' + "?id=" + $(this).val(),
                 function (data) {
                     if (data != null || data != undefined) {
-                        var res = data.split('@@');
                         
-                        $("#SubLocation").val(res[0])
-                        $("#Items").val(res[1])
+                        
+                        $("#SubLocation").val(data)
+                        
                     }
                 });
     })
-    $("#SubLocation #Items").change(function (e) {
+    $("#SubLocation ").change(function (e) {
         if ($(this).val().indexOf(',') == $(this).val().length - 1) {
             alert("Please remove ',' from the end of input");
             $("input[type='submit']").prop("disabled", true);

@@ -120,5 +120,35 @@ namespace API.Controllers
             return Ok(prop);
         }
 
+       [HttpGet]
+       [Route("deleteloc")]
+       public async Task<ActionResult<bool>> DeleteLocation(long Id)
+        {
+            bool status = await _propertyService.DeleteLocation(Id);
+            return Ok(status);
+        }
+        [HttpGet]
+        [Route("deleteasset")]
+        public async Task<ActionResult<bool>> DeleteAsset(long Id)
+        {
+            bool status = await _propertyService.DeleteAsset(Id);
+            return Ok(status);
+        }
+        [HttpGet]
+        [Route("assetmanager")]
+        public async Task<ActionResult<PropertyConfigDTO>> AssetManager()
+        {
+             AssetManagerModel asset = await _propertyService.GetAssetManager();
+            return Ok(asset);
+        }
+
+        [HttpPost]
+        [Route("createasset")]
+        public async Task<ActionResult<bool>> AssetManager(AssetManagerModel asset)
+        {
+            bool res = await _propertyService.SaveAsset(asset);
+            return Ok(res);
+        }
+
     }
 }

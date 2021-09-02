@@ -8,7 +8,7 @@ namespace DataEntity
     {
         public Property()
         {
-            this.UserProperties = new HashSet<UserProperty>();
+            this.Locations = new HashSet<Location>();
             this.UserProperties = new HashSet<UserProperty>();
         }
 

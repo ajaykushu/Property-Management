@@ -30,5 +30,9 @@ namespace BusinessLogic.Interfaces
 
         Task<List<SelectItem>> GetSubLocation(long id);
         Task<string> GetPropertyData(long id);
+        Task<bool> DeleteLocation(long id);
+        Task<bool> DeleteAsset(long id);
+        Task<AssetManagerModel> GetAssetManager();
+        Task<bool> SaveAsset(AssetManagerModel asset);
     }
 }

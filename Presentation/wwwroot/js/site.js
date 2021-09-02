@@ -419,8 +419,10 @@ $(window).on('unload', function () {
 
 $(document).ready(function () {
     $('#LocationId').change(function () {
+        enablespiner("Loading...");
         $.get("/Property/GetSubLocation?id=" + $(this).val(),
             function (data) {
+                disablespinner();
                 $("#SubLocationId").html("<option value=''>Select Sublocation</option>")
                 if (data != null || data != undefined) {
                     for (var i = 0; i < data.length; i++) {
@@ -428,21 +430,14 @@ $(document).ready(function () {
                     }
                 }
             });
-        $.get("GetItem?id=" + $(this).val(),
-            function (data) {
-                $("#ItemId").html("<option value=''>Select Item</option>")
-                if (data != null || data != undefined) {
-                    for (var i = 0; i < data.length; i++) {
-                        $("#ItemId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
-                    }
-                }
-            });
     });
 });
 $(document).ready(function () {
     $('#ItemId').change(function () {
+        enablespiner("Loading...");
         $.get("/WorkOrder/GetIssue?id=" + $(this).val(),
             function (data) {
+                disablespinner();
                 $("#IssueId").html("<option value=''>Select Issue</option><option value='-1'>Other</option>")
                 if (data != null || data != undefined) {
                     for (var i = 0; i < data.length; i++) {
@@ -454,8 +449,10 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
     $('#PropertyId').change(function () {
+        enablespiner("Loading...");
         $.get("GetLocation?id=" + $(this).val(),
             function (data) {
+                disablespinner();
                 $("#LocationId").html("<option value=''>Select Location</option>")
                 $("#SubLocationId").html("<option value=''>Select SubLocation</option>")
                 if (data != null || data != undefined) {
@@ -468,9 +465,10 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
     $('#Category').change(function () {
+        enablespiner("Loading...");
         $.get("/WorkOrder/GetDataByCategory?category=" + $(this).val(),
             function (data) {
-                console.log(data);
+                disablespinner();
                 if (data != null || data != undefined) {
                     $("#OptionId").html("<option value=''>Please Choose Option</option>")
                     for (var prop in data) {
@@ -740,4 +738,86 @@ function bindButtonClick() {
     });
 }
 
+
+
+
+
+function deleteProp() {
+    var value = $('#LocationId').find(":selected").val();
+    if (value != "") {
+        alertify.confirm('Do you want to delete Location', function () {
+            enablespiner("Deleting...");
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "/property/DeleteLocation", // Controller/View 
+                    data: { //Passing data
+                        Id: value, //Reading text box values using Jquery 
+
+                    }, success: function () { disablespinner(); alertify.success('Deleted Successfully'); }, error: function (res) { disablespinner(); alertify.error(res.responseText); $('#LocationId').val(""); $('#LocationId option[value=' + value + ']').remove(); }
+
+                });
+            
+        });
+    } else {
+        alertify.alert('Info', '<p> Please Choose Location </p>')
+
+    }
+}
+function deleteAsset() {
+    var value = $('#AssetId').find(":selected").val();
+    if (value != "") {
+        alertify.confirm('Do you want to delete Asset', function () {
+            enablespiner("Deleting...");
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "/property/DeleteAsset", // Controller/View 
+                    data: { //Passing data
+                        Id: value, //Reading text box values using Jquery 
+
+                    }, success: function () { disablespinner(); alertify.success('Deleted Successfully'); }, error: function (res) {
+                        disablespinner(); alertify.error(res.responseText); $('#AssetId').val(""); $('#AssetId option[value=' + value + ']').remove(); 
+
+ }
+
+                });
+
+        });
+    } else {
+        alertify.alert('Info', '<p> Please Choose Asset </p>')
+
+    }
+}
+
+//hide show location
+
+function ShowNewLocation() {
+    var value = document.querySelector('#flexCheckDefault').checked;
+    if (value) {
+        $('#new-location').show();
+        $('#available-location').hide();
+        $('#SubLocation').val('');
+        $('#LocationId').val('');
+    }
+    else {
+        $('#new-location').hide();
+        $('#NewLocation').val('')
+        $('#available-location').show();
+    }
+}
+function ShowNewAsset() {
+    var value = document.querySelector('#flexCheckDefault').checked;
+    if (value) {
+        $('#new-asset').show();
+        $('#available-asset').hide();
+        $('#Issues').val('');
+        $('#AssetId').val('');
+    }
+    else {
+        $('#new-asset').hide();
+        $('#NewAsset').val('')
+        $('#available-asset').show();
+    }
+}
 

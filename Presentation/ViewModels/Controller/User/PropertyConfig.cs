@@ -13,6 +13,6 @@ namespace Presentation.ViewModels
 
         [DisplayName("Sub Location")]
         public string SubLocation { set; get; }
-        public string Items { get; set; }
+        
     }
 }

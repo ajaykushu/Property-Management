@@ -1,14 +1,13 @@
-﻿@model PropertyConfig
+﻿@model AssetManagerModel
 @{
-    ViewData["Title"] = "Property Config";
+    ViewData["Title"] = "Asset Manager";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="table_container">
     <div class="workordertitle">
-        Property Configuration
+        Asset Manager
     </div>
-    <div style="text-align:center;font-weight:bold">@Model.Name</div>
-    <form asp-action="PropertyConfig" class="addconfig">
+    <form asp-action="AssetManager" class="addconfig">
         <table class="table">
             <tbody>
                 <tr>
@@ -19,38 +18,38 @@
                                 <div class="col-md-3">
                                 </div><div class="col">
                                     <div class="form-check">
-                                        <input class="form-check-input" onclick="ShowNewLocation();" type="checkbox" value="true" id="flexCheckDefault">
+                                        <input class="form-check-input" onclick="ShowNewAsset();" type="checkbox" value="true" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
-                                            New Location
+                                            New Asset
                                         </label>
                                     </div>
 
                                 </div>
                             </div>
-                            @if (Model.Locations != null && Model.Locations.Any())
+                            @if (Model.Assets != null && Model.Assets.Any())
                             {
-                                <div class="row top-buffer" id="available-location">
+                                <div class="row top-buffer" id="available-asset">
                                     <div class="col-md-3">
-                                        <label for="Locations">Location Available</label>
+                                        <label for="Locations">Asset Available</label>
                                     </div>
                                     <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
-                                            <option value=""> Select Location</option>
+                                        <select class="form-control form-control-sm custom-input" asp-for="AssetId" asp-items="@(new SelectList(Model.Assets, "Id", "PropertyName"))">
+                                            <option value="">Select Asset</option>
                                         </select>
-                                        <span asp-validation-for="LocationId" class="text-danger"></span>
-                                        <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteProp()"></div>
+                                        <span asp-validation-for="AssetId" class="text-danger"></span>
+                                        <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteAsset()"></div>
 
                                     </div>
 
                                 </div>
                             }
 
-                            <div class="row top-buffer" id="new-location" style="display:none;">
+                            <div class="row top-buffer" id="new-asset" style="display:none;">
                                 <div class="col-md-3">
-                                    <label for="NewLocation">New Location</label>
+                                    <label for="NewAsset">New Asset</label>
                                 </div>
                                 <div class="col">
-                                    <input asp-for="NewLocation" class="form-control form-control-sm custom-input">
+                                    <input asp-for="NewAsset" class="form-control form-control-sm custom-input">
                                 </div>
                             </div>
                         </div>
@@ -61,10 +60,10 @@
                         <div class="col">
                             <div class="row ">
                                 <div class="col-md-3">
-                                    <label asp-for="SubLocation"></label>
+                                    <label asp-for="Issues"></label>
                                 </div>
                                 <div class="col">
-                                    <textarea asp-for="SubLocation" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
+                                    <textarea asp-for="Issues" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
                                     <span class="text-danger">Enter , speparated Sub Location</span><br />
                                     <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
                                 </div>
@@ -74,22 +73,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <div class="col">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <label>Asset Manager</label>
-                                </div>
-                                <div class="col">
-                                    <a href="/property/AssetManager" target="_blank" >Click here</a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <input asp-for="PropertyId" hidden>
+                        
                         <input class="btn btn-sm btn-primary" type="submit" value="submit">
                     </td>
                 </tr>
@@ -101,15 +85,20 @@
     <a href="javascript:history.back()">Back</a>
 </div>
 <script>
-    $('#LocationId').change(function () {
-          $.get('@Url.Action("GetPropertyData","Property")' + "?id=" + $(this).val(),
+    $('#AssetId').change(function () {
+          $.get('@Url.Action("GetIssue","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
                     if (data != null || data != undefined) {
-                        $("#SubLocation").val(data)
+                        var str = "";
+                      for (var i = 0; i < data.length; i++)
+        {
+                          str = str == "" ? str +data[i].propertyName:str+","+data[i].propertyName;
+        }
+                  $("#Issues").val(str)       
                     }
                 });
     })
-    $("#SubLocation").change(function (e) {
+    $("#Issues").change(function (e) {
         if ($(this).val().indexOf(',') == $(this).val().length - 1) {
             alert("Please remove ',' from the end of the Sub-Locations");
             $("input[type='submit']").prop("disabled", true);

@@ -17,8 +17,8 @@ namespace DataEntity
 
         [Column(TypeName = "varchar(50)")]
         public string IssueName { get; set; }
-        [ForeignKey("Item")]
-        public int ItemId { get; set; }
+        
+       public int ItemId { get; set; }
         public Item Item { get; set; }
 
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }

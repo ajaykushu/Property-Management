@@ -85,10 +85,13 @@
                     <td>
 
                         <div class="row padding">
-
-                            <select class="form-control " asp-for="ItemId">
-                                <option value="">Select Item</option>
-                            </select>
+                            @if (Model.Items != null)
+                            {
+                                <select asp-for="ItemId" class="form-control" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                    <option value="">Select Item</option>
+                                </select>
+                            }
+                           
                             <span asp-validation-for="ItemId" class="text-danger"></span>
                         </div>
 

@@ -181,9 +181,14 @@ namespace BusinessLogic.Services
         public async Task<CreateNormalWO> GetCreateWOModel(long userId)
         {
             CreateNormalWO wo = new CreateNormalWO();
+            wo.Items = await _itemRepo.Get(x=>x.Active).Select(x => new SelectItem
+            {
+                Id = x.Id,
+                PropertyName = x.ItemName
+            }).ToListAsync();
             if (_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
-                var prop = await _property.GetAll().Include(x => x.Locations).ThenInclude(x => x.SubLocations).AsNoTracking().ToListAsync();
+                var prop = await _property.GetAll().AsNoTracking().ToListAsync();
                 wo.Properties = prop.Select(x => new SelectItem
                 {
                     Id = x.Id,
@@ -192,7 +197,8 @@ namespace BusinessLogic.Services
             }
             else
             {
-                var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x => x.Locations).ThenInclude(x => x.SubLocations).AsNoTracking().ToListAsync();
+                var property = await _userProperty.GetAll().Where(x => x.ApplicationUserId == userId).Include(x => x.Property).ThenInclude(x => x.Locations).AsNoTracking().ToListAsync();
+               
                 var primaryprop = property.Where(x => x.IsPrimary == true).Select(x => x.Property).FirstOrDefault();
                 wo.Properties = property.Select(x => new SelectItem
                 {
@@ -200,7 +206,7 @@ namespace BusinessLogic.Services
                     PropertyName = x.Property.PropertyName
                 }).ToList();
                 if (primaryprop != null && primaryprop.Locations != null)
-                    wo.Locations = primaryprop.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
+                    wo.Locations = primaryprop.Locations.Where(y=>y.Active).Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
                 wo.PropertyId = primaryprop != null ? primaryprop.Id : 0;
             }
 
@@ -304,7 +310,7 @@ namespace BusinessLogic.Services
             editwo.Locations = temp.Property.Locations.Select(x => new SelectItem { Id = x.Id, PropertyName = x.LocationName }).ToList();
             editwo.Description = temp.Description;
             editwo.IssueId = temp.IssueId.HasValue? temp.IssueId.Value:-1;
-            editwo.ItemId = temp.ItemId;
+            editwo.ItemId = temp.ItemId.GetValueOrDefault();
             editwo.CustomIssue = temp.CustomIssue;
             editwo.CreatedDate = temp.CreatedTime;
             editwo.VendorId = temp.VendorId;
@@ -315,7 +321,7 @@ namespace BusinessLogic.Services
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
-            editwo.Items = await _itemRepo.GetAll().Where(x=>x.LocationId==temp.LocationId).Select(x => new SelectItem
+            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
@@ -922,7 +928,7 @@ namespace BusinessLogic.Services
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
-            editwo.Items = await _itemRepo.GetAll().Where(x=>x.LocationId==temp.LocationId).Select(x => new SelectItem
+            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
@@ -1341,7 +1347,7 @@ namespace BusinessLogic.Services
 
         public async Task<List<SelectItem>> GetItem(long id)
         {
-            var res = await _itemRepo.Get(x => x.LocationId == id).Select(x => new SelectItem
+            var res = await _itemRepo.Get(x=>x.Active).Select(x => new SelectItem
             {
                 Id=x.Id,
                 PropertyName=x.ItemName

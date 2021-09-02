@@ -18,9 +18,9 @@ namespace DataEntity
 
         [Column(TypeName = "varchar(50)")]
         public string ItemName { get; set; }
-        [ForeignKey("Location")]
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
+
+        public  bool Active { get; set; }
+        
         public ICollection<Issue> Issues { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }

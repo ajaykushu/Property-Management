@@ -244,11 +244,10 @@ namespace BusinessLogic.Services
                 throw new BadRequestException("Choose Location or Enter New Location");
             }
 
-            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).Include(x=>x.Locations).ThenInclude(x=>x.Items).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
+            var prop = await _property.Get(x => x.Id == propertyConfig.PropertyId).Include(x => x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x => x.WorkOrders).Include(x=>x.Locations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
 
             
             HashSet<string> areas = null;
-            HashSet<string> items = null;
             if (!string.IsNullOrWhiteSpace(propertyConfig.SubLocation))
             {
                 if (propertyConfig.SubLocation.Contains(','))
@@ -261,19 +260,7 @@ namespace BusinessLogic.Services
                     };
                 }
             }
-            if (!string.IsNullOrWhiteSpace(propertyConfig.Items))
-            {
-                if (propertyConfig.Items.Contains(','))
-                    items = propertyConfig.Items.Split(',').ToHashSet();
-                else
-                {
-                    items = new HashSet<string>
-                    {
-                        propertyConfig.Items
-                    };
-                }
-            }
-
+            
             if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
             {
                 if (prop.Locations == null) prop.Locations = new List<Location>();
@@ -352,70 +339,12 @@ namespace BusinessLogic.Services
                     }
                 }
                 //itms
-                if (location.Items == null)
-                    { 
-                        location.Items = new List<Item>();
-                        if (items != null)
-                        {
-                            foreach (var item in items)
-                            {
-                                location.Items.Add(new Item
-                                {
-                                    ItemName = item
-                                });
-                            }
-                        }
-                    }
-                    else
-                    {
-                        
-                        for (int i = 0; i < location.Items.Count;)
-                        {
-                            if (!items.Contains(location.Items.ElementAt(i).ItemName))
-                            {
-                                if (location.Items.ElementAt(i).WorkOrders.Count == 0)
-                                    location.Items.Remove(location.Items.ElementAt(i));
-                                else
-                                    throw new BadRequestException(location.Items.ElementAt(i).ItemName + " is assigned to workorder Ids: " + string.Join(",", location.Items.ElementAt(i).WorkOrders.Select(x => x.Id).ToList()));
-                            }
-                            else
-                            {
-                                items.Remove(location.Items.ElementAt(i).ItemName);
-                                i++;
-                            }
-                        }
-                        if (items != null)
-                        {
-                            foreach (var item in items)
-                            {
-                                location.Items.Add(new Item
-                                {
-                                    ItemName = item
-                                });
-                            }
-                        }
-                    }
+               
                 
             }
             var status = await _property.Update(prop);
             if (status > 0)
             {
-                if (!string.IsNullOrWhiteSpace(propertyConfig.NewLocation))
-                {
-                    List<Item> item1 = new List<Item>();
-                    if (items != null)
-                    {
-                        foreach (var item in items)
-                        {
-                            item1.Add(new Item
-                            {
-                                ItemName = item,
-                                LocationId = location.Id
-                            });
-                        }
-                        await _item.BulkInsert(item1);
-                    }
-                }
                 return true;
             }
             return false;
@@ -436,8 +365,129 @@ namespace BusinessLogic.Services
         public async Task<string> GetPropertyData(long id)
         {
             var res = await _subloaction.Get(x => x.LocationId == id).Select(x => x.AreaName).ToListAsync();
-            var item = await _item.Get(x => x.LocationId == id).Select(x => x.ItemName).ToListAsync();
-            return string.Join(',', res)+'@'+ string.Join(',', item);
+            return string.Join(',', res);
+        }
+
+        public async Task<bool> DeleteLocation(long id)
+        {
+            //for loc with wo
+           var obj= _loc.Get(x => x.Id == id).FirstOrDefault();
+            if(obj!=null)
+            {
+                obj.Active = false;
+               var status= await _loc.Update(obj); 
+                if (status > 0)
+                    return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> DeleteAsset(long id)
+        {
+           var obj= _item.Get(x => x.Id == id).FirstOrDefault();
+            if (obj != null)
+            {
+                obj.Active = false;
+                var status = await _item.Update(obj);
+                if (status > 0)
+                    return true;
+            }
+            return false;
+        }
+
+        public async Task<AssetManagerModel> GetAssetManager()
+        {
+            var AssetManagerModel = new AssetManagerModel();
+            AssetManagerModel.Assets =await _item.Get(x=>x.Active).Select(x => new SelectItem
+            {
+                Id=x.Id,
+                 PropertyName=x.ItemName
+            }).ToListAsync();
+
+            return AssetManagerModel;
+        }
+
+        public async Task<bool> SaveAsset(AssetManagerModel asset)
+        {
+            var issues = asset.Issues.Split(",").ToHashSet<string>();
+            if (!asset.AssetId.HasValue)
+            {
+                var assetobj = new Item();
+                assetobj.ItemName = asset.NewAsset;
+                assetobj.Issues = new List<Issue>();
+                
+                foreach(var issue in issues)
+                {
+                    assetobj.Issues.Add(new Issue
+                    {
+                        IssueName=issue,
+                       
+                    });
+                }
+               var status= await _item.Add(assetobj);
+                if (status > 0)
+                    return true;
+                return false;
+
+
+            }
+            else
+            {
+                var item = _item.Get(x => x.Id == asset.AssetId).Include(x=>x.Issues).ThenInclude(y=>y.WorkOrders).FirstOrDefault();
+                if(item!=null)
+                {
+                    if(item.Issues==null|| item.Issues.Count == 0)
+                    {
+                        item.Issues = new List<Issue>();
+                        //add as above
+                        
+                        foreach (var issue in issues)
+                        {
+                            item.Issues.Add(new Issue
+                            {
+                                IssueName = issue,
+
+                            });
+                        }
+                    }
+                    else
+                    {
+                       
+                        for (int i = 0; i < item.Issues.Count;)
+                        {
+                            if (!issues.Contains(item.Issues.ElementAt(i).IssueName))
+                            {
+                                if (item.Issues.ElementAt(i).WorkOrders.Count == 0)
+                                    item.Issues.Remove(item.Issues.ElementAt(i));
+                                else
+                                    throw new BadRequestException(item.Issues.ElementAt(i).IssueName + " is assigned to workorder Ids: " + string.Join(",", item.Issues.ElementAt(i).WorkOrders.Select(x => x.Id).ToList()));
+                            }
+                            else
+                            {
+                                issues.Remove(item.Issues.ElementAt(i).IssueName);
+                                i++;
+                            }
+                        }
+                        if (issues != null)
+                        {
+                            foreach (var issue in issues)
+                            {
+                                item.Issues.Add(new Issue
+                                {
+                                    IssueName = issue
+                                });
+                            }
+                        }
+                    }
+
+                  
+                }
+                var status = await _item.Update(item);
+                if (status > 0)
+                    return true;
+                return false;
+
+            }
         }
     }
 }

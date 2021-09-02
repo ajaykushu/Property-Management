@@ -63,7 +63,7 @@ namespace DataAccessLayer.Repository
             builder.Entity<PropertyType>().HasIndex(x => x.PropertyTypeName).IsUnique();
             builder.Entity<ApplicationUser>().Property(x => x.SMSAltert).HasDefaultValue(false);
             builder.Entity<ApplicationUser>().Property(x => x.ClockType).HasDefaultValue(12);
-            builder.Entity<Item>().Property(x => x.LocationId).HasDefaultValue(1);
+            
             builder.Entity<ApplicationUser>().Property(x => x.LanguageId).HasDefaultValue(1);
             builder.Entity<ApplicationUser>().Property(x => x.IsActive).HasDefaultValue(true);
             builder.Entity<WorkOrder>().Property(x => x.IsActive).HasDefaultValue(true);
@@ -74,6 +74,12 @@ namespace DataAccessLayer.Repository
             builder.Entity<WorkOrder>().Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("Concat('WO', NEXT VALUE FOR workordersequence)");
             builder.Entity<RecurringWO>().Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("Concat('RWO', NEXT VALUE FOR workordersequence)");
             DataSeeder(builder);
+            //deleting cascade
+            builder.Entity<Issue>().HasOne<Item>(x => x.Item).WithMany(d => d.Issues).HasForeignKey(x => x.ItemId).IsRequired(true).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<SubLocation>().HasOne<Location>(x => x.Location).WithMany(d => d.SubLocations).HasForeignKey(x => x.LocationId).IsRequired(true).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Item>().Property(x => x.Active).HasDefaultValue(true);
+            builder.Entity<Location>().Property(x => x.Active).HasDefaultValue(true);
+
         }
 
         private static void DataSeeder(ModelBuilder builder)

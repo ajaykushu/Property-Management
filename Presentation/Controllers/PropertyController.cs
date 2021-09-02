@@ -19,6 +19,7 @@ using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
+    
     public class PropertyController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;
@@ -294,6 +295,88 @@ namespace Presentation.Controllers
             }
             return Ok(result);
         }
+
+        [HttpPost]
+        
+        public async Task<IActionResult> DeleteLocation(long Id)
+        {
+            string result = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("deleteloc", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?Id=" + Id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    result = await response.Content.ReadAsStringAsync();
+                else
+                {
+                    return BadRequest("Delete Failed");
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Ok(result);
+        } 
+        [HttpGet]
+        public async Task<IActionResult> AssetManager()
+        {
+            AssetManagerModel assetManagerModel = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("assetmanager", out var path);
+                var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path , this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    assetManagerModel = JsonConvert.DeserializeObject<AssetManagerModel>(await res.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception) { }
+            if (_detection.Device.Type == DeviceType.Mobile)
+                return View("~/Views/Property/Mobile/AssetManager.cshtml", assetManagerModel);
+           
+            return View(assetManagerModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssetManager(AssetManagerModel assetManagerModel)
+        {
+            bool result = false;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("createasset", out var path);
+                var res = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path ,assetManagerModel, this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    result = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception) { }
+            return RedirectToAction("AssetManager");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAsset(long Id)
+        {
+            string result = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("deleteasset", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?Id=" + Id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    result = await response.Content.ReadAsStringAsync();
+                else
+                {
+                    return BadRequest("Delete Failed");
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Ok(result);
+
+        }
+
+        
 
 
     }
