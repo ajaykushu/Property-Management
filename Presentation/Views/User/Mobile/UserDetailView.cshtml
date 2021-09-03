@@ -177,7 +177,7 @@
                             </div> 
                             <div class="col">
                                 <form asp-action="ChangeTZ" asp-controller="User" id="adduser">
-                                    <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "PropertyName", "Id"))">
+                                    <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "Id", "PropertyName"))">
                                         <option value="">TimeZone</option>
                                     </select>
                                     <input asp-for="UserId" hidden/>

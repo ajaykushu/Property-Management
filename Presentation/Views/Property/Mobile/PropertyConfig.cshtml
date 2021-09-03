@@ -95,12 +95,7 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td>
-                        <input asp-for="PropertyId" hidden>
-                        <input class="btn btn-sm btn-primary" type="submit" value="submit">
-                    </td>
-                </tr>
+               
             </tbody>
         </table>
         @*<table class="table table_container">
@@ -187,6 +182,13 @@
     var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
 
 <script>
-        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+       @if (key == "Success")
+    {
+     <text>alertify.success(@TempData["Sccess"]);</text>
+    }
+    @if (key == "Error")
+    {
+     <text>alertify.error(@TempData["Error"]);</text>
+    }
 </script>
 }
