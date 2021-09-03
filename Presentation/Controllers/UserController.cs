@@ -62,8 +62,9 @@ namespace Presentation.Controllers
                     var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, register, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
+                        var href = Url.Action("GetAllUsers");
                         if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
-                            return Ok(StringConstants.RegisterSuccess);
+                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.CreatedSuccess);
                         else
                             return Ok(StringConstants.RegisterFailed);
                     }

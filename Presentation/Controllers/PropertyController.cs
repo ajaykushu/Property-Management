@@ -122,7 +122,7 @@ namespace Presentation.Controllers
         {
             if (id == 0)
             {
-                TempData["Error"] = "Unable to Activate/Deactivate property";
+                //TempData["Error"] = "Unable to Activate/Deactivate property";
                 return RedirectToAction("ListProperties");
             }
             try
@@ -131,10 +131,7 @@ namespace Presentation.Controllers
                 var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + id + "&operation=" + operation, this, _token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (operation)
-                        TempData["Success"] = StringConstants.ActivateSuccessfull;
-                    else
-                        TempData["Success"] = StringConstants.DeactivateSuccessfull;
+                    
                 }
             }
             catch (Exception)
