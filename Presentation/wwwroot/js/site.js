@@ -754,7 +754,7 @@ function deleteProp() {
                     data: { //Passing data
                         Id: value, //Reading text box values using Jquery 
 
-                    }, success: function () { disablespinner(); alertify.success('Deleted Successfully'); }, error: function (res) { disablespinner(); alertify.error(res.responseText); $('#LocationId').val(""); $('#LocationId option[value=' + value + ']').remove(); }
+                    }, success: function () { disablespinner(); alertify.success('Deleted Successfully'); $('#LocationId').val(""); $('#LocationId option[value=' + value + ']').remove(); $('#SubLocation').val(''); }, error: function (res) { disablespinner(); alertify.error(res.responseText); }
 
                 });
             
@@ -776,8 +776,8 @@ function deleteAsset() {
                     data: { //Passing data
                         Id: value, //Reading text box values using Jquery 
 
-                    }, success: function () { disablespinner(); alertify.success('Deleted Successfully'); }, error: function (res) {
-                        disablespinner(); alertify.error(res.responseText); $('#AssetId').val(""); $('#AssetId option[value=' + value + ']').remove(); 
+                    }, success: function () { disablespinner(); alertify.success('Deleted Successfully'); $('#AssetId option[value=' + value + ']').remove(); $('#Issues').val(''); }, error: function (res) {
+                        disablespinner(); alertify.error(res.responseText); $('#AssetId').val("");
 
  }
 

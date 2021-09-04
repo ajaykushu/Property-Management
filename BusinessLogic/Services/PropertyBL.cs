@@ -221,7 +221,7 @@ namespace BusinessLogic.Services
 
         public async Task<PropertyConfigDTO> GetPropertyConfig(long id)
         {
-            var res = await _loc.Get(x => x.PropertyId == id).Select(x => new SelectItem
+            var res = await _loc.Get(x => x.PropertyId == id).Where(x=>x.Active).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.LocationName

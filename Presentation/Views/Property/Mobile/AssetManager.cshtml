@@ -89,7 +89,9 @@
         </div>
 
         <script>
-    $('#AssetId').change(function () {
+            $('#AssetId').change(function () {
+
+                enablespiner("Loading...");
           $.get('@Url.Action("GetIssue","WorkOrder")' + "?id=" + $(this).val(),
                 function (data) {
                     if (data != null || data != undefined) {
@@ -98,7 +100,8 @@
         {
                           str = str == "" ? str +data[i].propertyName:str+","+data[i].propertyName;
         }
-                  $("#Issues").val(str)
+                        $("#Issues").val(str)
+                        disablespinner();
                     }
                 });
     })
