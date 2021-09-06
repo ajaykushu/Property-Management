@@ -273,6 +273,7 @@ namespace BusinessLogic.Services
                  location = new Location
                 {
                     LocationName = propertyConfig.NewLocation,
+                    Active=true,
                     SubLocations = new List<SubLocation>()
                 };
                 if (areas != null)
@@ -414,6 +415,7 @@ namespace BusinessLogic.Services
             {
                 var assetobj = new Item();
                 assetobj.ItemName = asset.NewAsset;
+                assetobj.Active = true;
                 assetobj.Issues = new List<Issue>();
                 
                 foreach(var issue in issues)
