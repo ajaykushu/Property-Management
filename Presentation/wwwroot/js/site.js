@@ -2,11 +2,14 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+
+
 function RESTCALL(url, datas, method, contenttype, process, succ_callback, fail_callback, token, enctype) {
     $.ajax({
         xhr: function () {
             enablespiner();
-            var xhr = new window.XMLHttpRequest();
+            var xhr  = new window.XMLHttpRequest();
             xhr.upload.addEventListener("progress", function (evt) {
                 $('.progress').show();
                 if (evt.lengthComputable) {
@@ -95,12 +98,12 @@ $(document).ready(function () {
                 if (file[i].type.indexOf('image') != -1) {
                     imgDisphtml += "<img class='zoom-img' data-original='" + URL.createObjectURL(event.target.files[i]) + "' height='150' src='" + URL.createObjectURL(event.target.files[i]) + "' width='200'>";
                 }
-                imgDisphtml += file[i].name + "</span> <input class='btn btn-sm btn-danger mt-1' onclick='removefile(event);' type = 'button' value = 'Delete' ></div>";
+                imgDisphtml += file[i].name + "</span> <input class='btn btn-sm btn-danger mt-1' onclick='removefile(event);' type = 'button' value = 'Delete'></div>";
 
             }
             if (parent != "") {
                 $('#file_selected').append(parent + imgDisphtml);
-            $('#file_selected').append("</div>");
+                $('#file_selected').append("</div><p class='text-danger'>Photo uploads are not added until work order is saved.</p>");
         }
             else {
              $('.attach').append(imgDisphtml);

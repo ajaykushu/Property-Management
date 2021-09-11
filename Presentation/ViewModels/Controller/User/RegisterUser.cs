@@ -49,6 +49,7 @@ namespace Presentation.ViewModels
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
+        [RegularExpression(@"^\d{3}-?\d{3}-?\d{4}$",ErrorMessage ="Should be 10 digit number")]
         public string PhoneNumber { set; get; }
        
 
