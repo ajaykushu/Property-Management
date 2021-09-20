@@ -1,0 +1,63 @@
+﻿@model Presentation.ViewModels.Controller.Home.DashBoard
+    @{
+    ViewData["Title"] = "DashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <div class="workordertitle">Dashboard
+        <ul style="list-style:none;display:inline-flex;grid-gap:5px;margin-bottom:0px">
+            
+            <li>
+            <i class="fa fa-home"></i>
+                </li>
+            <li >
+            <select class=" form-control form-control-sm" style="width:100px;">
+                <option>Test</option>
+            </select>
+            </li>
+        </ul>
+    </div>
+<hr/>
+    <div class="card">
+        
+        <div class="card-body">
+            <h5 class="card-title">Rooms</h5>
+            <ul class="pagination">
+                @foreach(var item in Model.Locations){
+                <li class="page-item">
+                    <a class="page-link">@item.RoomNumber</a>
+                </li>
+            }
+            </ul>
+        </div>
+    </div>
+    <div style="width:50%">
+        <canvas id="goodCanvas1" width="400" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+    </div>
+<script>
+   
+    const data = {
+  labels: [
+    'Red',
+    'Blue',
+    'Yellow'
+  ],
+  datasets: [{
+    label: 'My First Dataset',
+    data: [300, 50, 100],
+    backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)'
+    ],
+    hoverOffset: 4
+  }]
+    };
+
+     var ctx = document.getElementById('goodCanvas1').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: data
+    });
+   
+</script>

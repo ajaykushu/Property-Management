@@ -156,6 +156,24 @@ namespace Presentation.Controllers
                 return Json(true);
             }
             return Json(false);
+        } 
+        [HttpGet]
+        public IActionResult DashBoard()
+        {
+            var obj = new DashBoard();
+            obj.Locations = new List<LoctionDetail>
+            {
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="101"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="102"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="103"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="104"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="105"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="106"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="108"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="109"},
+                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="110"}
+            };
+            return View(obj);
         }
     }
 }
