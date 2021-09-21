@@ -14,15 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200724144730_Cron.cs" />
-    <Compile Remove="Migrations\20200724144730_Cron.Designer.cs" />
-    <Compile Remove="Migrations\20200905154311_add-identity.cs" />
-    <Compile Remove="Migrations\20200905154311_add-identity.Designer.cs" />
-    <Compile Remove="Migrations\20201208171940_ItemWithProp1.cs" />
-    <Compile Remove="Migrations\20201208171940_ItemWithProp1.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.6.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />

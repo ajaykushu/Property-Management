@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Presentation.ViewModels.Controller.Home.LoctionDetail>
+
+<div class="card">
+
+    <div class="card-body">
+        <h5 class="card-title">Rooms</h5>
+        <ul class="pagination" style="flex-wrap:wrap">
+            @foreach (var item in Model)
+            {
+                <li class="page-item">
+                    @if (item.HasPendingWorkorder)
+                    {
+                        <button type="button"  data-toggle="modal" data-target="#exampleModalLong" class="page-link room  active" style="color:black">@item.RoomNumber</button>
+                    }
+                    else
+                    {
+                        <button type="button" data-toggle="modal" data-target="#exampleModalLong" class="page-link room" style="background-color:forestgreen;color:white">@item.RoomNumber</button>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<div style="width:50%">
+    <canvas id="goodCanvas1" width="400" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">WordOrder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    const data = {
+        labels: [
+            'Red',
+            'Blue',
+            'Yellow'
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+
+            data: [300, 50, 100],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    var ctx = document.getElementById('goodCanvas1').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: data
+    });
+
+    $('.room').click(function () {
+
+    })
+</script>

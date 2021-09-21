@@ -103,6 +103,8 @@ namespace API
             services.AddScoped<INotifier, Notifications>();
             services.AddScoped<IRecurringWorkOrderJob,RecurringWorkOrderJob>();
             services.AddScoped<IRecurringBL, RecurringBL>();
+            services.AddScoped<IHomeBL, HomeBL>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

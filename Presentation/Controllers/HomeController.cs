@@ -158,22 +158,44 @@ namespace Presentation.Controllers
             return Json(false);
         } 
         [HttpGet]
-        public IActionResult DashBoard()
+        public async Task<IActionResult> DashBoard()
         {
-            var obj = new DashBoard();
-            obj.Locations = new List<LoctionDetail>
+            //getting the proprtyList
+            DashBoard dashBoard = null;
+            try
             {
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="101"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="102"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="103"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="104"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="105"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="106"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="108"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="109"},
-                new LoctionDetail{ HasPendingWorkorder=true,WorkOrderCount=12,RoomNumber="110"}
-            };
-            return View(obj);
+                _apiRoute.Value.Routes.TryGetValue("GetDashboard", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    dashBoard = JsonConvert.DeserializeObject<DashBoard>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = StringConstants.Error;
+            }
+            //getting all notification
+           
+            return View(dashBoard);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Locations(long Id)
+        {
+            //getting the proprtyList
+            List<LoctionDetail> dashBoard = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("locationView", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?Id="+Id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    dashBoard = JsonConvert.DeserializeObject<List<LoctionDetail>>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = StringConstants.Error;
+            }
+            //getting all notification
+
+            return PartialView("DashboardRoomView",dashBoard);
         }
     }
 }
