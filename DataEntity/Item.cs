@@ -20,7 +20,10 @@ namespace DataEntity
         public string ItemName { get; set; }
 
         public  bool Active { get; set; }
-        
+       
+        public Location Location { get; set; }
+        public int? LocationId { get; set; }
+
         public ICollection<Issue> Issues { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }

@@ -78,22 +78,9 @@
                 <tr>
                     <td>
                         <div class="col">
-                            @if (Model.Items != null && Model.Items.Any())
-                            {
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label asp-for="ItemId"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
-                                            <option value="">Select Item</option>
-                                        </select>
-                                        <span asp-validation-for="ItemId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
+                           
+                                
+                           
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label asp-for="ItemId"> </label>
@@ -105,7 +92,7 @@
                                         <span asp-validation-for="ItemId" class="text-danger"></span>
                                     </div>
                                 </div>
-                            }
+                            
 
                             <div class="row top-buffer">
                                 <div class="col-md-3">

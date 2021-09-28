@@ -21,7 +21,7 @@ namespace Presentation.ViewModels
         public int SubLocationId { get; set; }
 
         public List<SelectItem> SubLocation { get; set; }
-        public List<SelectItem> Items { get; set; }
+        //public List<SelectItem> Items { get; set; }
 
         [DisplayName("Item")]
         [Required(ErrorMessage = "Please Select Item")]

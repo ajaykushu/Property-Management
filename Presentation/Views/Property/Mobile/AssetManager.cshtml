@@ -19,6 +19,48 @@
                 <tbody>
                     <tr>
                         <td>
+                            <div class="col">
+                                @if (Model.Property != null && Model.Property.Any())
+                                {
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="Locations">Property</label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm custom-input" asp-for="PropertyId" asp-items="@(new SelectList(Model.Property, "Id", "PropertyName"))">
+                                                <option value="">Select Property</option>
+                                            </select>
+                                            <span asp-validation-for="PropertyId" class="text-danger"></span>
+
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                                <div class="row top-buffer ">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Location</label>
+                                    </div>
+                                    <div class="col">
+
+                                        <select id="LocationId" name="LocationId" class="form-control form-control-sm custom-input ">
+                                            <option value="">Select Location</option>
+                                        </select>
+
+                                        <span asp-validation-for="LocationId" class="text-danger"></span>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
 
                             <div class="col">
                                 <div class="row">
@@ -33,23 +75,22 @@
 
                                     </div>
                                 </div>
-                                @if (Model.Assets != null && Model.Assets.Any())
-                                {
-                                    <div class="row top-buffer" id="available-asset">
-                                        <div class="col-md-3">
-                                            <label for="Locations">Asset Available</label>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-control form-control-sm custom-input" asp-for="AssetId" asp-items="@(new SelectList(Model.Assets, "Id", "PropertyName"))">
-                                                <option value="">Select Asset</option>
-                                            </select>
-                                            <span asp-validation-for="AssetId" class="text-danger"></span>
-                                            <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteAsset()"></div>
 
-                                        </div>
+                                <div class="row top-buffer" id="available-asset">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Asset Available</label>
+                                    </div>
+                                    <div class="col">
+                                        <select id="ItemId" name="ItemId" class="form-control form-control-sm custom-input itemId ">
+                                            <option value="">Select Asset</option>
+                                        </select>
+                                        <span asp-validation-for="ItemId" class="text-danger"></span>
+                                        <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteAsset()"></div>
 
                                     </div>
-                                }
+
+                                </div>
+
 
                                 <div class="row top-buffer" id="new-asset" style="display:none;">
                                     <div class="col-md-3">
@@ -78,7 +119,7 @@
                             </div>
                         </td>
                     </tr>
-                   
+
                 </tbody>
             </table>
             <div class="bottom-stick" style="background-color:white">
@@ -89,7 +130,7 @@
         </div>
 
         <script>
-            $('#AssetId').change(function () {
+            $('.itemId').change(function () {
 
                 enablespiner("Loading...");
           $.get('@Url.Action("GetIssue","WorkOrder")' + "?id=" + $(this).val(),

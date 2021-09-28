@@ -141,6 +141,13 @@ namespace API.Controllers
              AssetManagerModel asset = await _propertyService.GetAssetManager();
             return Ok(asset);
         }
+        [HttpGet]
+        [Route("getasset")]
+        public async Task<ActionResult<List<SelectItem>>> GetAssset(int location)
+        {
+            List<SelectItem> asset = await _propertyService.GetAssset(location);
+            return Ok(asset);
+        }
 
         [HttpPost]
         [Route("createasset")]

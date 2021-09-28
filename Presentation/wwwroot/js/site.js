@@ -425,11 +425,23 @@ $(document).ready(function () {
         enablespiner("Loading...");
         $.get("/Property/GetSubLocation?id=" + $(this).val(),
             function (data) {
-                disablespinner();
+               
                 $("#SubLocationId").html("<option value=''>Select Sublocation</option>")
                 if (data != null || data != undefined) {
                     for (var i = 0; i < data.length; i++) {
                         $("#SubLocationId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
+                    }
+                }
+            });
+        
+        //item
+        $.get("/Property/GetAsset?locId=" + $(this).val(),
+            function (data) {
+                disablespinner();
+                $("#ItemId").html("<option value=''>Select Item</option>")
+                if (data != null || data != undefined) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#ItemId").append('<option value=' + data[i].id + '>' + data[i].propertyName + '</option>')
                     }
                 }
             });
@@ -453,7 +465,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#PropertyId').change(function () {
         enablespiner("Loading...");
-        $.get("GetLocation?id=" + $(this).val(),
+        $.get("/workorder/GetLocation?id=" + $(this).val(),
             function (data) {
                 disablespinner();
                 $("#LocationId").html("<option value=''>Select Location</option>")

@@ -16,7 +16,7 @@ namespace Models.WorkOrder.RequestModels
         [Required]
         public int SubLocationId { get; set; }
 
-        public List<SelectItem> Items { get; set; }
+        //public List<SelectItem> Items { get; set; }
 
         [Required(ErrorMessage = "Please Select Item")]
         public int ItemId { get; set; }

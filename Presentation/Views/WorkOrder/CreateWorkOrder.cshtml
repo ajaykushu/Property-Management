@@ -72,22 +72,21 @@
                        
                         
                         <div class="col">
-                            @if (Model.Items != null)
-                            {
+                            
                                 
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label asp-for="ItemId"> </label>
                                     </div>
                                     <div class="col">
-                                        <select asp-for="ItemId" class="form-control form-control-sm custom-input" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                        <select asp-for="ItemId" class="form-control form-control-sm custom-input">
                                             <option value="">Select Item</option>
                                         </select>
                                         
                                         <span asp-validation-for="ItemId" class="text-danger"></span>
                                     </div>
                                 </div>
-                            }
+                            
 
                                 <div class="row top-buffer">
                                     <div class="col-md-3">

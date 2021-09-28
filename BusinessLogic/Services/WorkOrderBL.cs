@@ -181,11 +181,11 @@ namespace BusinessLogic.Services
         public async Task<CreateNormalWO> GetCreateWOModel(long userId)
         {
             CreateNormalWO wo = new CreateNormalWO();
-            wo.Items = await _itemRepo.Get(x=>x.Active).Select(x => new SelectItem
+            /*wo.Items = await _itemRepo.Get(x=>x.Active).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
-            }).ToListAsync();
+            }).ToListAsync();*/
             if (_httpContextAccessor.HttpContext.User.IsInRole("Master Admin"))
             {
                 var prop = await _property.GetAll().AsNoTracking().ToListAsync();
@@ -321,7 +321,7 @@ namespace BusinessLogic.Services
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
-            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
+            editwo.Items = await _itemRepo.GetAll().Where(x=>x.LocationId==editwo.LocationId).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName
@@ -928,7 +928,7 @@ namespace BusinessLogic.Services
             editwo.FileAvailable = temp.WOAttachments.Select(x => new KeyValuePair<string, string>(x.FileName,
              string.Concat(_scheme, _httpContextAccessor.HttpContext.Request.Host.Value, "/api/", x.FilePath))).ToList();
 
-            editwo.Items = await _itemRepo.GetAll().Select(x => new SelectItem
+            editwo.Items = await _itemRepo.GetAll().Where(x => x.LocationId == editwo.LocationId).Select(x => new SelectItem
             {
                 Id = x.Id,
                 PropertyName = x.ItemName

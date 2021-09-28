@@ -350,6 +350,22 @@ namespace Presentation.Controllers
             catch (Exception) { }
             return RedirectToAction("AssetManager");
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAsset(int locId)
+        {
+            List<SelectItem> result= new List<SelectItem>();
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("getasset", out var path);
+                var res = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path+"?location="+locId, this, _token);
+                if (res.IsSuccessStatusCode)
+                {
+                    result = JsonConvert.DeserializeObject<List<SelectItem>>(await res.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception) { }
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteAsset(long Id)

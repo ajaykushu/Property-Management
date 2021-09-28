@@ -34,5 +34,6 @@ namespace BusinessLogic.Interfaces
         Task<bool> DeleteAsset(long id);
         Task<AssetManagerModel> GetAssetManager();
         Task<bool> SaveAsset(AssetManagerModel asset);
+        Task<List<SelectItem>> GetAssset(int loc);
     }
 }

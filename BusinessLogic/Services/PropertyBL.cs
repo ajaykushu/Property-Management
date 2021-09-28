@@ -399,11 +399,13 @@ namespace BusinessLogic.Services
         public async Task<AssetManagerModel> GetAssetManager()
         {
             var AssetManagerModel = new AssetManagerModel();
-            AssetManagerModel.Assets =await _item.Get(x=>x.Active).Select(x => new SelectItem
+            AssetManagerModel.Property = await _property.Get(x => x.IsActive).Select(x => new SelectItem
             {
                 Id=x.Id,
-                 PropertyName=x.ItemName
+                PropertyName=x.PropertyName
             }).ToListAsync();
+            //var loc=await _loc.Get(x=>x.PropertyId==).ThenInclude(y=>y.Items).ToListAsync();
+            //AssetManagerModel.Location=loc.Select(x=>x.)
 
             return AssetManagerModel;
         }
@@ -411,10 +413,11 @@ namespace BusinessLogic.Services
         public async Task<bool> SaveAsset(AssetManagerModel asset)
         {
             var issues = asset.Issues.Split(",").ToHashSet<string>();
-            if (!asset.AssetId.HasValue)
+            if (!asset.ItemId.HasValue)
             {
                 var assetobj = new Item();
                 assetobj.ItemName = asset.NewAsset;
+                assetobj.LocationId = asset.LocationId;
                 assetobj.Active = true;
                 assetobj.Issues = new List<Issue>();
                 
@@ -435,7 +438,7 @@ namespace BusinessLogic.Services
             }
             else
             {
-                var item = _item.Get(x => x.Id == asset.AssetId).Include(x=>x.Issues).ThenInclude(y=>y.WorkOrders).FirstOrDefault();
+                var item = _item.Get(x => x.Id == asset.ItemId).Include(x=>x.Issues).ThenInclude(y=>y.WorkOrders).FirstOrDefault();
                 if(item!=null)
                 {
                     if(item.Issues==null|| item.Issues.Count == 0)
@@ -490,6 +493,11 @@ namespace BusinessLogic.Services
                 return false;
 
             }
+        }
+
+        public async  Task<List<SelectItem>> GetAssset(int loc)
+        {
+            return await _item.Get(x => x.LocationId == loc).Select(x => new SelectItem {Id=x.Id,PropertyName=x.ItemName }).ToListAsync();
         }
     }
 }

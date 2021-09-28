@@ -7,8 +7,12 @@ namespace Models.Property.RequestModels
 {
     public class AssetManagerModel
     {
-        public List<SelectItem> Assets { get; set; }
-        public long? AssetId { get; set; }
+        
+        public List<SelectItem> Property { get; set; }
+        public int PropertyId { get; set; }
+       
+        public int LocationId { get; set; }
+        public long? ItemId { get; set; }
         public string Issues { get; set; }
         public string NewAsset { get; set; }
     }
