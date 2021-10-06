@@ -24,7 +24,7 @@ namespace Presentation.ViewModels
         //public List<SelectItem> Items { get; set; }
 
         [DisplayName("Item")]
-        [Required(ErrorMessage = "Please Select Item")]
+       
         public int ItemId { get; set; }
 
         public int? VendorId { get; set; }

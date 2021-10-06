@@ -40,8 +40,6 @@ namespace Presentation.ViewModels
         [Remote("CheckEmail", "User")]
         public string Email { get; set; }
 
-     
-
         public string OfficeExt { get; set; }
       
 
@@ -52,15 +50,9 @@ namespace Presentation.ViewModels
         [RegularExpression(@"^\d{3}-?\d{3}-?\d{4}$",ErrorMessage ="Should be 10 digit number")]
         public string PhoneNumber { set; get; }
        
-
-        [Remote("CheckUserName", "User")]
-        [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length between 4 to 256 charcters")]
-        [Required(ErrorMessage = "Please Enter UserName")]
-        public string UserName { set; get; }
-
-        [Required(ErrorMessage = "Please Enter Password")]
+        [Required(ErrorMessage = "Please enter password")]
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Passwords must have at least one digit ('0'-'9')., Passwords must have at least one uppercase ('A'-'Z').,Min length 8 charcters")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Must have at least 1 number, 1 capital letter and 1 lowercase letter.")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Please Confirm Password")]

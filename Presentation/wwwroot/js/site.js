@@ -110,8 +110,8 @@ $(document).ready(function () {
             
             }
             bindZoomImg();
-        parent = "";
-        imgDisphtml = "";
+            parent = "";
+            imgDisphtml = "";
             $("input[type=file]").replaceWith($("input[type=file]").val('').clone(true));
         }
     })
@@ -125,7 +125,10 @@ function removefile(e) {
                 break;
             }
         }
+
+       
         e.currentTarget.parentNode.remove();
+        
     }
 };
 
@@ -207,7 +210,29 @@ $(document).ready(function () {
         $('.select-input').val(arr);
     })
 });
+//assign primery property if has value
 
+$(document).ready(function () {
+    //get value from primary property
+    //get value from 
+
+ });
+
+//setting primary property
+$(function () {
+    //--
+    //--set 
+    var prop = $('.select-input ').val().split(',');
+    $('input:checkbox[name=SelectedProperty]').each(function (key) {
+        if (prop.indexOf($('input:checkbox[name=SelectedProperty]')[key].value)!=-1) {
+            $('input:checkbox[name=SelectedProperty]')[key].checked= true;
+        }
+    });
+    $('input:radio[name=PrimaryProperty]').val([$('.primary_span')[0].innerText]);
+    $('input:radio[name=PrimaryProperty]').trigger('change');
+    
+   
+});
 $(document).ready(function () {
     $('input[name$="PrimaryProperty"]').on('change', function () {
         var index = arr.lastIndexOf($(this).val());
@@ -481,6 +506,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#Category').change(function () {
         enablespiner("Loading...");
+        var self = $(this).val();
         $.get("/WorkOrder/GetDataByCategory?category=" + $(this).val(),
             function (data) {
                 disablespinner();
@@ -492,7 +518,10 @@ $(document).ready(function () {
                             result += "<optgroup label='" + prop + "'>";
 
                         for (var i = 0; i < data[prop].length; i++) {
-                            result += '<option value=' + data[prop][i].id + '>' + data[prop][i].propertyName + '</option>';
+                            result += '<option value=' + data[prop][i].id;
+                            if (data[prop][i].id == 3 && self == "department")
+                                result += ' selected ';
+                                result+='>' + data[prop][i].propertyName + '</option>';
 
                         }
                         if (prop != "")
@@ -508,6 +537,7 @@ $(document).ready(function () {
             $("#OptionId").removeProp("required").prop("hidden", true);
 
     });
+    $('#Category').trigger('change');
 
 });
 $('#history_button').click(function (e) {
@@ -697,7 +727,7 @@ $("a[name='exportlink']").click(function () {
         });
 });
 $(document).ready(function () {
-    $('#IssueId').change(function () {
+    $('#IssueId').on('change', function () {
         if ($(this).val() == '-1') {
             $('.CustomIssueDiv').show();
             $('.CustomIssueDiv').prop("required", 'true');
@@ -706,7 +736,9 @@ $(document).ready(function () {
             $('.CustomIssueDiv').hide();
             $('.CustomIssueDiv').removeProp("required");
         }
-    })
+    });
+    $('#IssueId').trigger('change');
+
 });
 
 
@@ -717,7 +749,8 @@ function AddItem(e) {
     if (val == "" || val == undefined)
         $('#FilesRemoved').val(e.target.name)
     else
-        $('#FilesRemoved').val(val + ',' + e.target.name)
+        $('#FilesRemoved').val(val + ',' + e.target.name);
+    $('.removed').show();
     e.target.remove();
 
 }
@@ -836,3 +869,14 @@ function ShowNewAsset() {
     }
 }
 
+
+
+
+
+$(document).ready(function () {
+    $('#dohiddenreset').click(function () {
+        document.getElementById("search").value = "";
+        $('#form1').submit();
+        $('.form2').submit();
+    });
+});

@@ -109,7 +109,7 @@
 
                                 <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
                                     <option value="">Issue</option>
-                                    <option value="-1">Other</option>
+                                    <option selected value="-1">Other</option>
 
                                 </select>
                                 <span asp-validation-for="IssueId" class="text-danger"></span>
@@ -250,6 +250,7 @@
                                     </div>
                                 }
                             </div>
+                            <p class="text-danger removed" style="display:none;text-align: center;">Photos are not removed until work order is saved.</p>
                         }
                         <input type="text" asp-for="FilesRemoved" hidden>
                         <div class="row top-buffer">
@@ -264,7 +265,7 @@
                                 <div id="file_selected">
                                 </div>
                                 <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                <p class="text-danger">Photo uploads are not added until work order is saved.</p>
+
                             </div>
                         </div>
                     </td>

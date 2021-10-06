@@ -362,7 +362,7 @@ th {
     }
 
     .usersview td:nth-of-type(3):before {
-        content: "Email";
+        content: "UserId (E-mail)";
     }
 
     .usersview td:nth-of-type(4):before {
@@ -373,9 +373,7 @@ th {
         content: "Primary Property";
     }
 
-    .usersview td:nth-of-type(6):before {
-        content: "User Id";
-    }
+    
 
     .wordorderdetail td:nth-of-type(1):before {
         content: "Work Order Id";
@@ -580,7 +578,7 @@ label {
 /**/
 /*getall users*/
 .cont {
-    width: 100px;
+    width: 119px;
     height: 30px;
     position: relative;
     margin-right: 10px;

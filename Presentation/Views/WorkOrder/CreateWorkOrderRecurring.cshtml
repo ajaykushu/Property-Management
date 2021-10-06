@@ -101,7 +101,7 @@
                                 <div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="IssueId">
                                         <option value="">Select Issue</option>
-                                        <option value="-1">Other</option>
+                                        <option selected value="-1">Other</option>
                                     </select>
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
@@ -173,7 +173,7 @@
                                 <div class="col ">
                                     <select class="form-control form-control-sm custom-input" asp-for="Category">
                                         <option value="">Choose One</option>
-                                        <option value="department">Department</option>
+                                        <option selected value="department">Department</option>
                                         <option value="user">User</option>
                                         <option value="anyone">Anyone</option>
                                     </select>
@@ -213,7 +213,7 @@
                                     <div id="file_selected">
                                     </div>
                                     <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                    <p class="text-danger">Photo uploads are not added until work order is saved.</p>
+                                   
                                 </div>
                             </div>
                         </div>

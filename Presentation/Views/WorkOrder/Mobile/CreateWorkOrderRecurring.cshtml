@@ -105,7 +105,7 @@
 
                                 <select class="form-control " asp-for="IssueId">
                                     <option value="">Issue</option>
-                                    <option value="-1">Other</option>
+                                    <option selected value="-1">Other</option>
                                 </select>
                                 <span asp-validation-for="IssueId" class="text-danger"></span>
                             </div>
@@ -182,7 +182,7 @@
                             <div class="row padding">
                                 <select class="form-control " asp-for="Category">
                                     <option value="">Choose One</option>
-                                    <option value="department">Department</option>
+                                    <option selected value="department">Department</option>
                                     <option value="user">User</option>
                                     <option value="anyone">Anyone</option>
                                 </select>

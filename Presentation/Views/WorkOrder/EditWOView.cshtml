@@ -90,7 +90,7 @@
                                 <div class="col">
                                     <select class="form-control form-control-sm custom-input" asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
                                         <option value="">Select Issue</option>
-                                        <option value="-1">Other</option>
+                                        <option  value="-1">Other</option>
                                     </select>
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
@@ -167,30 +167,30 @@
                             <div class="col">
                                 @if (Model.Options != null && Model.Options.Any())
                                 {
-                                <select class="form-control form-control-sm custom-input" asp-for="OptionId">
-                                    <option value="">Select Option</option>
-                                    @foreach (var item in Model.Options)
-                                    {
-                                        if (item.Key == "")
+                                    <select class="form-control form-control-sm custom-input" asp-for="OptionId">
+                                        <option value="">Select Option</option>
+                                        @foreach (var item in Model.Options)
                                         {
-                                            foreach (var subitem in item.Value)
+                                            if (item.Key == "")
                                             {
-                                                <option value=@subitem.Id>@subitem.PropertyName</option>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <optgroup label="@item.Key">
-                                                @foreach (var subitem in item.Value)
+                                                foreach (var subitem in item.Value)
                                                 {
                                                     <option value=@subitem.Id>@subitem.PropertyName</option>
                                                 }
-                                            </optgroup>
+                                            }
+                                            else
+                                            {
+                                                <optgroup label="@item.Key">
+                                                    @foreach (var subitem in item.Value)
+                                                    {
+                                                        <option value=@subitem.Id>@subitem.PropertyName</option>
+                                                    }
+                                                </optgroup>
 
+                                            }
                                         }
-                                    }
 
-                                </select>
+                                    </select>
                                 }
                                 else
                                 {
@@ -201,35 +201,36 @@
                             </div>
                         </div>
                         @if (Model.Vendors != null && Model.Vendors.Any())
-                         {
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label for="File">Vendor</label>
+                        {
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="File">Vendor</label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"))">
+                                        <option value="">Select Vendor</option>
+                                    </select>
+                                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col">
-                                <select class="form-control form-control-sm custom-input" asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"))">
-                                    <option value="">Select Vendor</option>
-                                </select>
-                                <span asp-validation-for="VendorId" class="text-danger"></span>
-                            </div>
-                        </div>
-                         }
+                        }
 
                         @if (Model.FileAvailable != null)
-                            {
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label asp-for="FileAvailable"></label>
+                        {
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label asp-for="FileAvailable"></label>
+                                </div>
+                                @foreach (var item in Model.FileAvailable)
+                                {
+                                    <div class="col">
+                                        <a href="@item.Value">@item.Key</a>
+                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
+                                    </div>
+                                }
                             </div>
-                            @foreach (var item in Model.FileAvailable)
-                                    {
-                            <div class="col">
-                                <a href="@item.Value" >@item.Key</a>
-                                <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
-                            </div>
-                                    }
-                        </div>
-                            }
+                            <p class="text-danger removed" style="display:none;text-align: center;">Photos are not removed until work order is saved.</p>
+                        }
                         <input type="text" asp-for="FilesRemoved" hidden>
                         <div class="row top-buffer">
                             <div class="col-md-3">
@@ -243,7 +244,7 @@
                                 <div id="file_selected">
                                 </div>
                                 <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                <p class="text-danger">Photo uploads are not added until work order is saved.</p>
+
                             </div>
                         </div>
                     </div>

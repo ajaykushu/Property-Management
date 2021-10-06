@@ -47,11 +47,8 @@ namespace Presentation.ViewModels
         [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
         public string PhoneNumber { set; get; }
 
-        [StringLength(256, MinimumLength = 4, ErrorMessage = "Please Keep length between 4 to 256 charcters")]
-        public string UserName { set; get; }
-
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Passwords must have at least one digit ('0'-'9')., Passwords must have at least one uppercase ('A'-'Z').,Min length 8 charcters")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Must have at least 1 number, 1 capital letter and 1 lowercase letter.")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]

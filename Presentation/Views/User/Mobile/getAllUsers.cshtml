@@ -27,7 +27,7 @@
         <div class="input-group">
             <div class="cont">
                 <input type="radio" @if (ViewBag.filter == FilterEnum.Email) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.Email' class="selector1" required>
-                <label class="label1" for="email">@FilterEnum.Email</label>
+                <label class="label1" for="email">User</label>
             </div>
             <div class="cont">
                 <input type="radio" @if (ViewBag.filter == FilterEnum.FirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.FirstName class="selector2" required>
@@ -57,7 +57,7 @@
                         Full Name
                     </th>
                     <th>
-                        Email
+                        UserId (E-mail)
                     </th>
                     <th>
                         Roles
@@ -65,9 +65,7 @@
                     <th>
                         Primary Property
                     </th>
-                    <th>
-                        User Id
-                    </th>
+                    
                     <th>Operation</th>
                 </tr>
             </thead>
@@ -91,9 +89,7 @@
                     <td>
                         <span class="value">@Html.DisplayFor(modelItem => item.PrimaryProperty)</span>
                     </td>
-                    <td>
-                        <span class="value">@Html.DisplayFor(modelItem => item.UserName)</span>
-                    </td>
+                    
                     <td>
                         @{
                             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
@@ -174,9 +170,3 @@
     </script>
 }
 </div>
-<script> 
-    $('#dohiddenreset').click(function () {
-        document.getElementById("search").value = "";
-        $('#form1').submit();
- })
-    </script>

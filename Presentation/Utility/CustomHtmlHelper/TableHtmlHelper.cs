@@ -232,7 +232,7 @@ namespace Presentation.Utility.CustomHtmlHelper
                 var str = "{'name':'" + data[i].Key + "','readonly':'" + data[i].Value + "'},";
                 jsarray += str;
                   
-            }
+             }
            jsarray=jsarray[jsarray.Length - 1] == ',' ? jsarray.Substring(0, jsarray.Length - 1) : jsarray;
             jsarray += "];";
             sb.Append("<script>");

@@ -11,23 +11,23 @@
     <auth-link action="Create" controller="User" content='<i class="fa fa-plus fa-1x"></i>&nbsp;Create New' bclass="btn btn-sm btn-success" feature=@MenuEnum.Add_User></auth-link>
 </p>
 
-<form class="form wofilter">
+<form class="form wofilter form2">
     <div class="input-group">
         <div class="cont">
             <input type="radio" @if (ViewBag.filter == FilterEnum.Email) { <text> checked</text>} id="email" name="Filter" value='@FilterEnum.Email' class="selector1" required>
-            <label class="label1" for="email">@FilterEnum.Email</label>
+            <label class="label1" for="email">User</label>
         </div>
         <div class="cont">
             <input type="radio" @if (ViewBag.filter == FilterEnum.FirstName) { <text> checked</text>} id="firstname" name="Filter" value=@FilterEnum.FirstName class="selector2" required>
             <label class="label2" for="firstname">@FilterEnum.FirstName</label>
         </div>
-        <div class="cont" style="margin-right:30px;">
+        <div class="cont mr-2">
             <input type="radio" @if (ViewBag.filter == FilterEnum.Property) { <text> checked</text>} id="property" name="Filter" value=@FilterEnum.Property class="selector3" required>
             <label class="label3" for="property">Primary Property</label>
         </div>
-        <input style="margin-right:10px;" class="form-control form-control-sm" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
-        <input style="margin-right:10px;" class="btn btn-sm btn-primary" type="submit" value="Filter">
-        <input style="margin-right:10px;" type="reset" value="Reset" class="btn btn-sm btn-danger">
+        <input  class="form-control form-control-sm mr-1" value='@ViewBag.searchString' name="matchString" autocomplete="off" id="search" type="text" placeholder="Search">
+        <input  class="btn btn-sm btn-primary mr-1" type="submit" value="Filter">
+        <input  type="reset" id="dohiddenreset" value="Reset" class="btn btn-sm btn-danger mr-1">
     </div>
     <hr />
     <div class="workordertitle">
@@ -45,7 +45,7 @@
                     Full Name
                 </th>
                 <th>
-                    Email
+                    UserId (E-mail)
                 </th>
                 <th>
                     Roles
@@ -53,9 +53,7 @@
                 <th>
                     Primary Property 
                 </th>
-                <th>
-                    User Id
-                </th>
+               
                 <th>Operation</th>
             </tr>
         </thead>
@@ -85,9 +83,7 @@
         <span class="value">Not Assigned</span>
     }
 </td>
-                <td>
-                    <span class="value">   @Html.DisplayFor(modelItem => item.UserName)</span>
-</td>
+              
                 <td>
                     @{
                                     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();

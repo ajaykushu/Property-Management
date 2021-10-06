@@ -212,7 +212,7 @@ namespace Presentation.Controllers
                     editWorkOrder = JsonConvert.DeserializeObject<EditWorkOrder>(await response.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
             if (_detection.Device.Type == DeviceType.Mobile)

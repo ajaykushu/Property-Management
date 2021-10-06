@@ -24,7 +24,7 @@ namespace Presentation.ViewModels
         //public List<SelectItem> Items { get; set; }
 
         [DisplayName("Item")]
-        [Required(ErrorMessage = "Please Select Item")]
+       
         public int ItemId { get; set; }
 
         public int? VendorId { get; set; }
@@ -39,6 +39,7 @@ namespace Presentation.ViewModels
 
         [DisplayName("Issue")]
         [Required(ErrorMessage = "Please Select Issue")]
+       
         public int IssueId { get; set; }
 
         [Required(ErrorMessage = "Please Give Some Detail")]
@@ -53,7 +54,6 @@ namespace Presentation.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DueDate { get; set; }
-        
         
         public IList<IFormFile> File { get; set; }
 

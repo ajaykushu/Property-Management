@@ -25,7 +25,6 @@ namespace Presentation.ViewModels
 
         public List<SelectItem> Items { get; set; }
 
-        [Required(ErrorMessage = "Please Select Item")]
         [DisplayName("Item")]
         public int ItemId { get; set; }
 
@@ -34,6 +33,8 @@ namespace Presentation.ViewModels
         public List<SelectItem> Issues { get; set; }
 
         [DisplayName("Issue")]
+        
+
         [Required(ErrorMessage = "Please Select Issue Id")]
         public int IssueId { get; set; }
 

@@ -240,18 +240,22 @@
 
                         @if (Model.FileAvailable != null)
                         {
-                            <div class="row top-buffer">
-                                <div class="col-md-3">
-                                    <label asp-for="FileAvailable"></label>
-                                </div>
-                                @foreach (var item in Model.FileAvailable)
-                                {
-                                    <div class="col">
-                                        <a href="@item.Value" >@item.Key</a>
-                                        <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
-                                    </div>
-                                }
+                    <div class="row top-buffer">
+                        <div class="col-md-3">
+                            <label asp-for="FileAvailable"></label>
+                        </div>
+                        @foreach (var item in Model.FileAvailable)
+                        {
+                            <div class="col">
+                                <a href="@item.Value">@item.Key</a>
+                                <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
                             </div>
+                        }
+
+
+                        
+                        <p class="text-danger removed" style="display:none;text-align: center;">Photos are not removed until work order is saved.</p>
+                    </div>
                         }
                         <input type="text" asp-for="FilesRemoved" hidden>
                         <div class="row top-buffer">
@@ -266,7 +270,7 @@
                                 <div id="file_selected">
                                 </div>
                                 <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                <p class="text-danger">Photo uploads are not added until work order is saved.</p>
+
                             </div>
                         </div>
                     </div>

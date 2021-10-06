@@ -40,6 +40,6 @@ namespace BusinessLogic.Interfaces
         Task<List<TimeSheet>> GetTimeSheet();
         Task<List<TimesheetBreakDown>> GetTimeSheet(string id);
         Task<bool> SaveEffort(List<TimesheetBreakDown> timesheetBreakDown);
-        Task<bool> ChangeTZ(string timeZone,string id);
+        Task<bool> ChangeTZ(string timeZone,long Id);
     }
 }

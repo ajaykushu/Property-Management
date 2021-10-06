@@ -69,6 +69,7 @@ namespace API.Controllers
         }
 
         [Route("getallusers")]
+       
         [FeatureBasedAuthorization(MenuEnum.View_Users)]
         [HttpGet]
         public async Task<ActionResult<Pagination<IList<UsersListModel>>>> GetAllUsers(string matchString, FilterEnum filter, int requestedPage)
@@ -182,7 +183,7 @@ namespace API.Controllers
         [Route("changetz")]
         public async Task<ActionResult<bool>> ChangeTZ([FromForm] UserDetailModel udm)
         {
-            bool res = await _userService.ChangeTZ(udm.TimeZone, udm.UserId);
+            bool res = await _userService.ChangeTZ(udm.TimeZone, udm.Id);
             return Ok(res);
         }
 

@@ -82,7 +82,7 @@ namespace API.Authentication
             {
                 var newuser = new RegisterUserDTO
                 {
-                    UserName = "TestUser",
+                   
                     Email = "test@test.com",
                     PhoneNumber = "7777777777",
                     FirstName = "Test",

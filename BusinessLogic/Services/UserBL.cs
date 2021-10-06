@@ -67,8 +67,8 @@ namespace BusinessLogic.Services
             IdentityResult identityResult;
             ApplicationUser applicationUser = new ApplicationUser
             {
-                UserName = model.UserName,
-                Email = model.Email,
+                UserName = model.Email,
+            Email = model.Email,
                 IsEffortVisible=model.IsEffortVisible,
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
@@ -97,9 +97,12 @@ namespace BusinessLogic.Services
                 }
             }
             identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
+         
+            
             if (!identityResult.Succeeded)
             {
                 _imageUploadInFile.Delete(filepath);
+               
                 throw new BadRequestException(identityResult.Errors.Select(x => x.Description).Aggregate((i, j) => i + ", " + j));
             }
             else
@@ -160,7 +163,6 @@ namespace BusinessLogic.Services
                 TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DisplayName }).ToList(),
                 Departments = _department.GetAll().Select(x => new SelectItem { Id = x.Id, PropertyName = x.DepartmentName }).AsNoTracking().ToList(),
                 Email = applicationUser.Email,
-                UserName = applicationUser.UserName,
                 IsEffortVisible=applicationUser.IsEffortVisible,
                 FirstName = applicationUser.FirstName,
                 LastName = applicationUser.LastName,
@@ -315,7 +317,7 @@ namespace BusinessLogic.Services
                         Email = item.Email,
                         FullName = item.FirstName + " " + item.LastName,
                         Id = item.Id,
-                        UserName = item.UserName,
+                        
                         IsActive = item.IsActive,
                         PrimaryProperty = item.UserProperties.Where(x => x.IsPrimary).Select(x => x.Property.PropertyName).FirstOrDefault(),
                         Roles = string.Join(", ", roles)
@@ -376,7 +378,7 @@ namespace BusinessLogic.Services
                     }).ToList(),
                     PhoneNumber = x.PhoneNumber,
                     Department = x.Department.DepartmentName,
-                    UserId = x.UserName,
+                    
                     OfficeExtension = x.OfficeExt,
                     IsActive = x.IsActive,
                     SMSAlert = x.SMSAltert,
@@ -557,9 +559,9 @@ namespace BusinessLogic.Services
            
                 return false;
         }
-        public async  Task<bool> ChangeTZ(string timeZone,string userId)
+        public async  Task<bool> ChangeTZ(string timeZone,long Id)
         {
-            var user = await _userManager.FindByNameAsync(userId);
+            var user = await _userManager.Users.Where(x=>x.Id==Id).FirstOrDefaultAsync();
             user.TimeZone = timeZone;
             var res=await  _userManager.UpdateAsync(user);
             if (res.Succeeded)

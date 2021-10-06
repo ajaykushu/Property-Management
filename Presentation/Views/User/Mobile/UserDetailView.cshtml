@@ -55,14 +55,7 @@
                                 <span class="value">  @Html.DisplayFor(x => x.PhoneNumber)</span>
 </div>
                         </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-3">
-                                <label for="UserId">User Id</label>
-                            </div>
-                            <div class="col">
-                                <span class="value">@Html.DisplayFor(x => x.UserId)</span>
-</div>
-                        </div>
+                        
                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label for="OfficeExtension">Office Extension</label>
@@ -180,7 +173,7 @@
                                     <select class="form-control form-control-sm custom-input" asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZones, "Id", "PropertyName"))">
                                         <option value="">TimeZone</option>
                                     </select>
-                                    <input asp-for="UserId" hidden/>
+                                    <input asp-for="Id" hidden/>
                                     <input type="submit" class="btn btn-success" value="Change">
                                 </form>
                             </div>
