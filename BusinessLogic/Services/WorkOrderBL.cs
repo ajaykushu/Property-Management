@@ -384,7 +384,7 @@ namespace BusinessLogic.Services
                 }
                 wo.Description = editWorkOrder.Description;
                 wo.IssueId = editWorkOrder.IssueId!=-1? editWorkOrder.IssueId:(int?)null;
-                wo.ItemId = editWorkOrder.ItemId;
+                wo.ItemId = editWorkOrder.ItemId != 0 ? editWorkOrder.ItemId : (int?)null;
                 wo.DueDate = editWorkOrder.DueDate;
                 wo.CustomIssue = editWorkOrder.CustomIssue;
                 wo.LocationId = editWorkOrder.LocationId;
@@ -990,7 +990,7 @@ namespace BusinessLogic.Services
                 }
                 wo.Description = editWorkOrder.Description;
                 wo.IssueId = editWorkOrder.IssueId!=-1? editWorkOrder.IssueId:(int?)null;
-                wo.ItemId = editWorkOrder.ItemId;
+                wo.ItemId = editWorkOrder.ItemId != 0 ? editWorkOrder.ItemId : (int?)null; 
                 wo.CustomIssue = editWorkOrder.CustomIssue;
                 wo.DueAfterDays = editWorkOrder.DueAfterDays;
                 wo.LocationId = editWorkOrder.LocationId;

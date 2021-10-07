@@ -22,7 +22,7 @@ using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
-    
+    [ReferrerAttribute]
     public class ConfigurationController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;

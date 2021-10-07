@@ -19,7 +19,7 @@ using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
-    
+    [ReferrerAttribute]
     public class UserController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;

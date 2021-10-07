@@ -20,7 +20,7 @@ using Wangkanai.Detection;
 
 namespace Presentation.Controllers
 {
-   
+    [ReferrerAttribute]
     public class WorkOrderController : Controller
     {
         private readonly IHttpClientHelper _httpClientHelper;
@@ -50,7 +50,6 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(NoStore = true, Duration = 0)]
         [Authorize]
         public async Task<IActionResult> Index(WOFilterModel wOFilterModel)
         {
@@ -80,7 +79,7 @@ namespace Presentation.Controllers
         {
 
             CreateWorkOrder createWorkOrder = new CreateWorkOrder();
-
+            
             _apiRoute.Value.Routes.TryGetValue("getworkordermodel", out string path);
             var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
@@ -244,7 +243,7 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> EditWO(EditWorkOrder editWorkOrder)
+        public async Task<IActionResult> EditWO(EditWorkOrder editWorkOrder,string Referer)
         {
             string msg = String.Empty;
             if (ModelState.IsValid)
@@ -256,8 +255,8 @@ namespace Presentation.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true") {
-                            var href = Url.Action("Index");
-                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.SuccessUpdate);
+                            
+                            return StatusCode((int)HttpStatusCode.Redirect, Referer + "@" + StringConstants.SuccessUpdate);
                         }
                         
                         else
@@ -282,7 +281,8 @@ namespace Presentation.Controllers
         
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder)
+        
+        public async Task<IActionResult> CreateWO(CreateWorkOrder workOrder, string Referer)
         {
             if (ModelState.IsValid)
             {
@@ -295,8 +295,8 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            var href = Url.Action("Index",new WOFilterModel {SortedByDate=true });
-                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.CreatedSuccess);
+                           
+                            return StatusCode((int)HttpStatusCode.Redirect, Referer + "@" + StringConstants.CreatedSuccess);
                         }
                         else
                             return BadRequest("Unable To Create");
@@ -317,7 +317,7 @@ namespace Presentation.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateWORecurring(CreateWorkOrderRecurring workOrder)
+        public async Task<IActionResult> CreateWORecurring(CreateWorkOrderRecurring workOrder, string Referer)
         {
             if (ModelState.IsValid)
             {
@@ -330,8 +330,8 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            var href= Url.Action("GetRecurringWO", new WOFilterModel {SortedByDate=true });
-                            return StatusCode((int)HttpStatusCode.Redirect,href+"@"+StringConstants.CreatedSuccess);
+                           
+                            return StatusCode((int)HttpStatusCode.Redirect,Referer+"@"+StringConstants.CreatedSuccess);
                            
                         }
                         else
@@ -618,7 +618,7 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> EditRecurringWO(EditRecurringWorkOrder editWorkOrder)
+        public async Task<IActionResult> EditRecurringWO(EditRecurringWorkOrder editWorkOrder, string Referer)
         {
             string msg = String.Empty;
             if (ModelState.IsValid)
@@ -631,8 +631,10 @@ namespace Presentation.Controllers
                     {
                         if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
                         {
-                            var href = Url.Action("GetRecurringWO");
-                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.SuccessUpdate);
+                           
+
+
+                            return StatusCode((int)HttpStatusCode.Redirect, Referer + "@" + StringConstants.SuccessUpdate);
 
                         
                     }

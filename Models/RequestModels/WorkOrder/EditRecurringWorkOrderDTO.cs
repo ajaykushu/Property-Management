@@ -19,8 +19,8 @@ namespace Models.WorkOrder.RequestModels
 
         public List<SelectItem> Items { get; set; }
 
-        [Required(ErrorMessage = "Please Select Item")]
-        public int ItemId { get; set; }
+        
+        public int? ItemId { get; set; }
 
         public string PropertyName { get; set; }
 

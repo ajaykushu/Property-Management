@@ -166,7 +166,7 @@ namespace Presentation.Controllers
                 TempData["Error"] = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
             }
 
-            return RedirectToAction("PropertyEditView", new { id = prop.Id });
+            return RedirectToAction("ListProperties", new { id = prop.Id });
         }
 
         [HttpGet]

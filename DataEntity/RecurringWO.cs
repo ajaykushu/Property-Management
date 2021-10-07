@@ -13,7 +13,7 @@ namespace DataEntity
         public string Id { get; set; }
         public long PropertyId { get; set; }
         public Property Property { get; set; }
-        public int ItemId { get; set; }
+        public int? ItemId { get; set; }
         public Item Item { get; set; }
         public int? IssueId { get; set; }
         public string CustomIssue { get; set; }

@@ -25,6 +25,7 @@
     </header>
 
     <form class="mform" style="height: @height ;bottom:@bottom" id="wocreaterecurring" asp-action="CreateWORecurring" asp-controller="WorkOrder">
+        <input type="text" id="Referer" name="Referer" hidden value="@ViewBag.Referer" />
         @if (Model == null)
         {
             <p>No Record Found</p>
@@ -90,15 +91,15 @@
                     <tr>
                         <td>
 
-                           
-                                <div class="row padding">
 
-                                    <select class="form-control " asp-for="ItemId">
-                                        <option value="">Item</option>
-                                    </select>
-                                    <span asp-validation-for="ItemId" class="text-danger"></span>
-                                </div>
-                            
+                            <div class="row padding">
+
+                                <select class="form-control " asp-for="ItemId">
+                                    <option value="">Item</option>
+                                </select>
+                                <span asp-validation-for="ItemId" class="text-danger"></span>
+                            </div>
+
 
 
                             <div class="row top-buffer padding">
@@ -228,7 +229,7 @@
                     @*<input type="reset" class="btn btn-sm btn-danger w-50" value="Reset" name="reset" style="margin-left:5px;">*@
                 </div>
             </div>
-                }
-                <input asp-for="CronExpression" hidden>
-        </form>
+        }
+        <input asp-for="CronExpression" hidden>
+    </form>
 }

@@ -26,7 +26,7 @@ namespace Presentation.ViewModels
         public List<SelectItem> Items { get; set; }
 
         [DisplayName("Item")]
-        public int ItemId { get; set; }
+        public int? ItemId { get; set; }
 
         public string PropertyName { get; set; }
 

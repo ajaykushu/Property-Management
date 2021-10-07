@@ -8,6 +8,7 @@
     New Recurring Work Order
 </div>
 <form class="form" id="wocreaterecurring" asp-action="CreateWORecurring" asp-controller="WorkOrder">
+    <input type="text" id="Referer" name="Referer" hidden value="@ViewBag.Referer" />
     @if (Model == null)
     {
         <p>No Record Found</p>
@@ -19,7 +20,7 @@
                 <tr>
                     <td>
                         <section id="sch">
-                            <partial name="SchedulerView.cshtml"  model="Model"> 
+                            <partial name="SchedulerView.cshtml" model="Model">
                         </section>
                         <span asp-validation-for="CronExpression"></span>
                     </td>
@@ -78,21 +79,21 @@
                 <tr>
                     <td>
                         <div class="col">
-                           
-                                
-                           
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label asp-for="ItemId"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm custom-input" asp-for="ItemId">
-                                            <option value="">Select Item</option>
-                                        </select>
-                                        <span asp-validation-for="ItemId" class="text-danger"></span>
-                                    </div>
+
+
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="ItemId"> </label>
                                 </div>
-                            
+                                <div class="col">
+                                    <select class="form-control form-control-sm custom-input" asp-for="ItemId">
+                                        <option value="">Select Item</option>
+                                    </select>
+                                    <span asp-validation-for="ItemId" class="text-danger"></span>
+                                </div>
+                            </div>
+
 
                             <div class="row top-buffer">
                                 <div class="col-md-3">
@@ -106,7 +107,7 @@
                                     <span asp-validation-for="IssueId" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="row top-buffer CustomIssueDiv" style ="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                            <div class="row top-buffer CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
                                 <div class="col-md-3">
                                     <label asp-for="CustomIssue">Custom Issue</label>
                                 </div>
@@ -213,7 +214,7 @@
                                     <div id="file_selected">
                                     </div>
                                     <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                   
+
                                 </div>
                             </div>
                         </div>

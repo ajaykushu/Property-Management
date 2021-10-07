@@ -25,6 +25,7 @@
     </header>
     
     <form class="mform" style="height: @height ;bottom:@bottom" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
+        <input type="text" id="Referer" name="Referer" hidden value="@ViewBag.Referer" />
         @if (Model == null)
         {
             <p>No Record Found</p>
@@ -78,32 +79,40 @@
                     <tr>
                         <td>
 
-                            @if (Model.Items != null && Model.Items.Any())
-                            {
-                                <div class="row padding">
+                            <div class="row padding">
+                                @if (Model.Items != null && Model.Items.Any())
+                                {
+
                                     <select class="form-control " asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
                                         <option value="">Item</option>
                                     </select>
-                                    <span asp-validation-for="ItemId" class="text-danger"></span>
-                                </div>
-                            }
-
-                           
-                                <div class="row top-buffer padding">
-
-                                    <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
-                                        <option value=""></option>
-                                        <option  value="-1">Other</option>
+                                }
+                                else
+                                {
+                                    <select class="form-control " asp-for="ItemId">
+                                        <option value="">Item</option>
                                     </select>
-                                    <span asp-validation-for="IssueId" class="text-danger"></span>
-                                </div>
-                            
+                                }
+                                <span asp-validation-for="ItemId" class="text-danger"></span>
+                            </div>
+
+
+
+                            <div class="row top-buffer padding">
+
+                                <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                    <option value=""></option>
+                                    <option value="-1">Other</option>
+                                </select>
+                                <span asp-validation-for="IssueId" class="text-danger"></span>
+                            </div>
+
                             <div class="row top-buffer padding CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
                                 <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
 
                             </div>
-                           
-                            </td>
+
+                        </td>
                     </tr>
                     <tr>
                         <th>
@@ -262,8 +271,8 @@
                     @*passing data to controller*@
                 </div>
             </div>
-                }
-        </form>
+        }
+    </form>
 }
 <script>
 

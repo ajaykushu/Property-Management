@@ -24,7 +24,8 @@
     </nav>
 </header>
 
-<form class="mform" style="height: @height ;bottom:@bottom" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
+<form class="mform" style="height: @height;bottom:@bottom" id="wocreate" asp-action="CreateWO" asp-controller="WorkOrder">
+    <input type="text" id="Referer" name="Referer" hidden value="@ViewBag.Referer" />
     @if (Model == null)
     {
         <p>No Record Found</p>
@@ -85,11 +86,11 @@
                     <td>
 
                         <div class="row padding">
-                           
-                                <select asp-for="ItemId" class="form-control">
-                                    <option value="">Select Item</option>
-                                </select>
-                            
+
+                            <select asp-for="ItemId" class="form-control">
+                                <option value="">Select Item</option>
+                            </select>
+
                             <span asp-validation-for="ItemId" class="text-danger"></span>
                         </div>
 
@@ -226,5 +227,5 @@
                 <button type="submit" data-toggle="modal" style="margin-left: 24%;" data-target=".bd-example-modal-lg" class="btn w-50 btn-success submit">Create</button>
             </div>
         </div>
-            }
-    </form>
+    }
+</form>

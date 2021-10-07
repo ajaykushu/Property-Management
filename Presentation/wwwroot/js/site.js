@@ -545,7 +545,7 @@ $(document).ready(function () {
             $("#OptionId").removeProp("required").prop("hidden", true);
 
     });
-    if ($('#Category').val() == "" || $('#Category').val() == undefined)
+    if ($('#OptionId').val() == "" || $('#OptionId').val() == undefined)
          $('#Category').trigger('change');
 
 });
