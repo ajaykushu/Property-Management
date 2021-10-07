@@ -96,6 +96,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        
         [Authorize]
         public async Task<ActionResult> ListProperties()
         {

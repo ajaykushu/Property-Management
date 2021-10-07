@@ -50,6 +50,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [Authorize]
         public async Task<IActionResult> Index(WOFilterModel wOFilterModel)
         {
@@ -254,8 +255,11 @@ namespace Presentation.Controllers
                     var response = await _httpClientHelper.PostFileDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, editWorkOrder, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
-                            return Ok(StringConstants.SuccessUpdate);
+                        if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true") {
+                            var href = Url.Action("Index");
+                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.SuccessUpdate);
+                        }
+                        
                         else
                             return Ok(StringConstants.UpdateFailed);
                     }
@@ -291,7 +295,7 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            var href = Url.Action("Index");
+                            var href = Url.Action("Index",new WOFilterModel {SortedByDate=true });
                             return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.CreatedSuccess);
                         }
                         else
@@ -326,7 +330,7 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                            var href= Url.Action("GetRecurringWO");
+                            var href= Url.Action("GetRecurringWO", new WOFilterModel {SortedByDate=true });
                             return StatusCode((int)HttpStatusCode.Redirect,href+"@"+StringConstants.CreatedSuccess);
                            
                         }
@@ -577,6 +581,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [Authorize]
         public async Task<IActionResult> GetRecurringWO(WOFilterModel wOFilterModel)
         {
@@ -594,6 +599,7 @@ namespace Presentation.Controllers
             return View(wOFilterModel);
         }
         [HttpGet]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [Authorize]
         public async Task<IActionResult> GetChildWO(string rwoId,string search, int pageNumber = 0)
         {
@@ -624,7 +630,13 @@ namespace Presentation.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
-                            return Ok(StringConstants.SuccessUpdate);
+                        {
+                            var href = Url.Action("GetRecurringWO");
+                            return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.SuccessUpdate);
+
+                        
+                    }
+                           
                         else
                             return Ok(StringConstants.UpdateFailed);
                     }

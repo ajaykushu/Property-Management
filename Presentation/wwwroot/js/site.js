@@ -212,11 +212,7 @@ $(document).ready(function () {
 });
 //assign primery property if has value
 
-$(document).ready(function () {
-    //get value from primary property
-    //get value from 
 
- });
 
 //setting primary property
 $(function () {
@@ -304,11 +300,16 @@ $(document).ready(function () {
                 $("input[type=password]").val("");
                 $("form :input").prop("disabled", false);
                 var data = res.responseText.split('@');
-                if (res.status == 302) {
-                    alertify.alert('Success', '<p>' + data[1] + '</p>', function () {
-                        window.location.href = data[0];
-                    });
-                }
+                    if (res.status == 302) {
+                        alertify.alert('Success', '<p>' + data[1] + '</p>', function () {
+                            window.location.href = data[0];
+                        });
+                    }
+                    else {
+                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                            
+                        });
+                    }
 
 
             }, "");
@@ -375,18 +376,25 @@ $(document).ready(function () {
             $("form :input").prop("disabled", true);
             RESTCALL(url, formData, 'POST', false, false, function (res) {
                 disablespinner();
-
                 $("form :input").prop("disabled", false);
-                alertify.alert('Info', '<p>' + res + '</p>', function () {
-                    location.reload();
+                alertify.alert('Info', '<p>' + res.responseText + '</p>', function () {
+                    
                 });
             }, function (res) {
                 disablespinner();
                 $("input[type=password]").val("");
-                $("form :input").prop("disabled", false);
-                alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
-                    location.reload();
-                });
+                    $("form :input").prop("disabled", false);
+                    var data = res.responseText.split('@');
+                    if (res.status == 302) {
+                        alertify.alert('Success', '<p>' + data[1] + '</p>', function () {
+                            window.location.href = data[0];
+                        });
+                    }
+                    else {
+                        alertify.alert('Error', '<p>' + res.responseText + '</p>', function () {
+                            location.reload();
+                        });
+                    }
             }, "");
         }
     });
@@ -537,7 +545,8 @@ $(document).ready(function () {
             $("#OptionId").removeProp("required").prop("hidden", true);
 
     });
-    $('#Category').trigger('change');
+    if ($('#Category').val() == "" || $('#Category').val() == undefined)
+         $('#Category').trigger('change');
 
 });
 $('#history_button').click(function (e) {

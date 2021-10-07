@@ -76,7 +76,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" id="Email"><i class="fa fa-envelope fa-1x"></i></a>
+                                    <a class="nav-link text-white" id="mailid"><i class="fa fa-envelope fa-1x"></i></a>
                                 </li>
                                 <li class="nav-item active">
                                     <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><b><u>Logout</u></b></a>
@@ -217,11 +217,14 @@
        
         
     });
-    $('#mail').on('submit', function (e) {
+    $('#mailid').on('submit', function (e) {
         if (!isValid) {
             e.preventDefault();    //stop form from submitting
         }
     });
+    if (performance.navigation.type == 2) {
+         location.reload(true);
+    }
 </script>
 <style>
   .close{
@@ -258,5 +261,7 @@
 .fa-1x {
         font-size: 1.5em !important;
     }
+
+
     </style>
 

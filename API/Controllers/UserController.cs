@@ -71,6 +71,7 @@ namespace API.Controllers
         [Route("getallusers")]
        
         [FeatureBasedAuthorization(MenuEnum.View_Users)]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [HttpGet]
         public async Task<ActionResult<Pagination<IList<UsersListModel>>>> GetAllUsers(string matchString, FilterEnum filter, int requestedPage)
         {

@@ -36,6 +36,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("listproperties")]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [FeatureBasedAuthorization(MenuEnum.View_Property)]
         public async Task<ActionResult<List<PropertiesModel>>> GetProperties()
         {

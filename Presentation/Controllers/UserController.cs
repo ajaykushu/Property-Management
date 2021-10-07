@@ -194,7 +194,9 @@ namespace Presentation.Controllers
             return BadRequest(msg);
         }
 
+
         [HttpGet]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [Authorize]
         public async Task<IActionResult> GetAllUsers(string matchString, int requestedPage, FilterEnum filter = FilterEnum.Email)
         {

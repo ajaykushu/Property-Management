@@ -57,11 +57,11 @@ namespace DataEntity
             if (appuser != null)
             {
                 if (manager.Users.Where(x => x.PhoneNumber == user.PhoneNumber && appuser.Id != x.Id).FirstOrDefault() != null)
-                    return IdentityResult.Failed(new IdentityError { Description = "Phone number is already present" });
+                    return IdentityResult.Failed();
             }
             else
                 if (manager.Users.Where(x => x.PhoneNumber == user.PhoneNumber).FirstOrDefault() != null)
-                return IdentityResult.Failed(new IdentityError { Description = "Phone number is already present" });
+                return IdentityResult.Failed();
 
             return IdentityResult.Success;
         }

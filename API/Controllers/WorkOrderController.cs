@@ -87,6 +87,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("getallworkorder")]
         [FeatureBasedAuthorization(MenuEnum.Get_WO)]
+        [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<ActionResult<List<WorkOrderAssigned>>> GetWO(WOFilterDTO wOFilterModel)
         {
             var workorderassigned = await _workOrderService.GetWO(wOFilterModel);
@@ -178,6 +179,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [Route("getRecurringWO")]
         [FeatureBasedAuthorization(MenuEnum.GetWO_Detail)]
         public async Task<ActionResult<Pagination<List<RecurringWOs>>>> GetRecurringWO(WOFilterDTO wOFilterDTO)
@@ -195,6 +197,7 @@ namespace API.Controllers
         }
         [HttpGet]
         [Route("getchildwos")]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [FeatureBasedAuthorization(MenuEnum.Recurring_WO)]
         public async Task<ActionResult<Pagination<List<ChildWo>>>> GetChildWO( string rwoId, string search,int pageNumber)
         {
@@ -220,6 +223,7 @@ namespace API.Controllers
             return Ok(res);
         }
         [HttpGet]
+        [ResponseCache(NoStore = true, Duration = 0)]
         [Route("geteffort")]
         public async Task<ActionResult<EffortPagination>> GetEffort(string id, bool prev)
         {
