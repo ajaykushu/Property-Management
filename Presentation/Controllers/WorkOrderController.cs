@@ -295,8 +295,16 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                           
-                            return StatusCode((int)HttpStatusCode.Redirect, Referer + "@" + StringConstants.CreatedSuccess);
+                            if (_detection.Device.Type == DeviceType.Mobile)
+                            {
+                                var href = Url.Action("Index");
+                                return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.CreatedSuccess);
+                            }
+                            else
+                            {
+                                var href = Url.Action("Index");
+                                return StatusCode((int)HttpStatusCode.Redirect, Referer + "@" + StringConstants.CreatedSuccess);
+                            }
                         }
                         else
                             return BadRequest("Unable To Create");
@@ -330,9 +338,16 @@ namespace Presentation.Controllers
                         var result = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
                         if (result)
                         {
-                           
-                            return StatusCode((int)HttpStatusCode.Redirect,Referer+"@"+StringConstants.CreatedSuccess);
-                           
+                            if (_detection.Device.Type == DeviceType.Mobile)
+                            {
+                                var href = Url.Action("GetRecurringWO");
+                                return StatusCode((int)HttpStatusCode.Redirect, href + "@" + StringConstants.CreatedSuccess);
+                            }
+                            else
+                            {
+                                return StatusCode((int)HttpStatusCode.Redirect, Referer + "@" + StringConstants.CreatedSuccess);
+                            }
+
                         }
                         else
                             return BadRequest("Unable To Create");
