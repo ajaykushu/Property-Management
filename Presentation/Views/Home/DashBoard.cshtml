@@ -12,15 +12,12 @@
             <li>
             <i class="fa fa-home"></i>
                 </li>
-            <li >
            
-            <select class="form-control form-control-sm" id="Property" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))" style="width:100px;">
-                
-            </select>
-            </li>
         </ul>
     }
     </div>
+    <select class="form-control form-control-sm  mt-1" id="Property"  asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName","Selected"))" style="width:100px;">
+    </select>
 <hr/>
  <div id="param">
      @{await Html.RenderPartialAsync("DashboardRoomView.cshtml", Model.Locations);

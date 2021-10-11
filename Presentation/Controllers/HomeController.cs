@@ -197,5 +197,26 @@ namespace Presentation.Controllers
 
             return PartialView("DashboardRoomView",dashBoard);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Sublocation(long Id)
+        {
+            //getting the proprtyList
+            List<SubLocationModel> dashBoard = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("sublocation", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?Id=" + Id, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    dashBoard = JsonConvert.DeserializeObject<List<SubLocationModel>>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = StringConstants.Error;
+            }
+            //getting all notification
+            return PartialView("Sublocation", dashBoard);
+        }
+
     }
 }

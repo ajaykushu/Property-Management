@@ -37,7 +37,7 @@ namespace BusinessLogic.Services
             {
                 Id = x.Id,
                 PropertyName = x.MenuName,
-                Selected = rolemenumap.Contains(x.Id) ? true : false
+                Selected = rolemenumap.Contains(x.Id) ? "true" : "false"
             }).ToList();
             return ret;
         }

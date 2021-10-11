@@ -191,7 +191,7 @@ namespace BusinessLogic.Services
             var status = false;
             if (property != null)
             {
-                property.Country = prop.Country;
+                //property.Country = prop.Country;
                 property.City = prop.City;
                 property.StreetAddress1 = prop.StreetAddress1;
                 property.StreetAddress2 = prop.StreetAddress2;
@@ -498,6 +498,12 @@ namespace BusinessLogic.Services
         public async  Task<List<SelectItem>> GetAssset(int loc)
         {
             return await _item.Get(x => x.LocationId == loc).Select(x => new SelectItem {Id=x.Id,PropertyName=x.ItemName }).ToListAsync();
+        }
+
+        public Task<List<Assets>> Assets()
+        {
+            throw new NotImplementedException();
+
         }
     }
 }

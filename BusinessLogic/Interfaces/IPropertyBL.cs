@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using DataTransferObjects.RequestModels;
+using Models;
 using Models.Property.RequestModels;
 using Models.ResponseModels;
 using System.Collections.Generic;
@@ -35,5 +36,7 @@ namespace BusinessLogic.Interfaces
         Task<AssetManagerModel> GetAssetManager();
         Task<bool> SaveAsset(AssetManagerModel asset);
         Task<List<SelectItem>> GetAssset(int loc);
+        Task<List<Assets>> Assets();
+       
     }
 }

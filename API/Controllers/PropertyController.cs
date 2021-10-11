@@ -157,6 +157,13 @@ namespace API.Controllers
             bool res = await _propertyService.SaveAsset(asset);
             return Ok(res);
         }
+        [HttpGet]
+        [Route("assets")]
+        public async Task<ActionResult<bool>> Assets()
+        {
+            List<Assets> res = await _propertyService.Assets();
+            return Ok(res);
+        }
 
     }
 }

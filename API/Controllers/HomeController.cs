@@ -33,5 +33,12 @@ namespace API.Controllers
             return Ok(obj);
 
         }
+        [HttpGet("sublocationview")]
+        public async Task<ActionResult<List<LoctionDetail>>> Sublocation(long Id)
+        {
+            var obj = await _homeBL.Sublocation(Id);
+            return Ok(obj);
+
+        }
     }
 }

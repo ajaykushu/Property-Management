@@ -18,7 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Interface;
-
+using DataTransferObjects.RequestModels;
 
 namespace BusinessLogic.Services
 {
@@ -77,29 +77,32 @@ namespace BusinessLogic.Services
 
         public async Task<DashBoard> GetDashboard()
         {
+            
             var obj = new DashBoard();
-           var ret= await  _property.GetAll().Where(x => x.IsActive).Include(x=>x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x=>x.WorkOrders).ToListAsync();
-            obj.Properties = ret.Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName }).ToList();
-            //obj.Locations = ret.First().Locations.Select(x=> new LoctionDetail { RoomNumber = x.LocationName, HasPendingWorkorder = x.WorkOrders.Any(x => x.IsActive), WorkOrderCount = x.WorkOrders.Count() }).ToList();
+           var ret= await  _property.GetAll().Where(x => x.IsActive).Include(x=>x.UserProperties).Include(x=>x.Locations).ThenInclude(x => x.SubLocations).ThenInclude(x=>x.WorkOrders).ToListAsync();
+            obj.Properties = ret.Select(x => new SelectItem { Id = x.Id, PropertyName = x.PropertyName,Selected=x.UserProperties.Where(y=>y.ApplicationUserId==userId && y.IsPrimary).FirstOrDefault()?.Id.ToString()}).ToList();
 
-            var sub = ret.First().Locations.SelectMany(x => x.SubLocations);
+            var prim = obj.Properties.Where(x => string.IsNullOrEmpty(x.Selected)).First();
+            var sub = ret.Where(x=>x.Id==prim.Id).SelectMany(x=>x.Locations).ToList();
             obj.Locations = new List<LoctionDetail>();
-            obj.Locations = sub.Select(x => new LoctionDetail { RoomNumber = x.AreaName, HasPendingWorkorder = x.WorkOrders.Any(x => x.IsActive), WorkOrderCount = x.WorkOrders.Count() }).ToList();
-
+            obj.Locations = sub.Select(x => new LoctionDetail {Id=x.Id, RoomNumber = x.LocationName, HasPendingWorkorder = x.WorkOrders != null?x.WorkOrders.Any(x => x.IsActive):false,WorkOrderCount = x.WorkOrders!=null? x.WorkOrders.Count:0}).ToList();
             return obj;
-
-
-
         }
 
         public async Task<List<LoctionDetail>> LocationView(long Id)
         {
-            var ret = await _property.GetAll().Where(x => x.IsActive && Id==x.Id).Include(x => x.Locations).ThenInclude(x=>x.SubLocations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
-            var sub = ret.Locations.SelectMany(x => x.SubLocations).Distinct();
+            var ret = await _property.GetAll().Where(x => x.IsActive && Id==x.Id).Include(x => x.Locations).ThenInclude(x => x.WorkOrders).FirstOrDefaultAsync();
             var obj = new List<LoctionDetail>();
-            obj = sub.Select(x => new LoctionDetail { RoomNumber = x.AreaName, HasPendingWorkorder = x.WorkOrders.Any(x => x.IsActive), WorkOrderCount = x.WorkOrders.Count() }).ToList();
+            var data = ret.Locations.ToList();
+            obj = data.Select(x => new LoctionDetail {Id=x.Id, RoomNumber = x.LocationName, HasPendingWorkorder = x.WorkOrders != null?x.WorkOrders.Any(x => x.IsActive):false, WorkOrderCount = x.WorkOrders != null ? x.WorkOrders.Count : 0 }).ToList();
 
             return obj;
+
+        }
+        public async Task<List<SubLocationModel>> Sublocation(long loc)
+        {
+            var dc = await _sublocation.GetAll().Where(x => x.LocationId == loc).Include(x => x.WorkOrders).Select(y => new SubLocationModel { HasPendingWorkder = y.WorkOrders != null ? y.WorkOrders.Any(x => x.IsActive) : false, Id = y.Id, SublocationName = y.AreaName,Workorder=y.WorkOrders.Select(x=>x.Id).ToList() }).ToListAsync();
+            return dc;
 
         }
     }

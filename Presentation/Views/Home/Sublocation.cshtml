@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Presentation.ViewModels.Controller.Home.SubLocationModel>
+
+    <div class="card">
+
+        <div class="card-body">
+            <h5 class="card-title">Sub Locations</h5>
+            <ul class="pagination" style="flex-wrap:wrap">
+                @foreach (var item in Model)
+            {
+                <li class="page-item">
+                    @if (item.HasPendingWorkder)
+                    {
+                    <button type="button" data-toggle="modal" data-target="#exampleModalLong" class="page-link room  active" style="color:black">@item.SublocationName</button>
+                    }
+                    else
+                    {
+                    <button type="button" data-toggle="modal" data-target="#exampleModalLong" class="page-link room" style="background-color:forestgreen;color:white">@item.SublocationName</button>
+                    }
+                </li>
+            }
+            </ul>
+        </div>
+    </div>
+   
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">WordOrder</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+    
+    $('.room').click(function () {
+
+    })
+    </script>

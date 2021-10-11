@@ -16,7 +16,7 @@ namespace Presentation.ViewModels.Controller.Home
         public int Id { get; set; }
         public string RoomNumber { get; set; }
         public bool HasPendingWorkorder { get; set; }
-        public  int WorkOrderCount { get; set; }
+        public  int? WorkOrderCount { get; set; }
         List<KeyValuePair<string,int>> StateDistribution { get; set; }
 
     }

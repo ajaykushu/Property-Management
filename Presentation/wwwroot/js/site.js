@@ -889,3 +889,13 @@ $(document).ready(function () {
         $('.form2').submit();
     });
 });
+$(document).ready(function () {
+$('.room').click(function () {
+    //get sublocation
+   
+    $.get('/Home/Sublocation?Id=' + $(this).val(), function (res) {
+        $('.modal-body').html(res);
+       
+    });
+})
+});

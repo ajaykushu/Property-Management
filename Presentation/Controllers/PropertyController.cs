@@ -8,6 +8,7 @@ using Presentation.ConstModal;
 using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
+using Presentation.ViewModels.Controller.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -389,8 +390,26 @@ namespace Presentation.Controllers
             return Ok(result);
 
         }
+        [HttpGet]
+        public async Task<IActionResult> Assets()
+        {
+            List<Assets> result = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("assets", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    result  = JsonConvert.DeserializeObject<List<Assets>>(await response.Content.ReadAsStringAsync());
+               
+               
+            }
+            catch (Exception)
+            {
+            }
+            return View(result);
 
-        
+        }
+
 
 
     }
