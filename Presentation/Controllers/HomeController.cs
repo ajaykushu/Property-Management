@@ -174,6 +174,10 @@ namespace Presentation.Controllers
                 TempData["Error"] = StringConstants.Error;
             }
             //getting all notification
+            if (_detection.Device.Type == DeviceType.Mobile)
+            {
+                return View("~/Views/Home/Mobile/Dashboard.cshtml", dashBoard);
+            }
            
             return View(dashBoard);
         }
