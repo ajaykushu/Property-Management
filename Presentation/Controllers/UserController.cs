@@ -173,7 +173,10 @@ namespace Presentation.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         if (await response.Content.ReadAsStringAsync().ConfigureAwait(false) == "true")
+                        {
+
                             return Ok(StringConstants.SuccessUpdate);
+                        }
                         else
                             return Ok(StringConstants.UpdateFailed);
                     }

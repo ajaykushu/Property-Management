@@ -520,8 +520,6 @@ namespace BusinessLogic.Services
                 if (!post.WorkOrderId.Contains("R"))
                 {
                     var wo = _workOrder.Get(x => x.Id == post.WorkOrderId).AsNoTracking().FirstOrDefault();
-
-
                     var users = await GetUsersToSendNotification(wo);
                     var repliedto = post.RepliedTo != null ? await _appuser.FindByNameAsync(post.RepliedTo) : null;
                     if (repliedto != null && !users.Contains(repliedto.Id))
@@ -801,11 +799,13 @@ namespace BusinessLogic.Services
 
         public async Task<List<long>> GetUsersToSendNotification(WorkOrder woId)
         {
+            var appuser = _appuser.FindByNameAsync(woId.CreatedByUserName);
 
-
-            var users = _userProperty.GetAll().Where(x => x.PropertyId == woId.PropertyId).Select(x => x.ApplicationUserId).Distinct().ToHashSet();
+            HashSet<long> users = new HashSet<long>();
+            users.Add(appuser.Id);
             if (woId.AssignedToId.HasValue)
                 users.Add(woId.AssignedToId.GetValueOrDefault());
+           
             else if (woId.AssignedToDeptId.HasValue)
             {
                 var tempuserId = await _appuser.Users.Where(x => x.DepartmentId == woId.AssignedToDeptId).Select(x => x.Id).ToListAsync();
@@ -1359,6 +1359,12 @@ namespace BusinessLogic.Services
         {
             for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
                 yield return day;
+        }
+
+        public async Task<List<string>> GetWoList(long id)
+        {
+            var rest = await _sublocation.Get(x => x.Id == id).Include(x => x.WorkOrders).Select(y => y.WorkOrders.Select(z => z.Id).ToList()).FirstOrDefaultAsync();
+            return rest;
         }
     }
 }

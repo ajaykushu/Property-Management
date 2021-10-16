@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Presentation.Utility;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -44,7 +45,8 @@ namespace Presentation.ViewModels
 
         [DisplayName("Cell Number")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
+        [DataType(DataType.PhoneNumber,ErrorMessage ="Enter Valid Phone Number")]
+        [StringLength(12)]
         public string PhoneNumber { set; get; }
 
         [DataType(DataType.Password, ErrorMessage = "Please Enter Valid Password")]

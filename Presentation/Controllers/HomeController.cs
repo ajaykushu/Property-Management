@@ -222,5 +222,25 @@ namespace Presentation.Controllers
             return PartialView("Sublocation", dashBoard);
         }
 
+        [HttpGet]
+        public async Task<IActionResult>  WorkOrderList(long sublocId)
+        {
+            List<string> wo = null;
+            try
+            {
+                _apiRoute.Value.Routes.TryGetValue("wolist", out string path);
+                var response = await _httpClientHelper.GetDataAsync(_apiRoute.Value.ApplicationBaseUrl + path + "?id=" + sublocId, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    wo = JsonConvert.DeserializeObject<List<string>>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = StringConstants.Error;
+            }
+            //getting all notification
+            return PartialView(wo);
+        }
+
+
     }
 }

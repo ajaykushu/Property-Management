@@ -1,0 +1,19 @@
+﻿@model IEnumerable<string>
+
+<div class="card">
+
+    <div class="card-body">
+        <h5 class="card-title">Work Orders</h5>
+        <ul class="pagination" style="flex-wrap:wrap">
+            @foreach (var item in Model)
+            {
+                <li class="page-item">
+                        <a  data-toggle="modal"  asp-controller="WorkOrder" asp-action="GetWODetail" asp-route-id="@item" target="_blank" class="page-link room  active" style="color:black">@item</a>
+                   
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+

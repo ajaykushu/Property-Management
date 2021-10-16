@@ -377,7 +377,7 @@ $(document).ready(function () {
             RESTCALL(url, formData, 'POST', false, false, function (res) {
                 disablespinner();
                 $("form :input").prop("disabled", false);
-                alertify.alert('Info', '<p>' + res.responseText + '</p>', function () {
+                alertify.alert('Info', '<p>' + res + '</p>', function () {
                     
                 });
             }, function (res) {
@@ -894,7 +894,7 @@ $('.room').click(function () {
     //get sublocation
    
     $.get('/Home/Sublocation?Id=' + $(this).val(), function (res) {
-        $('.modal-body').html(res);
+        $('.subloc').html(res);
        
     });
 })

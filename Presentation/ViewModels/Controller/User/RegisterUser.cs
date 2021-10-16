@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Presentation.Utility;
 
 namespace Presentation.ViewModels
 {
@@ -46,8 +47,8 @@ namespace Presentation.ViewModels
         [DisplayName("Cell Number")]
         [Remote("CheckPhoneNumber", "User")]
         [Required(ErrorMessage = "Please Enter  Phone Number")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Please Enter Valid Phone Number")]
-        [RegularExpression(@"^\d{3}-?\d{3}-?\d{4}$",ErrorMessage ="Should be 10 digit number")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Enter Valid Phone Number")]
+        [StringLength(12)]
         public string PhoneNumber { set; get; }
        
         [Required(ErrorMessage = "Please enter password")]
