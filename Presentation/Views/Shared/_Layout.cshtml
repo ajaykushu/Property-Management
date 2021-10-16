@@ -136,10 +136,13 @@
 <script>
     $(document).ready(function () {
         $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
-            if (parseInt(data) > 9); {
+            if (parseInt(data) > 9) {
                 data="9+"
             }
-            console.log(data);
+            else {
+                data = parseInt(data);
+            }
+           
             $("#notification_count").html('<strong>' + data + '</strong>');
         })
     });
