@@ -899,3 +899,35 @@ $('.room').click(function () {
     });
 })
 });
+
+
+$(document).ready(function () {
+    $('.toggle').change(function () {
+        var falseval = ".false" + $(this).val();
+        var trueval = ".true" + $(this).val();
+        if ($(this)[0].checked) {
+            $(falseval).prop("hidden", false)
+            $(trueval).prop("hidden", true)
+
+        }
+        else {
+            $(trueval).prop("hidden", false)
+            $(falseval).prop("hidden", true)
+        }
+    })
+    $('#updatefeat').submit(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        var form = $(this).serialize();
+        RESTCALL(url, form, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8', true, function (res) {
+            alertify.alert('Info', '<p>' + res + '</p>', function () {
+                disablespinner();
+            });
+        }, function (res) {
+            $('.features').html(res.responseText);
+            alertify.alert('Error', '<p> Some error Occured </p>', function () {
+                disablespinner();
+            });
+        }, "");
+    });
+});
