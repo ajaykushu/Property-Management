@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210209130825_LeaveSystem")]
-    partial class LeaveSystem
+    [Migration("20211107124251_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "cce6957f-4f1d-42e5-b173-66d9c211a3f9",
+                            ConcurrencyStamp = "9556f085-927b-42b8-a51c-0bcf1ca53e70",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "ebad0877-6cb5-4795-a296-84d0a175acee",
+                            ConcurrencyStamp = "624c4cfc-fa42-4478-b127-5980f3ff7413",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "d5a12159-0e9d-4048-82b2-cefb337d030d",
+                            ConcurrencyStamp = "916fc466-13a8-4c90-b8a2-91b6605c3fd8",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -430,6 +430,11 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -439,10 +444,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ItemName")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("LocationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdatedByUserName")
                         .HasColumnType("varchar(50)");
@@ -460,17 +463,17 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
+                            Active = false,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ItemName = "Tv",
-                            LocationId = 0,
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
+                            Active = false,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ItemName = "AC",
-                            LocationId = 0,
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -557,6 +560,11 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("LocationName")
                         .HasColumnType("varchar(50)");
@@ -930,7 +938,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<int?>("IssueId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ItemId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int?>("LocationId")
@@ -1599,7 +1607,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<int?>("IssueId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ItemId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int?>("LocationId")
@@ -1727,9 +1735,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("DataEntity.Location", "Location")
                         .WithMany("Items")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("DataEntity.Leave", b =>
@@ -1775,9 +1781,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("DataEntity.Item", "Item")
                         .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("DataEntity.Location", "Location")
                         .WithMany()
@@ -1900,9 +1904,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("DataEntity.Item", "Item")
                         .WithMany("WorkOrders")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("DataEntity.Location", "Location")
                         .WithMany("WorkOrders")
