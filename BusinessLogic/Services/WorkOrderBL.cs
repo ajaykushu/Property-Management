@@ -799,7 +799,7 @@ namespace BusinessLogic.Services
 
         public async Task<List<long>> GetUsersToSendNotification(WorkOrder woId)
         {
-            var appuser = _appuser.FindByNameAsync(woId.CreatedByUserName);
+            var appuser = await _appuser.FindByNameAsync(woId.CreatedByUserName);
 
             HashSet<long> users = new HashSet<long>();
             users.Add(appuser.Id);
