@@ -16,6 +16,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20210925151316_Location.cs" />
     <Compile Remove="Migrations\20210925151316_Location.Designer.cs" />
+    <Compile Remove="Migrations\20211203160533_newmig.cs" />
+    <Compile Remove="Migrations\20211203160533_newmig.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Presentation.ViewModels.Inspections>
+
+@{
+    ViewData["Title"] = "Inspections";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="workordertitle">
+        Inspections
+    </div>
+<p>
+   <a asp-action="Inspection">Create New</a>
+</p>
+<table class="table table-striped wordorderdetail table_container table-responsive-lg">
+    <thead>
+        <tr>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Property)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inspector)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items)
+            </th>
+            <th>
+              Actions
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr  class="clickable-row" data-href="@Url.Action("CheckList","Inspection",new {id= item.InspectionId,propertyId=item.PropertyId })">
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Property)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inspector)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Items)
+            </td>
+            <td>
+                @if (item.IsComplete == 1)
+                {
+                    @Html.ActionLink("Pause", "");
+
+                }
+                @if (item.IsComplete == 2)
+                {
+                    @Html.ActionLink("Continue", "");
+
+                }
+            </td>
+           
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+    $('.clickable-row').click(function () {
+        window.location = $(this).data("href");
+    })
+</script>

@@ -49,5 +49,6 @@ namespace DataEntity
         public virtual ICollection<Location> Locations { get; set; }
         
         public virtual ICollection<UserProperty> UserProperties { get; set; }
+        public virtual ICollection<Inspection> Inspections { get; set; }
     }
 }

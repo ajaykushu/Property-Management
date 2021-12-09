@@ -1,0 +1,127 @@
+﻿@model Presentation.ViewModels.CheckList
+
+@{
+    ViewData["Title"] = "CheckList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="workordertitle">
+    Inspection
+</div>
+<form asp-action="Item" id="CheckList">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <table class="table table_container">
+        <tbody>
+            <tr>
+                <td hidden>
+                    <div class="col">
+
+                        <div class="row">
+                            <label asp-for="InspectionId"></label>
+                        </div>
+                        <div class="row">
+                            <input asp-for="InspectionId" class="form-control-sm custom-input">
+                            <span asp-validation-for="InspectionId" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </td>
+                <td >
+                    <div class="col">
+
+                        <div class="row">
+                            <label asp-for="LocationId"></label>
+                        </div>
+                        <div class="row">
+                            <select asp-for="LocationId" class="form-control-sm custom-input" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))" )>
+                                <option value=" " >Select Location</option>
+                            </select>
+                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            
+                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="col">
+
+                        <div class="row">
+                            <label asp-for="SublocationId"></label>
+                        </div>
+                        <div class="row">
+                            <select id="SubLocationId" class="form-control-sm custom-input"></select>
+                            <span asp-validation-for="SublocationId" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                           
+                            <span asp-validation-for="SublocationId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="col">
+
+                        <div class="row">
+                            <label asp-for="Description"></label>
+                        </div>
+                        <div class="row">
+                            <textarea asp-for="Description" style="height:120px" class="form-control-sm custom-input"></textarea>
+                           
+                        </div>
+                        <div class="row">
+                           
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr><td colspan="3">
+    <input type="submit" value="Add Item" class="btn btn-primary" />
+</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="List">
+
+    </div>
+</form>
+
+
+                  
+               
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+
+            <script>
+    $(document).ready(function () {
+        $('#CheckList').submit(function (e) {
+            e.preventDefault();
+            var url = $(this).attr('action');
+            if (!$(this).validate().form()) return false;
+          
+            var formData = new FormData(this);
+            RESTCALL(url, formData, 'POST', false, false, function (data) {
+                ajaxGet()
+            }, function () {
+                    disablespinner();
+            });
+        });
+
+        ajaxGet();
+
+    });
+    function ajaxGet() {
+        var url = '@Url.Action("Item")' + "?Id=" + $('#InspectionId').val();
+        enablespiner("List Loading..")
+             $.get(url, function (data) {
+
+                 $('#List').html(data);
+                 disablespinner();
+            });
+            }
+            </script>

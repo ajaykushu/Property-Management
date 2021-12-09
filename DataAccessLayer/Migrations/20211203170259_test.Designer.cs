@@ -4,14 +4,16 @@ using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20211203170259_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +53,21 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "8cf8a0f8-c07c-4d62-8b5d-a26d4a287241",
+                            ConcurrencyStamp = "8737ef0e-760b-41fe-89c8-bee0299a7f66",
                             Name = "Master Admin",
                             NormalizedName = "MASTER ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "19bd5de9-b62f-49db-849a-1a3ef06b9cc2",
+                            ConcurrencyStamp = "152a1157-2f5e-4d7c-bfc8-41888b21d23f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3L,
-                            ConcurrencyStamp = "fbdad8b0-649f-4267-ba07-e786a1493c68",
+                            ConcurrencyStamp = "7a73af38-5e68-4848-9c17-5a1f00d03360",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -244,30 +246,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("SubLocationId");
 
                     b.ToTable("CheckLists");
-                });
-
-            modelBuilder.Entity("DataEntity.CheckListQueue", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CheckListId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("InspectionQueueId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CheckListId");
-
-                    b.HasIndex("InspectionQueueId");
-
-                    b.ToTable("CheckListQueues");
                 });
 
             modelBuilder.Entity("DataEntity.Comment", b =>
@@ -451,9 +429,6 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
                     b.Property<string>("CreatedByUserName")
                         .HasColumnType("varchar(50)");
 
@@ -475,6 +450,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -491,31 +469,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("PropertyId");
 
                     b.ToTable("Inspections");
-                });
-
-            modelBuilder.Entity("DataEntity.InspectionQueue", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InspectionId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InspectionId");
-
-                    b.ToTable("InspectionQueues");
                 });
 
             modelBuilder.Entity("DataEntity.Issue", b =>
@@ -903,13 +856,6 @@ namespace DataAccessLayer.Migrations
                             Id = 22L,
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MenuName = "Effort",
-                            UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 24L,
-                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MenuName = "Inspections",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1865,17 +1811,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("SubLocationId");
                 });
 
-            modelBuilder.Entity("DataEntity.CheckListQueue", b =>
-                {
-                    b.HasOne("DataEntity.CheckList", "CheckList")
-                        .WithMany()
-                        .HasForeignKey("CheckListId");
-
-                    b.HasOne("DataEntity.InspectionQueue", "InspectionQueue")
-                        .WithMany("checkListQueues")
-                        .HasForeignKey("InspectionQueueId");
-                });
-
             modelBuilder.Entity("DataEntity.Comment", b =>
                 {
                     b.HasOne("DataEntity.ApplicationUser", "ApplicationUser")
@@ -1915,13 +1850,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataEntity.InspectionQueue", b =>
-                {
-                    b.HasOne("DataEntity.Inspection", "Inspection")
-                        .WithMany("InspectionQueues")
-                        .HasForeignKey("InspectionId");
                 });
 
             modelBuilder.Entity("DataEntity.Issue", b =>

@@ -31,6 +31,8 @@ namespace DataAccessLayer.Repository
         public DbSet<Department> Departments { set; get; }
         public DbSet<Issue> Issues { set; get; }
         public DbSet<Item> Items { set; get; }
+        public DbSet<Inspection> Inspections { set; get; }
+        public DbSet<CheckList> CheckLists { set; get; }
         public DbSet<Languages> Languages { set; get; }
         public DbSet<Location> Locations { set; get; }
         public DbSet<Menu> Menu { set; get; }
@@ -40,6 +42,8 @@ namespace DataAccessLayer.Repository
         public DbSet<Status> Statuses { set; get; }
         public DbSet<UserProperty> UserProperties { set; get; }
         public DbSet<WorkOrder> WorkOrders { set; get; }
+        public DbSet<InspectionQueue> InspectionQueues { set; get; }
+        public DbSet<CheckListQueue> CheckListQueues { get; set; }
         public DbSet<RecurringWO> RecurringWOs { set; get; }
         public DbSet<Effort> Efforts { get; set; }
 
@@ -254,6 +258,10 @@ namespace DataAccessLayer.Repository
                    {
                        Id = 22,
                        MenuName = "Effort"
+                   }, new Menu()
+                   {
+                Id = 24,
+                       MenuName = "Inspections"
                    }
                    ); 
 

@@ -1,0 +1,168 @@
+﻿@model Presentation.ViewModels.Inspection
+
+@{
+    ViewData["Title"] = "Add Inspection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+
+    <div class="workordertitle">
+       Inspection
+    </div>
+    <form asp-action="Inspection">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <table class="table table_container">
+            <tbody>
+                <tr hidden>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="Id"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Id" class="form-control-sm custom-input">
+                                    <span asp-validation-for="Id" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="Name"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Name" class="form-control-sm custom-input">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="Description"></label>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="Description" style="height:150px" class="form-control-sm custom-input"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="Type"></label>
+                                </div>
+                                <div class="col">
+
+                                    <select asp-for="Type" class="form-control-sm custom-input">
+                                        <option value="1">
+                                            Inspection
+                                        </option>
+                                        <option value="2">
+                                            Checklist
+                                        </option>
+                                    </select>
+                                    <span asp-validation-for="Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="DepartmentID"></label>
+                                </div>
+                                <div class="col">
+                                    <select asp-for="DepartmentID" class="form-control-sm custom-input" asp-items="@(new SelectList(Model.Departments, "Id", "PropertyName"))">
+                                        >
+                                    </select>
+
+                                    <span asp-validation-for="DepartmentID" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="CronExpression"></label>
+                                </div>
+                                <div class="col">
+                                    <select asp-for="CronExpression" class="form-control-sm custom-input">
+                                        <option value="0 0 0 * * *" selected>
+                                            Daily
+                                        </option>
+                                        <option value="0 0 1 * *">Monthly</option>
+                                    </select>
+                                    <span asp-validation-for="CronExpression" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label asp-for="PropertyId"></label>
+                                </div>
+                                <div class="col">
+                                    <select asp-for="PropertyId" class="form-control-sm custom-input" asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName"))">
+                                        >
+
+                                    </select>
+
+                                    <span asp-validation-for="PropertyId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr><td>
+                        <input type="submit" class="btn btn-primary" value="Create" />
+                    </td></tr>
+                
+<tbody>
+        </table>
+
+       
+       
+        
+        
+    </form>
+       
+   
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    <div/>
+
+
+

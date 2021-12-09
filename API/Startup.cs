@@ -104,6 +104,8 @@ namespace API
             services.AddScoped<IRecurringWorkOrderJob,RecurringWorkOrderJob>();
             services.AddScoped<IRecurringBL, RecurringBL>();
             services.AddScoped<IHomeBL, HomeBL>();
+            services.AddScoped<IInspect, Inspect>();
+            services.AddScoped<IRecurringInspection, RecurringInspection>();
 
         }
 

@@ -69,7 +69,7 @@ namespace Utilities
                     workOrder.WOAttachments = new List<WOAttachments>();
                     foreach (var item in obj.WOAttachments)
                     {
-                        item.Key = 0;
+                         item.Key = 0;
                         workOrder.WOAttachments.Add(item);
                     }
                 }
