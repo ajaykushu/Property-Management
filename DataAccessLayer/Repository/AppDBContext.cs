@@ -263,6 +263,11 @@ namespace DataAccessLayer.Repository
                 Id = 24,
                        MenuName = "Inspections"
                    }
+                   , new Menu()
+                   {
+                       Id = 23,
+                       MenuName = "Dashboard"
+                   }
                    ); 
 
 
