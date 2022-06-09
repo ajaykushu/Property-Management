@@ -11,6 +11,9 @@ namespace Presentation.ViewModels
     [Serializable]
     public class CreateWorkOrder
     {
+        private DateTime _date = DateTime.Now;
+      
+        
         [DisplayName("Location")]
         public int LocationId { get; set; }
 
@@ -52,8 +55,14 @@ namespace Presentation.ViewModels
 
         [Required]
         [DataType(DataType.Date)]
+        [DisplayName("Complete By Date")]
+       
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime DueDate { get; set; }
+        public DateTime DueDate
+        {
+            get { return _date.AddDays(14); }
+            set { _date = value; }
+        }
         
         public IList<IFormFile> File { get; set; }
 

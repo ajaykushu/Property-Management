@@ -1,47 +1,50 @@
 ﻿@model IEnumerable<Presentation.ViewModels.Grouped>
-
-    <div class="workordertitle">
-        List
-    </div>
+@using Presentation.ViewModels.Controller.CheckList
+<div class="workordertitle">
+    List
+</div>
 <table class="table table_container">
     <tbody>
         @foreach (var location in Model)
-        {    <tr>
-        <td></td><td></td><td></td>
+        {
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td>
-                   <b> @Html.DisplayFor(modelItem => location.LocationName)</b>
+                    <b> @Html.DisplayFor(modelItem => location.LocationName)</b>
                 </td>
 
                 <td colspan="2">
                     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                     @if (location.Order == 1)
                     {
-                        @Html.ActionLink("Move Down", "Down", new { InspectionId = location.InspectionId, LocationId = location.LocationId })
+                        @Html.ActionLink("Move Down", "MoveTask", new MoveTask { InspectionId = location.InspectionId, LocationId = location.LocationId, ItemType=ItemType.List,d=Direction.Down })
                     }
                     else
                     {
-                        @Html.ActionLink("Move Up", "Up", new { InspectionId = location.InspectionId, LocationId = location.LocationId })
+                        @Html.ActionLink("Move Up", "MoveTask", new MoveTask { InspectionId = location.InspectionId, LocationId = location.LocationId, ItemType = ItemType.List,d=Direction.Up })
                     }
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
                     <table class="table">
-                       
+
                         @foreach (var item in location.Items)
-                        {  
+                        {
                             <tr>
                                 <td colspan="2">@Html.DisplayFor(modelItem => item.Description)</td>
                                 <td>
-                                    @if (item.Order ==1)
+                                    @if (item.Order == 1)
                                     {
-                                        @Html.ActionLink("Move Down", "Down", new { InspectionId = location.InspectionId, itemId = item.Id })
+                                        @Html.ActionLink("Move Down", "MoveTask", new { InspectionId = location.InspectionId, itemId = item.Id,ItemType = ItemType.Task,d=Direction.Down })
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Move Up", "Up", new { InspectionId = location.InspectionId, itemId = item.Id })
+                                        @Html.ActionLink("Move Up", "MoveTask", new { InspectionId = location.InspectionId, itemId = item.Id,ItemType = ItemType.Task,d=Direction.Up })
                                     }
                                 </td>
                             </tr>

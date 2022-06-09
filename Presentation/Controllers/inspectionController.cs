@@ -12,6 +12,7 @@ using Presentation.ConstModal;
 using Presentation.Utility;
 using Presentation.Utility.Interface;
 using Presentation.ViewModels;
+using Presentation.ViewModels.Controller.CheckList;
 using Wangkanai.Detection;
 
 namespace Presentation.Controllers
@@ -165,6 +166,24 @@ namespace Presentation.Controllers
             
         }
 
+        public async Task<IActionResult> MoveTask(MoveTask  d)
+        {
+            try 
+            {
+                _apiRoute.Value.Routes.TryGetValue("movetask", out string path);
+                var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path,d, this, _token).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                    return Ok();
+
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = StringConstants.Error;
+            }
+            return BadRequest();
+
+        }
+        
 
     }
 }

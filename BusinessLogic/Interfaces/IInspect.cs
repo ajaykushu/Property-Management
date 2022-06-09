@@ -15,5 +15,6 @@ namespace BusinessLogic.Interfaces
         List<GroupedDTO> GetCheckList(string id);
         Task<bool> AddList(CheckListDTO check);
         Task<List<InspectionsDTO>> GetInspections();
+        Task<bool> MoveTask(MoveTask d);
     }
 }

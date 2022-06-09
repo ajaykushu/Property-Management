@@ -277,7 +277,7 @@ namespace BusinessLogic.Services
             workOrderAssigned = await query.Skip(wOFilterModel.PageNumber * iteminpage).Take(iteminpage).Select(x => new WorkOrderAssigned
                 {
                     DueDate = x.DueDate.ToString("dd-MMM-yy"),
-                    Description = x.Description,
+                    Description = x.Item!=null && x.Issue != null?x.Item.ItemName+" - "+x.Issue.IssueName: x.Item == null?x.CustomIssue:x.Item.ItemName+" - "+x.CustomIssue,
                     Id = x.Id,
                     IsActive = x.IsActive,
                     ParentId = x.ParentWoId,

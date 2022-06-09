@@ -14,7 +14,7 @@
     </div>
     @if (Model != null)
     {
-        <form asp-action="AddProperty" asp-controller="Property" id="addprop">
+        <form asp-action="AddProperty" asp-controller="Property" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <table class="table">
                 <tbody>
@@ -87,31 +87,33 @@
                                 </div>
                                 <div class="row top-buffer">
                                     <div class="col-md-3">
-                                        <label asp-for="ZipCode"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input asp-for="ZipCode" class="form-control-sm custom-input">
-                                        <span asp-validation-for="ZipCode" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
                                         <label asp-for="State"> </label>
                                     </div>
                                     <div class="col">
                                         <input asp-for="State" class="form-control-sm custom-input">
                                         <span asp-validation-for="State" class="text-danger"></span>
                                     </div>
-                                </div>
-                                <div class="row top-buffer">
-                                    <div class="col-md-3">
-                                        <label asp-for="Country"> </label>
                                     </div>
-                                    <div class="col">
-                                        <input asp-for="Country" class="form-control-sm custom-input">
-                                        <span asp-validation-for="Country" class="text-danger"></span>
+                                    <div class="row top-buffer">
+                                        <div class="col-md-3">
+                                            <label asp-for="ZipCode"></label>
+                                        </div>
+                                        <div class="col">
+                                            <input asp-for="ZipCode" class="form-control-sm custom-input">
+                                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                </div>
+
+                               
+                                @*<div class="row top-buffer">
+            <div class="col-md-3">
+                <label asp-for="Country"> </label>
+            </div>
+            <div class="col">
+                <input asp-for="Country" class="form-control-sm custom-input">
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+        </div>*@
                             </div>
                         </td>
                     </tr>

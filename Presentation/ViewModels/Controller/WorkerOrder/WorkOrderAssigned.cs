@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.ViewModels
 {
-    public class WorkOrderAssigned
-    {   [DisplayName("WO#")]
-        [Key]
+    public class WorkOrderAssigned {
+       
+        [DisplayName("WO#")]
         public string Id { get; set; }
         [DisplayName("Assigned To")]
         public string AssignedTo { get; set; }
@@ -14,7 +14,8 @@ namespace Presentation.ViewModels
         public string Description { get; set; }
         [DisplayName("Parent Id")]
         public string ParentId { get; set; }
-        [DisplayName("Due Date")]
+        [DisplayName("Complete By Date")]
+       
         public string DueDate { get; set; }
         [DisplayName("Property")]
         [SkipPropertyAttribute]

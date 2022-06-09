@@ -59,5 +59,16 @@ namespace API.Controllers
             List<InspectionsDTO> list = await _ins.GetInspections();
             return Ok(list);
         }
+
+        [HttpPost]
+        [Route("movetask")]
+        public async Task<ActionResult<bool>> MoveTask(MoveTask d)
+        {
+            bool res = await _ins.MoveTask(d);
+            return Ok(res);
+        }
+
+        
+        
     }
 }

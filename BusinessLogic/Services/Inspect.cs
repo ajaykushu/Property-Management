@@ -21,6 +21,7 @@ namespace BusinessLogic.Services
     public class Inspect : IInspect
     {
         private readonly IRepo<Inspection> _insp;
+        private readonly IRepo<Item> _item;
         private readonly IRepo<InspectionQueue> _inspq;
         private readonly UserManager<ApplicationUser> _appuser;
         private readonly IRepo<CheckList> _check;
@@ -40,7 +41,7 @@ namespace BusinessLogic.Services
         private readonly TimeZoneInfo timeZone;
         private readonly bool is24HrFormat = false;
 
-        public Inspect(IRepo<Inspection> insp, IRepo<CheckList> check, UserManager<ApplicationUser> appuser, IRepo<UserProperty> userProperty, IRepo<Property> property, IRepo<Department> department, IHttpContextAccessor httpContextAccessor, IRepo<SubLocation> sublocation, IRepo<Location> location, INotifier notifier, IRecurringInspection rinspect, IRepo<InspectionQueue> inspq)
+        public Inspect(IRepo<Inspection> insp, IRepo<CheckList> check, UserManager<ApplicationUser> appuser, IRepo<UserProperty> userProperty, IRepo<Property> property, IRepo<Department> department, IHttpContextAccessor httpContextAccessor, IRepo<SubLocation> sublocation, IRepo<Location> location, INotifier notifier, IRecurringInspection rinspect, IRepo<InspectionQueue> inspq,IRepo<Item> item)
         {
 
 
@@ -49,6 +50,7 @@ namespace BusinessLogic.Services
             _rinspect = rinspect;
             _insp = insp;
             _check = check;
+            _item = item;
             _httpContextAccessor = httpContextAccessor;
             _inspq = inspq;
             _appuser = appuser;
@@ -158,5 +160,79 @@ namespace BusinessLogic.Services
             return res;
         }
 
+        public async Task<bool> MoveTask(MoveTask d)
+        {
+            
+                if (d.ItemType == ItemType.List)        
+                {
+                if (d.d == Direction.Up)
+                {
+                    //var a= await _item.Get(x => x.LocationId == d.LocationId && x.InspectionId == d.InspectionId).SingleOrDefaultAsync();//3
+                    //var b = await _check.Get(x => x.LocationId == d.LocationId && x.InspectionId == d.InspectionId && x.LocationOrder==a.LocationOrder-1).SingleOrDefaultAsync();//2
+                    //if (b != null)
+                    //{
+                    //    b.LocationOrder = a.LocationOrder; //3
+                    //    await _check.Update(b);
+                    //    a.LocationOrder -= 1;
+                    //    if (await _check.Update(a) > 1) return true;
+                    
+                    //}
+                }
+                 
+                else               
+                {
+                        //var a = await _check.Get(x => x.LocationId == d.LocationId && x.InspectionId == d.InspectionId).SingleOrDefaultAsync();//3
+                        //var b = await _check.Get(x => x.LocationId == d.LocationId && x.InspectionId == d.InspectionId && x.LocationOrder == a.LocationOrder + 1).SingleOrDefaultAsync();//4
+                        //if (b != null)
+                        //{
+                        //    b.LocationOrder = a.LocationOrder;//3
+                        //    await _check.Update(b);
+                        //a.LocationOrder = a.LocationOrder + 1;//4
+                        //if (await _check.Update(a) > 1) { return true; }
+                        //}
+                         
+                    }
+                }
+            else
+            {
+                if (d.ItemType == ItemType.Task)
+                {
+                    if (d.d == Direction.Up)
+                    {
+                        //var a = await _item.Get(x => x.LocationId == d.LocationId && x.Id == d.ItemId).SingleOrDefaultAsync();//3
+                        //var b = await _item.Get(x => x.LocationId == d.LocationId && x.Id == d.InspectionId && x.Order == a.Order - 1).SingleOrDefaultAsync();//2
+                        //if (b != null)
+                        //{
+                        //    b.Order = a.Order; //3
+                        //    await _check.Update(b);
+                        //    a.Order -= 1;
+                        //    if (await _check.Update(b) > 1)
+                        //    {
+                        //        return true;
+                        //    }
+                        //}
+                    }
+
+                }
+                else
+                {
+                    if (d.d == Direction.Up)
+                    {
+                        var a = await _check.Get(x => x.LocationId == d.LocationId && x.InspectionId == d.InspectionId).SingleOrDefaultAsync();//3
+                        var b = await _check.Get(x => x.LocationId == d.LocationId && x.InspectionId == d.InspectionId && x.Order == a.Order - 1).SingleOrDefaultAsync();//2
+                        if (b != null)
+                        {
+                            b.Order = a.Order; //3
+                            await _check.Update(b);
+                            a.Order -= 1;
+                            await _check.Update(a);
+                        }
+                    }
+
+                }
+                
+            }
+            return false;
+        }
     }
 }

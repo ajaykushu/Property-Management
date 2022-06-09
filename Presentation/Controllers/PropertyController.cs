@@ -76,24 +76,21 @@ namespace Presentation.Controllers
                 {
                     var response = await _httpClientHelper.PostDataAsync(_apiRoute.Value.ApplicationBaseUrl + path, model, this, _token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode && await response.Content.ReadAsStringAsync() == "true")
-                        return Ok(StringConstants.CreatedSuccess);
-                    else if (response.StatusCode == HttpStatusCode.BadRequest)
-                        return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                        return Content("<script language='javascript' type='text/javascript'>location.reload(true);</script>");
-                    else
-                        return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
+                        return RedirectToAction("ListProperties");
+                    
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, StringConstants.Error);
+                    TempData["Error"] = ex.Message;
                 }
             }
             else
             {
                string msg = String.Join(", ", ModelState.Where(x => x.Value.Errors.Count > 0).SelectMany(x => x.Value.Errors.Select(y => y.ErrorMessage)).ToList());
-                return StatusCode(500, msg);
+
+                TempData["Error"] = msg;
             }
+            return RedirectToAction("AddPropertyView");
         }
 
         [HttpGet]
