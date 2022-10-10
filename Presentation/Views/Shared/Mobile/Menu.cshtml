@@ -73,6 +73,18 @@
         </nav>
     </header>
     <div class="mwrapper">
+        <div class="row">
+            <div class="col">
+                <div class="menu">
+                    <a asp-action="GetAllNotification" asp-controller="Home">
+                        <div class="item">
+                            <span><i class="fa fa-bell fa-7x" aria-hidden="true"></i></span>
+                            <span id="notification_count" style="font-family: Georgia, 'Times New Roman', Times, serif; color: red"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
         @for (int i = 0; i < ret.Count; i = i + 2)
         {
 
@@ -117,20 +129,9 @@
             </div>
 
         }
-        
-        <div class="row">
-            <div class="col">
-                <div class="menu">
-                    <a asp-action="GetAllNotification" asp-controller="Home">
-                        <div class="item">
-                            <span><i class="fa fa-bell fa-7x" aria-hidden="true"></i></span>
-                            <span id="notification_count"style="font-family: Georgia, 'Times New Roman', Times, serif; color: red"></span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            </div>
-        </div>
+
+
+    </div>
 
         <script>
     $('#notification_count').ready(function () {

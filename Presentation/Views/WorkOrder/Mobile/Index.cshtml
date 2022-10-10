@@ -50,15 +50,15 @@
     <div class="container">
         @if (ResponseModel != null && ResponseModel.Payload != null && ResponseModel.Payload.Any())
         {
-            <table class="table border-0" style="table-layout:fixed;">
+            <table class="table border-0">
                 <tbody>
                     @foreach (var item in ResponseModel.Payload)
                     {
                         <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id})'">
-                            <td style="padding-top:20px;padding-bottom:20px;">
+                            <td style="padding-top:20px;padding-bottom:20px;width:80%">
                                 <span style="word-wrap:break-word;font-size:15px"><span class="d-inline-flex status @if(item.ParentId!=null){<text>green</text>}else{ <text>orange</text>}"></span>@item.Description</span>
                             </td>
-                            <td style="padding-right:0px;text-align:end;font-size:14px;color:grey;padding-top:20px;padding-bottom:20px;">@item.DueDate.Substring(0, 6)&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></td>
+                            <td style="padding-right:0px;width:80%";text-align:end;font-size:14px;color:grey;padding-top:20px;padding-bottom:20px;">@item.DueDate.Substring(0, 6)&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></td>
                         </tr>
                     }
                 </tbody>

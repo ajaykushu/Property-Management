@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="col">
                                        
-                                        <select id="LocationId" name="LocationId" class="form-control form-control-sm custom-input ">
+                                        <select    asp-for="LocationId" class="form-control form-control-sm custom-input ">
                                             <option value="">Select Location</option>
                                         </select>
                                         
@@ -74,7 +74,7 @@
                                         <label for="Locations">Asset Available</label>
                                     </div>
                                     <div class="col">
-                                        <select id="ItemId" name="ItemId" class="form-control form-control-sm custom-input itemId"><option value="">Select Asset</option>
+                                        <select asp-for="ItemId" class="form-control form-control-sm custom-input itemId"><option value="">Select Asset</option>
                                         </select>
                                         <span asp-validation-for="ItemId" class="text-danger"></span>
                                         <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteAsset()"></div>
@@ -89,6 +89,7 @@
                                 </div>
                                 <div class="col">
                                     <input asp-for="NewAsset" class="form-control form-control-sm custom-input">
+                                    <span asp-validation-for="NewAsset" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +105,7 @@
                                 <div class="col">
                                     <textarea asp-for="Issues" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
                                     <span class="text-danger">Enter issues separated by a comma.</span><br />
-                                                                                                       <span class="text-info">Issues will come prepopulated if available to corresponding location</span>
+                                                                                                       @*<span class="text-info">Issues will come prepopulated if available to corresponding location</span>*@
                                 </div>
                             </div>
                         </div>

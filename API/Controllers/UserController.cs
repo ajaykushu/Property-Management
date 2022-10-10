@@ -145,7 +145,7 @@ namespace API.Controllers
         [Route("markasread")]
         public async Task<ActionResult<int>> MarkAsRead(int id)
         {
-            bool res = await _userService.MarkAsRead(id);
+            int res = await _userService.MarkAsRead(id);
             return Ok(res);
         }
 

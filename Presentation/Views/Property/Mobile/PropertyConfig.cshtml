@@ -74,7 +74,7 @@
                                 <div class="col">
                                     <textarea asp-for="SubLocation" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
                                     <span class="text-danger">Enter , speparated Sub Location</span><br />
-                                    <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
+                                    @*<span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>*@
                                 </div>
                             </div>
                         </div>
@@ -167,15 +167,15 @@
                     }
                 });
     })
-    $("#SubLocation ").change(function (e) {
-        if ($(this).val().indexOf(',') == $(this).val().length - 1) {
-            alert("Please remove ',' from the end of input");
-            $("input[type='submit']").prop("disabled", true);
-        }
-        else {
-            $("input[type='submit']").prop("disabled", false);
-        }
-    })
+    //$("#SubLocation ").change(function (e) {
+    //    if ($(this).val().indexOf(',') == $(this).val().length - 1) {
+    //        alert("Please remove ',' from the end of input");
+    //        $("input[type='submit']").prop("disabled", true);
+    //    }
+    //    else {
+    //        $("input[type='submit']").prop("disabled", false);
+    //    }
+    //})
 </script>
 @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
 {

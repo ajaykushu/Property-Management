@@ -31,6 +31,7 @@ namespace Models.User.RequestModels
         public int DepartmentId { get; set; }
 
         [Required(ErrorMessage = "Please Enter Email Address")]
+        [Display(Name= "UserID (Email)")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
         public string Email { get; set; }
 

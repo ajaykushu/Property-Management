@@ -28,7 +28,7 @@ namespace Models.User.RequestModels
         public string PrimaryProperty { get; set; }
 
         public List<SelectItem> Languages { get; set; }
-       
+        [Display(Name = "UserID (Email)")]
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
         public string Email { get; set; }

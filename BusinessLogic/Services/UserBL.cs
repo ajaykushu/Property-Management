@@ -420,7 +420,7 @@ namespace BusinessLogic.Services
 
         public async Task<List<AllNotification>> GetAllNotification()
         {
-            var data = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).Select(x => new AllNotification
+            var data = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).OrderByDescending(x=>x.CreatedTime).Select(x => new AllNotification
             {
                 Id = x.NId,
                 CreationTime = x.CreatedTime.ToString("dd-MMM-yy hh:mm:ss tt"),
@@ -438,7 +438,7 @@ namespace BusinessLogic.Services
             return data;
         }
 
-        public async Task<bool> MarkAsRead(int id)
+        public async Task<int> MarkAsRead(int id)
         {
             var data = await _userNotification.Get(x => x.ApplicationUserId == userId && x.NotificationId == id).FirstOrDefaultAsync();
             if (data != null)
@@ -447,16 +447,11 @@ namespace BusinessLogic.Services
                 var count = await _userNotification.Get(x => x.NotificationId == id).Where(x => !x.IsRead).CountAsync();
                 if (count == 0)
                     await _userNotification.Delete(data);
-                else
-                {
-                    if (await _userNotification.Update(data) > 1)
-                    {
-                        return true;
-                    }
-                }
+                
             }
+            var cnt = await _notification.GetAll().Include(x => x.UserNotification).Where(x => x.UserNotification.Where(x => x.ApplicationUserId == userId && !x.IsRead).Any()).CountAsync();
 
-            return false;
+            return cnt;
         }
 
         public async Task<List<UserList>> GetUserEmail()

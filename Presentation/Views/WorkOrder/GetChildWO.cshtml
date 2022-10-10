@@ -113,7 +113,7 @@
     
 
 <script>
-    var workorderId = '@Model.Payload[0].ParentId';
+    var workorderId = '@Model?.Payload[0].ParentId';
     function GetPage(pagenumber) {
             $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=&pageNumber='+pagenumber,
                 function (data) {

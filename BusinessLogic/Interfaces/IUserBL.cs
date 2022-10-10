@@ -35,7 +35,7 @@ namespace BusinessLogic.Interfaces
 
         Task<int> GetNotificationCount();
 
-        Task<bool> MarkAsRead(int id);
+        Task<int> MarkAsRead(int id);
         Task<List<UserList>> GetUserEmail();
         Task<List<TimeSheet>> GetTimeSheet();
         Task<List<TimesheetBreakDown>> GetTimeSheet(string id);

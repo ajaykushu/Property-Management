@@ -24,6 +24,15 @@
                             <div class="col">
                                 <div class="row">
                                     <div class="col-md-3">
+                                        <label asp-for="Email"> </label>
+                                    </div>
+                                    <div class="col">
+                                        <input asp-for="Email" autocomplete="off" class="form-control-sm custom-input">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
                                         <label for="FirstName">First Name</label>
                                     </div>
                                     <div class="col">
@@ -99,16 +108,8 @@
                     <tr>
                         <td>
                             <div class="col">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label asp-for="Email"> </label>
-                                    </div>
-                                    <div class="col">
-                                        <input asp-for="Email" autocomplete="off" class="form-control-sm custom-input">
-                                        <span asp-validation-for="Email" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="row top-buffer">
+                                
+                                <div class="row ">
                                     <div class="col-md-3">
                                         <label asp-for="PhoneNumber">Cell Number</label>
                                     </div>

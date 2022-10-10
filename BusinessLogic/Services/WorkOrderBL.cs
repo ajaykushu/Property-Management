@@ -120,7 +120,7 @@ namespace BusinessLogic.Services
                 //create notification
                 //getting all the person whom property is assigned
                 var users = await GetUsersToSendNotification(workOrder);
-                await _notifier.CreateNotification("Work Order Created with WOId " + workOrder.Id, users, workOrder.Id, "WA");
+                await _notifier.CreateNotification("Work Order Created with WOID " + workOrder.Id, users, workOrder.Id, "WA");
                 return true;
             }
 
