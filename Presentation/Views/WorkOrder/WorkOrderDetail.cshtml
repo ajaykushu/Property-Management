@@ -183,21 +183,34 @@ else
                             }
                             @if (Model.Attachment != null)
                             {
-                        <div class="row top-buffer">
+                         <div class="row top-buffer">
                             <div class="col-md-3">
                                 <label asp-for="Attachment"></label>
                             </div>
                             <div class="col-md-9 customdisp">
                                 @Html.DisplayImage(Model.Attachment)
+                               
                             </div>
+                            
+                           </div>
+                           <div class="row">
+                               <div class="col-md-3">
 
-                            </div>
+                               </div>
+                               <div class="col-md-9">
+                                   <p class="text text-danger">Photo uploads are not added until work order is saved.</p>
+                               </div>
+                           </div>
+                        
+                                
+                           
                             }
                         <div class="row top-buffer mt-5">
                             <div class="col-md-3">
                                 <label for="File">Add Attachment</label>
                             </div>
                             <div class="col">
+                                
                                 <div class="cont">
                                     <label class="browsebutton">Add File</label>
                                     <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
@@ -206,7 +219,7 @@ else
                                 <div id="file_selected">
                                 </div>
                                 <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
-                                @*<p class="text-danger">Photo uploads are not added until work order is saved.</p>*@
+
                             </div>
                           
                         </div>

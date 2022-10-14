@@ -21,9 +21,10 @@ namespace Presentation.Utility.CustomHtmlHelper
 
         public static IHtmlContent DisplayImage(this IHtmlHelper htmlHelper, List<KeyValuePair<string, string>> Images)
         {
-
+           
             var div1 = new TagBuilder("div");
             div1.AddCssClass("customdisp");
+            TagBuilder tagBuilder=null;
 
             if (Images != null && Images.Count > 0)
             {
@@ -32,6 +33,7 @@ namespace Presentation.Utility.CustomHtmlHelper
                     if (format.Where(x => item.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault() != null)
                     {
                         var div = new TagBuilder("div");
+                        tagBuilder = div;
                         div.AddCssClass("photo_disp");
                         div.Attributes.Add("style", "display:inline-table;margin:5px;");
                         var thumb = item.Value.Replace(".jpg", ".png");
@@ -61,6 +63,7 @@ namespace Presentation.Utility.CustomHtmlHelper
                     else
                     {
                         var div = new TagBuilder("div");
+                        tagBuilder = div;
                         div.AddCssClass("photo_disp");
                         var anch = new TagBuilder("a");
                         anch.Attributes.Add("href", item.Value);
@@ -85,12 +88,14 @@ namespace Presentation.Utility.CustomHtmlHelper
                     }
                 }
             }
+           
             string result;
             using (var writer = new StringWriter())
             {
                 div1.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
                 result = writer.ToString();
             }
+
             return new HtmlString(result);
         }
     }

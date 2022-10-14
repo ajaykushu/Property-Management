@@ -444,7 +444,8 @@ namespace BusinessLogic.Services
             if (data != null)
             {
                 data.IsRead = true;
-                var count = await _userNotification.Get(x => x.NotificationId == id).Where(x => !x.IsRead).CountAsync();
+                await _userNotification.Update(data);
+                    var count = await _userNotification.Get(x => x.NotificationId == id).Where(x => !x.IsRead).CountAsync();
                 if (count == 0)
                     await _userNotification.Delete(data);
                 

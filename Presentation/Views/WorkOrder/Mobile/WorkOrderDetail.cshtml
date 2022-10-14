@@ -130,6 +130,7 @@
                                         </div>
                                     }
                                     <div class=" top-buffer mt-5">
+                                        <p class="text text-info">Photo uploads are not added until work order is saved.</p>
                                         <div class="cont">
                                             <label class="browsebutton">Add Photo</label>
                                             <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
@@ -139,7 +140,7 @@
                                         </div>
                                         <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
                                     </div>
-                                    @*<p class="text-danger">Photo uploads are not added until work order is saved.</p>*@
+                                    
                                     <input type="text" asp-for="FilesRemoved" hidden>
                                     <input type="submit" hidden value="Update" id="dohidden" class="btn btn btn-primary ">
                                     <button type="reset" hidden id="dohiddenreset" class="btn btn btn-primary "></button>

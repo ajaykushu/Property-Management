@@ -33,7 +33,7 @@ namespace Presentation.ViewModels
 
         public string PrimaryProperty { get; set; }
         public List<SelectItem> Languages { get; set; }
-
+        [DisplayName("UserID (Email)")]
         [Required(ErrorMessage = "Please Enter Email Address")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please Enter Valid Email Address")]
         public string Email { get; set; }
